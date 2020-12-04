@@ -10,15 +10,30 @@ const Index = ({scripts}) => {
             <Head>
                 <title>ScriptAxis | The Funscript Library (Work in Progress!)</title>
             </Head>
+            <h2 style={{marginBottom: "0.5em"}}>Recently added scripts</h2>
             <ScriptGrid scripts={scripts}/>
         </Layout>
     )
 }
 
 export async function getServerSideProps(ctx) {
-    const res = await axios.get(`https://firestore.googleapis.com/v1/projects/scriptlibrary-8f879/databases/(default)/documents/scripts`);
+    const res = await axios.post(`https://firestore.googleapis.com/v1/projects/scriptlibrary-8f879/databases/(default)/documents/:runQuery`, {
+        structuredQuery : {
+            from: [{
+                collectionId: "scripts"
+            }],
+            orderBy: [{
+                field: {
+                    fieldPath: "created"
+                },
+                direction: "DESCENDING"
+            }],
+            limit: 12
+        }
+    });
     let scripts = res.data;
-    scripts = scripts.documents.map(script => ScriptUtils.parseScriptDocument(script));
+    console.log(scripts);
+    scripts = scripts.map(script => ScriptUtils.parseScriptDocument(script.document));
     return {
         props: {
             scripts
