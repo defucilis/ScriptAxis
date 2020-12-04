@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import Image from 'next/image'
+import {FaSearch} from 'react-icons/fa'
 
 import styles from './Header.module.css'
 
@@ -7,12 +9,20 @@ const Header = () => {
         <div className={styles.header}>
             <div className={styles.searchbar}>
                 <div className="container">
-                    <h1>Logo!</h1>
+                    <Link href="/">
+                        <a className={styles.logo}>
+                            <Image src="/img/script-axis-512.png" alt="Script Axis logo" width="180" height="45" />
+                        </a>
+                    </Link>
                     <form>
                         <input type="text" placeholder="Search 2,298 Scripts..." />
-                        <input type="submit" value="@" />
+                        <button type="submit">
+                            <FaSearch />
+                        </button>
                     </form>
-                    <a href="/add">+ Add a Script</a>
+                    <Link href="/add">
+                        <a className={styles.addscript}>+ Add a Script</a>
+                    </Link>
                 </div>
             </div>
             <div className={styles.navbar}>

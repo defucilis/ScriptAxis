@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { FaThumbsUp } from 'react-icons/fa'
 
 import style from './ScriptTile.module.css'
 
@@ -62,7 +63,7 @@ const ScriptTile = ({script}) => {
                 script.thumbsup.integerValue + script.thumbsdown.integerValue > 0 
                     ? (<div className={style.bottomrow}>
                         <p>{viewsToString(script.views.integerValue)} Views</p>
-                        <p>&</p>
+                        <FaThumbsUp />
                         <p>{thumbsToPercentage(script.thumbsup.integerValue, script.thumbsdown.integerValue)}%</p>
                     </div>)
                     : (<div className={style.bottomrow}>

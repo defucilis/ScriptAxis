@@ -66,6 +66,7 @@
 .bottomrow {
     display: flex;
     justify-content: flex-start;
+    color: #777;
 }
 .bottomrow > p {
     color: #777;
@@ -76,4 +77,7 @@
 }
 .bottomrow > p:last-child {
     margin-left: 0.5em;
+}
+.bottomrow > svg {
+    margin-top: 8px;
 }

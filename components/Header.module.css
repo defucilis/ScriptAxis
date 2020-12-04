@@ -2,6 +2,13 @@
     margin-bottom: 2em;
 }
 
+.logo {
+    width: 180px;
+    height: 100%;
+    display: grid;
+    place-items: center;
+}
+
 .searchbar {
     background-color: #1b1b1b;
     border-bottom: 1px solid #aaa;
@@ -41,16 +48,27 @@
     color: #fff;
 }
 
-.searchbar input[type=submit] {
+.searchbar button {
     width: 4em;
     height: 30px;
     font-size: 1.2em;
     background-color: #e8739c;
     border: 1px solid #e8739c;
     border-radius: 0px 5px 5px 0px;
+    position: relative;
+    cursor: pointer;
+}
+.searchbar button > svg {
+    position: relative;
+    top: 2px;
+    color: #000;
+    transition: color 0.2s;
+}
+.searchbar button:hover > svg {
+    color: #fff;
 }
 
-.searchbar > div > a {
+.searchbar > div > .addscript {
     background-color: #303030;
     height: 30px;
     display: grid;
