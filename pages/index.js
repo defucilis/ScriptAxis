@@ -2,10 +2,14 @@ import Layout from '../components/Layout'
 import ScriptGrid from '../components/ScriptGrid'
 import axios from 'axios'
 import ScriptUtils from '../utilities/ScriptUtils'
+import Head from 'next/head'
 
 const Index = ({scripts}) => {
     return (
         <Layout>
+            <Head>
+                <title>ScriptAxis | The Funscript Library (Work in Progress!)</title>
+            </Head>
             <ScriptGrid scripts={scripts}/>
         </Layout>
     )

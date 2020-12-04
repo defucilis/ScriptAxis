@@ -3,6 +3,7 @@ import {useRouter} from 'next/router'
 import axios from 'axios'
 import ScriptUtils from '../../utilities/ScriptUtils'
 import ScriptGrid from '../../components/ScriptGrid'
+import Head from 'next/head'
 
 const Author = ({scripts}) => {
 
@@ -11,6 +12,9 @@ const Author = ({scripts}) => {
 
     return (
         <Layout>
+         <Head>
+                <title>ScriptAxis | {authorname}</title>
+            </Head>
             <h1>Author {authorname}</h1>
             <ScriptGrid scripts={scripts} />
         </Layout>
