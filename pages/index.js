@@ -1,6 +1,7 @@
 import Layout from '../components/Layout'
 import ScriptGrid from '../components/ScriptGrid'
 import axios from 'axios'
+import ScriptUtils from '../utilities/ScriptUtils'
 
 const Index = ({scripts}) => {
     return (
@@ -13,24 +14,7 @@ const Index = ({scripts}) => {
 export async function getServerSideProps(ctx) {
     const res = await axios.get(`https://firestore.googleapis.com/v1/projects/scriptlibrary-8f879/databases/(default)/documents/scripts`);
     let scripts = res.data;
-    console.log(scripts.documents);
-    scripts = scripts.documents.map(script => {
-        return {
-            name: script.fields.name.stringValue,
-            slug: script.fields.slug.stringValue,
-            author: script.fields.author.stringValue,
-            duration: script.fields.duration.integerValue,
-            description: script.fields.description.stringValue,
-            source: script.fields.source.stringValue,
-            thumbnail: script.fields.thumbnail.stringValue,
-            created: script.fields.created.timestampValue,
-            modified: script.fields.modified.timestampValue,
-            likes: script.fields.likes.integerValue,
-            thumbsdown: script.fields.thumbsdown.integerValue,
-            thumbsup: script.fields.thumbsup.integerValue,
-            views: script.fields.views.integerValue,
-        }
-    })
+    scripts = scripts.documents.map(script => ScriptUtils.parseScriptDocument(script));
     return {
         props: {
             scripts
