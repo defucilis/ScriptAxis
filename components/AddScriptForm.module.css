@@ -1,0 +1,21 @@
+.form {
+
+}
+
+.form > label {
+    color: #fff;
+    display: block;
+}
+
+.form > input {
+    display: block;
+    margin-bottom: 1em;
+    width: 40%;
+}
+
+.form > textarea {
+    display: block;
+    margin-bottom: 1em;
+    width: 40%;
+    height: 6em;
+}
