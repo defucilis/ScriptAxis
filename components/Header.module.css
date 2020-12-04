@@ -79,17 +79,23 @@
 
 .navbar {
     background-color: #1b1b1b;
+    height: 45px;
+}
+
+.navbar > div {
+    height: 100%;
 }
 
 .navbar ul {
     display: flex;
     width: 100%;
     justify-content: space-between;
+    height: 100%;
 }
 
 .navbar ul > li {
     flex-grow: 2;
-    height: 3em;
+    height: 100%;
 }
 
 .navbar ul > li > a {

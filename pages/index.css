@@ -30,6 +30,10 @@ a {
     text-decoration: none;
 }
 
+.content {
+    min-height: calc(100vh - 200px);
+}
+
 .container {
     min-width: 991px;
     max-width: 1323px;
