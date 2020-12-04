@@ -41,6 +41,7 @@ const handleSubmit = e => {
             thumbsdown: { integerValue: 0},
             created: { timestampValue: new Date()} ,
             modified: { timestampValue: new Date()} ,
+            likes: { integerValue: 0 }
         }
     };
 

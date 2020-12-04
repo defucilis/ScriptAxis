@@ -67,17 +67,16 @@
     display: flex;
     justify-content: flex-start;
     color: #777;
+    margin-top: 0.5em;
 }
-.bottomrow > p {
+.bottomrow p {
     color: #777;
-    margin: 0.5em 0;
+    margin: 0;
 }
-.bottomrow > p:first-child {
-    margin-right: 1em;
+.bottomrow svg {
+    margin-right: 0.5em;
 }
-.bottomrow > p:last-child {
-    margin-left: 0.5em;
-}
-.bottomrow > svg {
-    margin-top: 8px;
+.bottomrow .rating, .bottomrow .likes {
+    display: flex;
+    margin-left: 1.5em;
 }

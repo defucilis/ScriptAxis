@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { FaThumbsUp } from 'react-icons/fa'
+import { FaHeart } from 'react-icons/fa'
 
 import style from './ScriptTile.module.css'
 
@@ -59,17 +60,19 @@ const ScriptTile = ({script}) => {
                     <a>{script.author.stringValue}</a>
                 </Link>
             </div>
-            {
-                script.thumbsup.integerValue + script.thumbsdown.integerValue > 0 
-                    ? (<div className={style.bottomrow}>
-                        <p>{viewsToString(script.views.integerValue)} Views</p>
-                        <FaThumbsUp />
-                        <p>{thumbsToPercentage(script.thumbsup.integerValue, script.thumbsdown.integerValue)}%</p>
-                    </div>)
-                    : (<div className={style.bottomrow}>
-                        <p>{viewsToString(script.views.integerValue)} Views</p>
-                    </div>)
-            }
+            <div className={style.bottomrow}>
+                <p className={style.views}>{viewsToString(script.views.integerValue)} Views</p>
+                <div className={style.rating}>
+                    <FaThumbsUp />
+                    <p>{thumbsToPercentage(script.thumbsup.integerValue, script.thumbsdown.integerValue)}%</p>
+                </div>
+                { script.likes.integerValue == 0 ? null : (
+                <div className={style.likes}>
+                    <FaHeart />
+                    <p>{script.likes.integerValue}</p>
+                </div>
+                )}
+            </div>
             
         </div>
     )
