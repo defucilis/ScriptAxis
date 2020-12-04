@@ -48,8 +48,8 @@ const ScriptTile = ({script}) => {
                 </a>
             </Link>
             <div className={style.scriptname}>
-                <Link href={`script/${script.slug.stringValue}`}>
-                    <a>{script.name.stringValue}</a>
+                <Link href={script.source.stringValue}>
+                    <a target="_blank">{script.name.stringValue}</a>
                 </Link>
             </div>
             <div className={style.scriptauthor}>
@@ -57,11 +57,18 @@ const ScriptTile = ({script}) => {
                     <a>{script.author.stringValue}</a>
                 </Link>
             </div>
-            <div className={style.bottomrow}>
-                <p>{viewsToString(script.views.integerValue)} Views</p>
-                <p>&</p>
-                <p>{thumbsToPercentage(script.thumbsup.integerValue, script.thumbsdown.integerValue)}%</p>
-            </div>
+            {
+                script.thumbsup.integerValue + script.thumbsdown.integerValue > 0 
+                    ? (<div className={style.bottomrow}>
+                        <p>{viewsToString(script.views.integerValue)} Views</p>
+                        <p>&</p>
+                        <p>{thumbsToPercentage(script.thumbsup.integerValue, script.thumbsdown.integerValue)}%</p>
+                    </div>)
+                    : (<div className={style.bottomrow}>
+                        <p>{viewsToString(script.views.integerValue)} Views</p>
+                    </div>)
+            }
+            
         </div>
     )
 }
