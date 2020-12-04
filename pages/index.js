@@ -13,12 +13,27 @@ const Index = ({scripts}) => {
 export async function getServerSideProps(ctx) {
     const res = await axios.get(`https://firestore.googleapis.com/v1/projects/scriptlibrary-8f879/databases/(default)/documents/scripts`);
     let scripts = res.data;
-    while(scripts && scripts.documents && scripts.documents.length < 10 && scripts.documents.length > 0) {
-        scripts.documents.push({...scripts.documents[0]});
-    }
+    console.log(scripts.documents);
+    scripts = scripts.documents.map(script => {
+        return {
+            name: script.fields.name.stringValue,
+            slug: script.fields.slug.stringValue,
+            author: script.fields.author.stringValue,
+            duration: script.fields.duration.integerValue,
+            description: script.fields.description.stringValue,
+            source: script.fields.source.stringValue,
+            thumbnail: script.fields.thumbnail.stringValue,
+            created: script.fields.created.timestampValue,
+            modified: script.fields.modified.timestampValue,
+            likes: script.fields.likes.integerValue,
+            thumbsdown: script.fields.thumbsdown.integerValue,
+            thumbsup: script.fields.thumbsup.integerValue,
+            views: script.fields.views.integerValue,
+        }
+    })
     return {
         props: {
-            scripts: {...scripts}
+            scripts
         }
     }
 }

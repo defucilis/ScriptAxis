@@ -8,10 +8,9 @@ const ScriptGrid = ({scripts}) => {
     const [tiles, setTiles] = useState([]);
     useEffect(() => {
         if(!scripts) return;
-        if(!scripts.documents) return;
-        setTiles(scripts.documents.map(document => {
+        setTiles(scripts.map(script => {
             return (
-                <ScriptTile key={document.fields.slug.stringValue} script={{...document.fields}} />
+                <ScriptTile key={script.slug} script={{...script}} />
             );
         }))
     }, [scripts]);

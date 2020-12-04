@@ -41,35 +41,35 @@ const thumbsToPercentage = (thumbsup, thumbsdown) => {
 const ScriptTile = ({script}) => {
     return (
         <div className={style.scripttile}>
-            <Link href={`script/${script.slug.stringValue}`}>
+            <Link href={`script/${script.slug}`}>
                 <a className={style.thumbnail}>
                     <div className={style.imagewrapper}>
-                        <img src={script.thumbnail.stringValue} />
+                        <img src={script.thumbnail} />
                     </div>
                     <div className={style.imageoverlay}></div>
-                    <span>{durationToString(script.duration.integerValue)}</span>
+                    <span>{durationToString(script.duration)}</span>
                 </a>
             </Link>
             <div className={style.scriptname}>
-                <Link href={script.source.stringValue}>
-                    <a target="_blank">{script.name.stringValue}</a>
+                <Link href={script.source}>
+                    <a target="_blank">{script.name}</a>
                 </Link>
             </div>
             <div className={style.scriptauthor}>
-                <Link href={`author/${script.author.stringValue}`}>
-                    <a>{script.author.stringValue}</a>
+                <Link href={`author/${script.author}`}>
+                    <a>{script.author}</a>
                 </Link>
             </div>
             <div className={style.bottomrow}>
-                <p className={style.views}>{viewsToString(script.views.integerValue)} Views</p>
+                <p className={style.views}>{viewsToString(script.views)} Views</p>
                 <div className={style.rating}>
                     <FaThumbsUp />
-                    <p>{thumbsToPercentage(script.thumbsup.integerValue, script.thumbsdown.integerValue)}%</p>
+                    <p>{thumbsToPercentage(script.thumbsup, script.thumbsdown)}%</p>
                 </div>
-                { script.likes.integerValue == 0 ? null : (
+                { script.likes == 0 ? null : (
                 <div className={style.likes}>
                     <FaHeart />
-                    <p>{script.likes.integerValue}</p>
+                    <p>{script.likes}</p>
                 </div>
                 )}
             </div>
