@@ -1,0 +1,70 @@
+.sidebyside {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2em;
+}
+
+.imagewrapper {
+    width: 50%;
+    height: 380px;
+    background-color: #000;
+    display: grid;
+    place-items: center left;
+}
+.imagewrapper > img {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.details {
+    width: 50%;
+    padding-left: 2em;
+}
+
+.name {
+    font-size: 4em;
+}
+
+.author {
+    font-size: 2em;
+}
+
+.author a:hover {
+    color: #e8739c;
+    cursor: pointer;
+}
+
+.duration > p {
+    font-size: 2em;
+    margin-top: 0.5em;;
+}
+
+.source {
+    background-color: #e8739c;
+    display: block;
+    width: 270px;
+    font-size: 1.4em;
+    padding: 0.25em 0.5em;
+    border-radius: 5px;
+    color: #000;
+    margin-top: 1em;
+    text-align: center;
+}
+
+.stats {
+    font-size: 1.5em;
+    color: #777;
+    margin-top: 1em;
+}
+
+.stats li {
+    margin-top: 0.5em;
+}
+
+.stats span {
+    color: #777;
+}
+
+.stats svg {
+    margin-right: 0.5em;
+}
