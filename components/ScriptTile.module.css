@@ -1,0 +1,64 @@
+.scripttile {
+    margin-bottom: 1em;
+}
+
+.thumbnail {
+    display: block;
+    position: relative;
+}
+.imagewrapper {
+    background-color: #000;
+    display: grid;
+    place-items: center;
+    box-shadow: 0x 0px 0px 2px rgba(0,0,0,0);
+    transition: box-shadow 0.2s;
+}
+.imagewrapper:hover {
+    box-shadow: 0px 0px 0px 2px #e8739c;
+}
+.imagewrapper > img {
+    max-width: 100%;
+    max-height: 100%;
+}
+.thumbnail > span {
+    display: block;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+}
+
+.scriptname { 
+    margin: 0.5em 0;
+}
+.scriptname > a {
+    height: 2.25em;
+    overflow-y: hidden;
+}
+.scriptname > a:hover {
+    color: #e8739c;
+}
+
+.scriptauthor {
+    margin: 0;
+}
+.scriptauthor > a {
+    color: #777;
+}
+.scriptauthor > a:hover {
+    color: #e8739c;
+}
+
+.bottomrow {
+    display: flex;
+    justify-content: flex-start;
+}
+.bottomrow > p {
+    color: #777;
+    margin: 0.5em 0;
+}
+.bottomrow > p:first-child {
+    margin-right: 1em;
+}
+.bottomrow > p:last-child {
+    margin-left: 0.5em;
+}
