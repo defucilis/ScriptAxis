@@ -1,22 +1,29 @@
+import {useState, useEffect} from 'react'
 import Layout from '../components/Layout'
-import ScriptGrid from '../components/ScriptGrid'
 import axios from 'axios'
 import ScriptUtils from '../utilities/ScriptUtils'
+import ScriptGrid from '../components/ScriptGrid'
 import Head from 'next/head'
 
-const Index = ({scripts}) => {
+const Scripts = ({propScripts}) => {
+
+    const [scripts, setScripts] = useState([]);
+    useEffect(() => {
+        setScripts(propScripts);
+    }, [propScripts])
+
     return (
-        <Layout>
-            <Head>
-                <title>ScriptAxis | The Funscript Library (Work in Progress!)</title>
+        <Layout page="scripts">
+         <Head>
+                <title>ScriptAxis | Scripts</title>
             </Head>
-            <h2 style={{marginBottom: "0.5em"}}>Recently added scripts</h2>
-            <ScriptGrid scripts={scripts}/>
+            <h1>Scripts</h1>
+            <ScriptGrid scripts={scripts} />
         </Layout>
     )
 }
 
-export async function getServerSideProps(ctx) {
+export async function getServerSideProps() {
     const res = await axios.post(`https://firestore.googleapis.com/v1/projects/scriptlibrary-8f879/databases/(default)/documents/:runQuery`, {
         structuredQuery : {
             from: [{
@@ -27,17 +34,15 @@ export async function getServerSideProps(ctx) {
                     fieldPath: "created"
                 },
                 direction: "DESCENDING"
-            }],
-            limit: 12
+            }]
         }
     });
-    let scripts = res.data;
-    scripts = scripts.map(script => ScriptUtils.parseScriptDocument(script.document));
+    let scripts = res.data.map(script => ScriptUtils.parseScriptDocument(script.document));
     return {
         props: {
-            scripts
+            propScripts: [...scripts]
         }
     }
 }
 
-export default Index;
+export default Scripts;

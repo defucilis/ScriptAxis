@@ -29,7 +29,7 @@ const Header = ({page}) => {
                 <div className="container">
                     <ul>
                         <li className={!page || page === "home" ? styles.currentnav : null}><Link href="/">HOME</Link></li>
-                        <li className={page === "scripts" ? styles.currentnav : null}><Link href="/">SCRIPTS</Link></li>
+                        <li className={page === "scripts" ? styles.currentnav : null}><Link href="/scripts">SCRIPTS</Link></li>
                         <li className={page === "categories" ? styles.currentnav : null} onClick={() => alert("Coming soon!")}><Link href="/">CATEGORIES</Link></li>
                         <li className={page === "tags" ? styles.currentnav : null} onClick={() => alert("Coming soon!")}><Link href="/">TAGS</Link></li>
                         <li className={page === "authors" ? styles.currentnav : null}><Link href="/">AUTHORS</Link></li>

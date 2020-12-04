@@ -21,7 +21,6 @@ const handleSubmit = e => {
 
     const doRequest = async postData => {
         const res = await axios.post("https://firestore.googleapis.com/v1/projects/scriptlibrary-8f879/databases/(default)/documents/scripts", postData);
-        console.log(res);
         Router.push("/");
     }
 
