@@ -28,7 +28,7 @@ const viewsToString = views => {
         return (Math.round(views / 100) / 10) + "k";
     }
 
-    return Math.round(views) + " Views";
+    return Math.round(views) + "";
 }
 
 const thumbsToPercentage = (thumbsup, thumbsdown) => {
