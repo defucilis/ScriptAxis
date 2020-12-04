@@ -7,7 +7,7 @@ import Head from 'next/head'
 const Script = ({script}) => {
 
     return (
-        <Layout>
+        <Layout page="scripts">
             <Head>
                 <title>ScriptAxis | {script.name}</title>
             </Head>

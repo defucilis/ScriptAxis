@@ -4,7 +4,7 @@ import {FaSearch} from 'react-icons/fa'
 
 import styles from './Header.module.css'
 
-const Header = () => {
+const Header = ({page}) => {
     return (
         <div className={styles.header}>
             <div className={styles.searchbar}>
@@ -28,11 +28,11 @@ const Header = () => {
             <div className={styles.navbar}>
                 <div className="container">
                     <ul>
-                        <li className={styles.currentnav}><Link href="/">HOME</Link></li>
-                        <li><Link href="/">SCRIPTS</Link></li>
-                        <li><Link href="/">CATEGORIES</Link></li>
-                        <li><Link href="/">TAGS</Link></li>
-                        <li><Link href="/">LINKS</Link></li>
+                        <li className={!page || page === "home" ? styles.currentnav : null}><Link href="/">HOME</Link></li>
+                        <li className={page === "scripts" ? styles.currentnav : null}><Link href="/">SCRIPTS</Link></li>
+                        <li className={page === "categories" ? styles.currentnav : null} onClick={() => alert("Coming soon!")}><Link href="/">CATEGORIES</Link></li>
+                        <li className={page === "tags" ? styles.currentnav : null} onClick={() => alert("Coming soon!")}><Link href="/">TAGS</Link></li>
+                        <li className={page === "authors" ? styles.currentnav : null}><Link href="/">AUTHORS</Link></li>
                     </ul>
                 </div>
             </div>

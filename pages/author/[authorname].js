@@ -11,7 +11,7 @@ const Author = ({scripts}) => {
     const {authorname} = router.query;
 
     return (
-        <Layout>
+        <Layout page="authors">
          <Head>
                 <title>ScriptAxis | {authorname}</title>
             </Head>
