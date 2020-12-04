@@ -9,7 +9,7 @@ const durationToString = duration => {
     const seconds = duration - (minutes * 60) - (hours * 3600);
     if(hours > 0) output += hours + ":";
     if(minutes > 0) output += minutes + ":";
-    if(seconds > 10) output += seconds;
+    if(seconds >= 10) output += seconds;
     else if(seconds > 0) output += "0" + seconds;
     else output += "00";
     return output;
@@ -44,6 +44,7 @@ const ScriptTile = ({script}) => {
                     <div className={style.imagewrapper}>
                         <img src={script.thumbnail.stringValue} />
                     </div>
+                    <div className={style.imageoverlay}></div>
                     <span>{durationToString(script.duration.integerValue)}</span>
                 </a>
             </Link>
