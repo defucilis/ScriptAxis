@@ -1,14 +1,11 @@
-import Header from '../components/Header'
+import Layout from '../components/Layout'
 import ScriptGrid from '../components/ScriptGrid'
 
 const Index = ({scripts}) => {
     return (
-        <div>
-            <Header />
-            <div className="container">
-                <ScriptGrid scripts={scripts}/>
-            </div>
-        </div>
+        <Layout>
+            <ScriptGrid scripts={scripts}/>
+        </Layout>
     )
 }
 
