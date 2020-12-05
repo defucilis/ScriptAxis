@@ -1,0 +1,9 @@
+.browsescripts {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+}
+
+.tileheader {
+    display: flex;
+    justify-content: space-between;
+}

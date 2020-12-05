@@ -1,39 +1,13 @@
-import {useState, useEffect} from 'react'
 import Layout from '../components/Layout'
 import ScriptUtils from '../utilities/ScriptUtils'
-import ScriptGrid from '../components/ScriptGrid'
-import Head from 'next/head'
 import firebase from '../utilities/Firebase'
 import Fuse from 'fuse.js'
+import BrowseScripts from '../components/BrowseScripts'
 
-const Scripts = ({propScripts, query}) => {
-
-    const [scripts, setScripts] = useState([]);
-    useEffect(() => {
-        setScripts(propScripts);
-    }, [propScripts])
-
-    const getHeadTitle = query => {
-        return query.search || query.category || query.tag || "Scripts";
-    }
-
-    const getBodyTitle = query => {
-        if(query.search) 
-            return `Scripts matching "${query.search}"`
-        if(query.category)
-            return `${ScriptUtils.getPrettyCategory(query.category)} Scripts`;
-        if(query.tag)
-            return `Scripts tagged with ${ScriptUtils.getPrettyCategory(query.tag)}`;
-        return "All Scripts";
-    }
-
+const Scripts = ({propScripts, tags, categories, query}) => {
     return (
         <Layout page="scripts">
-            <Head>
-                <title>ScriptAxis | {getHeadTitle(query)}</title>
-            </Head>
-            <h1 style={{marginBottom: "0.5em"}}>{getBodyTitle(query)}</h1>
-            <ScriptGrid scripts={scripts} />
+            <BrowseScripts propScripts={propScripts} tags={tags} categories={categories} query={query} />
         </Layout>
     )
 }
@@ -71,9 +45,18 @@ export async function getServerSideProps({query}) {
 
     if(!snapshot || !snapshot.docs) return {props: { propScripts: [] }}
     
+    let dbQuery = db.collection("tags");
+    snapshot = await dbQuery.get();
+    const tags = snapshot.docs.map(doc => doc.id);
+    dbQuery = db.collection("categories");
+    snapshot = await dbQuery.get();
+    const categories = snapshot.docs.map(doc => doc.id);
+
     return {
         props: {
             propScripts: scripts,
+            categories,
+            tags,
             query
         }
     }

@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react';
 import ScriptTile from './ScriptTile'
 import style from './ScriptGrid.module.css';
 
-const ScriptGrid = ({scripts}) => {
+const ScriptGrid = ({scripts, customStyle}) => {
 
     const [tiles, setTiles] = useState([]);
     useEffect(() => {
@@ -16,7 +16,7 @@ const ScriptGrid = ({scripts}) => {
     }, [scripts]);
 
     return (
-        <div className={style.scriptgrid}>
+        <div className={style.scriptgrid} style={customStyle}>
             {tiles}
         </div>
     )

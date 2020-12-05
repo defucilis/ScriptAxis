@@ -23,6 +23,7 @@
     "react-dropzone": "^11.2.4",
     "react-icons": "^4.1.0",
     "react-markdown": "^5.0.3",
+    "react-slider": "^1.1.2",
     "slugify": "^1.4.6"
   }
 }
