@@ -1,5 +1,5 @@
 .form {
-
+    margin-top: 1em;
 }
 
 .form > label {
@@ -10,12 +10,25 @@
 .form > input {
     display: block;
     margin-bottom: 1em;
-    width: 40%;
+    width: 60%;
+    font-size: 1.2em;
+    padding: 0.25em 0.5em;
 }
 
 .form > textarea {
     display: block;
     margin-bottom: 1em;
-    width: 40%;
+    width: 60%;
     height: 6em;
+    font-size: 1.2em;
+    padding: 0.25em 0.5em;
+}
+
+.dropzone {
+    height: 100px;
+    border: 2px dashed white;
+    width: 60%;
+    margin-bottom: 1em;
+    display: grid;
+    place-items: center;
 }

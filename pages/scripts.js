@@ -14,7 +14,7 @@ const Scripts = ({propScripts}) => {
 
     return (
         <Layout page="scripts">
-         <Head>
+            <Head>
                 <title>ScriptAxis | Scripts</title>
             </Head>
             <h1>Scripts</h1>

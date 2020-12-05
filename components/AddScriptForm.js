@@ -1,6 +1,10 @@
+import {useState} from 'react'
 import Router from 'next/router'
 import slugify from 'slugify'
 import firebase from '../utilities/Firebase'
+import FirebaseUtils from '../utilities/FirebaseUtils'
+
+import {useDropzone} from 'react-dropzone'
 
 import style from './AddScriptForm.module.css'
 
@@ -17,37 +21,68 @@ const stringToDuration = str => {
     return -1;
 }
 
-const handleSubmit = e => {
-
-    const doRequest = async postData => {
-        const db = firebase.firestore();
-        const dbQuery = db.collection("scripts");
-        const data = await dbQuery.add(postData);
-        Router.push("/");
+const AddScriptForm = () => {
+    const getFile = files => {
+        setThumbnailFile(files[0]);
     }
 
-    e.preventDefault();
+    const reportFileError = rejections => {
+        alert(rejections[0].errors[0].message);
+    }
 
-    const postData = {
-        name: e.target.name.value,
-        source: e.target.source.value,
-        author: e.target.author.value,
-        slug: slugify(e.target.name.value).toLowerCase(),
-        description: e.target.description.value,
-        thumbnail: e.target.thumbnail.value,
-        duration: stringToDuration(e.target.duration.value),
-        views: 0,
-        thumbsup: 1,
-        thumbsdown: 0,
-        created: firebase.firestore.Timestamp.fromDate(new Date()),
-        modified: firebase.firestore.Timestamp.fromDate(new Date()),
-        likes: 0,
-    };
+    const {getRootProps, getInputProps} = useDropzone({
+        accept: [
+            "image/png",
+            "image/jpeg"
+        ],
+        maxSize: 2000000, //2MB
+        multiple: false,
+        noKeyboard: true,
+        preventDropOnDocument: true,
+        onDropAccepted: getFile,
+        onDropRejected: reportFileError
+    });
 
-    doRequest(postData);
-}
+    const [thumbnailFile, setThumbnailFile] = useState(null);
 
-const AddScriptForm = () => {
+    const handleSubmit = e => {
+
+        e.preventDefault();
+
+        if(thumbnailFile === null) {
+            alert("No thumbnail provided!");
+            return;
+        }
+
+        const doRequest = async postData => {
+            const fileUrl = await FirebaseUtils.uploadFile(thumbnailFile, `thumbnails/thumbnail_${postData.slug}`, progress => console.log(progress));
+            postData.thumbnail = fileUrl;
+
+            const db = firebase.firestore();
+            const dbQuery = db.collection("scripts");
+            const data = await dbQuery.add(postData);
+            Router.push("/");
+        }
+    
+    
+        const postData = {
+            name: e.target.name.value,
+            source: e.target.source.value,
+            author: e.target.author.value,
+            slug: slugify(e.target.name.value).toLowerCase(),
+            description: e.target.description.value,
+            duration: stringToDuration(e.target.duration.value),
+            views: 0,
+            thumbsup: 1,
+            thumbsdown: 0,
+            created: firebase.firestore.Timestamp.fromDate(new Date()),
+            modified: firebase.firestore.Timestamp.fromDate(new Date()),
+            likes: 0,
+        };
+    
+        doRequest(postData);
+    }
+
     return (
         <form className={style.form} onSubmit={handleSubmit}>
             <label htmlFor="name">Script Name</label>
@@ -56,8 +91,15 @@ const AddScriptForm = () => {
             <input type="text" id="source" />
             <label htmlFor="author">Script Author</label>
             <input type="text" id="author" />
-            <label htmlFor="thumbnail">Thumbnail Image URL</label>
-            <input type="text" id="thumbnail" />
+            <div {...getRootProps({className: style.dropzone})}>
+                <input {...getInputProps()} />
+                {
+                <p>{!thumbnailFile || thumbnailFile.name === "" 
+                    ? "Drag + drop a thumbnail image, or click to select one" 
+                    : `${thumbnailFile.name} (${(thumbnailFile.size / (thumbnailFile.size > 1000000 ? 1000000 : 1000)).toFixed(1)} ${(thumbnailFile.size > 1000000 ? "MB" : "kB")})`}
+                </p>
+                }
+            </div>
             <label htmlFor="duration">Script Duration</label>
             <input type="text" id="duration" />
             <label htmlFor="description">Script Description</label>

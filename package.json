@@ -17,7 +17,9 @@
     "next": "^10.0.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-dropzone": "^11.2.4",
     "react-icons": "^4.1.0",
+    "react-markdown": "^5.0.3",
     "slugify": "^1.4.6"
   }
 }
