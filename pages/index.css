@@ -21,6 +21,10 @@ h1 {
     font-size: 1.5em;
 }
 
+*:focus {
+    outline: none;
+}
+
 ul {
     list-style: none;
     padding: 0;
@@ -37,6 +41,7 @@ a {
 
 .content {
     min-height: calc(100vh - 200px);
+    padding-bottom: 50px;
 }
 
 .container {
@@ -55,4 +60,15 @@ a {
 
 ::placeholder {
     font-style: italic;
+}
+
+input, textarea {
+    background-color: #363636;
+    color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+}
+
+.tagify__tag-text {
+    color: #000;
 }
