@@ -8,14 +8,14 @@ const Tags = dynamic(() => import("@yaireo/tagify/dist/react.tagify"), { ssr: fa
 import ReactSlider from 'react-slider'
 
 const Filters = ({tags, categories, query, onFilter}) => {
-    const [filters, setFilters] = useState(() => {
-        if(query.category) return { category: query.category };
-        return {};
-    });
+    const [filters, setFilters] = useState({});
     const [initialIncludeTags, setInitialIncludeTags] = useState("");
     useEffect(() => {
         if(query.tag) {
             setInitialIncludeTags(query.tag)
+        }
+        if(query.category) {
+            setCategory(query.category);
         }
     }, [query])
 
