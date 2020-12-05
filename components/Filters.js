@@ -47,7 +47,7 @@ const Filters = ({tags, categories, query, onFilter}) => {
         setFilters(cur => {
             return {
                 ...cur,
-                category: category
+                category: cur.category && cur.category === category ? "" : category
             }
         });
     }
