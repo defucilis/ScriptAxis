@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@yaireo/tagify": "^3.21.5",
     "axios": "^0.21.0",
     "firebase": "^8.1.2",
     "isomorphic-unfetch": "^3.1.0",

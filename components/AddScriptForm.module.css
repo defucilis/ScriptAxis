@@ -13,6 +13,7 @@
     width: 60%;
     font-size: 1.2em;
     padding: 0.25em 0.5em;
+    border: none;
 }
 
 .form > textarea {
@@ -22,6 +23,15 @@
     height: 6em;
     font-size: 1.2em;
     padding: 0.25em 0.5em;
+    border: none;
+}
+
+.form > select {
+    margin-bottom: 1em;
+    width: 60%;
+    font-size: 1.2em;
+    padding: 0.25em 0.5em;
+    border: none;
 }
 
 .dropzone {
@@ -31,4 +41,13 @@
     margin-bottom: 1em;
     display: grid;
     place-items: center;
+}
+
+.tags {
+    width: 60%;
+    background-color: #fff;
+    --tag-bg: #e8739c;
+    --tag-hover: #c9577f;
+    --tag-remove-bg: #963658;
+    margin-bottom: 1em;
 }

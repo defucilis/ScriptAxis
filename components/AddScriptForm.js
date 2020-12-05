@@ -1,10 +1,14 @@
-import {useState} from 'react'
+import {useState, useEffect, useRef} from 'react'
 import Router from 'next/router'
 import slugify from 'slugify'
 import firebase from '../utilities/Firebase'
 import FirebaseUtils from '../utilities/FirebaseUtils'
+import ScriptUtils from '../utilities/ScriptUtils'
 
 import {useDropzone} from 'react-dropzone'
+
+import dynamic from 'next/dynamic'
+const Tags = dynamic(() => import("@yaireo/tagify/dist/react.tagify"), { ssr: false });
 
 import style from './AddScriptForm.module.css'
 
@@ -21,7 +25,7 @@ const stringToDuration = str => {
     return -1;
 }
 
-const AddScriptForm = () => {
+const AddScriptForm = ({tags, categories}) => {
     const getFile = files => {
         setThumbnailFile(files[0]);
     }
@@ -55,16 +59,43 @@ const AddScriptForm = () => {
         }
 
         const doRequest = async postData => {
+            //upload the thumbnail and add it to the database
             const fileUrl = await FirebaseUtils.uploadFile(thumbnailFile, `thumbnails/thumbnail_${postData.slug}`, progress => console.log(progress));
             postData.thumbnail = fileUrl;
 
+            //Get the ID of the new record, and create it
             const db = firebase.firestore();
-            const dbQuery = db.collection("scripts");
-            const data = await dbQuery.add(postData);
+            let dbQuery = db.collection("scripts").doc();
+            const newId = dbQuery.id;
+            let dbData = await dbQuery.set(postData);
+            
+
+            //Operate on tags
+            postData.tags.forEach(async tag => {
+                dbQuery = db.collection("tags").doc(tag);
+
+                if(tags.findIndex(t => t === tag) === -1) {
+                    //If the tag is new, add it to the database
+                    await dbQuery.set({
+                        scripts: [newId]
+                    });
+                } else {
+                    //Otherwise, add the new script to it
+                    await dbQuery.update({
+                        scripts: firebase.firestore.FieldValue.arrayUnion(newId)
+                    });
+                }
+            })
+
+            //Add the new script to the chosen category
+            dbQuery = db.collection("categories").doc(postData.category);
+            await dbQuery.update({
+                scripts: firebase.firestore.FieldValue.arrayUnion(newId)
+            });
+
             Router.push("/");
         }
-    
-    
+
         const postData = {
             name: e.target.name.value,
             source: e.target.source.value,
@@ -72,6 +103,8 @@ const AddScriptForm = () => {
             slug: slugify(e.target.name.value).toLowerCase(),
             description: e.target.description.value,
             duration: stringToDuration(e.target.duration.value),
+            category: e.target.category.value,
+            tags: [e.target.category.value, ...chosenTags],
             views: 0,
             thumbsup: 1,
             thumbsdown: 0,
@@ -82,6 +115,17 @@ const AddScriptForm = () => {
     
         doRequest(postData);
     }
+
+    const [categoryOptions, setCategoryOptions] = useState([]);
+    const [chosenTags, setChosenTags] = useState([]);
+    useEffect(() => {
+        if(!categories) return;
+
+        setCategoryOptions(categories.map(category => {
+            const prettyName = ScriptUtils.getPrettyCategory(category);
+            return <option key={category} value={category}>{prettyName}</option>
+        }));
+    }, [categories])
 
     return (
         <form className={style.form} onSubmit={handleSubmit}>
@@ -100,6 +144,41 @@ const AddScriptForm = () => {
                 </p>
                 }
             </div>
+            <label htmlFor="category">Script Category</label>
+            <select id="category">
+                {categoryOptions}
+            </select>
+            <label htmlFor="tags">Script Tags</label>
+            <Tags 
+                className={style.tags}
+                settings = {
+                    {
+                        whitelist: tags,
+                        blacklist: categories,
+                        validate: tag => {
+                            const transformedTag = tag.value.trim().toLowerCase();
+                            const match = transformedTag.match("[a-z ]+");
+                            console.log({
+                                transformedTag,
+                                matches: transformedTag.match("[a-z ]+")
+                            })
+                            const success = match && match.length === 1 && match[0].length === transformedTag.length;
+                            return success 
+                                ? true 
+                                : "Letters only!";
+                        }
+                    }
+                }
+                onChange={e => {
+                    e.persist();
+                    if(!e.target.value || e.target.value.length === 0) {
+                        setChosenTags([]);
+                        return;
+                    }
+                    const json = JSON.parse(e.target.value);
+                    setChosenTags(json.map(tag => tag.value.trim().toLowerCase().replace(" ", "-")));
+                }}
+            />
             <label htmlFor="duration">Script Duration</label>
             <input type="text" id="duration" />
             <label htmlFor="description">Script Description</label>

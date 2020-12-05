@@ -34,9 +34,23 @@
     cursor: pointer;
 }
 
+
+.category {
+    margin-top: 0.5em;;
+    font-size: 1.8em;
+}
+
+.tags > li {
+    display: inline;
+    background-color: #1b1b1b;
+    border-radius: 5px;
+    padding: 0.25em 0.5em;
+    margin-right: 0.5em;
+}
+
 .duration > p {
     font-size: 2em;
-    margin-top: 0.5em;;
+    margin-top: 1em;;
 }
 
 .source {

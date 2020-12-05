@@ -9,6 +9,8 @@ const ScriptUtils = {
             description: scriptDocument.description,
             source: scriptDocument.source,
             thumbnail: scriptDocument.thumbnail,
+            category: scriptDocument.category || null,
+            tags: scriptDocument.tags || [],
             created: scriptDocument.created.toMillis(),
             modified: scriptDocument.modified.toMillis(),
             likes: scriptDocument.likes,
@@ -47,6 +49,15 @@ const ScriptUtils = {
     thumbsToPercentage: (thumbsup, thumbsdown) => {
         const percentage = (thumbsup / (Number(thumbsup) + Number(thumbsdown)));
         return Math.round(percentage * 100.0);
+    },
+    getPrettyCategory: category => {
+        let prettyName = category.replace("-", " ");
+        if(prettyName.length < 4) return prettyName.toUpperCase();
+
+        return prettyName
+            .split(" ")
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
     }
 }
 

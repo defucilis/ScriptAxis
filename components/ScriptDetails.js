@@ -20,6 +20,13 @@ const ScriptDetails = ({script}) => {
                     <img src={script.thumbnail} />
                 </div>
                 <div className={style.details}>
+                    <p className={style.category}>{!script.category ? "No Category" : ScriptUtils.getPrettyCategory(script.category)}</p>
+                    <ul className={style.tags}>
+                        {!script.tags 
+                            ? null 
+                            : script.tags.map(tag => <li key={tag}>{ScriptUtils.getPrettyCategory(tag)}</li>)
+                        }
+                    </ul>
                     <div className={style.duration}>
                         <p>Duration: {ScriptUtils.durationToString(script.duration)}</p>
                     </div>
