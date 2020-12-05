@@ -16,14 +16,19 @@ const Script = ({script}) => {
     )
 }
 
-export async function getServerSideProps({query}) {
+export async function getServerSideProps({query,res}) {
     const db = firebase.firestore();
     const dbQuery = db.collection("scripts").where("slug", "==", query.scriptslug);
     const snapshot = await dbQuery.get();
     const scripts = snapshot.docs.map(doc => ScriptUtils.parseScriptDocument(doc.data()));
+    if(!scripts || scripts.length === 0) {
+        return {
+            notFound: true
+        }
+    }
     return {
         props: {
-            script : scripts && scripts.length > 0 ? scripts[0] : null
+            script : scripts[0]
         }
     }
 }
