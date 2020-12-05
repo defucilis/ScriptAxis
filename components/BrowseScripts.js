@@ -57,9 +57,16 @@ const BrowseScripts = ({propScripts, tags, categories, query}) => {
                         <h1>{getBodyTitle(query)}</h1>
                         <Sorting onSort={handleSort} />
                     </div>
-                    <ScriptGrid scripts={scripts} customStyle={{
-                        gridTemplateColumns: `repeat(3, 1fr)`
-                    }} />
+                    {!scripts || scripts.length === 0 ? (
+                        <div className={style.noscripts}>
+                            <p>No scripts match your selected filters</p>
+                        </div>
+                    ) : (
+                        <ScriptGrid scripts={scripts} customStyle={{
+                            gridTemplateColumns: `repeat(3, 1fr)`
+                        }} />
+                    )}
+                    
                 </div>
             </div>
         </div>
