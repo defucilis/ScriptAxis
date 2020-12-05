@@ -110,7 +110,7 @@ const Filters = ({tags, categories, query, onFilter}) => {
                     </ul>
                 </div>
 
-                <label htmlFor="includeTags">Include Tags</label>
+                <label htmlFor="includeTags">Tags</label>
                 <div className={style.field}>
                     <Tags 
                         className={style.tags}
@@ -137,7 +137,7 @@ const Filters = ({tags, categories, query, onFilter}) => {
                         }}
                     />
                 </div>
-
+                {/* Sadly, it seems that Firestore just can't do this :c
                 <label htmlFor="excludeTags">Exclude Tags</label>
                 <div className={style.field}>
                     <Tags 
@@ -164,6 +164,7 @@ const Filters = ({tags, categories, query, onFilter}) => {
                         }}
                     />
                 </div>
+                */}
                 
                 <label htmlFor="duration">Duration (minutes)</label>
                 <div className={style.field}>
