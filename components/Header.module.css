@@ -1,5 +1,6 @@
 .header {
     margin-bottom: 2em;
+    position: relative;
 }
 
 .logo {
@@ -114,4 +115,32 @@
 
 .currentnav {
     border-bottom: 2px solid #e8739c;
+}
+
+.categories, .tags {
+    position: absolute;
+    width: 100%;
+    background-color: #202020;
+    z-index: 2;
+    padding: 2em 0;
+    display: none;
+}
+
+.categories ul, .tags ul {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-gap: 1em;
+}
+.categories li, .tags li {
+    height: 80px;
+    background-color: #1b1b1b;
+}
+.categories li a, .tags li a {
+    height: 100%;
+    text-align: center;
+    display: grid;
+    align-items: center;
+}
+.categories li a:hover, .tags li a:hover {
+    box-shadow: 0px 0px 0px 2px #fff;
 }

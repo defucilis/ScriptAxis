@@ -20,7 +20,7 @@ export async function getServerSideProps(ctx) {
     const db = firebase.firestore();
     const dbQuery = db.collection("scripts").orderBy("created", "desc").limit(12);
     const snapshot = await dbQuery.get();
-    const scripts = snapshot.docs.map(doc => ScriptUtils.parseScriptDocument(doc.data()));
+    const scripts = snapshot.docs.map(doc => ScriptUtils.parseScriptDocument(doc));
     return {
         props: {
             scripts

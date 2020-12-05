@@ -28,7 +28,7 @@ export async function getServerSideProps({query}) {
     //we do sorting on the server to avoid needing to create a composite key
     //maybe we should just create one? Something to research
     const scripts = snapshot.docs
-        .map(doc => ScriptUtils.parseScriptDocument(doc.data()))
+        .map(doc => ScriptUtils.parseScriptDocument(doc))
         .sort((a, b) => b.created - a.created);
     return {
         props: {

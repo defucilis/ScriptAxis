@@ -1,21 +1,23 @@
 const ScriptUtils = {
     parseScriptDocument: scriptDocument => {
+        const script = scriptDocument.data();
         return {
-            name: scriptDocument.name,
-            slug: scriptDocument.slug,
-            author: scriptDocument.author,
-            duration: scriptDocument.duration,
-            description: scriptDocument.description,
-            source: scriptDocument.source,
-            thumbnail: scriptDocument.thumbnail,
-            category: scriptDocument.category || null,
-            tags: scriptDocument.tags || [],
-            created: scriptDocument.created.toMillis(),
-            modified: scriptDocument.modified.toMillis(),
-            likes: scriptDocument.likes,
-            thumbsdown: scriptDocument.thumbsdown,
-            thumbsup: scriptDocument.thumbsup,
-            views: scriptDocument.views,
+            id: scriptDocument.id,
+            name: script.name,
+            slug: script.slug,
+            author: script.author,
+            duration: script.duration,
+            description: script.description,
+            source: script.source,
+            thumbnail: script.thumbnail,
+            category: script.category || null,
+            tags: script.tags || [],
+            created: script.created.toMillis(),
+            modified: script.modified.toMillis(),
+            likes: script.likes,
+            thumbsdown: script.thumbsdown,
+            thumbsup: script.thumbsup,
+            views: script.views,
         }
     },
     durationToString: duration => {
