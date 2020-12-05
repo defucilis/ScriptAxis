@@ -10,7 +10,7 @@ const Index = ({scripts}) => {
             <Head>
                 <title>ScriptAxis | The Funscript Library (Work in Progress!)</title>
             </Head>
-            <h1 style={{marginBottom: "0.5em"}}>Recently added scripts</h1>
+            <h1>Recently added scripts</h1>
             <ScriptGrid scripts={scripts}/>
         </Layout>
     )
