@@ -1,10 +1,32 @@
+import {useState, useEffect} from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import {FaSearch} from 'react-icons/fa'
+import firebase from '../utilities/Firebase'
 
 import styles from './Header.module.css'
 
 const Header = ({page}) => {
+
+    const [scriptCount, setScriptCount] = useState(0);
+    useEffect(() => {
+        const loadScriptCount = async () => {
+            const db = firebase.firestore();
+            const dbQuery = db.collection("categories");
+            const snapshot = await dbQuery.get();
+            const scriptCount = snapshot.docs.reduce((acc, doc) => {
+                const scripts = doc.data().scripts;
+                if(!scripts || !scripts.length) return acc;
+                return acc + scripts.length;
+            }, 0);
+            window.localStorage.setItem("scriptCount", scriptCount);
+            setScriptCount(scriptCount);
+        }
+        const storedScriptCount = window.localStorage.getItem("scriptCount");
+        if(storedScriptCount) setScriptCount(storedScriptCount);
+        loadScriptCount();
+    }, [])
+
     return (
         <div className={styles.header}>
             <div className={styles.searchbar}>
@@ -15,7 +37,7 @@ const Header = ({page}) => {
                         </a>
                     </Link>
                     <form>
-                        <input type="text" placeholder="Search 2,298 Scripts..." />
+                        <input type="text" placeholder={`Search ${scriptCount > 0 ? scriptCount + " " : ""}Scripts...`} />
                         <button type="submit">
                             <FaSearch />
                         </button>
