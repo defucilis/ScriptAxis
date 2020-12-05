@@ -129,11 +129,11 @@ const AddScriptForm = ({tags, categories}) => {
 
     return (
         <form className={style.form} onSubmit={handleSubmit}>
-            <label htmlFor="name">Script Name</label>
+            <label htmlFor="name">Name</label>
             <input type="text" id="name" />
-            <label htmlFor="source">Source Link</label>
+            <label htmlFor="source">Link to Source</label>
             <input type="text" id="source" />
-            <label htmlFor="author">Script Author</label>
+            <label htmlFor="author">Author</label>
             <input type="text" id="author" />
             <div {...getRootProps({className: style.dropzone})}>
                 <input {...getInputProps()} />
@@ -144,11 +144,11 @@ const AddScriptForm = ({tags, categories}) => {
                 </p>
                 }
             </div>
-            <label htmlFor="category">Script Category</label>
+            <label htmlFor="category">Category</label>
             <select id="category">
                 {categoryOptions}
             </select>
-            <label htmlFor="tags">Script Tags</label>
+            <label htmlFor="tags">Tags</label>
             <Tags 
                 className={style.tags}
                 settings = {
@@ -175,9 +175,9 @@ const AddScriptForm = ({tags, categories}) => {
                     setChosenTags(json.map(tag => tag.value.trim().toLowerCase().replace(" ", "-")));
                 }}
             />
-            <label htmlFor="duration">Script Duration</label>
+            <label htmlFor="duration">Duration</label>
             <input type="text" id="duration" />
-            <label htmlFor="description">Script Description</label>
+            <label htmlFor="description">Description</label>
             <textarea id="description"></textarea>
             <input type="submit" value="Add Script"></input>
         </form>

@@ -1,10 +1,14 @@
 import Layout from '../components/Layout'
 import AddScriptForm from '../components/AddScriptForm'
 import firebase from '../utilities/Firebase'
+import Head from 'next/head'
 
 const Add = ({tags, categories}) => {
     return (
         <Layout>
+            <Head>
+                <title>ScriptAxis | Add Script</title>
+            </Head>
             <h1>Add a Script</h1>
             <AddScriptForm tags={tags} categories={categories}/>
         </Layout>
