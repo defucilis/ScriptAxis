@@ -4,6 +4,8 @@ import ScriptUtils from '../utilities/ScriptUtils'
 import { FaThumbsUp } from 'react-icons/fa'
 import { FaHeart } from 'react-icons/fa'
 import { FaRegEye } from 'react-icons/fa'
+import ReactMarkdown from 'react-markdown'
+import moment from 'moment'
 
 const ScriptDetails = ({script}) => {
     return (
@@ -14,11 +16,19 @@ const ScriptDetails = ({script}) => {
                     <span>By <a>{script.author}</a></span>
                 </Link>
             </div>
+            <p className={style.created}>{moment(script.created, "x").format("Do MMMM YYYY")}</p>
             <div className={style.sidebyside}>
                 <div className={style.imagewrapper}>
                     <img src={script.thumbnail} />
                 </div>
                 <div className={style.details}>
+                    <p className={style.category}>{!script.category ? "No Category" : ScriptUtils.getPrettyCategory(script.category)}</p>
+                    <ul className={style.tags}>
+                        {!script.tags 
+                            ? null 
+                            : script.tags.map(tag => <li key={tag}>{ScriptUtils.getPrettyCategory(tag)}</li>)
+                        }
+                    </ul>
                     <div className={style.duration}>
                         <p>Duration: {ScriptUtils.durationToString(script.duration)}</p>
                     </div>
@@ -41,6 +51,7 @@ const ScriptDetails = ({script}) => {
                     </ul>
                 </div>
             </div>
+            <ReactMarkdown source={script.description} />
         </div>
     )
 }

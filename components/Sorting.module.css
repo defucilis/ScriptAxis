@@ -1,0 +1,12 @@
+.sorting select {
+    background: none;
+    color: #fff;
+    border: 0;
+    -webkit-appearance: none;
+    padding: 0.5em 1.5em 0.5em 0.5em;
+    text-align: right;
+    font-size: 1.2em;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='36' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M0 6l8 12 8-12z'/><path d='M0 5h36v36H5z' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center right;
+}

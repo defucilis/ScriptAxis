@@ -11,12 +11,19 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@yaireo/tagify": "^3.21.5",
     "axios": "^0.21.0",
+    "firebase": "^8.1.2",
+    "fuse.js": "^6.4.3",
     "isomorphic-unfetch": "^3.1.0",
+    "moment": "^2.29.1",
     "next": "^10.0.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-dropzone": "^11.2.4",
     "react-icons": "^4.1.0",
+    "react-markdown": "^5.0.3",
+    "react-slider": "^1.1.2",
     "slugify": "^1.4.6"
   }
 }

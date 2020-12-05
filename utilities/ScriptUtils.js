@@ -1,19 +1,23 @@
 const ScriptUtils = {
     parseScriptDocument: scriptDocument => {
+        const script = scriptDocument.data();
         return {
-            name: scriptDocument.fields.name.stringValue,
-            slug: scriptDocument.fields.slug.stringValue,
-            author: scriptDocument.fields.author.stringValue,
-            duration: scriptDocument.fields.duration.integerValue,
-            description: scriptDocument.fields.description.stringValue,
-            source: scriptDocument.fields.source.stringValue,
-            thumbnail: scriptDocument.fields.thumbnail.stringValue,
-            created: scriptDocument.fields.created.timestampValue,
-            modified: scriptDocument.fields.modified.timestampValue,
-            likes: scriptDocument.fields.likes.integerValue,
-            thumbsdown: scriptDocument.fields.thumbsdown.integerValue,
-            thumbsup: scriptDocument.fields.thumbsup.integerValue,
-            views: scriptDocument.fields.views.integerValue,
+            id: scriptDocument.id,
+            name: script.name,
+            slug: script.slug,
+            author: script.author,
+            duration: script.duration,
+            description: script.description,
+            source: script.source,
+            thumbnail: script.thumbnail,
+            category: script.category || null,
+            tags: script.tags || [],
+            created: script.created.toMillis(),
+            modified: script.modified.toMillis(),
+            likes: script.likes,
+            thumbsdown: script.thumbsdown,
+            thumbsup: script.thumbsup,
+            views: script.views,
         }
     },
     durationToString: duration => {
@@ -46,6 +50,15 @@ const ScriptUtils = {
     thumbsToPercentage: (thumbsup, thumbsdown) => {
         const percentage = (thumbsup / (Number(thumbsup) + Number(thumbsdown)));
         return Math.round(percentage * 100.0);
+    },
+    getPrettyCategory: category => {
+        let prettyName = category.replace("-", " ");
+        if(prettyName.length < 4) return prettyName.toUpperCase();
+
+        return prettyName
+            .split(" ")
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
     }
 }
 
