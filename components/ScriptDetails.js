@@ -4,6 +4,7 @@ import ScriptUtils from '../utilities/ScriptUtils'
 import { FaThumbsUp } from 'react-icons/fa'
 import { FaHeart } from 'react-icons/fa'
 import { FaRegEye } from 'react-icons/fa'
+import ReactMarkdown from 'react-markdown'
 
 const ScriptDetails = ({script}) => {
     return (
@@ -41,6 +42,7 @@ const ScriptDetails = ({script}) => {
                     </ul>
                 </div>
             </div>
+            <ReactMarkdown source={script.description} />
         </div>
     )
 }
