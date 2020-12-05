@@ -5,6 +5,7 @@ import { FaThumbsUp } from 'react-icons/fa'
 import { FaHeart } from 'react-icons/fa'
 import { FaRegEye } from 'react-icons/fa'
 import ReactMarkdown from 'react-markdown'
+import moment from 'moment'
 
 const ScriptDetails = ({script}) => {
     return (
@@ -15,6 +16,7 @@ const ScriptDetails = ({script}) => {
                     <span>By <a>{script.author}</a></span>
                 </Link>
             </div>
+            <p className={style.created}>{moment(script.created, "x").format("Do MMMM YYYY")}</p>
             <div className={style.sidebyside}>
                 <div className={style.imagewrapper}>
                     <img src={script.thumbnail} />
