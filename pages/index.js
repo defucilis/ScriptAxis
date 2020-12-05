@@ -1,8 +1,8 @@
 import Layout from '../components/Layout'
 import ScriptGrid from '../components/ScriptGrid'
-import axios from 'axios'
 import ScriptUtils from '../utilities/ScriptUtils'
 import Head from 'next/head'
+import firebase from '../utilities/Firebase'
 
 const Index = ({scripts}) => {
     return (
@@ -17,22 +17,10 @@ const Index = ({scripts}) => {
 }
 
 export async function getServerSideProps(ctx) {
-    const res = await axios.post(`https://firestore.googleapis.com/v1/projects/scriptlibrary-8f879/databases/(default)/documents/:runQuery`, {
-        structuredQuery : {
-            from: [{
-                collectionId: "scripts"
-            }],
-            orderBy: [{
-                field: {
-                    fieldPath: "created"
-                },
-                direction: "DESCENDING"
-            }],
-            limit: 12
-        }
-    });
-    let scripts = res.data;
-    scripts = scripts.map(script => ScriptUtils.parseScriptDocument(script.document));
+    const db = firebase.firestore();
+    const dbQuery = db.collection("scripts").orderBy("created", "desc").limit(12);
+    const snapshot = await dbQuery.get();
+    const scripts = snapshot.docs.map(doc => ScriptUtils.parseScriptDocument(doc.data()));
     return {
         props: {
             scripts

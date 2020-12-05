@@ -1,9 +1,9 @@
 import {useState, useEffect} from 'react'
 import Layout from '../components/Layout'
-import axios from 'axios'
 import ScriptUtils from '../utilities/ScriptUtils'
 import ScriptGrid from '../components/ScriptGrid'
 import Head from 'next/head'
+import firebase from '../utilities/Firebase'
 
 const Scripts = ({propScripts}) => {
 
@@ -24,23 +24,13 @@ const Scripts = ({propScripts}) => {
 }
 
 export async function getServerSideProps() {
-    const res = await axios.post(`https://firestore.googleapis.com/v1/projects/scriptlibrary-8f879/databases/(default)/documents/:runQuery`, {
-        structuredQuery : {
-            from: [{
-                collectionId: "scripts"
-            }],
-            orderBy: [{
-                field: {
-                    fieldPath: "created"
-                },
-                direction: "DESCENDING"
-            }]
-        }
-    });
-    let scripts = res.data.map(script => ScriptUtils.parseScriptDocument(script.document));
+    const db = firebase.firestore();
+    const dbQuery = db.collection("scripts").orderBy("created", "desc");
+    const snapshot = await dbQuery.get();
+    const scripts = snapshot.docs.map(doc => ScriptUtils.parseScriptDocument(doc.data()));
     return {
         props: {
-            propScripts: [...scripts]
+            propScripts: scripts
         }
     }
 }

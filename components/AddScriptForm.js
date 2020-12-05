@@ -1,6 +1,6 @@
 import Router from 'next/router'
-import axios from 'axios'
 import slugify from 'slugify'
+import firebase from '../utilities/Firebase'
 
 import style from './AddScriptForm.module.css'
 
@@ -20,31 +20,30 @@ const stringToDuration = str => {
 const handleSubmit = e => {
 
     const doRequest = async postData => {
-        const res = await axios.post("https://firestore.googleapis.com/v1/projects/scriptlibrary-8f879/databases/(default)/documents/scripts", postData);
+        const db = firebase.firestore();
+        const dbQuery = db.collection("scripts");
+        const data = await dbQuery.add(postData);
         Router.push("/");
     }
 
     e.preventDefault();
 
     const postData = {
-        fields: {
-            name: { stringValue: e.target.name.value},
-            source: { stringValue: e.target.source.value},
-            author: { stringValue: e.target.author.value},
-            slug: { stringValue: slugify(e.target.name.value).toLowerCase()},
-            description: { stringValue: e.target.description.value},
-            thumbnail: { stringValue: e.target.thumbnail.value},
-            duration: { integerValue: stringToDuration(e.target.duration.value)},
-            views: { integerValue: 0},
-            thumbsup: { integerValue: 1},
-            thumbsdown: { integerValue: 0},
-            created: { timestampValue: new Date()} ,
-            modified: { timestampValue: new Date()} ,
-            likes: { integerValue: 0 }
-        }
+        name: e.target.name.value,
+        source: e.target.source.value,
+        author: e.target.author.value,
+        slug: slugify(e.target.name.value).toLowerCase(),
+        description: e.target.description.value,
+        thumbnail: e.target.thumbnail.value,
+        duration: stringToDuration(e.target.duration.value),
+        views: 0,
+        thumbsup: 1,
+        thumbsdown: 0,
+        created: firebase.firestore.Timestamp.fromDate(new Date()),
+        modified: firebase.firestore.Timestamp.fromDate(new Date()),
+        likes: 0,
     };
 
-    //console.log(fields);
     doRequest(postData);
 }
 

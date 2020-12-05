@@ -1,8 +1,8 @@
 import Layout from '../../components/Layout'
-import axios from 'axios'
 import ScriptUtils from '../../utilities/ScriptUtils'
 import ScriptDetails from '../../components/ScriptDetails'
 import Head from 'next/head'
+import firebase from '../../utilities/Firebase'
 
 const Script = ({script}) => {
 
@@ -17,28 +17,13 @@ const Script = ({script}) => {
 }
 
 export async function getServerSideProps({query}) {
-    const res = await axios.post(`https://firestore.googleapis.com/v1/projects/scriptlibrary-8f879/databases/(default)/documents/:runQuery`, {
-        structuredQuery : {
-            from: [{
-                collectionId: "scripts"
-            }],
-            where: {
-                fieldFilter: {
-                    field: {
-                        fieldPath: "slug"
-                    },
-                    op: "EQUAL",
-                    value: {
-                        stringValue: query.scriptslug
-                    }
-                }
-            }
-        }
-    });
-    let foundScripts = res.data.map(script => ScriptUtils.parseScriptDocument(script.document));
+    const db = firebase.firestore();
+    const dbQuery = db.collection("scripts").where("slug", "==", query.scriptslug);
+    const snapshot = await dbQuery.get();
+    const scripts = snapshot.docs.map(doc => ScriptUtils.parseScriptDocument(doc.data()));
     return {
         props: {
-            script : foundScripts && foundScripts.length > 0 ? foundScripts[0] : null
+            script : scripts && scripts.length > 0 ? scripts[0] : null
         }
     }
 }

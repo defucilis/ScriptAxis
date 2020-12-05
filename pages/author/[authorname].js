@@ -1,9 +1,9 @@
 import Layout from '../../components/Layout'
 import {useRouter} from 'next/router'
-import axios from 'axios'
 import ScriptUtils from '../../utilities/ScriptUtils'
 import ScriptGrid from '../../components/ScriptGrid'
 import Head from 'next/head'
+import firebase from '../../utilities/Firebase'
 
 const Author = ({scripts}) => {
 
@@ -22,28 +22,17 @@ const Author = ({scripts}) => {
 }
 
 export async function getServerSideProps({query}) {
-    const res = await axios.post(`https://firestore.googleapis.com/v1/projects/scriptlibrary-8f879/databases/(default)/documents/:runQuery`, {
-        structuredQuery : {
-            from: [{
-                collectionId: "scripts"
-            }],
-            where: {
-                fieldFilter: {
-                    field: {
-                        fieldPath: "author"
-                    },
-                    op: "EQUAL",
-                    value: {
-                        stringValue: query.authorname
-                    }
-                }
-            }
-        }
-    });
-    let authorScripts = res.data.map(script => ScriptUtils.parseScriptDocument(script.document));
+    const db = firebase.firestore();
+    const dbQuery = db.collection("scripts").where("author", "==", query.authorname);
+    const snapshot = await dbQuery.get();
+    //we do sorting on the server to avoid needing to create a composite key
+    //maybe we should just create one? Something to research
+    const scripts = snapshot.docs
+        .map(doc => ScriptUtils.parseScriptDocument(doc.data()))
+        .sort((a, b) => b.created - a.created);
     return {
         props: {
-            scripts: [...authorScripts]
+            scripts
         }
     }
 }

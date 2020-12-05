@@ -1,19 +1,20 @@
 const ScriptUtils = {
     parseScriptDocument: scriptDocument => {
+        console.log(scriptDocument);
         return {
-            name: scriptDocument.fields.name.stringValue,
-            slug: scriptDocument.fields.slug.stringValue,
-            author: scriptDocument.fields.author.stringValue,
-            duration: scriptDocument.fields.duration.integerValue,
-            description: scriptDocument.fields.description.stringValue,
-            source: scriptDocument.fields.source.stringValue,
-            thumbnail: scriptDocument.fields.thumbnail.stringValue,
-            created: scriptDocument.fields.created.timestampValue,
-            modified: scriptDocument.fields.modified.timestampValue,
-            likes: scriptDocument.fields.likes.integerValue,
-            thumbsdown: scriptDocument.fields.thumbsdown.integerValue,
-            thumbsup: scriptDocument.fields.thumbsup.integerValue,
-            views: scriptDocument.fields.views.integerValue,
+            name: scriptDocument.name,
+            slug: scriptDocument.slug,
+            author: scriptDocument.author,
+            duration: scriptDocument.duration,
+            description: scriptDocument.description,
+            source: scriptDocument.source,
+            thumbnail: scriptDocument.thumbnail,
+            created: scriptDocument.created.toMillis(),
+            modified: scriptDocument.modified.toMillis(),
+            likes: scriptDocument.likes,
+            thumbsdown: scriptDocument.thumbsdown,
+            thumbsup: scriptDocument.thumbsup,
+            views: scriptDocument.views,
         }
     },
     durationToString: duration => {
