@@ -6,19 +6,33 @@ import Head from 'next/head'
 import firebase from '../utilities/Firebase'
 import Fuse from 'fuse.js'
 
-const Scripts = ({propScripts}) => {
+const Scripts = ({propScripts, query}) => {
 
     const [scripts, setScripts] = useState([]);
     useEffect(() => {
         setScripts(propScripts);
     }, [propScripts])
 
+    const getHeadTitle = query => {
+        return query.search || query.category || query.tag || "Scripts";
+    }
+
+    const getBodyTitle = query => {
+        if(query.search) 
+            return `Scripts matching "${query.search}"`
+        if(query.category)
+            return `${ScriptUtils.getPrettyCategory(query.category)} Scripts`;
+        if(query.tag)
+            return `Scripts tagged with ${ScriptUtils.getPrettyCategory(query.tag)}`;
+        return "All Scripts";
+    }
+
     return (
         <Layout page="scripts">
             <Head>
-                <title>ScriptAxis | Scripts</title>
+                <title>ScriptAxis | {getHeadTitle(query)}</title>
             </Head>
-            <h1>Scripts</h1>
+            <h1 style={{marginBottom: "0.5em"}}>{getBodyTitle(query)}</h1>
             <ScriptGrid scripts={scripts} />
         </Layout>
     )
@@ -29,7 +43,8 @@ export async function getServerSideProps({query}) {
     let snapshot;
     let scripts;
     if(query.search) {
-        //not ideal, but we need to pull the whole scripts collection just to do this...
+        //not ideal, but we need to pull the whole scripts collection just to search by name...
+        //if I were to use a third party search service, or to write my own API, then I wouldn't need to do this
         const dbQuery = db.collection("scripts");
         snapshot = await dbQuery.get();
         scripts = snapshot.docs.map(doc => ScriptUtils.parseScriptDocument(doc));
@@ -58,7 +73,8 @@ export async function getServerSideProps({query}) {
     
     return {
         props: {
-            propScripts: scripts
+            propScripts: scripts,
+            query
         }
     }
 }
