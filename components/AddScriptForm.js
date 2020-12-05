@@ -153,8 +153,6 @@ const AddScriptForm = ({tags, categories}) => {
                 className={style.tags}
                 settings = {
                     {
-                        whitelist: tags,
-                        blacklist: categories,
                         validate: tag => {
                             const transformedTag = tag.value.trim().toLowerCase();
                             const match = transformedTag.match("[a-z ]+");
@@ -165,6 +163,8 @@ const AddScriptForm = ({tags, categories}) => {
                         }
                     }
                 }
+                whitelist={tags}
+                blacklist={categories}
                 onChange={e => {
                     e.persist();
                     if(!e.target.value || e.target.value.length === 0) {
