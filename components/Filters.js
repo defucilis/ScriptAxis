@@ -19,9 +19,8 @@ const Filters = ({tags, categories, query, onFilter}) => {
         }
     }, [query])
 
-    console.log(initialIncludeTags)
-
     useEffect(() => {
+        if(Object.keys(filters).length === 0) return;
         onFilter(filters);
     }, [filters])
 
