@@ -1,6 +1,5 @@
 const ScriptUtils = {
     parseScriptDocument: scriptDocument => {
-        console.log(scriptDocument);
         return {
             name: scriptDocument.name,
             slug: scriptDocument.slug,

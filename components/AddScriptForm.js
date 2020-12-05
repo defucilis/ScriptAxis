@@ -60,7 +60,7 @@ const AddScriptForm = ({tags, categories}) => {
 
         const doRequest = async postData => {
             //upload the thumbnail and add it to the database
-            const fileUrl = await FirebaseUtils.uploadFile(thumbnailFile, `thumbnails/thumbnail_${postData.slug}`, progress => console.log(progress));
+            const fileUrl = await FirebaseUtils.uploadFile(thumbnailFile, `thumbnails/thumbnail_${postData.slug}`, progress => console.log((progress * 100) + "%"));
             postData.thumbnail = fileUrl;
 
             //Get the ID of the new record, and create it
@@ -158,10 +158,6 @@ const AddScriptForm = ({tags, categories}) => {
                         validate: tag => {
                             const transformedTag = tag.value.trim().toLowerCase();
                             const match = transformedTag.match("[a-z ]+");
-                            console.log({
-                                transformedTag,
-                                matches: transformedTag.match("[a-z ]+")
-                            })
                             const success = match && match.length === 1 && match[0].length === transformedTag.length;
                             return success 
                                 ? true 
