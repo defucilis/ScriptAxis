@@ -53,13 +53,13 @@
     color: #e8739c;
 }
 
-.scriptauthor {
+.scriptcreator {
     margin: 0;
 }
-.scriptauthor > a {
+.scriptcreator > a {
     color: #777;
 }
-.scriptauthor > a:hover {
+.scriptcreator > a:hover {
     color: #e8739c;
 }
 

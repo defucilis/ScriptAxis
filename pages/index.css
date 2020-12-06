@@ -83,6 +83,7 @@ input, textarea {
 /* This could be improved a lot... */
 .loader {
     position: fixed;
+    left: 0px;
     width: 100vw;
     background-color: #e8739c;
     z-index: 999;

@@ -7,16 +7,32 @@ const Tags = dynamic(() => import("@yaireo/tagify/dist/react.tagify"), { ssr: fa
 
 import ReactSlider from 'react-slider'
 
-const Filters = ({tags, categories, query, onFilter}) => {
+const Filters = ({query, onFilter}) => {
     const [filters, setFilters] = useState({});
     const [initialIncludeTags, setInitialIncludeTags] = useState("");
+    const [tags, setTags] = useState([])
+    const [categories, setCategories] = useState([]);
     useEffect(() => {
-        if(query.tag) {
-            setInitialIncludeTags(query.tag)
-        }
-        if(query.category) {
-            setCategory(query.category);
-        }
+        window.setTimeout(() => {
+            const storedTagCounts = window.localStorage.getItem("storedTagCounts");
+            const storedCategoryCounts = window.localStorage.getItem("storedCategoryCounts");
+            if(storedTagCounts) setTags(JSON.parse(storedTagCounts).map(tag => tag.name));
+            if(storedCategoryCounts) setCategories(JSON.parse(storedCategoryCounts));
+        }, 50)
+    }, []);
+    useEffect(() => {
+        window.setTimeout(() => {
+            if(query.filters.include) {
+                setInitialIncludeTags(query.filters.include[0])
+            } else {
+                setInitialIncludeTags([]);
+            }
+            if(query.filters.category) {
+                setCategory(query.filters.category.name.equals);
+            } else {
+                clearCategory();
+            }
+        }, 100)
     }, [query])
 
     useEffect(() => {
@@ -28,7 +44,7 @@ const Filters = ({tags, categories, query, onFilter}) => {
         setFilters(cur => {
             return {
                 ...cur,
-                includedTags: tags
+                include: tags
             }
         });
     }
@@ -37,18 +53,34 @@ const Filters = ({tags, categories, query, onFilter}) => {
         setFilters(cur => {
             return {
                 ...cur,
-                excludedTags: tags
+                exclude: tags
             }
         });
     }
 
     const setCategory = category => {
+        const shouldToggleOff = (
+            filters.category && 
+            filters.category.name && 
+            filters.category.name.equals && 
+            filters.category.name.equals === category
+        );
+        console.log("Setting category", category, shouldToggleOff)
         setFilters(cur => {
             return {
                 ...cur,
-                category: cur.category && cur.category === category ? "" : category
+                category: shouldToggleOff ? undefined : { name: { equals: category }}
             }
         });
+    }
+
+    const clearCategory = () => {
+        setFilters(cur => {
+            return {
+                ...cur,
+                category: undefined
+            }
+        })
     }
 
     const transformDuration = index => {
@@ -80,11 +112,15 @@ const Filters = ({tags, categories, query, onFilter}) => {
         setFilters(cur => {
             return {
                 ...cur,
-                minDuration,
-                maxDuration
+                duration: { 
+                    min: values[0] === 0 ? -1 : minDuration,
+                    max: values[1] === 7 ? -1 : maxDuration
+                }
             }
         })
     }
+
+    console.log(filters);
 
     return (
         <div className={style.filters}>
@@ -95,12 +131,12 @@ const Filters = ({tags, categories, query, onFilter}) => {
                         {
                             categories.map(category => {
                                 return (
-                                    <li key={category}>
+                                    <li key={category.name}>
                                         <a 
-                                            className={filters.category === category ? style.selectedcategory : null}
-                                            onClick={() => setCategory(category)}
+                                            className={filters.category && filters.category.name && filters.category.name.equals === category.name ? style.selectedcategory : null}
+                                            onClick={() => setCategory(category.name)}
                                         >
-                                            {ScriptUtils.getPrettyCategory(category)}
+                                            {ScriptUtils.getPrettyCategory(category.name)} ({category.count})
                                         </a>
                                     </li>
                                 );
@@ -131,8 +167,11 @@ const Filters = ({tags, categories, query, onFilter}) => {
                                 setIncludedTags([]);
                                 return;
                             }
-                            const json = JSON.parse(e.target.value);
-                            setIncludedTags(json.map(tag => tag.value.trim().toLowerCase().replace(" ", "-")));
+                            if(!e.target.value || e.target.value === "") setIncludedTags([])
+                            else {
+                                const json = JSON.parse(e.target.value);
+                                setIncludedTags(json.map(tag => tag.value.trim().toLowerCase().replace(" ", "-")));
+                            }
                         }}
                     />
                 </div>
@@ -179,7 +218,7 @@ const Filters = ({tags, categories, query, onFilter}) => {
                             ]}
                             min={0}
                             max={7}
-                            onChange={handleSliderChange}
+                            onAfterChange={handleSliderChange}
                         />
                     </div>
                     <div className={style.slidermarks}>

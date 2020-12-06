@@ -16,14 +16,15 @@ model Script {
   name              String
   slug              String      @unique
   creator           Creator
-  owner             User        @relation("OwnedScripts")
+  owner             User        @relation("ScriptOwner")
   category          Category
-  tags              Tag[]
+  tags              String[]
   description       String?
+  duration          Int
   thumbnail         String
   sourceUrl         String?
   active            Boolean     @default(true)
-  likedScripts      User[]      @relation("LikedScripts")
+  likedBy           User[]      @relation("ScriptLiker")
   likeCount         Int         @default(0)
   thumbsUp          Int         @default(1)
   thumbsDown        Int         @default(0)
@@ -53,7 +54,6 @@ model Category {
 // Tags for scripts - each script can have more than one
 model Tag {
   name              String      @id
-  scripts           Script[]
   count             Int         @default(0)
 }
 
@@ -62,9 +62,9 @@ model User {
   id                String      @default(uuid()) @id
   username          String      @unique
   email             String      @unique
-  creator           Boolean     @default(false)
-  ownedScripts      Script[]    @relation("OwnedScripts")
-  likedScripts      Script[]    @relation("LikedScripts")
+  creator           Creator?
+  ownedScripts      Script[]    @relation("ScriptOwner")
+  likedScripts      Script[]    @relation("ScriptLiker")
   created           DateTime    @default(now())
   modified          DateTime    @updatedAt
 }

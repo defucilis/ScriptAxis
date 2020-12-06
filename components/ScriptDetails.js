@@ -11,9 +11,9 @@ const ScriptDetails = ({script}) => {
     return (
         <div className={style.script}>
             <h1 className={style.name}>{script.name}</h1>
-            <div className={style.author}>
-                <Link href={`/author/${script.author}`}>
-                    <span>By <a>{script.author}</a></span>
+            <div className={style.creator}>
+                <Link href={`/creator/${script.creator}`}>
+                    <span>By <a>{script.creator}</a></span>
                 </Link>
             </div>
             <p className={style.created}>{moment(script.created, "x").format("Do MMMM YYYY")}</p>
@@ -32,7 +32,7 @@ const ScriptDetails = ({script}) => {
                     <div className={style.duration}>
                         <p>Duration: {ScriptUtils.durationToString(script.duration)}</p>
                     </div>
-                    <Link href={script.source}>
+                    <Link href={script.sourceUrl}>
                         <a className={style.source} target="_blank">Go to source webpage</a>
                     </Link>
                     <ul className={style.stats}>
@@ -42,7 +42,7 @@ const ScriptDetails = ({script}) => {
                         </li>
                         <li>
                             <FaThumbsUp />
-                            <span>{ScriptUtils.thumbsToPercentage(script.thumbsup, script.thumbsdown)}%</span>
+                            <span>{ScriptUtils.thumbsToPercentage(script.thumbsUp, script.thumbsDown)}%</span>
                         </li>
                         <li>
                             <FaHeart />

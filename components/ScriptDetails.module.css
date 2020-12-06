@@ -25,11 +25,11 @@
     font-size: 4em;
 }
 
-.author {
+.creator {
     font-size: 2em;
 }
 
-.author a:hover {
+.creator a:hover {
     color: #e8739c;
     cursor: pointer;
 }

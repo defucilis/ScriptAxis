@@ -12,12 +12,12 @@ const CreateTag = async (req, res) => {
     } catch(error) {
         const usefulError = error.message.split("\n").filter(line => line && !line.match(/[{}[\]:]+/g)?.length);
         console.log("Failed to create tag - " + usefulError);
-        res.status(500);
+        res.status(400);
         res.json({
             error: usefulError
         });
     } finally {
-        await prisma.disconnectionPromise;
+        await prisma.$disconnect();
     }
 }
 

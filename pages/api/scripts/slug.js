@@ -1,11 +1,12 @@
 import {PrismaClient} from '@prisma/client'
 
-const FetchScripts = () => {
+const FetchScript = (slug) => {
     return new Promise(async (resolve, reject) => {
         const prisma = new PrismaClient(/*{log: ["query"]}*/);
         try {
-            const scripts = await prisma.script.findMany({
+            const scripts = await prisma.script.findFirst({
                 where: {
+                    slug: slug,
                     active: true
                 },
                 include: {
@@ -22,15 +23,15 @@ const FetchScripts = () => {
     })
 }
 
-export {FetchScripts}
+export {FetchScript}
 
 export default async (req, res) => {
     try {
-        const scripts = await FetchScripts();
+        const script = await FetchScript();
         res.status(200);
-        res.json(scripts);
+        res.json(script);
     } catch(error) {
-        console.log("Error fetching scripts - " + error);
+        console.log("Error fetching script - " + error);
         res.status(400);
         res.json({
             error
