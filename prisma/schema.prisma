@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Everything required to store a funscript - this will change in the future!
+model Script {
+  id                Int         @default(autoincrement()) @id
+  name              String
+  slug              String      @unique
+  creator           Creator
+  owner             User        @relation("OwnedScripts")
+  category          Category
+  tags              Tag[]
+  description       String?
+  thumbnail         String
+  sourceUrl         String?
+  active            Boolean     @default(true)
+  likedScripts      User[]      @relation("LikedScripts")
+  likeCount         Int         @default(0)
+  thumbsUp          Int         @default(1)
+  thumbsDown        Int         @default(0)
+  views             Int         @default(0)
+  created           DateTime    @default(now())
+  modified          DateTime    @updatedAt
+}
+
+// Creators of scripts - may or may not be connected to a user account
+model Creator {
+  name              String      @id
+  user              User?
+  scripts           Script[]
+  totalViews        Int         @default(0)
+  totalLikes        Int         @default(0)
+  created           DateTime    @default(now())
+  modified          DateTime    @updatedAt
+}
+
+// Top-level categories for scripts - each script has only one
+model Category {
+  name              String      @id
+  scripts           Script[]
+  count             Int         @default(0)
+}
+
+// Tags for scripts - each script can have more than one
+model Tag {
+  name              String      @id
+  scripts           Script[]
+  count             Int         @default(0)
+}
+
+// User accounts - not in use yet
+model User {
+  id                String      @default(uuid()) @id
+  username          String      @unique
+  email             String      @unique
+  creator           Boolean     @default(false)
+  ownedScripts      Script[]    @relation("OwnedScripts")
+  likedScripts      Script[]    @relation("LikedScripts")
+  created           DateTime    @default(now())
+  modified          DateTime    @updatedAt
+}
+
+// The verification queue for moderators to consider - not in use yet
+model VerificationRequest {
+  id                Int         @id
+  user              User
+  status            Int         @default(0)
+  script            Script
+  created           DateTime    @default(now())
+  modified          DateTime    @updatedAt
+}
