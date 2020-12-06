@@ -145,7 +145,7 @@ const Filters = ({query, onFilter}) => {
                     </ul>
                 </div>
 
-                <label htmlFor="includeTags">Tags</label>
+                <label htmlFor="includeTags">Include Tags</label>
                 <div className={style.field}>
                     <Tags 
                         className={style.tags}
@@ -175,7 +175,6 @@ const Filters = ({query, onFilter}) => {
                         }}
                     />
                 </div>
-                {/* Sadly, it seems that Firestore just can't do this :c
                 <label htmlFor="excludeTags">Exclude Tags</label>
                 <div className={style.field}>
                     <Tags 
@@ -197,12 +196,14 @@ const Filters = ({query, onFilter}) => {
                                 setExcludedTags([]);
                                 return;
                             }
-                            const json = JSON.parse(e.target.value);
-                            setExcludedTags(json.map(tag => tag.value.trim().toLowerCase().replace(" ", "-")));
+                            if(!e.target.value || e.target.value === "") setExcludedTags([])
+                            else {
+                                const json = JSON.parse(e.target.value);
+                                setExcludedTags(json.map(tag => tag.value.trim().toLowerCase().replace(" ", "-")));
+                            }
                         }}
                     />
                 </div>
-                */}
                 
                 <label htmlFor="duration">Duration (minutes)</label>
                 <div className={style.field}>
