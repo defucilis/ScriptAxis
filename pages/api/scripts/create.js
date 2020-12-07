@@ -32,7 +32,10 @@ const CreateScript = async (req, res) => {
             thumbnail: rawData.thumbnail,
             description: rawData.description,
             duration: rawData.duration,
-            sourceUrl: rawData.sourceUrl
+            sourceUrl: rawData.sourceUrl,
+            streamingUrl: rawData.streamingUrl,
+            studio: rawData.studio || undefined,
+            talent: rawData.talent,
         }
 
         //for testing only!

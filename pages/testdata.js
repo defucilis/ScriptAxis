@@ -16,8 +16,8 @@ const ClearData = async (onSuccess, onFail) => {
     }
 }
 
-const AddData = async(onProgress, onSuccess, onFail) => {
-    const scripts = GetTestData();
+const AddData = async(count, onProgress, onSuccess, onFail) => {
+    const scripts = GetTestData().slice(0, count);
     let errorCount = 0;
 
     onProgress(`Adding ${scripts.length} scripts to the database`);
@@ -29,7 +29,7 @@ const AddData = async(onProgress, onSuccess, onFail) => {
             onProgress(`Inserting ${script.name}`)
             const response = await axios.post("/api/scripts/create", script);
             console.log("data", response.data);
-            onProgress(`${script.name} sucessfully inserted`);
+            onProgress(`${script.name} sucessfully inserted (${i + 1}/${scripts.length})`);
             onProgress("");
         } catch(error) {
             console.log("error", error.message, error.data);
@@ -46,6 +46,7 @@ const TestData = () => {
     
     const [running, setRunning] = useState(false);
     const [messages, setMessages] = useState({list: []});
+    const [count, setCount] = useState(41);
 
     const addMessage = message => {
         setMessages(cur => ({list: [...cur.list, message]}));
@@ -70,7 +71,7 @@ const TestData = () => {
     const StartAddData = () => {
         setRunning(true);
 
-        AddData(progressMessage => {
+        AddData(count, progressMessage => {
             addMessage(progressMessage);
         }, addedCount => {
             addMessage(`Successfully added ${addedCount} scripts to database`);
@@ -96,6 +97,7 @@ const TestData = () => {
             <div className={`${style.buttons} ${running ? style.hidden : ""}`}>
                 <button onClick={StartClearData}>Clear Data</button>
                 <button onClick={StartAddData}>Add Test Data</button>
+                <input type="number" id="count" onChange={e => setCount(parseInt(e.target.value))} value={count}></input>
                 <button onClick={ClearOutput}>Clear Output</button>
             </div>
             <div className={style.output}>

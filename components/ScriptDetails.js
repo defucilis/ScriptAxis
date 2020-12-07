@@ -32,26 +32,49 @@ const ScriptDetails = ({script}) => {
                     <div className={style.duration}>
                         <p>Duration: {ScriptUtils.durationToString(script.duration)}</p>
                     </div>
-                    <Link href={script.sourceUrl}>
-                        <a className={style.source} target="_blank">Go to source webpage</a>
-                    </Link>
-                    <ul className={style.stats}>
-                        <li>
-                            <FaRegEye />
-                            <span>{ScriptUtils.viewsToString(script.views)}</span>
-                        </li>
-                        <li>
-                            <FaThumbsUp />
-                            <span>{ScriptUtils.thumbsToPercentage(script.thumbsUp, script.thumbsDown)}%</span>
-                        </li>
-                        <li>
-                            <FaHeart />
-                            <span>{script.likes}</span>
-                        </li>
-                    </ul>
+                    <div className={style.linkbuttons}>
+                        {!script.sourceUrl ? null : (
+                            <Link href={script.sourceUrl}>
+                                <a className={style.source} target="_blank">View on {ScriptUtils.getSiteName(script.sourceUrl)}</a>
+                            </Link>
+                        )}
+                        {!script.streamingUrl ? null : (
+                            <Link href={script.streamingUrl}>
+                                <a className={style.source} target="_blank">Watch on {ScriptUtils.getSiteName(script.streamingUrl)}</a>
+                            </Link>
+                        )}
+                    </div>
+                    <div className={style.underlinkdata}>
+                        <ul className={style.stats}>
+                            <li>
+                                <FaRegEye />
+                                <span>{ScriptUtils.viewsToString(script.views)}</span>
+                            </li>
+                            <li>
+                                <FaThumbsUp />
+                                <span>{ScriptUtils.thumbsToPercentage(script.thumbsUp, script.thumbsDown)}%</span>
+                            </li>
+                            <li>
+                                <FaHeart />
+                                <span>{script.likes}</span>
+                            </li>
+                        </ul>
+                        <div className={style.studiotalent}>
+                            { !script.studio ? null : (
+                                <p><span className="grey">Studio:</span> {script.studio}</p>
+                            ) }
+                            { (!script.talent || script.talent.length === 0) ? null : (
+                                <p><span className="grey">Talent:</span> {script.talent.map(talent => {
+                                    return <span id={talent}>{talent}{talent === script.talent[script.talent.length - 1] ? "" : ", "}</span>
+                                })}</p>
+                            )}
+                        </div>
+                    </div>
                 </div>
             </div>
-            <ReactMarkdown source={script.description} />
+            <div className={style.description}>
+                <ReactMarkdown source={script.description} />
+            </div>
         </div>
     )
 }

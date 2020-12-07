@@ -109,6 +109,10 @@ input, textarea {
     -o-animation:       scrollBackground 10s 3.235s infinite;
 }
 
+.grey {
+    color: #777;
+}
+
 .loader > p {
     font-weight: bold;
     color: #fff;

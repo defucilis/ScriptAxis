@@ -42,7 +42,7 @@
 
 
 .category {
-    margin-top: 0.5em;;
+    margin-top: 0;
     font-size: 1.8em;
 }
 
@@ -59,6 +59,11 @@
     margin-top: 1em;;
 }
 
+.linkbuttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
 .source {
     background-color: #e8739c;
     display: block;
@@ -67,14 +72,21 @@
     padding: 0.25em 0.5em;
     border-radius: 5px;
     color: #000;
-    margin-top: 1em;
     text-align: center;
+    display: grid;
+    place-items: center;
+    margin-right: 1em;
+}
+
+.underlinkdata {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 1em;
 }
 
 .stats {
     font-size: 1.5em;
     color: #777;
-    margin-top: 1em;
 }
 
 .stats li {
@@ -87,4 +99,17 @@
 
 .stats svg {
     margin-right: 0.5em;
+}
+
+.studiotalent {
+    font-size: 1.2em;
+}
+
+.description {
+    margin-top: 1em;
+    font-size: 1.1em;
+}
+
+.description p {
+    margin: 0.5em 0;
 }

@@ -3,6 +3,7 @@ const ScriptUtils = {
         const output =  {
             id: script.id,
             name: script.name,
+            //name: "Debug Name",
             slug: script.slug,
             creator: script.creatorName,
             owner: script.owner,
@@ -11,7 +12,11 @@ const ScriptUtils = {
             description: script.description,
             duration: script.duration,
             thumbnail: script.thumbnail,
+            //thumbnail: "https://planethifi.com/wp-content/uploads/2020/06/720p-696x448.jpg",
             sourceUrl: script.sourceUrl,
+            streamingUrl: script.streamingUrl,
+            studio: script.studio,
+            talent: script.talent || [],
             active: script.active,
             created: script.created.valueOf(),
             modified: script.modified.valueOf(),
@@ -66,6 +71,8 @@ const ScriptUtils = {
         return Math.round(percentage * 100.0);
     },
     getPrettyCategory: category => {
+        //return category.substr(0, 2).toUpperCase() + Math.round(Math.random() * 100);
+
         let prettyName = category.replace("-", " ");
         if(prettyName.length < 4) return prettyName.toUpperCase();
 
@@ -73,6 +80,9 @@ const ScriptUtils = {
             .split(" ")
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
             .join(" ");
+    },
+    getSiteName: url => {
+        return url.replace("http://", "").replace("https://", "").replace("www.", "").split("/")[0].toLowerCase();
     }
 }
 

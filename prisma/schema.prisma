@@ -22,7 +22,11 @@ model Script {
   description       String?
   duration          Int
   thumbnail         String
+  funscripts        String[]
   sourceUrl         String?
+  streamingUrl      String?
+  studio            String?
+  talent            String[]
   active            Boolean     @default(true)
   likedBy           User[]      @relation("ScriptLiker")
   likeCount         Int         @default(0)
@@ -63,6 +67,7 @@ model User {
   username          String      @unique
   email             String      @unique
   creator           Creator?
+  isAdmin           Boolean     @default(false)
   ownedScripts      Script[]    @relation("ScriptOwner")
   likedScripts      Script[]    @relation("ScriptLiker")
   created           DateTime    @default(now())
