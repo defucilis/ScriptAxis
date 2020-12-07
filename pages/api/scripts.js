@@ -8,6 +8,9 @@ const FetchScripts = () => {
                 where: {
                     active: true
                 },
+                orderBy: {
+                    created: "desc"
+                },
                 include: {
                     creator: { select: { name: true }},
                     owner: { select: { username: true }}

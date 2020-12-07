@@ -10,7 +10,7 @@ import axios from 'axios'
 const BrowseScripts = ({propScripts, tags, categories, query}) => {
     const [scripts, setScripts] = useState([]);
     const [cachedFilters, setFilters] = useState({});
-    const [cachedSorting, setSorting] = useState({field: "created", direction: "desc"});
+    const [cachedSorting, setSorting] = useState([{created:"desc"}]);
     const [customFilters, setCustomFilters] = useState(false);
     
     useEffect(() => {

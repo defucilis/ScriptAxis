@@ -32,6 +32,7 @@ const QueryScripts = ({filters, sorting}) => {
 
             let scripts = await prisma.script.findMany({
                 where: finalWhere,
+                orderBy: sorting,
                 include: {
                     creator: { select: { name: true }},
                     owner: { select: { username: true }}
