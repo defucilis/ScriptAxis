@@ -91,7 +91,7 @@ input, textarea {
     display: grid;
     place-items: top;
     overflow: hidden;
-    height: 50px;
+    height: 25px;
 }
 
 .top {
@@ -125,7 +125,7 @@ input, textarea {
 }
 
 .notloadingtop {
-    bottom: -50px;
+    bottom: -25px;
     transition: bottom 0.2s;
 }
 
@@ -135,7 +135,7 @@ input, textarea {
 }
 
 .notloadingbottom {
-    top: -50px;
+    top: -25px;
     transition: top 0.2s;    
 }
 

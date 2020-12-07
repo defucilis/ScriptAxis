@@ -9,7 +9,10 @@ const CreateScript = async (req, res) => {
         
         //Create the script object
         const rawData = req.body;
-        transaction.push(prisma.script.create({data: {
+
+        //Make sure that the category is included in the tags!
+        const tags = [rawData.category, ...rawData.tags];
+        let data = {
             name: rawData.name,
             slug: rawData.slug,
             //Todo - if we're inserting a new Creator here, we should check to see if it should
@@ -25,12 +28,21 @@ const CreateScript = async (req, res) => {
                 where: {name: rawData.category},
                 create: {name: rawData.category}
             }},
-            tags: rawData.tags,
+            tags: tags,
             thumbnail: rawData.thumbnail,
             description: rawData.description,
             duration: rawData.duration,
             sourceUrl: rawData.sourceUrl
-        }}));
+        }
+
+        //for testing only!
+        if(rawData.likeCount) data.likeCount = rawData.likeCount;
+        if(rawData.thumbsUp) data.thumbsUp = rawData.thumbsUp;
+        if(rawData.thumbsDown) data.thumbsDown = rawData.thumbsDown;
+        if(rawData.views) data.views = rawData.views;
+        if(rawData.created) data.created = new Date(rawData.created);
+
+        transaction.push(prisma.script.create({data}));
 
         //Create or insert any necessary tags
         rawData.tags.forEach(tag => {

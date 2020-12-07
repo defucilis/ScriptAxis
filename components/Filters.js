@@ -160,7 +160,6 @@ const Filters = ({query, onFilter}) => {
                         }
                         value={initialIncludeTags}
                         whitelist={tags}
-                        blacklist={categories}
                         onChange={e => {
                             e.persist();
                             if(!e.target.value || e.target.value.length === 0) {
@@ -189,7 +188,6 @@ const Filters = ({query, onFilter}) => {
                             }
                         }
                         whitelist={tags}
-                        blacklist={categories}
                         onChange={e => {
                             e.persist();
                             if(!e.target.value || e.target.value.length === 0) {

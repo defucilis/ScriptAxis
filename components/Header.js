@@ -20,7 +20,6 @@ const Header = ({page}) => {
             try {
                 const res = await axios.get("/api/tagscategories");
                 const {tags, categories} = res.data;
-                console.log({tags, categories});
                 const scriptCount = categories.reduce((acc, category) => acc + category.count, 0);
                 setCategoryCounts(categories);
                 setTagCounts(tags);
