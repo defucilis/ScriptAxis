@@ -12,19 +12,6 @@ const Tags = dynamic(() => import("@yaireo/tagify/dist/react.tagify"), { ssr: fa
 
 import style from './AddScriptForm.module.css'
 
-const stringToDuration = str => {
-    const pieces = str.split(":");
-    if(pieces.length === 1) {
-        return parseInt(str);
-    } else if(pieces.length === 2) {
-        return 60 * parseInt(pieces[0]) + parseInt(pieces[1]);
-    } else if(pieces.length === 3) {
-        return 3600 * parseInt(pieces[0]) + 60 * parseInt(pieces[1]) + parseInt(pieces[0]);
-    }
-
-    return -1;
-}
-
 const AddScriptForm = ({tags, categories}) => {
     const getFile = files => {
         setThumbnailFile(files[0]);
@@ -80,7 +67,7 @@ const AddScriptForm = ({tags, categories}) => {
             owner: "9cf9dc87-a8cf-4c17-bb95-1f5c05b8d791", //todo - use the currently signed in user once that's built
             sourceUrl: e.target.source.value,
             description: e.target.description.value,
-            duration: stringToDuration(e.target.duration.value),
+            duration: ScriptUtils.(stringToDuration(e.target.duration.value)),
             category: e.target.category.value,
             tags: [e.target.category.value, ...chosenTags],
         };

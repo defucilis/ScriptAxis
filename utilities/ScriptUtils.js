@@ -34,6 +34,18 @@ const ScriptUtils = {
         else output += "00";
         return output;
     },
+    stringToDuration: str => {
+        const pieces = str.split(":");
+        if(pieces.length === 1) {
+            return parseInt(str);
+        } else if(pieces.length === 2) {
+            return 60 * parseInt(pieces[0]) + parseInt(pieces[1]);
+        } else if(pieces.length === 3) {
+            return 3600 * parseInt(pieces[0]) + 60 * parseInt(pieces[1]) + parseInt(pieces[0]);
+        }
+    
+        return -1;
+    },
     viewsToString: views => {
         if(views > 1000000) {
             return (Math.round(views / 100000) / 10) + "M";
