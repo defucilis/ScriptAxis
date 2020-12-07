@@ -22,11 +22,21 @@ const ScriptDetails = ({script}) => {
                     <img src={script.thumbnail} />
                 </div>
                 <div className={style.details}>
-                    <p className={style.category}>{!script.category ? "No Category" : ScriptUtils.getPrettyCategory(script.category)}</p>
+                    <p className={style.category}>{!script.category ? "No Category" : (
+                        <Link href={`/scripts?category=${script.category}`}>
+                            <a>{ScriptUtils.getPrettyCategory(script.category)}</a>
+                        </Link>
+                    )}</p>
                     <ul className={style.tags}>
                         {!script.tags 
                             ? null 
-                            : script.tags.map(tag => <li key={tag}>{ScriptUtils.getPrettyCategory(tag)}</li>)
+                            : script.tags.map(tag => {
+                                return (<li key={tag}>
+                                    <Link href={`/scripts?tag=${tag}`}>
+                                        <a>{ScriptUtils.getPrettyCategory(tag)}</a>
+                                    </Link>
+                                </li>);
+                            })
                         }
                     </ul>
                     <div className={style.duration}>
@@ -65,7 +75,7 @@ const ScriptDetails = ({script}) => {
                             ) }
                             { (!script.talent || script.talent.length === 0) ? null : (
                                 <p><span className="grey">Talent:</span> {script.talent.map(talent => {
-                                    return <span id={talent}>{talent}{talent === script.talent[script.talent.length - 1] ? "" : ", "}</span>
+                                    return <span key={talent}>{talent}{talent === script.talent[script.talent.length - 1] ? "" : ", "}</span>
                                 })}</p>
                             )}
                         </div>
