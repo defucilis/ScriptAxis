@@ -3,6 +3,7 @@ import "@yaireo/tagify/dist/tagify.css"
 import './index.css'
 import Router from "next/router";
 import {useState, useEffect} from 'react'
+import AuthManager from '../components/AuthManager'
 
 const App = ({Component, pageProps}) => {
     const [loading, setLoading] = useState(false);
@@ -17,12 +18,15 @@ const App = ({Component, pageProps}) => {
             Router.events.off("routeChangeComplete", endLoad);
             Router.events.off("routeChangeError", endLoad);
         }
-    }, [])
+    }, []);
+
     return (
         <>
             <div className={`loader top ${loading ? "loadingtop" : "notloadingtop"}`}></div>
             <div className={`loader bottom ${loading ? "loadingbottom" : "notloadingbottom"}`}></div>
-            <Component {...pageProps} />
+            <AuthManager>
+                <Component {...pageProps} />
+            </AuthManager>
         </>
     )
 }

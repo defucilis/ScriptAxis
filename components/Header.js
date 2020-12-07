@@ -1,15 +1,17 @@
-import {useState, useEffect, useRef} from 'react'
+import {useState, useEffect, useRef, useContext} from 'react'
 import Link from 'next/link'
 import Router from 'next/router'
 import Image from 'next/image'
 import {FaSearch} from 'react-icons/fa'
 import ScriptUtils from '../utilities/ScriptUtils'
 import axios from 'axios'
+import UserContext from '../utilities/UserContext'
 
 import styles from './Header.module.css'
 
 const Header = ({page}) => {
 
+    const {user} = useContext(UserContext)
     const [scriptCount, setScriptCount] = useState(0);
     const [categoryCounts, setCategoryCounts] = useState([]);
     const [tagCounts, setTagCounts] = useState([]);
@@ -72,9 +74,25 @@ const Header = ({page}) => {
                             <FaSearch />
                         </button>
                     </form>
-                    <Link href="/add">
-                        <a className={styles.addscript}>+ Add a Script</a>
-                    </Link>
+                    {
+                        user === null 
+                        ? (<div className={styles.userbuttons}>
+                            <Link href="/signin">
+                                <a>Sign In</a>
+                            </Link>
+                            <Link href="/signup">
+                                <a>Sign Up</a>
+                            </Link>
+                        </div>)
+                        : (<div>
+                            <Link href="/add">
+                                <a className={styles.addscript}>+ Add a Script</a>
+                            </Link>
+                            <Link href="/dashboard">
+                                <a className={styles.addscript}>Dashboard</a>
+                            </Link>
+                        </div>)
+                    }
                 </div>
             </div>
             <div className={styles.navbar}>

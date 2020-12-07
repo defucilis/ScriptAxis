@@ -67,7 +67,7 @@ const AddScriptForm = ({tags, categories}) => {
             owner: "9cf9dc87-a8cf-4c17-bb95-1f5c05b8d791", //todo - use the currently signed in user once that's built
             sourceUrl: e.target.source.value,
             description: e.target.description.value,
-            duration: ScriptUtils.(stringToDuration(e.target.duration.value)),
+            duration: ScriptUtils.stringToDuration(e.target.duration.value),
             category: e.target.category.value,
             tags: [e.target.category.value, ...chosenTags],
         };

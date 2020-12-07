@@ -2,8 +2,23 @@ import Layout from '../components/Layout'
 import AddScriptForm from '../components/AddScriptForm'
 import firebase from '../utilities/Firebase'
 import Head from 'next/head'
+import {useContext, useEffect} from 'react'
+import UserContext from '../utilities/UserContext'
 
 const Add = ({tags, categories}) => {
+
+    //page is blocked if user is not signed in
+    const {user} = useContext(UserContext);
+    useEffect(() => {
+        if(user.waiting) return;
+        if(user === null) Router.push("/");
+    }, [user])
+
+    const signOut = () => {
+        firebase.auth().signOut();
+        Router.push("/");
+    }
+
     return (
         <Layout>
             <Head>

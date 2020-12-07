@@ -72,13 +72,19 @@
     color: #fff;
 }
 
-.searchbar > div > .addscript {
+.addscript {
     background-color: #303030;
     height: 30px;
-    display: grid;
+    display: inline-grid;
     place-items: center;
     padding: 0 1em;
     border-radius: 5px;
+    margin-left: 1em;
+}
+
+.userbuttons > a {
+    margin-left: 1em;
+    font-size: 1.2em;
 }
 
 .navbar {
