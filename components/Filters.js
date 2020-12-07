@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useReducer} from 'react'
 import style from './Filters.module.css'
 import ScriptUtils from '../utilities/ScriptUtils'
 
@@ -7,8 +7,54 @@ const Tags = dynamic(() => import("@yaireo/tagify/dist/react.tagify"), { ssr: fa
 
 import ReactSlider from 'react-slider'
 
+const reduceFilters = (currentFilters, action) => {
+    let newFilters = {...currentFilters};
+    switch(action.type) {
+        case "name":
+            if(!action.value || action.value === "") delete(newFilters.name);
+            else newFilters.name = {include: newFilters.name}
+            break;
+        case "category":
+            if(!action.value || action.value === "") delete(newFilters.category);
+            else if(action.value && newFilters.category && newFilters.category.name.equals === action.value) delete(newFilters.category);
+            else newFilters.category = {name: {equals: action.value}};
+            break;
+        case "include":
+            if(action.operation === "add") {
+                if(!newFilters.include) newFilters.include = [action.value];
+                else newFilters.include.push(action.value);
+            } else if(action.operation === "remove") {
+                if(!newFilters.include || newFilters.include.length === 0) delete(newFilters.include);
+                newFilters.include = newFilters.include.filter(tag => tag !== action.value);
+                if(newFilters.include.length === 0) delete(newFilters.include);
+            } else {
+                console.error(`Unexpected value ${action.operation} for reduceFilters operation`)
+            }
+            break;
+        case "exclude":
+            if(action.operation === "add") {
+                if(!newFilters.exclude) newFilters.exclude = [action.value];
+                else newFilters.exclude.push(action.value);
+            } else if(action.operation === "remove") {
+                if(!newFilters.exclude || newFilters.exclude.length === 0) delete(newFilters.exclude);
+                newFilters.exclude = newFilters.exclude.filter(tag => tag !== action.value);
+                if(newFilters.exclude.length === 0) delete(newFilters.exclude);
+            } else {
+                console.error(`Unexpected value ${action.operation} for reduceFilters operation`)
+            }
+            break;
+        case "duration":
+            if(!action.value) delete(newFilters.duration);
+            else newFilters.duration = action.value;
+            break;
+        default:
+            console.error(`Unexpected value ${action.type} for reduceFilters action`);
+    }
+    return newFilters;
+}
+
 const Filters = ({query, onFilter}) => {
-    const [filters, setFilters] = useState({});
+    const [filters, setFilters] = useReducer(reduceFilters, {});
     const [initialIncludeTags, setInitialIncludeTags] = useState("");
     const [tags, setTags] = useState([])
     const [categories, setCategories] = useState([]);
@@ -28,60 +74,22 @@ const Filters = ({query, onFilter}) => {
                 setInitialIncludeTags([]);
             }
             if(query.filters.category) {
-                setCategory(query.filters.category.name.equals);
+                setFilters({
+                    type: "category",
+                    value: query.filters.category.name.equals
+                });
             } else {
-                clearCategory();
+                setFilters({
+                    type: "category",
+                    value: ""
+                });
             }
         }, 100)
     }, [query])
 
     useEffect(() => {
-        if(Object.keys(filters).length === 0) return;
         onFilter(filters);
     }, [filters])
-
-    const setIncludedTags = tags => {
-        setFilters(cur => {
-            return {
-                ...cur,
-                include: tags
-            }
-        });
-    }
-
-    const setExcludedTags = tags => {
-        setFilters(cur => {
-            return {
-                ...cur,
-                exclude: tags
-            }
-        });
-    }
-
-    const setCategory = category => {
-        const shouldToggleOff = (
-            filters.category && 
-            filters.category.name && 
-            filters.category.name.equals && 
-            filters.category.name.equals === category
-        );
-        console.log("Setting category", category, shouldToggleOff)
-        setFilters(cur => {
-            return {
-                ...cur,
-                category: shouldToggleOff ? undefined : { name: { equals: category }}
-            }
-        });
-    }
-
-    const clearCategory = () => {
-        setFilters(cur => {
-            return {
-                ...cur,
-                category: undefined
-            }
-        })
-    }
 
     const transformDuration = index => {
         switch(index) {
@@ -109,18 +117,14 @@ const Filters = ({query, onFilter}) => {
         let maxDuration = transformDuration(values[1]);
         //maximum duration is actually 120 minutes and above
         if(maxDuration === 7200) maxDuration = 999999999;
-        setFilters(cur => {
-            return {
-                ...cur,
-                duration: { 
-                    min: values[0] === 0 ? -1 : minDuration,
-                    max: values[1] === 7 ? -1 : maxDuration
-                }
+        setFilters({
+            type: "duration",
+            value: { 
+                min: values[0] === 0 ? -1 : minDuration,
+                max: values[1] === 7 ? -1 : maxDuration
             }
         })
     }
-
-    console.log(filters);
 
     return (
         <div className={style.filters}>
@@ -134,7 +138,10 @@ const Filters = ({query, onFilter}) => {
                                     <li key={category.name}>
                                         <a 
                                             className={filters.category && filters.category.name && filters.category.name.equals === category.name ? style.selectedcategory : null}
-                                            onClick={() => setCategory(category.name)}
+                                            onClick={() => setFilters({
+                                                        type: "category",
+                                                        value: category.name
+                                                    })}
                                         >
                                             {ScriptUtils.getPrettyCategory(category.name)} ({category.count})
                                         </a>
@@ -160,17 +167,21 @@ const Filters = ({query, onFilter}) => {
                         }
                         value={initialIncludeTags}
                         whitelist={tags}
-                        onChange={e => {
-                            e.persist();
-                            if(!e.target.value || e.target.value.length === 0) {
-                                setIncludedTags([]);
-                                return;
-                            }
-                            if(!e.target.value || e.target.value === "") setIncludedTags([])
-                            else {
-                                const json = JSON.parse(e.target.value);
-                                setIncludedTags(json.map(tag => tag.value.trim().toLowerCase().replace(" ", "-")));
-                            }
+                        onAdd={e => {
+                            console.log("tag added ", e.detail.data)
+                            setFilters({
+                                type: "include",
+                                operation: "add",
+                                value: e.detail.data.value
+                            })
+                        }}
+                        onRemove={e => {
+                            console.log("tag removed", e.detail.data);
+                            setFilters({
+                                type: "include",
+                                operation: "remove",
+                                value: e.detail.data.value
+                            })
                         }}
                     />
                 </div>
@@ -188,17 +199,20 @@ const Filters = ({query, onFilter}) => {
                             }
                         }
                         whitelist={tags}
-                        onChange={e => {
-                            e.persist();
-                            if(!e.target.value || e.target.value.length === 0) {
-                                setExcludedTags([]);
-                                return;
-                            }
-                            if(!e.target.value || e.target.value === "") setExcludedTags([])
-                            else {
-                                const json = JSON.parse(e.target.value);
-                                setExcludedTags(json.map(tag => tag.value.trim().toLowerCase().replace(" ", "-")));
-                            }
+                        onAdd={e => {
+                            console.log("tag added ", e.detail.data)
+                            setFilters({
+                                type: "exclude",
+                                operation: "add",
+                                value: e.detail.data.value
+                            })
+                        }}
+                        onRemove={e => {
+                            setFilters({
+                                type: "exclude",
+                                operation: "remove",
+                                value: e.detail.data.value
+                            })
                         }}
                     />
                 </div>

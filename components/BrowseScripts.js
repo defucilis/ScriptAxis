@@ -9,7 +9,7 @@ import axios from 'axios'
 
 const BrowseScripts = ({propScripts, tags, categories, query}) => {
     const [scripts, setScripts] = useState([]);
-    const [cachedFilters, setFilters] = useState({});
+    const [cachedFilters, setFilters] = useState({...query.filters});
     const [cachedSorting, setSorting] = useState([{created:"desc"}]);
     const [customFilters, setCustomFilters] = useState(false);
     
@@ -33,8 +33,54 @@ const BrowseScripts = ({propScripts, tags, categories, query}) => {
         return "All Scripts";
     }
 
+    const filtersEqual = (filterA, filterB) => {
+        const stringArrayEqual = (arrayA, arrayB) => {
+            if(arrayA && !arrayB || !arrayA && arrayB) return false;
+            if(arrayA.length !== arrayB.length) return false;
+            for(var i = 0; i < arrayA.length; i++) {
+                if(arrayA[i] !== arrayB[i]) return false;
+            }
+            return true;
+        }
+        
+        if(filterA.name || filterB.name) {
+            if(filterA.name && !filterB.name || !filterA.name && filterB.name) return false;
+            else if(filterA.name.contains !== filterB.name.contains) return false;
+        }
+
+        if(filterA.category || filterB.category) {
+            if(filterA.category && !filterB.category || !filterA.category && filterB.category) return false;
+            else if(filterA.category.name.equals !== filterB.category.name.equals) return false;
+        }
+
+        if(filterA.include || filterB.include) {
+            if(filterA.include && !filterB.include || !filterA.include && filterB.include) return false;
+            else if(!stringArrayEqual(filterA.include, filterB.include)) return false;
+        }
+
+        if(filterA.exclude || filterB.exclude) {
+            if(filterA.exclude && !filterB.exclude || !filterA.exclude && filterB.exclude) return false;
+            else if(!stringArrayEqual(filterA.exclude, filterB.exclude)) return false;
+        }
+
+        if(filterA.duration || filterB.duration) {
+            if(filterA.duration && !filterB.duration || !filterA.duration && filterB.duration) return false;
+            if(filterA.duration.max !== filterB.duration.max) return false;
+            if(filterA.duration.min !== filterB.duration.min) return false;
+        }
+
+        return true;
+    }
+
     const handleFilters = filters => {
-        console.log(filters);
+        console.log("New filters object", filters);
+        let identical = filtersEqual(filters, cachedFilters);
+        if(identical) {
+            console.log("New filters identical to old filters, doing nothing");
+            return;
+        } else {
+            console.log("Changed filters detected, fetching new scripts");
+        }
         setFilters(filters);
         setCustomFilters(true);
         fetchNewScripts(filters, cachedSorting);
