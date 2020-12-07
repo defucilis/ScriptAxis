@@ -4,8 +4,10 @@ const FetchTagsAndCategories = () => {
     return new Promise(async (resolve, reject) => {
         const prisma = new PrismaClient(/*{log: ["query"]}*/);
         try {
-            const tags = await prisma.tag.findMany();
-            const categories = await prisma.category.findMany();
+            let tags = await prisma.tag.findMany();
+            tags = tags.sort((a, b) => b.count - a.count);
+            let categories = await prisma.category.findMany();
+            categories = categories.sort((a, b) => b.count - a.count);
             await prisma.$disconnect();
             resolve({tags, categories});
         } catch(error) {
