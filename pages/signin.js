@@ -1,6 +1,7 @@
 import {useState, useContext} from 'react'
 import Layout from '../components/Layout'
 import Head from 'next/head'
+import Link from 'next/link'
 import Router from 'next/router'
 import firebase from '../utilities/Firebase'
 import axios from 'axios'
@@ -53,6 +54,7 @@ const SignIn = () => {
                 <input id="email" />
                 <label htmlFor="password">Password</label>
                 <input type="password" id="password" />
+                <Link href="/forgotpassword"><a className={style.forgot}>Forgot Password</a></Link>
                 <input type="submit" value="Sign In" />
                 <p style={{color: "red"}}>{error}</p>
             </form>

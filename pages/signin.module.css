@@ -18,3 +18,13 @@
     border: 0;
     width: 30%;
 }
+
+.forgot {
+    margin-bottom: 2em;
+    margin-top: -1em;
+    display: block;
+}
+
+.forgot:hover {
+    color: #e8739c;
+}
