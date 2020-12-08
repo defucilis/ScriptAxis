@@ -9,53 +9,79 @@ import ReactSlider from 'react-slider'
 
 const reduceFilters = (currentFilters, action) => {
     let newFilters = {...currentFilters};
-    switch(action.type) {
-        case "name":
-            if(!action.value || action.value === "") delete(newFilters.name);
-            else newFilters.name = {include: newFilters.name}
-            break;
-        case "category":
-            if(!action.value || action.value === "") delete(newFilters.category);
-            else if(action.value && newFilters.category && newFilters.category.name.equals === action.value) delete(newFilters.category);
-            else newFilters.category = {name: {equals: action.value}};
-            break;
-        case "include":
-            if(action.operation === "add") {
-                if(!newFilters.include) newFilters.include = [action.value];
-                else newFilters.include.push(action.value);
-            } else if(action.operation === "remove") {
-                if(!newFilters.include || newFilters.include.length === 0) delete(newFilters.include);
-                newFilters.include = newFilters.include.filter(tag => tag !== action.value);
-                if(newFilters.include.length === 0) delete(newFilters.include);
-            } else {
-                console.error(`Unexpected value ${action.operation} for reduceFilters operation`)
-            }
-            break;
-        case "exclude":
-            if(action.operation === "add") {
-                if(!newFilters.exclude) newFilters.exclude = [action.value];
-                else newFilters.exclude.push(action.value);
-            } else if(action.operation === "remove") {
-                if(!newFilters.exclude || newFilters.exclude.length === 0) delete(newFilters.exclude);
-                newFilters.exclude = newFilters.exclude.filter(tag => tag !== action.value);
-                if(newFilters.exclude.length === 0) delete(newFilters.exclude);
-            } else {
-                console.error(`Unexpected value ${action.operation} for reduceFilters operation`)
-            }
-            break;
-        case "duration":
-            if(!action.value) delete(newFilters.duration);
-            else newFilters.duration = action.value;
-            break;
-        default:
-            console.error(`Unexpected value ${action.type} for reduceFilters action`);
+    console.log("Filters: Mutating filters", currentFilters, action);
+    if(action.name) {
+        if(!action.name.value || action.name.value === "") delete(newFilters.name);
+        else newFilters.name = {include: newFilters.name}
     }
+    if(action.category) {
+        if(action.category.operation === "clear") {
+            delete(newFilters.category);
+        } else if(action.category.operation === "set") {
+            newFilters.category = {name: {equals: action.category.value}};
+        } else if(action.category.operation === "toggle") {
+            if(action.category.value && newFilters.category && newFilters.category.name.equals === action.category.value) 
+                delete(newFilters.category);
+            else 
+                newFilters.category = {name: {equals: action.category.value}};
+        }
+    }
+    if(action.include) {
+        if(action.include.operation === "add") {
+            if(!newFilters.include) 
+                newFilters.include = [action.include.value];
+            else if(newFilters.include.findIndex(f => f === action.include.value) === -1) 
+                newFilters.include.push(action.include.value);
+        } else if(action.include.operation === "remove") {
+            if(!newFilters.include || newFilters.include.length === 0) 
+                delete(newFilters.include);
+            newFilters.include = newFilters.include.filter(tag => tag !== action.include.value);
+            if(newFilters.include.length === 0) 
+                delete(newFilters.include);
+        } else if(action.include.operation === "set" ) {
+            if(!action.include.value || action.include.value.length === 0)
+                delete(newFilters.include);
+            else newFilters.include = action.include.value;  
+        } else if(action.include.operation === "clear") {
+            delete(newFilters.include);   
+        } else {
+            console.error(`Unexpected value ${action.include.operation} for reduceFilters operation`)
+        }
+    }
+    if(action.exclude) {
+        if(action.exclude.operation === "add") {
+            if(!newFilters.exclude) 
+                newFilters.exclude = [action.exclude.value];
+            else if(newFilters.exclude.findIndex(f => f === action.exclude.value) === -1) 
+                newFilters.exclude.push(action.exclude.value);
+        } else if(action.exclude.operation === "remove") {
+            if(!newFilters.exclude || newFilters.exclude.length === 0) 
+                delete(newFilters.exclude);
+            newFilters.exclude = newFilters.exclude.filter(tag => tag !== action.exclude.value);
+            if(newFilters.exclude.length === 0) 
+                delete(newFilters.exclude);
+        } else if(action.exclude.operation === "clear") {
+            delete(newFilters.exclude);   
+        }else {
+            console.error(`Unexpected value ${action.exclude.operation} for reduceFilters operation`)
+        }
+    }
+    if(action.minDuration) {
+        if(action.minDuration.operation === "clear") delete(newFilters.minDuration);
+        else newFilters.minDuration = action.minDuration.value;
+    }
+    if(action.maxDuration) {
+        if(action.maxDuration.operation === "clear") delete(newFilters.maxDuration);
+        else newFilters.maxDuration = action.maxDuration.value;
+    }
+    console.log("Filters: Filter mutation complete", newFilters);
     return newFilters;
 }
 
 const Filters = ({query, onFilter}) => {
     const [filters, setFilters] = useReducer(reduceFilters, {});
     const [initialIncludeTags, setInitialIncludeTags] = useState("");
+    const [initialExcludeTags, setInitialExcludeTags] = useState("");
     const [tags, setTags] = useState([])
     const [categories, setCategories] = useState([]);
     useEffect(() => {
@@ -66,29 +92,50 @@ const Filters = ({query, onFilter}) => {
             if(storedCategoryCounts) setCategories(JSON.parse(storedCategoryCounts));
         }, 50)
     }, []);
+
+    
     useEffect(() => {
         window.setTimeout(() => {
+            console.log("Filters: Updating Filters from Query:", query.filters);
+            let action = {};
             if(query.filters.include) {
-                setInitialIncludeTags(query.filters.include[0])
+                action.include = {
+                    operation: "add",
+                    value: query.filters.include[0],
+                };
             } else {
-                setInitialIncludeTags([]);
+                action.include = {
+                    operation: "clear"
+                }
             }
             if(query.filters.category) {
-                setFilters({
-                    type: "category",
+                action.category = {
+                    operation: "set",
                     value: query.filters.category.name.equals
-                });
+                }
             } else {
-                setFilters({
-                    type: "category",
-                    value: ""
-                });
+                action.category = {
+                    operation: "clear"
+                }
             }
-        }, 100)
+
+            console.log("Set Filter Action:", action);
+            if(Object.keys(action).length > 0) setFilters(action);
+
+            setInitialIncludeTags(query.filters.include ? [query.filters.include] : []);
+            setInitialIncludeTags(query.filters.include ? [query.filters.include] : []);
+            
+        }, 100);
     }, [query])
 
     useEffect(() => {
-        onFilter(filters);
+        console.log("Filters: Detected filter change")
+        if(!ScriptUtils.filtersEqual(query.filters, filters)) {
+            console.log("Filters: New filters was different from query filters:", filters, query.filters);
+            onFilter(filters);
+        } else {
+            console.log("Filters: New filters identical to query, skipping")
+        }
     }, [filters])
 
     const transformDuration = index => {
@@ -113,17 +160,12 @@ const Filters = ({query, onFilter}) => {
     }
 
     const handleSliderChange = values => {
-        const minDuration = transformDuration(values[0]);
-        let maxDuration = transformDuration(values[1]);
-        //maximum duration is actually 120 minutes and above
-        if(maxDuration === 7200) maxDuration = 999999999;
-        setFilters({
-            type: "duration",
-            value: { 
-                min: values[0] === 0 ? -1 : minDuration,
-                max: values[1] === 7 ? -1 : maxDuration
-            }
-        })
+        let action = {};
+        if(values[0] !== 0) action.minDuration = {value: transformDuration(values[0])}
+        else action.minDuration = {"operation" : "clear"}
+        if(values[1] !== 7) action.maxDuration = {value: transformDuration(values[1])}
+        else action.maxDuration = {"operation" : "clear"}
+        if(Object.keys(action).length > 0) setFilters(action);
     }
 
     return (
@@ -138,10 +180,10 @@ const Filters = ({query, onFilter}) => {
                                     <li key={category.name}>
                                         <a 
                                             className={filters.category && filters.category.name && filters.category.name.equals === category.name ? style.selectedcategory : null}
-                                            onClick={() => setFilters({
-                                                        type: "category",
+                                            onClick={() => setFilters({category: {
+                                                        operation: "toggle",
                                                         value: category.name
-                                                    })}
+                                                    }})}
                                         >
                                             {ScriptUtils.getPrettyCategory(category.name)} ({category.count})
                                         </a>
@@ -169,19 +211,17 @@ const Filters = ({query, onFilter}) => {
                         whitelist={tags}
                         onAdd={e => {
                             console.log("tag added ", e.detail.data)
-                            setFilters({
-                                type: "include",
+                            setFilters({include: {
                                 operation: "add",
                                 value: e.detail.data.value
-                            })
+                            }})
                         }}
                         onRemove={e => {
                             console.log("tag removed", e.detail.data);
-                            setFilters({
-                                type: "include",
+                            setFilters({include: {
                                 operation: "remove",
                                 value: e.detail.data.value
-                            })
+                            }})
                         }}
                     />
                 </div>
@@ -198,21 +238,20 @@ const Filters = ({query, onFilter}) => {
                                 }
                             }
                         }
+                        value={initialExcludeTags}
                         whitelist={tags}
                         onAdd={e => {
                             console.log("tag added ", e.detail.data)
-                            setFilters({
-                                type: "exclude",
+                            setFilters({exclude: {
                                 operation: "add",
                                 value: e.detail.data.value
-                            })
+                            }})
                         }}
                         onRemove={e => {
-                            setFilters({
-                                type: "exclude",
+                            setFilters({exclude: {
                                 operation: "remove",
                                 value: e.detail.data.value
-                            })
+                            }})
                         }}
                     />
                 </div>

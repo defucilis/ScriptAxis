@@ -13,18 +13,14 @@ const Scripts = ({propScripts, tags, categories, query}) => {
 }
 
 export async function getServerSideProps({query}) {
+    console.log(query, ScriptUtils.queryToObject(query));
     let scripts = [];
-    let dbQuery = {
-        filters: {},
-        sorting: {
-            created: "desc"
-        }
-    };
+    let dbQuery = ScriptUtils.queryToObject(query);
     try {
         
-        if(query.search) dbQuery.filters.name = { contains: query.search, mode: "insensitive" };
-        if(query.tag) dbQuery.filters.include = [query.tag];
-        if(query.category) dbQuery.filters.category = { name: { equals: query.category }};
+        //if(query.search) dbQuery.filters.name = { contains: query.search, mode: "insensitive" };
+        //if(query.tag) dbQuery.filters.include = [query.tag];
+        //if(query.category) dbQuery.filters.category = { name: { equals: query.category }};
         scripts = await QueryScripts(dbQuery);
     } catch(error) {
         console.log("Failed to load scripts", error);

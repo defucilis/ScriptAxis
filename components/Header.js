@@ -171,7 +171,7 @@ const Header = ({page}) => {
                         tagCounts.filter(tag => tag.count > 0).map(tag => {
                             return (
                                 <li key={tag.name}>
-                                    <Link href={`/scripts?tag=${tag.name}`}>
+                                    <Link href={`/scripts?include=${tag.name}`}>
                                         <a>
                                             {ScriptUtils.getPrettyCategory(tag.name)}
                                             <br/>

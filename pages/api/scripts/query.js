@@ -19,10 +19,8 @@ const QueryScripts = ({filters, sorting}) => {
             if(filters.category) finalWhere.AND.push({category: filters.category});
 
             //duration needs to be split into two checks for min and max
-            if(filters.duration) {
-                if(filters.duration.min !== -1) finalWhere.AND.push({duration: {gte: filters.duration.min}});
-                if(filters.duration.max !== -1) finalWhere.AND.push({duration: {lte: filters.duration.max}});
-            }
+            if(filters.minDuration) finalWhere.AND.push({duration: {gte: filters.duration.min}});
+            if(filters.maxDuration) finalWhere.AND.push({duration: {lte: filters.duration.max}});
 
             //todo: God damn it Prisma doesn't support filtering with lists
             //see: https://github.com/prisma/prisma-client-js/issues/341
