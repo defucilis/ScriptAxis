@@ -12,7 +12,7 @@ const Dashboard = () => {
     //page is blocked if user is not signed in
     const {user} = useContext(UserContext);
     useEffect(() => {
-        if(user.waiting) return;
+        if(user !== null && user.waiting) return;
         if(user === null) Router.push("/");
     }, [user])
 
