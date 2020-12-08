@@ -21,16 +21,16 @@ const ScriptTile = ({script}) => {
                     <a>{script.name}</a>
                 </Link>
             </div>
-            <div className={style.scriptauthor}>
-                <Link href={`/author/${script.author}`}>
-                    <a>{script.author}</a>
+            <div className={style.scriptcreator}>
+                <Link href={`/creator/${script.creator}`}>
+                    <a>{script.creator}</a>
                 </Link>
             </div>
             <div className={style.bottomrow}>
                 <p className={style.views}>{ScriptUtils.viewsToString(script.views)} Views</p>
                 <div className={style.rating}>
                     <FaThumbsUp />
-                    <p>{ScriptUtils.thumbsToPercentage(script.thumbsup, script.thumbsdown)}%</p>
+                    <p>{ScriptUtils.thumbsToPercentage(script.thumbsUp, script.thumbsDown)}%</p>
                 </div>
                 { script.likes == 0 ? null : (
                 <div className={style.likes}>

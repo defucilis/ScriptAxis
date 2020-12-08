@@ -2,7 +2,7 @@ import Layout from '../../components/Layout'
 import ScriptUtils from '../../utilities/ScriptUtils'
 import ScriptDetails from '../../components/ScriptDetails'
 import Head from 'next/head'
-import firebase from '../../utilities/Firebase'
+import {FetchScript} from '../api/scripts/slug'
 
 const Script = ({script}) => {
 
@@ -17,18 +17,17 @@ const Script = ({script}) => {
 }
 
 export async function getServerSideProps({query,res}) {
-    const db = firebase.firestore();
-    const dbQuery = db.collection("scripts").where("slug", "==", query.scriptslug);
-    const snapshot = await dbQuery.get();
-    const scripts = snapshot.docs.map(doc => ScriptUtils.parseScriptDocument(doc));
-    if(!scripts || scripts.length === 0) {
+    let script = null;
+    try {
+        script = await FetchScript(query.scriptslug);
+        script = ScriptUtils.parseScriptDocument(script);
+    } catch(error) {
+        console.log(error);
+    } finally {
         return {
-            notFound: true
-        }
-    }
-    return {
-        props: {
-            script : scripts[0]
+            props: {
+                script
+            }
         }
     }
 }

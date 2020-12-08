@@ -1,9 +1,9 @@
 import {useState, useEffect, useRef} from 'react'
 import Router from 'next/router'
 import slugify from 'slugify'
-import firebase from '../utilities/Firebase'
 import FirebaseUtils from '../utilities/FirebaseUtils'
 import ScriptUtils from '../utilities/ScriptUtils'
+import axios from 'axios'
 
 import {useDropzone} from 'react-dropzone'
 
@@ -11,19 +11,6 @@ import dynamic from 'next/dynamic'
 const Tags = dynamic(() => import("@yaireo/tagify/dist/react.tagify"), { ssr: false });
 
 import style from './AddScriptForm.module.css'
-
-const stringToDuration = str => {
-    const pieces = str.split(":");
-    if(pieces.length === 1) {
-        return parseInt(str);
-    } else if(pieces.length === 2) {
-        return 60 * parseInt(pieces[0]) + parseInt(pieces[1]);
-    } else if(pieces.length === 3) {
-        return 3600 * parseInt(pieces[0]) + 60 * parseInt(pieces[1]) + parseInt(pieces[0]);
-    }
-
-    return -1;
-}
 
 const AddScriptForm = ({tags, categories}) => {
     const getFile = files => {
@@ -63,54 +50,26 @@ const AddScriptForm = ({tags, categories}) => {
             const fileUrl = await FirebaseUtils.uploadFile(thumbnailFile, `thumbnails/thumbnail_${postData.slug}`, progress => console.log((progress * 100) + "%"));
             postData.thumbnail = fileUrl;
 
-            //Get the ID of the new record, and create it
-            const db = firebase.firestore();
-            let dbQuery = db.collection("scripts").doc();
-            const newId = dbQuery.id;
-            let dbData = await dbQuery.set(postData);
-            
-
-            //Operate on tags
-            postData.tags.forEach(async tag => {
-                dbQuery = db.collection("tags").doc(tag);
-
-                if(tags.findIndex(t => t === tag) === -1) {
-                    //If the tag is new, add it to the database
-                    await dbQuery.set({
-                        scripts: [newId]
-                    });
-                } else {
-                    //Otherwise, add the new script to it
-                    await dbQuery.update({
-                        scripts: firebase.firestore.FieldValue.arrayUnion(newId)
-                    });
-                }
-            })
-
-            //Add the new script to the chosen category
-            dbQuery = db.collection("categories").doc(postData.category);
-            await dbQuery.update({
-                scripts: firebase.firestore.FieldValue.arrayUnion(newId)
-            });
-
-            Router.push("/");
+            try {
+                const response = await axios.post("/api/scripts/create", postData);
+                console.log(response);
+                Router.push("/");
+            } catch(error) {
+                console.log("Failed with error", error.response.data);
+                alert("Failed with error:\n" + JSON.stringify(error.response.data));
+            };
         }
 
         const postData = {
             name: e.target.name.value,
-            source: e.target.source.value,
-            author: e.target.author.value,
             slug: slugify(e.target.name.value).toLowerCase(),
+            creator: e.target.creator.value,
+            owner: "9cf9dc87-a8cf-4c17-bb95-1f5c05b8d791", //todo - use the currently signed in user once that's built
+            sourceUrl: e.target.source.value,
             description: e.target.description.value,
-            duration: stringToDuration(e.target.duration.value),
+            duration: ScriptUtils.stringToDuration(e.target.duration.value),
             category: e.target.category.value,
             tags: [e.target.category.value, ...chosenTags],
-            views: 0,
-            thumbsup: 1,
-            thumbsdown: 0,
-            created: firebase.firestore.Timestamp.fromDate(new Date()),
-            modified: firebase.firestore.Timestamp.fromDate(new Date()),
-            likes: 0,
         };
     
         doRequest(postData);
@@ -133,8 +92,8 @@ const AddScriptForm = ({tags, categories}) => {
             <input type="text" id="name" />
             <label htmlFor="source">Link to Source</label>
             <input type="text" id="source" />
-            <label htmlFor="author">Author</label>
-            <input type="text" id="author" />
+            <label htmlFor="creator">Creator</label>
+            <input type="text" id="creator" />
             <div {...getRootProps({className: style.dropzone})}>
                 <input {...getInputProps()} />
                 {

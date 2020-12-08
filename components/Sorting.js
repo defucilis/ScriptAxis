@@ -3,45 +3,51 @@ import style from './Sorting.module.css'
 const sortOptions = [
     {
         label: "Newest",
-        sorting: {
-            field: "created",
-            direction: "desc"
-        }
+        sorting: [
+            {
+                created: "desc"
+            }
+        ]
     },
     {
         label: "Oldest",
-        sorting: {
-            field: "created",
-            direction: "asc"
-        }
+        sorting: [
+            {
+                created: "asc"
+            }
+        ]
     },
     {
         label: "Most Viewed",
-        sorting: {
-            field: "views",
-            direction: "desc"
-        }
+        sorting: [
+            {
+                views: "desc"
+            }
+        ]
     },
     {
         label: "Most Liked",
-        sorting: {
-            field: "likes",
-            direction: "desc"
-        }
+        sorting: [
+            {
+                likeCount: "desc"
+            }
+        ]
     },
     {
         label: "Longest",
-        sorting: {
-            field: "duration",
-            direction: "desc"
-        }
+        sorting: [
+            {
+                duration: "desc"
+            }
+        ]
     },
     {
         label: "Shortest",
-        sorting: {
-            field: "duration",
-            direction: "asc"
-        }
+        sorting: [
+            {
+                duration: "asc"
+            }
+        ]
     },
 ]
 

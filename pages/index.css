@@ -39,6 +39,13 @@ a {
     text-decoration: none;
 }
 
+/* I have no idea why my body is getting an explicit 8px bottom margin applied... */
+body {
+    position: relative;
+    top: 8px;
+    margin-top: -8px;
+}
+
 .content {
     min-height: calc(100vh - 200px);
     padding-bottom: 50px;
@@ -71,4 +78,140 @@ input, textarea {
 
 .tagify__tag-text {
     color: #000;
+}
+
+/* This could be improved a lot... */
+.loader {
+    position: fixed;
+    left: 0px;
+    width: 100vw;
+    background-color: #e8739c;
+    z-index: 999;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='36' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M0 6l8 12 8-12z'/><path d='M0 5h36v36H5z' fill='none'/></svg>");
+    display: grid;
+    place-items: top;
+    overflow: hidden;
+    height: 25px;
+}
+
+.top {
+    border-top: 2px solid black;
+    animation:          scrollBackground 10s infinite;
+    -moz-animation:     scrollBackground 10s infinite;
+    -webkit-animation:  scrollBackground 10s infinite;
+    -o-animation:       scrollBackground 10s infinite;
+}
+.bottom {
+    border-bottom: 2px solid black;
+    animation:          scrollBackground 10s 3.235s infinite;
+    -moz-animation:     scrollBackground 10s 3.235s infinite;
+    -webkit-animation:  scrollBackground 10s 3.235s infinite;
+    -o-animation:       scrollBackground 10s 3.235s infinite;
+}
+
+.grey {
+    color: #777;
+}
+
+.loader > p {
+    font-weight: bold;
+    color: #fff;
+    font-size: 2em;
+    margin: 0;
+    width: 100%;
+    text-align: center;
+    text-shadow: 2px 2px 3px rgba(0,0,0,0.5);
+}
+
+.loadingtop {
+    bottom: 0px;
+    transition: bottom 2s;
+}
+
+.notloadingtop {
+    bottom: -25px;
+    transition: bottom 0.2s;
+}
+
+.loadingbottom {
+    top: 0px;
+    transition: top 2s;
+}
+
+.notloadingbottom {
+    top: -25px;
+    transition: top 0.2s;    
+}
+
+/* Animation Keyframes*/
+@keyframes scrollBackground {
+    0% { 
+        background-position-x: 0%; 
+        background-position-y: 1000%;
+        background-size: 1%;
+    }
+    50% { 
+        background-position-x: 100%; 
+        background-position-y: 0%;
+        background-size: 5%;
+    }
+    100% { 
+        background-position-x: 0%; 
+        background-position-y: 1000%;
+        background-size: 1%;
+    }
+}
+
+@-moz-keyframes scrollBackground {
+    0% { 
+        background-position-x: 0%; 
+        background-position-y: 1000%;
+        background-size: 1%;
+    }
+    50% { 
+        background-position-x: 100%; 
+        background-position-y: 0%;
+        background-size: 5%;
+    }
+    100% { 
+        background-position-x: 0%; 
+        background-position-y: 1000%;
+        background-size: 1%;
+    }
+}
+
+@-webkit-keyframes scrollBackground {
+    0% { 
+        background-position-x: 0%; 
+        background-position-y: 1000%;
+        background-size: 1%;
+    }
+    50% { 
+        background-position-x: 100%; 
+        background-position-y: 0%;
+        background-size: 5%;
+    }
+    100% { 
+        background-position-x: 0%; 
+        background-position-y: 1000%;
+        background-size: 1%;
+    }
+}
+
+@-o-keyframes scrollBackground {
+    0% { 
+        background-position-x: 0%; 
+        background-position-y: 1000%;
+        background-size: 1%;
+    }
+    50% { 
+        background-position-x: 100%; 
+        background-position-y: 0%;
+        background-size: 5%;
+    }
+    100% { 
+        background-position-x: 0%; 
+        background-position-y: 1000%;
+        background-size: 1%;
+    }
 }

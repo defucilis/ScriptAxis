@@ -2,7 +2,7 @@ import Layout from '../components/Layout'
 import ScriptGrid from '../components/ScriptGrid'
 import ScriptUtils from '../utilities/ScriptUtils'
 import Head from 'next/head'
-import firebase from '../utilities/Firebase'
+import {FetchScripts} from './api/scripts'
 
 const Index = ({scripts}) => {
     return (
@@ -16,14 +16,17 @@ const Index = ({scripts}) => {
     )
 }
 
-export async function getServerSideProps(ctx) {
-    const db = firebase.firestore();
-    const dbQuery = db.collection("scripts").orderBy("created", "desc").limit(12);
-    const snapshot = await dbQuery.get();
-    const scripts = snapshot.docs.map(doc => ScriptUtils.parseScriptDocument(doc));
-    return {
-        props: {
-            scripts
+export async function getServerSideProps() {
+    let scripts = [];
+    try {
+        scripts = await FetchScripts();
+    } catch(error) {
+        console.log("Failed to get scripts", error);        
+    } finally {
+        return {
+            props: {
+                scripts : scripts.map(script => ScriptUtils.parseScriptDocument(script))
+            }
         }
     }
 }

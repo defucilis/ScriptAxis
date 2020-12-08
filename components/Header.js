@@ -1,58 +1,46 @@
-import {useState, useEffect, useRef} from 'react'
+import {useState, useEffect, useRef, useContext} from 'react'
 import Link from 'next/link'
 import Router from 'next/router'
 import Image from 'next/image'
 import {FaSearch} from 'react-icons/fa'
-import firebase from '../utilities/Firebase'
 import ScriptUtils from '../utilities/ScriptUtils'
+import axios from 'axios'
+import UserContext from '../utilities/UserContext'
 
 import styles from './Header.module.css'
 
 const Header = ({page}) => {
 
+    const {user} = useContext(UserContext)
     const [scriptCount, setScriptCount] = useState(0);
-    const [categoryCounts, setCategoryCounts] = useState({});
-    const [tagCounts, setTagCounts] = useState({});
+    const [categoryCounts, setCategoryCounts] = useState([]);
+    const [tagCounts, setTagCounts] = useState([]);
     const categoriesRef = useRef();
     const tagsRef = useRef();
     useEffect(() => {
         const loadScriptCount = async () => {
-            const db = firebase.firestore();
-            let dbQuery = db.collection("categories");
-            let snapshot = await dbQuery.get();
-            const scriptCount = snapshot.docs.reduce((acc, doc) => {
-                const scripts = doc.data().scripts;
-                if(!scripts || !scripts.length) return acc;
-                return acc + scripts.length;
-            }, 0);
-            snapshot.docs.forEach(doc => {
-                const scripts = doc.data().scripts;
-                if(!scripts || !scripts.length) return;
-
-                setCategoryCounts(curValue => {
-                    return {
-                        ...curValue, [doc.id] : scripts.length
-                    }
-                })
-            });
-            dbQuery = db.collection("tags");
-            snapshot = await dbQuery.get();
-            snapshot.docs.forEach(doc => {
-                const scripts = doc.data().scripts;
-                if(!scripts || !scripts.length) return;
-
-                setTagCounts(curValue => {
-                    return {
-                        ...curValue, [doc.id] : scripts.length
-                    }
-                })
-            });
-
-            window.localStorage.setItem("scriptCount", scriptCount);
-            setScriptCount(scriptCount);
+            try {
+                const res = await axios.get("/api/loadlists");
+                const {tags, categories, talent, studios} = res.data;
+                const scriptCount = categories.reduce((acc, category) => acc + category.count, 0);
+                setCategoryCounts(categories);
+                setTagCounts(tags);
+                setScriptCount(scriptCount);
+                window.localStorage.setItem("scriptCount", scriptCount);
+                window.localStorage.setItem("storedTagCounts", JSON.stringify(tags));
+                window.localStorage.setItem("storedCategoryCounts", JSON.stringify(categories));
+                window.localStorage.setItem("storedTalent", JSON.stringify(talent));
+                window.localStorage.setItem("storedStudios", JSON.stringify(studios));
+            } catch(error) {
+                console.log(error);
+            }
         }
         const storedScriptCount = window.localStorage.getItem("scriptCount");
+        const storedTagCounts = window.localStorage.getItem("storedTagCounts");
+        const storedCategoryCounts = window.localStorage.getItem("storedCategoryCounts");
         if(storedScriptCount) setScriptCount(storedScriptCount);
+        if(storedTagCounts) setTagCounts(JSON.parse(storedTagCounts));
+        if(storedCategoryCounts) setCategoryCounts(JSON.parse(storedCategoryCounts));
         loadScriptCount();
     }, [])
 
@@ -88,9 +76,25 @@ const Header = ({page}) => {
                             <FaSearch />
                         </button>
                     </form>
-                    <Link href="/add">
-                        <a className={styles.addscript}>+ Add a Script</a>
-                    </Link>
+                    {
+                        user === null 
+                        ? (<div className={styles.userbuttons}>
+                            <Link href="/signin">
+                                <a>Sign In</a>
+                            </Link>
+                            <Link href="/signup">
+                                <a>Sign Up</a>
+                            </Link>
+                        </div>)
+                        : (<div>
+                            <Link href="/add">
+                                <a className={styles.addscript}>+ Add a Script</a>
+                            </Link>
+                            <Link href="/dashboard">
+                                <a className={styles.addscript}>Dashboard</a>
+                            </Link>
+                        </div>)
+                    }
                 </div>
             </div>
             <div className={styles.navbar}>
@@ -124,12 +128,12 @@ const Header = ({page}) => {
                         >
                             <a>TAGS</a>
                         </li>
-                        <li className={page === "authors" 
+                        <li className={page === "creators" 
                             ? styles.currentnav 
                             : null} 
                             onClick={() => alert("Coming soon!")}
                         >
-                            <Link href="/">AUTHORS</Link>
+                            <Link href="/">CREATORS</Link>
                         </li>
                     </ul>
                 </div>
@@ -142,14 +146,14 @@ const Header = ({page}) => {
             >
                 <div className="container">
                     <ul>{
-                        Object.keys(categoryCounts).map(category => {
+                        categoryCounts.filter(category => category.count > 0).map(category => {
                             return (
-                                <li key={category}>
-                                    <Link href={`/scripts?category=${category}`}>
+                                <li key={category.name}>
+                                    <Link href={`/scripts?category=${category.name}`}>
                                         <a>
-                                            {ScriptUtils.getPrettyCategory(category)}
+                                            {ScriptUtils.getPrettyCategory(category.name)}
                                             <br/>
-                                            ({categoryCounts[category]} Script{categoryCounts[category] > 1 ? "s" : ""})
+                                            ({category.count} Script{category.count > 1 ? "s" : ""})
                                         </a>
                                     </Link>
                                 </li>
@@ -166,14 +170,14 @@ const Header = ({page}) => {
             >
                 <div className="container">
                     <ul>{
-                        Object.keys(tagCounts).map(tag => {
+                        tagCounts.filter(tag => tag.count > 0).map(tag => {
                             return (
-                                <li key={tag}>
-                                    <Link href={`/scripts?tag=${tag}`}>
+                                <li key={tag.name}>
+                                    <Link href={`/scripts?include=${tag.name}`}>
                                         <a>
-                                            {ScriptUtils.getPrettyCategory(tag)}
+                                            {ScriptUtils.getPrettyCategory(tag.name)}
                                             <br/>
-                                            ({tagCounts[tag]} Script{tagCounts[tag] > 1 ? "s" : ""})
+                                            ({tag.count} Script{tag.count > 1 ? "s" : ""})
                                         </a>
                                     </Link>
                                 </li>
