@@ -15,6 +15,10 @@
     max-height: 100%;
     max-width: 100%;
 }
+.imagewrapper > iframe {
+    max-height: 100%;
+    max-width: 100%;
+}
 
 .details {
     width: 50%;
