@@ -61,6 +61,16 @@ model Tag {
   count             Int         @default(0)
 }
 
+//Talent for scripts - each script can have more than one
+model Talent {
+  name              String      @id
+}
+
+//Studio for scripts - each script can only have one
+model Studio {
+  name              String     @id
+}
+
 // User accounts - not in use yet
 model User {
   id                String      @default(uuid()) @id
@@ -70,6 +80,7 @@ model User {
   isAdmin           Boolean     @default(false)
   ownedScripts      Script[]    @relation("ScriptOwner")
   likedScripts      Script[]    @relation("ScriptLiker")
+  savedFilters      String[]
   created           DateTime    @default(now())
   modified          DateTime    @updatedAt
 }

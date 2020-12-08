@@ -35,6 +35,9 @@ const QueryScripts = ({filters, sorting}) => {
                     }
                 ]
             };
+
+            console.log(filters);
+
             //these are set directly from UI
             if(filters.name) finalWhere.AND.push({name: filters.name});
             if(filters.category) finalWhere.AND.push({category: filters.category});
@@ -42,6 +45,8 @@ const QueryScripts = ({filters, sorting}) => {
             //duration needs to be split into two checks for min and max
             if(filters.minDuration) finalWhere.AND.push({duration: {gte: transformDuration(Number(filters.minDuration))}});
             if(filters.maxDuration) finalWhere.AND.push({duration: {lte: transformDuration(Number(filters.maxDuration))}});
+
+            if(filters.studio) finalWhere.AND.push({studio: filters.studio});
 
             //todo: God damn it Prisma doesn't support filtering with lists
             //see: https://github.com/prisma/prisma-client-js/issues/341
@@ -69,6 +74,13 @@ const QueryScripts = ({filters, sorting}) => {
                 .filter(script => filters.exclude.reduce((acc, tag) => {
                     return acc && script.tags.findIndex(t => t === tag) === -1;
                 }, true));
+
+            if(filters.talent) {
+                scripts = scripts
+                    .filter(script => script.talent && script.talent
+                        .findIndex(talent => talent.includes(filters.talent.contains)
+                    ) !== -1);
+            }
 
             await prisma.$disconnect();
             resolve(scripts);

@@ -94,14 +94,23 @@ const Filters = ({query, onFilter}) => {
     const [tags, setTags] = useState([])
     const [categories, setCategories] = useState([]);
     const [search, setSearch] = useState("");
-    const [talent, setTalent] = useState("");
-    const [studio, setStudio] = useState("");
+    const [talentOptions, setTalentOptions] = useState([]);
+    const [studioOptions, setStudioOptions] = useState([]);
+    const [initialTalent, setInitialTalent] = useState([]);
+    const [initialStudio, setInitialStudio] = useState([]);
     useEffect(() => {
         window.setTimeout(() => {
             const storedTagCounts = window.localStorage.getItem("storedTagCounts");
-            const storedCategoryCounts = window.localStorage.getItem("storedCategoryCounts");
             if(storedTagCounts) setTags(JSON.parse(storedTagCounts).map(tag => tag.name));
+
+            const storedCategoryCounts = window.localStorage.getItem("storedCategoryCounts");
             if(storedCategoryCounts) setCategories(JSON.parse(storedCategoryCounts));
+
+            const storedTalent = window.localStorage.getItem("storedTalent");
+            if(storedTalent) setTalentOptions(JSON.parse(storedTalent).map(talent => talent.name));
+
+            const storedStudios = window.localStorage.getItem("storedStudios");
+            if(storedStudios) setStudioOptions(JSON.parse(storedStudios).map(studio => studio.name));
         }, 50)
     }, []);
 
@@ -137,11 +146,17 @@ const Filters = ({query, onFilter}) => {
                 value: query.filters.maxDuration
             }
 
+            action.talent = !query.filters.talent ? clearOp : {
+                value: query.filters.talent.contains
+            }
+
             if(Object.keys(action).length > 0) setFilters(action);
 
             setSearch(query.filters.name ? query.filters.name.contains : "");
             setInitialIncludeTags(query.filters.include ? [query.filters.include] : []);
             setInitialExcludeTags(query.filters.exclude ? [query.filters.exclude] : []);
+            setInitialTalent(query.filters.talent ? [query.filters.talent.contains] : []);
+            setInitialStudio(query.filters.studio ? [query.filters.studio.contains] : []);
             setDurationValues([
                 query.filters.minDuration ? Number(query.filters.minDuration) : 0,
                 query.filters.maxDuration ? Number(query.filters.maxDuration) : 7
@@ -338,28 +353,66 @@ const Filters = ({query, onFilter}) => {
                     </div>
                 </div>
 
-                <label htmlFor="title">Talent</label>
+                <label htmlFor="talent">Talent</label>
                 <div className={style.field}>
-                    <input 
-                        value={talent} 
-                        onChange={e => setTalent(e.target.value)} 
-                        onBlur={handleTalent}
-                        onKeyDown={handleTalent}
-                        className={style.search}
-                    >
-                    </input>
+                    <Tags 
+                        className={style.tags}
+                        settings = {
+                            {
+                                enforceWhitelist: true,
+                                dropdown: {
+                                    highlightFirst: true,
+                                    enabled: 0
+                                },
+                                mode: "select"
+                            }
+                        }
+                        value={initialTalent}
+                        whitelist={talentOptions}
+                        onAdd={e => {
+                            console.log("talent added ", e.detail.data)
+                            setFilters({talent: {
+                                value: e.detail.data.value
+                            }})
+                        }}
+                        onRemove={e => {
+                            console.log("talent removed", e.detail.data);
+                            setFilters({talent: {
+                                operation: "clear"
+                            }})
+                        }}
+                    />
                 </div>
 
-                <label htmlFor="title">Studio</label>
+                <label htmlFor="talent">Studio</label>
                 <div className={style.field}>
-                    <input 
-                        value={studio} 
-                        onChange={e => setStudio(e.target.value)} 
-                        onBlur={handleStudio}
-                        onKeyDown={handleStudio}
-                        className={style.search}
-                    >
-                    </input>
+                    <Tags 
+                        className={style.tags}
+                        settings = {
+                            {
+                                enforceWhitelist: true,
+                                dropdown: {
+                                    highlightFirst: true,
+                                    enabled: 0
+                                },
+                                mode: "select"
+                            }
+                        }
+                        value={initialStudio}
+                        whitelist={studioOptions}
+                        onAdd={e => {
+                            console.log("studio added ", e.detail.data)
+                            setFilters({studio: {
+                                value: e.detail.data.value
+                            }})
+                        }}
+                        onRemove={e => {
+                            console.log("studio removed", e.detail.data);
+                            setFilters({studio: {
+                                operation: "clear"
+                            }})
+                        }}
+                    />
                 </div>
             </div>
         </div>

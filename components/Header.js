@@ -20,8 +20,8 @@ const Header = ({page}) => {
     useEffect(() => {
         const loadScriptCount = async () => {
             try {
-                const res = await axios.get("/api/tagscategories");
-                const {tags, categories} = res.data;
+                const res = await axios.get("/api/loadlists");
+                const {tags, categories, talent, studios} = res.data;
                 const scriptCount = categories.reduce((acc, category) => acc + category.count, 0);
                 setCategoryCounts(categories);
                 setTagCounts(tags);
@@ -29,6 +29,8 @@ const Header = ({page}) => {
                 window.localStorage.setItem("scriptCount", scriptCount);
                 window.localStorage.setItem("storedTagCounts", JSON.stringify(tags));
                 window.localStorage.setItem("storedCategoryCounts", JSON.stringify(categories));
+                window.localStorage.setItem("storedTalent", JSON.stringify(talent));
+                window.localStorage.setItem("storedStudios", JSON.stringify(studios));
             } catch(error) {
                 console.log(error);
             }

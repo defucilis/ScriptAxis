@@ -1,6 +1,6 @@
 import {PrismaClient} from '@prisma/client'
 
-const FetchTagsAndCategories = () => {
+const FetchLists = () => {
     return new Promise(async (resolve, reject) => {
         const prisma = new PrismaClient(/*{log: ["query"]}*/);
         try {
@@ -8,8 +8,10 @@ const FetchTagsAndCategories = () => {
             tags = tags.sort((a, b) => b.count - a.count);
             let categories = await prisma.category.findMany();
             categories = categories.sort((a, b) => b.count - a.count);
+            let talent = await prisma.talent.findMany();
+            let studios = await prisma.studio.findMany();
             await prisma.$disconnect();
-            resolve({tags, categories});
+            resolve({tags, categories, talent, studios});
         } catch(error) {
             await prisma.$disconnect();
             reject(error);
@@ -17,11 +19,11 @@ const FetchTagsAndCategories = () => {
     })
 }
 
-export {FetchTagsAndCategories}
+export {FetchLists}
 
 export default async (req, res) => {
     try {
-        const scripts = await FetchTagsAndCategories();
+        const scripts = await FetchLists();
         res.status(200);
         res.json(scripts);
     } catch(error) {

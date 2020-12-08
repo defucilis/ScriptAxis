@@ -120,6 +120,10 @@
     font-size: 1.2em;
 }
 
+.studiotalent a:hover {
+    color: #e8739c;
+}
+
 .description {
     margin-top: 1em;
     font-size: 1.1em;

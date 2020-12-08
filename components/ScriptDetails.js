@@ -97,7 +97,7 @@ const ScriptDetails = ({script}) => {
                             ? null 
                             : script.tags.map(tag => {
                                 return (<li key={tag}>
-                                    <Link href={`/scripts?tag=${tag}`}>
+                                    <Link href={`/scripts?include=${tag}`}>
                                         <a>{ScriptUtils.getPrettyCategory(tag)}</a>
                                     </Link>
                                 </li>);
@@ -136,11 +136,18 @@ const ScriptDetails = ({script}) => {
                         </ul>
                         <div className={style.studiotalent}>
                             { !script.studio ? null : (
-                                <p><span className="grey">Studio:</span> {script.studio}</p>
+                                <p><span className="grey">Studio:</span> <Link href={`/scripts?studio=${script.studio}`}><a>{script.studio}</a></Link></p>
                             ) }
                             { (!script.talent || script.talent.length === 0) ? null : (
                                 <p><span className="grey">Talent:</span> {script.talent.map(talent => {
-                                    return <span key={talent}>{talent}{talent === script.talent[script.talent.length - 1] ? "" : ", "}</span>
+                                    return (
+                                        <span key={talent}>
+                                            <Link key={talent} href={`/scripts?talent=${talent}`}>
+                                                <a key={talent}>{talent}</a>
+                                            </Link>
+                                            {talent === script.talent[script.talent.length - 1] ? null : ", "}
+                                        </span>
+                                    );
                                 })}</p>
                             )}
                         </div>

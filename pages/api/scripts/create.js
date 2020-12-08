@@ -81,6 +81,24 @@ const CreateScript = async (req, res) => {
             }
         }))
 
+        //If talents were included, add them to the talent table
+        rawData.talent.forEach(talent => {
+            transaction.push(prisma.talent.upsert({
+                where: {name: talent},
+                create: {name: talent},
+                update: {}
+            }))
+        });
+
+        //If a studio was included, add it to the studio table
+        if(rawData.studio) {
+            transaction.push(prisma.studio.upsert({
+                where: {name: rawData.studio},
+                create: {name: rawData.studio},
+                update: {}
+            }))
+        };
+
         const results = await prisma.$transaction(transaction);
 
         res.status(201);
