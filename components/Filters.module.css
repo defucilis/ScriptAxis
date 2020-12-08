@@ -120,3 +120,24 @@
 .slidermarks ul li {
     text-align: center;
 }
+
+.checkbox {
+    display: grid;
+    place-items: center;
+}
+
+.checkbox > div {
+    background-color: #363636;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+}
+
+.checkbox > div > svg {
+    color: #fff;
+    width: 60%;
+    height: 60%;
+}

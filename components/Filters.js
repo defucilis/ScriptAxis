@@ -1,6 +1,8 @@
 import {useState, useEffect, useReducer} from 'react'
 import style from './Filters.module.css'
 import ScriptUtils from '../utilities/ScriptUtils'
+import Checkbox from './Checkbox'
+import { FaCheck } from 'react-icons/fa'
 
 import dynamic from 'next/dynamic'
 const Tags = dynamic(() => import("@yaireo/tagify/dist/react.tagify"), { ssr: false });
@@ -81,6 +83,14 @@ const reduceFilters = (currentFilters, action) => {
         if(action.studio.operation === "clear") delete(newFilters.studio);
         else newFilters.studio = {contains: action.studio.value}
     }
+    if(action.sourceUrl) {
+        if(!action.sourceUrl.value) delete(newFilters.sourceUrl);
+        else newFilters.sourceUrl = {not: null};
+    }
+    if(action.streamingUrl) {
+        if(!action.streamingUrl.value) delete(newFilters.streamingUrl);
+        else newFilters.streamingUrl = {not: null};
+    }
 
     console.log("Mutating filters", currentFilters, action, newFilters);
     return newFilters;
@@ -98,6 +108,8 @@ const Filters = ({query, onFilter}) => {
     const [studioOptions, setStudioOptions] = useState([]);
     const [initialTalent, setInitialTalent] = useState([]);
     const [initialStudio, setInitialStudio] = useState([]);
+    const [sourceUrl, setSourceUrl] = useState("");
+    const [streamingUrl, setStreamingUrl] = useState("");
     useEffect(() => {
         window.setTimeout(() => {
             const storedTagCounts = window.localStorage.getItem("storedTagCounts");
@@ -150,6 +162,14 @@ const Filters = ({query, onFilter}) => {
                 value: query.filters.talent.contains
             }
 
+            action.sourceUrl = !query.filters.sourceUrl ? clearOp : {
+                value: true
+            }
+
+            action.streamingUrl = !query.filters.streamingUrl ? clearOp : {
+                value: true
+            }
+
             if(Object.keys(action).length > 0) setFilters(action);
 
             setSearch(query.filters.name ? query.filters.name.contains : "");
@@ -161,11 +181,14 @@ const Filters = ({query, onFilter}) => {
                 query.filters.minDuration ? Number(query.filters.minDuration) : 0,
                 query.filters.maxDuration ? Number(query.filters.maxDuration) : 7
             ]);
+            setSourceUrl(query.filters.sourceUrl ? true : false);
+            setStreamingUrl(query.filters.streamingUrl ? true : false);
             
         }, 100);
     }, [query])
 
     useEffect(() => {
+        console.log("Query vs New", query.filters, filters);
         if(ScriptUtils.filtersEqual(query.filters, filters)) {
             console.log("Filters: No change to filters");
             return;
@@ -198,25 +221,17 @@ const Filters = ({query, onFilter}) => {
         })
     }
 
-    const handleTalent = e => {
-        if(e.key && e.key !== "Enter") return;
-        if(filters.talent && talent === filters.talent.contains) return;
-
+    const handleSourceChange = e => {
+        setSourceUrl(e.target.checked);
         setFilters({
-            talent: talent && talent !== ""
-                ? { value: talent }
-                : { operation : "clear" }
+            sourceUrl: e.target.checked ? {value: true} : {}
         })
     }
 
-    const handleStudio = e => {
-        if(e.key && e.key !== "Enter") return;
-        if(filters.studio && studio === filters.studio.contains) return;
-
+    const handleStreamingChange = e => {
+        setStreamingUrl(e.target.checked);
         setFilters({
-            studio: studio && studio !== ""
-                ? { value: studio }
-                : { operation : "clear" }
+            streamingUrl: e.target.checked ? {value: true} : {}
         })
     }
 
@@ -413,6 +428,20 @@ const Filters = ({query, onFilter}) => {
                             }})
                         }}
                     />
+                </div>
+
+                <label htmlFor="source">Has Source Link</label>
+                <div className={`${style.field} ${style.checkbox}`}>
+                    <Checkbox checked={sourceUrl} onChange={handleSourceChange}>
+                        <FaCheck />
+                    </Checkbox>
+                </div>
+
+                <label htmlFor="source">Has Streaming Link</label>
+                <div className={`${style.field} ${style.checkbox}`}>
+                    <Checkbox checked={streamingUrl} onChange={handleStreamingChange}>
+                        <FaCheck />
+                    </Checkbox>
                 </div>
             </div>
         </div>

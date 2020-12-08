@@ -134,8 +134,16 @@ const ScriptUtils = {
             else if(filterA.studio.contains !== filterB.studio.contains) return false;
         }
 
+        if(filterA.sourceUrl || filterB.sourceUrl) {
+            if(filterA.sourceUrl && !filterB.sourceUrl || !filterA.sourceUrl && filterB.sourceUrl) return false;
+        }
+        if(filterA.streamingUrl || filterB.streamingUrl) {
+            if(filterA.streamingUrl && !filterB.streamingUrl || !filterA.streamingUrl && filterB.streamingUrl) return false;
+        }
+
         return true;
     },
+    //goes from a filters object applied to the database and turns it into a query object to be turned into a URL query string
     objectToQuery: input => {
         if(!input) return "";
         
@@ -153,6 +161,8 @@ const ScriptUtils = {
         if(filters.maxDuration) output.maxDuration = filters.maxDuration;
         if(filters.talent) output.talent = filters.talent.contains;
         if(filters.studio) output.studio = filters.studio.contains;
+        if(filters.sourceUrl) output.sourceUrl = "true";
+        if(filters.streamingUrl) output.streamingUrl = "true";
 
         if(!defaultSorting && sorting && sorting.length > 0) {
             output.sorting = `${Object.keys(sorting[0])[0]}+${sorting[0][Object.keys(sorting[0])[0]]}`;
@@ -160,6 +170,7 @@ const ScriptUtils = {
 
         return output;
     },
+    //goes from a query object parsed from a URL string and turns it into a filter object to be applied to the database
     queryToObject: query => {
         let output = {filters: {}, sorting: {created: "desc"}};
 
@@ -171,6 +182,8 @@ const ScriptUtils = {
         if(query.maxDuration) output.filters.maxDuration = query.maxDuration;
         if(query.talent) output.filters.talent = { contains: query.talent, mode: "insensitive" };
         if(query.studio) output.filters.studio = { contains: query.studio, mode: "insensitive" };
+        if(query.sourceUrl) output.filters.sourceUrl = { not: null };
+        if(query.streamingUrl) output.filters.streamingUrl = { not: null };
         if(query.sorting) {
             const pieces = query.sorting.split(" ");
             output.sorting = [{[pieces[0]]: pieces[1]}];

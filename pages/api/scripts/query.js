@@ -48,6 +48,9 @@ const QueryScripts = ({filters, sorting}) => {
 
             if(filters.studio) finalWhere.AND.push({studio: filters.studio});
 
+            if(filters.sourceUrl) finalWhere.AND.push({sourceUrl: filters.sourceUrl});
+            if(filters.streamingUrl) finalWhere.AND.push({streamingUrl: filters.streamingUrl});
+
             //todo: God damn it Prisma doesn't support filtering with lists
             //see: https://github.com/prisma/prisma-client-js/issues/341
             //see: https://github.com/prisma/prisma/issues/3475
