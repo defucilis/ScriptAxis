@@ -54,6 +54,17 @@ const SignUp = () => {
             <Head>
                 <title>ScriptAxis | Sign Up</title>
             </Head>
+            <h1>Sign Up</h1>
+            <p>I've disabled this page for now, sorry! The site isn't ready for people to create accounts and start adding scripts yet!</p>
+            <p>You can follow my progress <a href="https://github.com/defucilis/ScriptAxis/projects/1">on GitHub</a> &lt;3</p>
+        </Layout>
+    )
+
+    return (
+        <Layout>
+            <Head>
+                <title>ScriptAxis | Sign Up</title>
+            </Head>
             <h1>Sign In</h1>
             <form onSubmit={signUp} className={style.signin}>
                 <label htmlFor="email">Email (not displayed publicly)</label>
