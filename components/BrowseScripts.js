@@ -37,16 +37,30 @@ const BrowseScripts = ({propScripts, tags, categories, query}) => {
         setCachedFilters(filters);
         const params = ScriptUtils.objectToQuery({filters, sorting: cachedSorting});
         const newParamString = ScriptUtils.queryToString(params);
-        if(newParamString && newParamString !== "")
+        if(newParamString && newParamString !== "") {
+            console.log("BrowseScripts: New params, navigating", newParamString);
             Router.push("/scripts" + newParamString);
+        } else if(newParamString === "" && Object.keys(filters).length === 0) {
+            console.log("BrowseScripts: No params, navigating to /scripts");
+            Router.push("/scripts")
+        } else {
+            console.log("BrowseScripts: No change to params");
+        }
     }
 
     const handleSort = sorting => {
         setCachedSorting(sorting);
         const params = ScriptUtils.objectToQuery({filters: cachedFilters, sorting});
         const newParamString = ScriptUtils.queryToString(params);
-        if(newParamString && newParamString !== "")
+        if(newParamString && newParamString !== "") {
+            console.log("BrowseScripts: New params, navigating", newParamString);
             Router.push("/scripts" + newParamString);
+        } else if(newParamString === "" && Object.keys(filters).length === 0) {
+            console.log("BrowseScripts: No params, navigating to /scripts");
+            Router.push("/scripts")
+        } else {
+            console.log("BrowseScripts: No change to params");
+        }
     }
 
     return (

@@ -114,10 +114,24 @@ const ScriptUtils = {
             else if(!stringArrayEqual(filterA.exclude, filterB.exclude)) return false;
         }
 
-        if(filterA.duration || filterB.duration) {
-            if(filterA.duration && !filterB.duration || !filterA.duration && filterB.duration) return false;
-            if(filterA.duration.max !== filterB.duration.max) return false;
-            if(filterA.duration.min !== filterB.duration.min) return false;
+        if(filterA.minDuration || filterB.minDuration) {
+            if(filterA.minDuration && !filterB.minDuration || !filterA.minDuration && filterB.minDuration) return false;
+            if(filterA.minDuration!== filterB.minDuration) return false;
+        }
+
+        if(filterA.maxDuration || filterB.maxDuration) {
+            if(filterA.maxDuration && !filterB.maxDuration || !filterA.maxDuration && filterB.maxDuration) return false;
+            if(filterA.maxDuration!== filterB.maxDuration) return false;
+        }
+
+        if(filterA.talent || filterB.talent) {
+            if(filterA.talent && !filterB.talent || !filterA.talent && filterB.talent) return false;
+            else if(filterA.talent.contains !== filterB.talent.contains) return false;
+        }
+
+        if(filterA.studio || filterB.studio) {
+            if(filterA.studio && !filterB.studio || !filterA.studio && filterB.studio) return false;
+            else if(filterA.studio.contains !== filterB.studio.contains) return false;
         }
 
         return true;
@@ -137,6 +151,8 @@ const ScriptUtils = {
         if(filters.exclude) output.exclude = filters.exclude.join("+");
         if(filters.minDuration) output.minDuration = filters.minDuration;
         if(filters.maxDuration) output.maxDuration = filters.maxDuration;
+        if(filters.talent) output.talent = filters.talent.contains;
+        if(filters.studio) output.studio = filters.studio.contains;
 
         if(!defaultSorting && sorting && sorting.length > 0) {
             output.sorting = `${Object.keys(sorting[0])[0]}+${sorting[0][Object.keys(sorting[0])[0]]}`;
@@ -153,6 +169,8 @@ const ScriptUtils = {
         if(query.exclude) output.filters.exclude = query.exclude.split(" ");
         if(query.minDuration) output.filters.minDuration = query.minDuration;
         if(query.maxDuration) output.filters.maxDuration = query.maxDuration;
+        if(query.talent) output.filters.talent = { contains: query.talent, mode: "insensitive" };
+        if(query.studio) output.filters.studio = { contains: query.studio, mode: "insensitive" };
         if(query.sorting) {
             const pieces = query.sorting.split(" ");
             output.sorting = [{[pieces[0]]: pieces[1]}];

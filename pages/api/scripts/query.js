@@ -1,5 +1,26 @@
 import {PrismaClient} from '@prisma/client'
 
+const transformDuration = index => {
+    switch(index) {
+        case 0:
+            return 0;
+        case 1:
+            return 300; //5 minutes
+        case 2:
+            return 600; //10 minutes
+        case 3:
+            return 900; //15 minutes
+        case 4:
+            return 1200; //20 minutes
+        case 5:
+            return 1800; //30 minutes
+        case 6:
+            return 3600; //60 minutes
+        case 7:
+            return 7200; //120 minutes
+    }
+}
+
 const QueryScripts = ({filters, sorting}) => {
     return new Promise(async (resolve, reject) => {
         const prisma = new PrismaClient(/*{log: ["query"]}*/);
@@ -19,8 +40,8 @@ const QueryScripts = ({filters, sorting}) => {
             if(filters.category) finalWhere.AND.push({category: filters.category});
 
             //duration needs to be split into two checks for min and max
-            if(filters.minDuration) finalWhere.AND.push({duration: {gte: filters.duration.min}});
-            if(filters.maxDuration) finalWhere.AND.push({duration: {lte: filters.duration.max}});
+            if(filters.minDuration) finalWhere.AND.push({duration: {gte: transformDuration(Number(filters.minDuration))}});
+            if(filters.maxDuration) finalWhere.AND.push({duration: {lte: transformDuration(Number(filters.maxDuration))}});
 
             //todo: God damn it Prisma doesn't support filtering with lists
             //see: https://github.com/prisma/prisma-client-js/issues/341
