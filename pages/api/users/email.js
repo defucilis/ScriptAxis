@@ -9,7 +9,9 @@ const FetchUser = (email) => {
                     email: email
                 },
                 include: {
-                    creator: { select: { name: true }}
+                    creator: { select: { name: true }},
+                    likedScripts: { select: { slug: true, name: true, thumbnail: true }},
+                    ownedScripts: { select: { slug: true, name: true, thumbnail: true }}
                 }
             });
             await prisma.$disconnect();

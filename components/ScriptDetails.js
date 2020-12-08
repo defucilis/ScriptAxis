@@ -1,3 +1,4 @@
+import {useState, useEffect, useContext} from 'react'
 import style from './ScriptDetails.module.css'
 import Link from 'next/link'
 import ScriptUtils from '../utilities/ScriptUtils'
@@ -6,13 +7,14 @@ import { FaHeart } from 'react-icons/fa'
 import { FaRegEye } from 'react-icons/fa'
 import ReactMarkdown from 'react-markdown'
 import moment from 'moment'
+import UserContext from '../utilities/UserContext'
+import axios from 'axios'
 
 const getEmbed = url => {
     let iframeLink = "";
     if(!url) return null;
     if(url.includes("pornhub.com")) {
         const pieces = url.split("?");
-        console.log(pieces);
         if(pieces.length < 2) return null;
         const params = new URLSearchParams("?" + pieces[1])
         const viewkey = params.get("viewkey");
@@ -67,6 +69,41 @@ const getEmbed = url => {
 }
 
 const ScriptDetails = ({script}) => {
+
+    const {user} = useContext(UserContext);
+    const [isLiked, setIsLiked] = useState(false);
+    const [scriptLikes, setScriptLikes] = useState(0);
+    useEffect(() => {
+        if(!user || !script) return;
+        if(!user.likedScripts) {
+            setIsLiked(false);
+            return;
+        }
+        setIsLiked(user.likedScripts.findIndex(s => s.slug === script.slug) !== -1);
+    }, [user, script])
+
+    useEffect(() => {
+        console.log(script);
+        if(!script) setScriptLikes(0);
+        else setScriptLikes(script.likes);
+    }, [script])
+
+    const toggleLike = async () => {
+        const newValue = !isLiked;
+        setIsLiked(newValue);
+        if(newValue) {
+            setScriptLikes(cur => cur + 1);
+        } else {
+            setScriptLikes(cur => cur - 1);
+        }
+        const likeData = await axios.post("/api/scripts/changelike", {
+            slug: script.slug, 
+            uid: user.id,
+            creator: script.creator,
+            isLiked: newValue
+        })
+        console.log(likeData);
+    }
 
     //todo - we could show the thumbnail while waiting for the iframe to load...
 
@@ -130,8 +167,13 @@ const ScriptDetails = ({script}) => {
                                 <span>{ScriptUtils.thumbsToPercentage(script.thumbsUp, script.thumbsDown)}%</span>
                             </li>
                             <li>
-                                <FaHeart />
-                                <span>{script.likes}</span>
+                                {user && user.emailVerified ? (
+                                    <FaHeart 
+                                        className={isLiked ? `${style.isLiked} ${style.clickable}` : style.clickable}
+                                        onClick={() => toggleLike(user.likedScripts)}
+                                     />
+                                ) : <FaHeart />}
+                                <span>{scriptLikes}</span>
                             </li>
                         </ul>
                         <div className={style.studiotalent}>

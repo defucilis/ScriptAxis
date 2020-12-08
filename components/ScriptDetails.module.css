@@ -116,6 +116,14 @@
     margin-right: 0.5em;
 }
 
+.clickable {
+    cursor: pointer;
+}
+
+.isLiked {
+    color: #eb576b
+}
+
 .studiotalent {
     font-size: 1.2em;
 }
