@@ -18,6 +18,8 @@ const SignUp = () => {
             setError("");
             try {
                 await firebase.auth().createUserWithEmailAndPassword(email, password);
+                console.log(firebase.auth().currentUser);
+                firebase.auth().currentUser.sendEmailVerification();
                 const user = await axios.post("/api/users/create", {email, username});
                 setUser(user.data)
                 console.log("Found user data", user.data);

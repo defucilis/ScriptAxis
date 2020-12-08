@@ -5,6 +5,11 @@ import Head from 'next/head'
 import {useContext, useEffect} from 'react'
 import UserContext from '../utilities/UserContext'
 
+const isVerified = user => {
+    if(!user) return false;
+    return user.emailVerified;
+}
+
 const Add = ({tags, categories}) => {
 
     //page is blocked if user is not signed in
@@ -19,13 +24,32 @@ const Add = ({tags, categories}) => {
         Router.push("/");
     }
 
+    const resend = async () => {
+        try {
+            await firebase.auth().currentUser.sendEmailVerification();
+        } catch(error) {
+            console.log(error.message);
+            alert("Failed to send verificationemail\n" + error.message);
+        }
+    }
+
     return (
         <Layout>
             <Head>
                 <title>ScriptAxis | Add Script</title>
             </Head>
             <h1>Add a Script</h1>
-            <AddScriptForm tags={tags} categories={categories}/>
+            {
+                isVerified(firebase.auth().currentUser) 
+                ? <AddScriptForm tags={tags} categories={categories}/>
+                : (
+                    <div>
+                        <p>Please verify your email address to create scripts</p>
+                        <button onClick={resend}>Resend Verification Email</button>
+                    </div>
+                )
+            }
+            
         </Layout>
     )
 }
