@@ -20,9 +20,7 @@ export async function getServerSideProps({query,res}) {
     let script = null;
     try {
         script = await FetchScript(query.scriptslug);
-        console.log("script before", script);
         script = ScriptUtils.parseScriptDocument(script);
-        console.log("script after", script);
     } catch(error) {
         console.log(error);
     } finally {

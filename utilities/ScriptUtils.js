@@ -83,6 +83,104 @@ const ScriptUtils = {
     },
     getSiteName: url => {
         return url.replace("http://", "").replace("https://", "").replace("www.", "").split("/")[0].toLowerCase();
+    }, 
+    filtersEqual: (filterA, filterB) => {
+        const stringArrayEqual = (arrayA, arrayB) => {
+            if(arrayA && !arrayB || !arrayA && arrayB) return false;
+            if(arrayA.length !== arrayB.length) return false;
+            for(var i = 0; i < arrayA.length; i++) {
+                if(arrayA[i] !== arrayB[i]) return false;
+            }
+            return true;
+        }
+        
+        if(filterA.name || filterB.name) {
+            if(filterA.name && !filterB.name || !filterA.name && filterB.name) return false;
+            else if(filterA.name.contains !== filterB.name.contains) return false;
+        }
+
+        if(filterA.category || filterB.category) {
+            if(filterA.category && !filterB.category || !filterA.category && filterB.category) return false;
+            else if(filterA.category.name.equals !== filterB.category.name.equals) return false;
+        }
+
+        if(filterA.include || filterB.include) {
+            if(filterA.include && !filterB.include || !filterA.include && filterB.include) return false;
+            else if(!stringArrayEqual(filterA.include, filterB.include)) return false;
+        }
+
+        if(filterA.exclude || filterB.exclude) {
+            if(filterA.exclude && !filterB.exclude || !filterA.exclude && filterB.exclude) return false;
+            else if(!stringArrayEqual(filterA.exclude, filterB.exclude)) return false;
+        }
+
+        if(filterA.minDuration || filterB.minDuration) {
+            if(filterA.minDuration && !filterB.minDuration || !filterA.minDuration && filterB.minDuration) return false;
+            if(filterA.minDuration!== filterB.minDuration) return false;
+        }
+
+        if(filterA.maxDuration || filterB.maxDuration) {
+            if(filterA.maxDuration && !filterB.maxDuration || !filterA.maxDuration && filterB.maxDuration) return false;
+            if(filterA.maxDuration!== filterB.maxDuration) return false;
+        }
+
+        if(filterA.talent || filterB.talent) {
+            if(filterA.talent && !filterB.talent || !filterA.talent && filterB.talent) return false;
+            else if(filterA.talent.contains !== filterB.talent.contains) return false;
+        }
+
+        if(filterA.studio || filterB.studio) {
+            if(filterA.studio && !filterB.studio || !filterA.studio && filterB.studio) return false;
+            else if(filterA.studio.contains !== filterB.studio.contains) return false;
+        }
+
+        return true;
+    },
+    objectToQuery: input => {
+        if(!input) return "";
+        
+        const filters = input.filters;
+        const sorting = input.sorting;
+        const defaultSorting = (sorting && sorting.length > 0 && sorting[0].created && sorting[0].created === "desc");
+        if(defaultSorting && (!filters || Object.keys(filters).length === 0)) return "";
+
+        let output = {};
+        if(filters.name) output.search = filters.name.contains;
+        if(filters.category) output.category = filters.category.name.equals;
+        if(filters.include) output.include = filters.include.join("+");
+        if(filters.exclude) output.exclude = filters.exclude.join("+");
+        if(filters.minDuration) output.minDuration = filters.minDuration;
+        if(filters.maxDuration) output.maxDuration = filters.maxDuration;
+        if(filters.talent) output.talent = filters.talent.contains;
+        if(filters.studio) output.studio = filters.studio.contains;
+
+        if(!defaultSorting && sorting && sorting.length > 0) {
+            output.sorting = `${Object.keys(sorting[0])[0]}+${sorting[0][Object.keys(sorting[0])[0]]}`;
+        }
+
+        return output;
+    },
+    queryToObject: query => {
+        let output = {filters: {}, sorting: {created: "desc"}};
+
+        if(query.search) output.filters.name = { contains: query.search, mode: "insensitive" };
+        if(query.category) output.filters.category = {name: {equals: query.category}};
+        if(query.include) output.filters.include = query.include.split(" ");
+        if(query.exclude) output.filters.exclude = query.exclude.split(" ");
+        if(query.minDuration) output.filters.minDuration = query.minDuration;
+        if(query.maxDuration) output.filters.maxDuration = query.maxDuration;
+        if(query.talent) output.filters.talent = { contains: query.talent, mode: "insensitive" };
+        if(query.studio) output.filters.studio = { contains: query.studio, mode: "insensitive" };
+        if(query.sorting) {
+            const pieces = query.sorting.split(" ");
+            output.sorting = [{[pieces[0]]: pieces[1]}];
+        }
+
+        return output;
+    },
+    queryToString: query => {
+        if(Object.keys(query).length === 0) return "";
+        return "?" + Object.keys(query).map(key => `${key}=${query[key]}`).join("&");
     }
 }
 

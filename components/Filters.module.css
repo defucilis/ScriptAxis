@@ -32,6 +32,12 @@
     width: 100%;
 }
 
+.search {
+    width: 100%;
+    font-size: 1.2em;
+    padding: 0.25em 0.5em;
+}
+
 .categories li {
     width: 100%;
 }
