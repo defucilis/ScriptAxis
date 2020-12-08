@@ -2,20 +2,16 @@ import Layout from '../components/Layout'
 import AddScriptForm from '../components/AddScriptForm'
 import firebase from '../utilities/Firebase'
 import Head from 'next/head'
+import Router from 'next/router'
 import {useContext, useEffect} from 'react'
 import UserContext from '../utilities/UserContext'
-
-const isVerified = user => {
-    if(!user) return false;
-    return user.emailVerified;
-}
 
 const Add = ({tags, categories}) => {
 
     //page is blocked if user is not signed in
     const {user} = useContext(UserContext);
     useEffect(() => {
-        if(user.waiting) return;
+        if(user && user.waiting) return;
         if(user === null) Router.push("/");
     }, [user])
 
@@ -40,7 +36,7 @@ const Add = ({tags, categories}) => {
             </Head>
             <h1>Add a Script</h1>
             {
-                isVerified(firebase.auth().currentUser) 
+                user && user.emailVerified
                 ? <AddScriptForm tags={tags} categories={categories}/>
                 : (
                     <div>

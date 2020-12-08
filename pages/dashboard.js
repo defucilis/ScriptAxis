@@ -21,6 +21,8 @@ const Dashboard = () => {
         Router.push("/");
     }
 
+    console.log(!user || !user.isAdmin, user);
+
     return (
         <Layout>
             <Head>
@@ -29,7 +31,7 @@ const Dashboard = () => {
             <h1>Your Dashboard</h1>
             <button onClick={signOut}>Sign Out</button>
             {
-                !user || !user.isAdmin ? null : (
+                !(user && user.isAdmin) ? null : (
                     <div>
                         <Link href="/testdata">
                             <a>Go to Admin Controls</a>

@@ -1,23 +1,19 @@
 import {PrismaClient} from '@prisma/client'
 
-const FetchCreatorScripts = (name) => {
+const VerifyEmail = (email) => {
     return new Promise(async (resolve, reject) => {
         const prisma = new PrismaClient({log: ["query"]});
         try {
-            const scripts = await prisma.creator
-                .findUnique({
-                    where: {
-                        name: name
-                    }
-                })
-                .scripts({
-                    include: {
-                        creator: { select: { name: true }},
-                        owner: { select: { username: true }}
-                    }
-                });
+            const user = await prisma.user.update({
+                where: {
+                    email: email
+                },
+                data: {
+                    emailVerified: true
+                }
+            })
             await prisma.$disconnect();
-            resolve(scripts);
+            resolve(user);
         } catch(error) {
             await prisma.$disconnect();
             reject(error);
@@ -25,11 +21,11 @@ const FetchCreatorScripts = (name) => {
     })
 }
 
-export {FetchCreatorScripts}
+export {VerifyEmail}
 
 export default async (req, res) => {
     try {
-        const script = await FetchCreatorScripts();
+        const script = await VerifyEmail(req.body.email);
         res.status(200);
         res.json(script);
     } catch(error) {

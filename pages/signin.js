@@ -18,7 +18,7 @@ const SignIn = () => {
             setError("");
             try {
                 await firebase.auth().signInWithEmailAndPassword(email, password);
-                const user = await axios("/api/users/email", {email});
+                const user = await axios.post("/api/users/email", {email});
                 setUser(user.data)
                 console.log("Found user data", user.data);
                 window.localStorage.setItem("userdata", JSON.stringify(user.data));

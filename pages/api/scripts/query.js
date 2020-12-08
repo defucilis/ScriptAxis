@@ -23,7 +23,7 @@ const transformDuration = index => {
 
 const QueryScripts = ({filters, sorting}) => {
     return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient(/*{log: ["query"]}*/);
+        const prisma = new PrismaClient({log: ["query"]});
         try {
 
             let finalWhere = {

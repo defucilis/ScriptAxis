@@ -76,6 +76,7 @@ model User {
   id                String      @default(uuid()) @id
   username          String      @unique
   email             String      @unique
+  emailVerified     Boolean     @default(false)
   creator           Creator?
   isAdmin           Boolean     @default(false)
   ownedScripts      Script[]    @relation("ScriptOwner")

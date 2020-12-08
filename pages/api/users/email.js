@@ -2,11 +2,11 @@ import {PrismaClient} from '@prisma/client'
 
 const FetchUser = (email) => {
     return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient(/*{log: ["query"]}*/);
+        const prisma = new PrismaClient({log: ["query"]});
         try {
             const users = await prisma.user.findFirst({
                 where: {
-                    email: email,
+                    email: email
                 },
                 include: {
                     creator: { select: { name: true }}

@@ -9,8 +9,13 @@ const AuthManager = ({children}) => {
     const refreshUserValue = email => {
         const doSignIn = async (email) => {
             try {
-                const user = await axios("/api/users/email", {email});
+                const user = await axios.post("/api/users/email", {email});
+                console.log("Loaded database user value", user.data);
                 setUser(user.data)
+                console.log("user vs firebase", user.data.emailVerified, firebase.auth().currentUser.emailVerified);
+                if(!user.data.emailVerified && firebase.auth().currentUser.emailVerified) {
+                    await axios.post("/api/users/verifyemail", {email});
+                }
                 window.localStorage.setItem("userdata", JSON.stringify(user.data));
             } catch(error) {
                 firebase.auth().signOut();
@@ -39,12 +44,17 @@ const AuthManager = ({children}) => {
                 return;
             }
             let valueFromLocalStorage = window.localStorage.getItem("userdata");
-            if(valueFromLocalStorage) valueFromLocalStorage = JSON.parse(valueFromLocalStorage);
-            if(valueFromLocalStorage === user.email) {
-                setUser(valueFromLocalStorage);
-            } else {
-                //a different user was signed in or something, weird...
-                window.localStorage.removeItem("userdata");
+            if(valueFromLocalStorage) {
+                valueFromLocalStorage = JSON.parse(valueFromLocalStorage);
+                if(valueFromLocalStorage.email === user.email) {
+                    console.log("Found cached user that matches signed in user, setting that data and refreshing")
+                    setUser(valueFromLocalStorage);
+                } else {
+                    //the user has signed out and signed back in, so we need to regenerate the local storage data using
+                    //database values for the newly signed in user
+                    console.log("Found cached user that didn't match - clearing cached value and refreshing")
+                    window.localStorage.removeItem("userdata");
+                }
             }
             refreshUserValue(user.email);
         });

@@ -2,7 +2,7 @@ import {PrismaClient} from '@prisma/client'
 
 const FetchScript = (slug) => {
     return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient(/*{log: ["query"]}*/);
+        const prisma = new PrismaClient({log: ["query"]});
         try {
             const scripts = await prisma.script.findFirst({
                 where: {

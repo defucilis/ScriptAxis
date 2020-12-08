@@ -2,7 +2,7 @@ import {PrismaClient} from '@prisma/client'
 
 const FetchLists = () => {
     return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient(/*{log: ["query"]}*/);
+        const prisma = new PrismaClient({log: ["query"]});
         try {
             let tags = await prisma.tag.findMany();
             tags = tags.sort((a, b) => b.count - a.count);
