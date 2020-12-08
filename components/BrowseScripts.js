@@ -37,7 +37,6 @@ const BrowseScripts = ({propScripts, tags, categories, query}) => {
         setCachedFilters(filters);
         const params = ScriptUtils.objectToQuery({filters, sorting: cachedSorting});
         const newParamString = ScriptUtils.queryToString(params);
-        console.log(newParamString);
         if(newParamString && newParamString !== "")
             Router.push("/scripts" + newParamString);
     }
@@ -46,7 +45,6 @@ const BrowseScripts = ({propScripts, tags, categories, query}) => {
         setCachedSorting(sorting);
         const params = ScriptUtils.objectToQuery({filters: cachedFilters, sorting});
         const newParamString = ScriptUtils.queryToString(params);
-        console.log(newParamString);
         if(newParamString && newParamString !== "")
             Router.push("/scripts" + newParamString);
     }

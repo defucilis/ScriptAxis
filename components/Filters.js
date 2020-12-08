@@ -9,7 +9,6 @@ import ReactSlider from 'react-slider'
 
 const reduceFilters = (currentFilters, action) => {
     let newFilters = {...currentFilters};
-    console.log("Filters: Mutating filters", currentFilters, action);
     if(action.name) {
         if(!action.name.value || action.name.value === "") delete(newFilters.name);
         else newFilters.name = {include: newFilters.name}
@@ -74,7 +73,6 @@ const reduceFilters = (currentFilters, action) => {
         if(action.maxDuration.operation === "clear") delete(newFilters.maxDuration);
         else newFilters.maxDuration = action.maxDuration.value;
     }
-    console.log("Filters: Filter mutation complete", newFilters);
     return newFilters;
 }
 
@@ -96,7 +94,6 @@ const Filters = ({query, onFilter}) => {
     
     useEffect(() => {
         window.setTimeout(() => {
-            console.log("Filters: Updating Filters from Query:", query.filters);
             let action = {};
             if(query.filters.include) {
                 action.include = {
@@ -119,7 +116,6 @@ const Filters = ({query, onFilter}) => {
                 }
             }
 
-            console.log("Set Filter Action:", action);
             if(Object.keys(action).length > 0) setFilters(action);
 
             setInitialIncludeTags(query.filters.include ? [query.filters.include] : []);
@@ -129,12 +125,8 @@ const Filters = ({query, onFilter}) => {
     }, [query])
 
     useEffect(() => {
-        console.log("Filters: Detected filter change")
         if(!ScriptUtils.filtersEqual(query.filters, filters)) {
-            console.log("Filters: New filters was different from query filters:", filters, query.filters);
             onFilter(filters);
-        } else {
-            console.log("Filters: New filters identical to query, skipping")
         }
     }, [filters])
 
