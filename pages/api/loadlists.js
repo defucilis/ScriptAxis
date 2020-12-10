@@ -10,8 +10,13 @@ const FetchLists = () => {
             categories = categories.sort((a, b) => b.count - a.count);
             let talent = await prisma.talent.findMany();
             let studios = await prisma.studio.findMany();
+            let creators = await prisma.creator.findMany({
+                select: {
+                    name: true
+                }
+            })
             await prisma.$disconnect();
-            resolve({tags, categories, talent, studios});
+            resolve({tags, categories, talent, studios, creators});
         } catch(error) {
             await prisma.$disconnect();
             reject(error);

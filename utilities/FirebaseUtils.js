@@ -3,10 +3,12 @@ import firebase from './Firebase'
 const FirebaseUtils = {
     uploadFile: (file, path, handleProgress) => {
         return new Promise((resolve, reject) => {
+            console.log("Uploading file", typeof(file), file)
             const storage = firebase.storage();
             const ref = storage.ref().child(path);
             const uploadTask = ref.put(file);
             uploadTask.on('state_changed', snapshot => {
+                console.log("Upload snapshot", snapshot);
                 const progress = snapshot.bytesTransferred / snapshot.totalBytes;
                 handleProgress(progress);
             }, error => {

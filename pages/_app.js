@@ -1,5 +1,6 @@
 import firebase from '../utilities/Firebase'
 import "@yaireo/tagify/dist/tagify.css"
+import "react-datepicker/dist/react-datepicker.css";
 import './index.css'
 import Router from "next/router";
 import {useState, useEffect} from 'react'

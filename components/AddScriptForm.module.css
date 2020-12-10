@@ -43,12 +43,24 @@
 }
 
 .dropzone {
-    height: 100px;
-    border: 2px dashed white;
+    min-height: 100px;
+    border: 2px dashed #aaa;
     width: 60%;
-    margin-bottom: 1em;
     display: grid;
     place-items: center;
+    background-color: #050505;
+    transition: all 0.3s;
+    padding: 1em;
+}
+
+.dropzoneon {
+    border: 2px solid #e8739c;
+    background-color: #963658;
+    transition: all 0.3s;
+}
+
+.dropzone p, .dropzone li {
+    font-size: 1.2em;
 }
 
 .tags {
@@ -61,5 +73,54 @@
     --tag-hover: #c9577f;
     --tag-remove-bg: #963658;
     --tag-text-color: #000;
+}
+
+.form label {
+    color: #fff;
+    font-size: 1.2em;
+    display: block;
+    margin-bottom: 0.25em;
+}
+
+.form input, .form textarea, .form select, .form button {
+    width: 60%;
+    font-size: 1.2em;
+    padding: 0.25em 0.5em;
+    background-color: #363636;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.form select {
+    border: 0;
+}
+
+.form > form > button {
+    background-color: #202020;
+    color: #fff;
+    border: 0;
+    padding: 0.5em 2em;
+    margin-top: 2em;
+}
+
+.form > form > div {
     margin-bottom: 1em;
+}
+
+.form aside {
+    color: #eb576b;
+    margin-top: 0.25em;
+}
+
+.datepicker {
+    display: block;
+}
+
+.datepickercalendar button {
+    background-color: transparent;
+    color: #fff;
+    width: 0;
+    width: 10px;
+    padding: 0;
+
 }

@@ -1,146 +1,338 @@
-import {useState, useEffect, useRef} from 'react'
-import Router from 'next/router'
+import {useState, useEffect, useContext} from 'react'
+
+import {Formik, Form} from 'formik'
+import moment from 'moment'
+import * as yup from 'yup';
+import axios from 'axios';
 import slugify from 'slugify'
+import ReactMarkdown from 'react-markdown'
+
+import {Input, TextArea, Select, Autocomplete, Tags, Dropzone, Datepicker} from './FormUtils';
+import NavigationPrompt from './NavigationPrompt'
 import FirebaseUtils from '../utilities/FirebaseUtils'
 import ScriptUtils from '../utilities/ScriptUtils'
-import axios from 'axios'
-
-import {useDropzone} from 'react-dropzone'
-
-import dynamic from 'next/dynamic'
-const Tags = dynamic(() => import("@yaireo/tagify/dist/react.tagify"), { ssr: false });
+import UserContext from '../utilities/UserContext'
 
 import style from './AddScriptForm.module.css'
 
-const AddScriptForm = ({tags, categories}) => {
-    const getFile = files => {
-        setThumbnailFile(files[0]);
-    }
+const AddScriptForm = ({tags, categories, talent, studios, creators}) => {
 
-    const reportFileError = rejections => {
-        alert(rejections[0].errors[0].message);
-    }
+    const {user} = useContext(UserContext);
 
-    const {getRootProps, getInputProps} = useDropzone({
-        accept: [
-            "image/png",
-            "image/jpeg"
-        ],
-        maxSize: 2000000, //2MB
-        multiple: false,
-        noKeyboard: true,
-        preventDropOnDocument: true,
-        onDropAccepted: getFile,
-        onDropRejected: reportFileError
+    const [formData, setFormData] = useState({
+        name: "",
+        creator: "",
+        category: "",
+        tags: [],
+        description: "",
+        duration: "",
+        thumbnail: [],
+        sourceUrl: "",
+        streamingUrl: "",
+        studio: "",
+        talent: [],
+        created: (new Date()),
     });
+    const [errors, setErrors] = useState({})
+    const [dirty, setDirty] = useState(false);
+    const handleChange = e => {
+        console.log(`Form: Setting ${e.target.id} to`, e.target.value)
+        setFormData(cur => ({...cur, [e.target.id]: e.target.value}));
+        if(errors[e.target.id]) {
+            setErrors(cur => {
+                let newVal = {...cur};
+                delete(newVal[e.target.id]);
+                return newVal;
+            })
+        }
+        setDirty(true);
+    }
+    const setError = e => {
+        setErrors(cur => ({
+            ...cur,
+            [e.target.id]: [e.target.error]
+        }))
+    }
 
-    const [thumbnailFile, setThumbnailFile] = useState(null);
-
+    const [submitting, setSubmitting] = useState(false);
     const handleSubmit = e => {
 
-        e.preventDefault();
-
-        if(thumbnailFile === null) {
-            alert("No thumbnail provided!");
-            return;
-        }
-
-        const doRequest = async postData => {
-            //upload the thumbnail and add it to the database
-            const fileUrl = await FirebaseUtils.uploadFile(thumbnailFile, `thumbnails/thumbnail_${postData.slug}`, progress => console.log((progress * 100) + "%"));
-            postData.thumbnail = fileUrl;
-
+        const doValidation = async (data, onPass, onFail) => {
             try {
-                const response = await axios.post("/api/scripts/create", postData);
-                console.log(response);
-                Router.push("/");
-            } catch(error) {
-                console.log("Failed with error", error.response.data);
-                alert("Failed with error:\n" + JSON.stringify(error.response.data));
-            };
+                const validation = await getSchema().validate(data, { abortEarly: false });
+                if(!ScriptUtils.stringIsValidDuration(data.duration)) {
+                    throw {
+                        inner: [{
+                            path: "duration",
+                            errors: ["Duration must be in the form hours:minutes:seconds"]
+                        }]
+                    };
+                }
+                onPass(validation);
+            } catch(err) {
+                let mappedErrors = {};
+                console.log(err);
+                err.inner.forEach(error => {
+                    mappedErrors[error.path] = error.errors[0];
+                })
+                if(!mappedErrors.duration && !ScriptUtils.stringIsValidDuration(data.duration)) {
+                    mappedErrors.duration = "Duration must be in the form hours:minutes:seconds"
+                }
+                setErrors(cur => ({...cur, ...mappedErrors}));
+                onFail(mappedErrors);
+            }
         }
 
-        const postData = {
-            name: e.target.name.value,
-            slug: slugify(e.target.name.value).toLowerCase(),
-            creator: e.target.creator.value,
-            owner: "9cf9dc87-a8cf-4c17-bb95-1f5c05b8d791", //todo - use the currently signed in user once that's built
-            sourceUrl: e.target.source.value,
-            description: e.target.description.value,
-            duration: ScriptUtils.stringToDuration(e.target.duration.value),
-            category: e.target.category.value,
-            tags: [e.target.category.value, ...chosenTags],
-        };
-    
-        doRequest(postData);
+        e.preventDefault();
+        console.log("Submitting with values", formData);
+
+        doValidation(formData, () => {
+            setSubmitting(true);
+            console.log("Validation passed");
+            createScript({
+                name: formData.name,
+                slug: slugify(formData.name, {lower: true}),
+                creator: formData.creator,
+                owner: user.id,
+                category: formData.category,
+                tags: formData.tags,
+                thumbnail: formData.thumbnail,
+                description: formData.description,
+                duration: formData.duration,
+                sourceUrl: formData.sourceUrl,
+                streamingUrl: formData.streamingUrl,
+                studio: formData.studio,
+                talent: formData.talent,
+                created: formData.created
+            }, response => {
+                console.log("Script created successfully", response);
+                setSubmitting(false);
+            }, error => {
+                console.log("Upload failed", error);
+                setSubmitting(false);
+            });
+        }, errors => {
+            console.log("Validation Failed", errors);
+        });
+    }
+
+    const getSchema = () => {
+        return yup.object().shape({
+            name: yup.string().required("A name is required"),
+            creator: yup.string().required("A creator is required"),
+            category: yup.string().required("A category is required"),
+            tags: yup.array().notRequired(),
+            description: yup.string().notRequired(""),
+            duration: yup.string().required("A duration is required"),
+            thumbnail: yup.array().length(1, "A thumbnail is required"),
+            sourceUrl: yup.string().notRequired().url("Source URL provided is invalid"),
+            streamingUrl: yup.string().notRequired().url("Streaming URL provided is invalid"),
+            studio: yup.string().notRequired(),
+            talent: yup.array().notRequired(),
+            created: yup.date().notRequired().max(new Date(), "Cannot set a future date!"),
+        });
     }
 
     const [categoryOptions, setCategoryOptions] = useState([]);
-    const [chosenTags, setChosenTags] = useState([]);
     useEffect(() => {
         if(!categories) return;
-
-        setCategoryOptions(categories.map(category => {
-            const prettyName = ScriptUtils.getPrettyCategory(category);
-            return <option key={category} value={category}>{prettyName}</option>
-        }));
+        
+        setCategoryOptions([{label: "Select a Category", value: ""}, ...categories.map(category => {
+            return {
+                label: ScriptUtils.getPrettyCategory(category),
+                value: category
+            }
+        })]);
     }, [categories])
 
+    const [tagOptions, setTagOptions] = useState([]);
+    useEffect(() => {
+        if(!tags) return;
+        setTagOptions(tags);
+    }, [tags])
+
+    const [talentOptions, setTalentOptions] = useState([]);
+    useEffect(() => {
+        if(!talent) return;
+        setTalentOptions(talent);
+    }, [talent])
+
+    const [studioOptions, setStudioOptions] = useState([]);
+    useEffect(() => {
+        if(!studios) return;
+        setStudioOptions(studios);
+    }, [studios])
+
+    const [creatorOptions, setCreatorOptions] = useState([]);
+    useEffect(() => {
+        if(!creators) return;
+        setCreatorOptions(creators);
+    }, [creators])
+
     return (
-        <form className={style.form} onSubmit={handleSubmit}>
-            <label htmlFor="name">Name</label>
-            <input type="text" id="name" />
-            <label htmlFor="source">Link to Source</label>
-            <input type="text" id="source" />
-            <label htmlFor="creator">Creator</label>
-            <input type="text" id="creator" />
-            <div {...getRootProps({className: style.dropzone})}>
-                <input {...getInputProps()} />
-                {
-                <p>{!thumbnailFile || thumbnailFile.name === "" 
-                    ? "Drag + drop a thumbnail image, or click to select one" 
-                    : `${thumbnailFile.name} (${(thumbnailFile.size / (thumbnailFile.size > 1000000 ? 1000000 : 1000)).toFixed(1)} ${(thumbnailFile.size > 1000000 ? "MB" : "kB")})`}
-                </p>
-                }
+        <div className={style.form}>
+        <NavigationPrompt when={dirty} message={"You have unsaved changes, are you sure you'd like to leave?"} />
+        {submitting ? (
+            <div>
+                <p>Your script is processing - this may take a minute or so. Feel free to leave this page, it should appear soon.</p>
             </div>
-            <label htmlFor="category">Category</label>
-            <select id="category">
-                {categoryOptions}
-            </select>
-            <label htmlFor="tags">Tags</label>
-            <Tags 
-                className={style.tags}
-                settings = {
-                    {
-                        validate: tag => {
-                            const transformedTag = tag.value.trim().toLowerCase();
-                            const match = transformedTag.match("[a-z ]+");
-                            const success = match && match.length === 1 && match[0].length === transformedTag.length;
-                            return success 
-                                ? true 
-                                : "Letters only!";
-                        }
-                    }
-                }
-                whitelist={tags}
-                blacklist={categories}
-                onChange={e => {
-                    e.persist();
-                    if(!e.target.value || e.target.value.length === 0) {
-                        setChosenTags([]);
-                        return;
-                    }
-                    const json = JSON.parse(e.target.value);
-                    setChosenTags(json.map(tag => tag.value.trim().toLowerCase().replace(" ", "-")));
-                }}
-            />
-            <label htmlFor="duration">Duration</label>
-            <input type="text" id="duration" />
-            <label htmlFor="description">Description</label>
-            <textarea id="description"></textarea>
-            <input type="submit" value="Add Script"></input>
-        </form>
-    )
+        ) : (
+            <form onSubmit={handleSubmit}>
+                <Input 
+                    id="name" name="name" label="Title" 
+                    placeholder="Script Title"
+                    onChange={handleChange}
+                    value={formData.name}
+                    error={errors.name}
+                />
+                
+                <Autocomplete 
+                    id="creator" name="creator" label="Creator" 
+                    tagProps={{
+                        className: style.tags,
+                        whitelist: creatorOptions,
+                    }}
+                    onChange={handleChange}
+                    error={errors.creator}
+                    value={formData.creator}
+                />
+
+                <Select 
+                    id="category" name="category" label="Category" 
+                    options={categoryOptions}
+                    onChange={handleChange}
+                    error={errors.category}
+                    value={formData.category}
+                />
+                <Tags 
+                    name="tags"
+                    id="tags"
+                    label="Tags"
+                    tagProps={{
+                        settings: {
+                            validate: tag => {
+                                const transformedTag = tag.value.trim().toLowerCase();
+                                const match = transformedTag.match("[a-z ]+");
+                                const success = match && match.length === 1 && match[0].length === transformedTag.length;
+                                return success 
+                                    ? true 
+                                    : "Letters only!";
+                            }
+                        },
+                        whitelist: tagOptions,
+                        className: style.tags
+                    }}
+                    onChange={handleChange}
+                    error={errors.tags}
+                    value={formData.tags}
+                />
+                
+                <TextArea 
+                    name="description" id="description" label="Description" 
+                    maxheight={400} 
+                    onChange={handleChange}
+                    error={errors.description}
+                    value={formData.description}
+                />
+                <Input 
+                    id="duration" name="duration" label="Duration" 
+                    placeholder="hh:mm:ss"
+                    onChange={handleChange}
+                    error={errors.duration}
+                    value={formData.duration}
+                />
+                
+                <Dropzone 
+                    id="thumbnail" name="thumbnail" label="Thumbnail Image" 
+                    className={style.dropzone}
+                    hoveringClassName={style.dropzoneon}
+                    instruction="Drag + drop a thumbnail image, or click to select one"
+                    options={{
+                        accept: [
+                            "image/png",
+                            "image/jpeg",
+                        ],
+                        maxSize: 2000000, //2MB
+                        multiple: false,
+                        noKeyboard: true,
+                        preventDropOnDocument: true,
+                    }}
+                    onChange={handleChange}
+                    onError={setError}
+                    error={errors.thumbnail}
+                    value={formData.thumbnail}
+                />
+                <Input 
+                    id="sourceUrl" name="sourceUrl" label="Source URL" 
+                    onChange={handleChange}
+                    error={errors.sourceUrl}
+                    value={formData.sourceUrl}
+                />
+                <Input 
+                    id="streamingUrl" name="streamingUrl" label="Streaming URL" 
+                    onChange={handleChange}
+                    error={errors.streamingUrl}
+                    value={formData.streamingUrl}
+                />
+                <Autocomplete 
+                    id="studio" name="studio" label="Studio" 
+                    tagProps={{
+                        className: style.tags,
+                        whitelist: studioOptions,
+                    }} 
+                    onChange={handleChange}
+                    error={errors.studio}
+                    value={formData.studio}
+                />
+                <Tags 
+                    name="talent" id="talent" label="Talent"
+                    tagProps={{
+                        whitelist: talentOptions,
+                        className: style.tags
+                    }}
+                    onChange={handleChange}
+                    error={errors.talent}
+                    value={formData.talent}
+                />
+                <Datepicker
+                    name="created" id="created" label="Creation Date (if not today)"
+                    wrapperClassName={style.datepicker}
+                    popperClassName={style.datepickercalendar}
+                    onChange={handleChange}
+                    error={errors.created}
+                    value={formData.created}
+                />
+
+                <button type="submit">Add Script</button>
+                <pre style={{position: "fixed", right: "1em", top: "100px"}}>{JSON.stringify({formData, errors}, null, 2)}</pre>
+            </form>
+        )}
+        </div>
+    );
 }
+
+const createScript = async (postData, onSuccess, onFail) => {
+    //upload the thumbnail and add it to the database
+    try {
+        const fileUrl = await FirebaseUtils.uploadFile(
+            postData.thumbnail[0], 
+            `thumbnails/thumbnail_${postData.slug}`, 
+            progress => console.log("Thumbnail File uploading", progress * 100)
+        );
+        postData.thumbnail = fileUrl;
+    } catch(error) {
+        onFail(error);
+    }
+
+    postData.duration = ScriptUtils.stringToDuration(postData.duration);
+
+    try {
+        const response = await axios.post("/api/scripts/create", postData);
+        onSuccess(response.data);
+    } catch(error) {
+        onFail(error);
+    };
+}
+
 
 export default AddScriptForm;

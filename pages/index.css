@@ -143,6 +143,10 @@ input, textarea {
     transition: top 0.2s;    
 }
 
+pre {
+    color: #fff;
+}
+
 /* Animation Keyframes*/
 @keyframes scrollBackground {
     0% { 
