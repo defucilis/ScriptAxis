@@ -96,7 +96,7 @@ const ScriptUtils = {
     getPrettyCategory: category => {
         //return category.substr(0, 2).toUpperCase() + Math.round(Math.random() * 100);
 
-        let prettyName = category.replace("-", " ");
+        let prettyName = category.replace(/[-]/g, " ");
         if(prettyName.length < 4) return prettyName.toUpperCase();
 
         return prettyName

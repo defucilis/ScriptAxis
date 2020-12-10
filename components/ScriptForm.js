@@ -20,16 +20,20 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
     const tagsRef = useRef();
     const talentRef = useRef();
     useEffect(() => {
-        console.log("Setting form data", defaultFormData)
-        setFormData(defaultFormData);
+        console.log("Setting form data", defaultFormData);
+        const newData = {...defaultFormData};
+        if(newData.tags) {
+            newData.tags = newData.tags.map(tag => ScriptUtils.getPrettyCategory(tag))
+        }
+        setFormData(newData);
         setTimeout(() => {
-            if(defaultFormData.tags && defaultFormData.tags.length > 0) {
+            if(newData.tags && newData.tags.length > 0) {
                 tagsRef.current.removeAllTags();
-                tagsRef.current.addTags(defaultFormData.tags);
+                tagsRef.current.addTags(newData.tags);
             }
-            if(defaultFormData.talent && defaultFormData.talent.length > 0) {
+            if(newData.talent && newData.talent.length > 0) {
                 talentRef.current.removeAllTags();
-                talentRef.current.addTags(defaultFormData.talent);
+                talentRef.current.addTags(newData.talent);
             }
         }, 100)
     }, [defaultFormData, tagsRef, talentRef])

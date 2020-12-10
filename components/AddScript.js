@@ -25,7 +25,7 @@ const defaultFormData = {
 };
 
 const AddScript = ({tags, categories, talent, studios, creators}) => {
-    const [submitting, setSubmitting] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
 
     const handleValidationPassed = data => {
         setSubmitting(true);
