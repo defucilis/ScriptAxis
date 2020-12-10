@@ -1,5 +1,5 @@
 import Layout from '../components/Layout'
-import AddScriptForm from '../components/AddScriptForm'
+import AddScript from '../components/AddScript'
 import firebase from '../utilities/Firebase'
 import Head from 'next/head'
 import Router from 'next/router'
@@ -39,7 +39,7 @@ const Add = ({tags, categories, talent, studios, creators}) => {
             <h1>Add a Script</h1>
             {
                 user && user.emailVerified
-                ? <AddScriptForm tags={tags} categories={categories} talent={talent} studios={studios} creators={creators}/>
+                ? <AddScript tags={tags} categories={categories} talent={talent} studios={studios} creators={creators}/>
                 : (
                     <div>
                         <p>Please verify your email address to create scripts</p>

@@ -123,19 +123,3 @@
     width: 10px;
     padding: 0;
 }
-
-.processing {
-    display: grid;
-    place-items: center;
-    width: 100%;
-    min-height: 400px;
-}
-
-.processing span {
-    display: block;
-    text-align: center;
-}
-
-.processing svg {
-    font-size: 3em;
-}
