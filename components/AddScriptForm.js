@@ -6,6 +6,7 @@ import * as yup from 'yup';
 import axios from 'axios';
 import slugify from 'slugify'
 import ReactMarkdown from 'react-markdown'
+import { FaCogs } from 'react-icons/fa'
 
 import {Input, TextArea, Select, Autocomplete, Tags, Dropzone, Datepicker} from './FormUtils';
 import NavigationPrompt from './NavigationPrompt'
@@ -14,25 +15,28 @@ import ScriptUtils from '../utilities/ScriptUtils'
 import UserContext from '../utilities/UserContext'
 
 import style from './AddScriptForm.module.css'
+import Router from 'next/router';
+
+const defaultFormData = {
+    name: "",
+    creator: "",
+    category: "",
+    tags: [],
+    description: "",
+    duration: "",
+    thumbnail: [],
+    sourceUrl: "",
+    streamingUrl: "",
+    studio: "",
+    talent: [],
+    created: (new Date()),
+};
 
 const AddScriptForm = ({tags, categories, talent, studios, creators}) => {
 
     const {user} = useContext(UserContext);
 
-    const [formData, setFormData] = useState({
-        name: "",
-        creator: "",
-        category: "",
-        tags: [],
-        description: "",
-        duration: "",
-        thumbnail: [],
-        sourceUrl: "",
-        streamingUrl: "",
-        studio: "",
-        talent: [],
-        created: (new Date()),
-    });
+    const [formData, setFormData] = useState({...defaultFormData});
     const [errors, setErrors] = useState({})
     const [dirty, setDirty] = useState(false);
     const handleChange = e => {
@@ -106,7 +110,13 @@ const AddScriptForm = ({tags, categories, talent, studios, creators}) => {
                 created: formData.created
             }, response => {
                 console.log("Script created successfully", response);
-                setSubmitting(false);
+                if(Router.pathname === "/add")
+                    Router.push(`/script/${response[0].slug}`);
+                else {
+                    if(confirm("Your script has finished processing. Click OK to go to its page, or Cancel to stay where you are.\nIn the future I'll make this a little less annoying!")) {
+                        Router.push(`/script/${response[0].slug}`);
+                    }
+                }
             }, error => {
                 console.log("Upload failed", error);
                 setSubmitting(false);
@@ -173,8 +183,13 @@ const AddScriptForm = ({tags, categories, talent, studios, creators}) => {
         <div className={style.form}>
         <NavigationPrompt when={dirty} message={"You have unsaved changes, are you sure you'd like to leave?"} />
         {submitting ? (
-            <div>
-                <p>Your script is processing - this may take a minute or so. Feel free to leave this page, it should appear soon.</p>
+            <div className={style.processing}>
+                <p>
+                    <span><FaCogs /></span>
+                    <span>Your script is processing - this may take up to a minute or two.</span>
+                    <span>Feel free to leave this page, it should appear soon.</span>
+                    <span>Alternatively, you can wait here and be redirected to your script once it's finished processing.</span>
+                </p>
             </div>
         ) : (
             <form onSubmit={handleSubmit}>
@@ -304,7 +319,6 @@ const AddScriptForm = ({tags, categories, talent, studios, creators}) => {
                 />
 
                 <button type="submit">Add Script</button>
-                <pre style={{position: "fixed", right: "1em", top: "100px"}}>{JSON.stringify({formData, errors}, null, 2)}</pre>
             </form>
         )}
         </div>
