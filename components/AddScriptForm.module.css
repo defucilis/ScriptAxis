@@ -95,11 +95,12 @@
     border: 0;
 }
 
-.form button {
+.form > form > button {
     background-color: #202020;
     color: #fff;
     border: 0;
     padding: 0.5em 2em;
+    margin-top: 2em;
 }
 
 .form > form > div {
@@ -109,4 +110,17 @@
 .form aside {
     color: #eb576b;
     margin-top: 0.25em;
+}
+
+.datepicker {
+    display: block;
+}
+
+.datepickercalendar button {
+    background-color: transparent;
+    color: #fff;
+    width: 0;
+    width: 10px;
+    padding: 0;
+
 }

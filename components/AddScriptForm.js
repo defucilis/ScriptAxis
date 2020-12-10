@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext, useRef} from 'react'
+import {useState, useEffect, useContext} from 'react'
 
 import {Formik, Form} from 'formik'
 import moment from 'moment'
@@ -7,21 +7,113 @@ import axios from 'axios';
 import slugify from 'slugify'
 import ReactMarkdown from 'react-markdown'
 
-import {Input, TextArea, Select, Autocomplete, Tags, Dropzone} from './FormUtils';
+import {Input, TextArea, Select, Autocomplete, Tags, Dropzone, Datepicker} from './FormUtils';
 import NavigationPrompt from './NavigationPrompt'
 import FirebaseUtils from '../utilities/FirebaseUtils'
 import ScriptUtils from '../utilities/ScriptUtils'
+import UserContext from '../utilities/UserContext'
 
 import style from './AddScriptForm.module.css'
 
 const AddScriptForm = ({tags, categories, talent, studios, creators}) => {
-    const handleSubmit = (values, {setSubmitting}) => {
 
-        setSubmitting(true);
-        console.log("Submitting with values", values);
-        setTimeout(() => setSubmitting(false), 2000);
-    
-        //doRequest(postData);
+    const {user} = useContext(UserContext);
+
+    const [formData, setFormData] = useState({
+        name: "",
+        creator: "",
+        category: "",
+        tags: [],
+        description: "",
+        duration: "",
+        thumbnail: [],
+        sourceUrl: "",
+        streamingUrl: "",
+        studio: "",
+        talent: [],
+        created: (new Date()),
+    });
+    const [errors, setErrors] = useState({})
+    const [dirty, setDirty] = useState(false);
+    const handleChange = e => {
+        console.log(`Form: Setting ${e.target.id} to`, e.target.value)
+        setFormData(cur => ({...cur, [e.target.id]: e.target.value}));
+        if(errors[e.target.id]) {
+            setErrors(cur => {
+                let newVal = {...cur};
+                delete(newVal[e.target.id]);
+                return newVal;
+            })
+        }
+        setDirty(true);
+    }
+    const setError = e => {
+        setErrors(cur => ({
+            ...cur,
+            [e.target.id]: [e.target.error]
+        }))
+    }
+
+    const [submitting, setSubmitting] = useState(false);
+    const handleSubmit = e => {
+
+        const doValidation = async (data, onPass, onFail) => {
+            try {
+                const validation = await getSchema().validate(data, { abortEarly: false });
+                if(!ScriptUtils.stringIsValidDuration(data.duration)) {
+                    throw {
+                        inner: [{
+                            path: "duration",
+                            errors: ["Duration must be in the form hours:minutes:seconds"]
+                        }]
+                    };
+                }
+                onPass(validation);
+            } catch(err) {
+                let mappedErrors = {};
+                console.log(err);
+                err.inner.forEach(error => {
+                    mappedErrors[error.path] = error.errors[0];
+                })
+                if(!mappedErrors.duration && !ScriptUtils.stringIsValidDuration(data.duration)) {
+                    mappedErrors.duration = "Duration must be in the form hours:minutes:seconds"
+                }
+                setErrors(cur => ({...cur, ...mappedErrors}));
+                onFail(mappedErrors);
+            }
+        }
+
+        e.preventDefault();
+        console.log("Submitting with values", formData);
+
+        doValidation(formData, () => {
+            setSubmitting(true);
+            console.log("Validation passed");
+            createScript({
+                name: formData.name,
+                slug: slugify(formData.name, {lower: true}),
+                creator: formData.creator,
+                owner: user.id,
+                category: formData.category,
+                tags: formData.tags,
+                thumbnail: formData.thumbnail,
+                description: formData.description,
+                duration: formData.duration,
+                sourceUrl: formData.sourceUrl,
+                streamingUrl: formData.streamingUrl,
+                studio: formData.studio,
+                talent: formData.talent,
+                created: formData.created
+            }, response => {
+                console.log("Script created successfully", response);
+                setSubmitting(false);
+            }, error => {
+                console.log("Upload failed", error);
+                setSubmitting(false);
+            });
+        }, errors => {
+            console.log("Validation Failed", errors);
+        });
     }
 
     const getSchema = () => {
@@ -31,12 +123,13 @@ const AddScriptForm = ({tags, categories, talent, studios, creators}) => {
             category: yup.string().required("A category is required"),
             tags: yup.array().notRequired(),
             description: yup.string().notRequired(""),
+            duration: yup.string().required("A duration is required"),
             thumbnail: yup.array().length(1, "A thumbnail is required"),
             sourceUrl: yup.string().notRequired().url("Source URL provided is invalid"),
             streamingUrl: yup.string().notRequired().url("Streaming URL provided is invalid"),
             studio: yup.string().notRequired(),
             talent: yup.array().notRequired(),
-            created: yup.date().notRequired(),
+            created: yup.date().notRequired().max(new Date(), "Cannot set a future date!"),
         });
     }
 
@@ -78,113 +171,166 @@ const AddScriptForm = ({tags, categories, talent, studios, creators}) => {
 
     return (
         <div className={style.form}>
-        <NavigationPrompt when={false} message={"Test Message!"} />
-        <Formik
-            initialValues={{
-                name: "",
-                creator: "",
-                category: "",
-                tags: [],
-                description: "",
-                duration: "",
-                thumbnail: [],
-                sourceUrl: "",
-                streamingUrl: "",
-                studio: "",
-                talent: [],
-                created: (new Date()),
-            }}
-            validateOnChange={false}
-            validateOnBlur={false}
-            validationSchema={getSchema}
-            onSubmit={handleSubmit}
-        >
-            {props => props.isSubmitting ? (
-                <div>
-                    <p>Your new script is processing - this may take a minute or so. Feel free to leave this page.</p>
-                </div>    
-            ) : (
-                <Form>
-                    <Input id="name" name="name" label="Title" placeholder="Script Title" />
-                    <Autocomplete id="creator" name="creator" label="Creator" tagProps={{
+        <NavigationPrompt when={dirty} message={"You have unsaved changes, are you sure you'd like to leave?"} />
+        {submitting ? (
+            <div>
+                <p>Your script is processing - this may take a minute or so. Feel free to leave this page, it should appear soon.</p>
+            </div>
+        ) : (
+            <form onSubmit={handleSubmit}>
+                <Input 
+                    id="name" name="name" label="Title" 
+                    placeholder="Script Title"
+                    onChange={handleChange}
+                    value={formData.name}
+                    error={errors.name}
+                />
+                
+                <Autocomplete 
+                    id="creator" name="creator" label="Creator" 
+                    tagProps={{
                         className: style.tags,
                         whitelist: creatorOptions,
-                    }} />
-                    <Select id="category" name="category" label="Category" options={categoryOptions}/>
-                    <Tags 
-                        name="tags"
-                        id="tags"
-                        label="Tags"
-                        tagProps={{
-                            settings: {
-                                validate: tag => {
-                                    const transformedTag = tag.value.trim().toLowerCase();
-                                    const match = transformedTag.match("[a-z ]+");
-                                    const success = match && match.length === 1 && match[0].length === transformedTag.length;
-                                    return success 
-                                        ? true 
-                                        : "Letters only!";
-                                }
-                            },
-                            whitelist: tagOptions,
-                            className: style.tags
-                        }}
-                    />
-                    <TextArea name="description" id="description" label="Description" maxheight={400} style={{resize:"none"}} />
-                    <Input id="duration" name="duration" label="Duration" placeholder="hh:mm:ss" />
-                    <Dropzone id="thumbnail" name="thumbnail" label="Thumbnail Image" 
-                        className={style.dropzone}
-                        hoveringClassName={style.dropzoneon}
-                        instruction="Drag + drop a thumbnail image, or click to select one"
-                        options={{
-                            accept: [
-                                "image/png",
-                                "image/jpeg",
-                            ],
-                            maxSize: 2000000, //2MB
-                            multiple: false,
-                            noKeyboard: true,
-                            preventDropOnDocument: true,
-                        }}
-                    />
-                    <Input id="sourceUrl" name="sourceUrl" label="Source URL" />
-                    <Input id="streamingUrl" name="streamingUrl" label="Streaming URL" />
-                    <Autocomplete id="studio" name="studio" label="Studio" tagProps={{
+                    }}
+                    onChange={handleChange}
+                    error={errors.creator}
+                    value={formData.creator}
+                />
+
+                <Select 
+                    id="category" name="category" label="Category" 
+                    options={categoryOptions}
+                    onChange={handleChange}
+                    error={errors.category}
+                    value={formData.category}
+                />
+                <Tags 
+                    name="tags"
+                    id="tags"
+                    label="Tags"
+                    tagProps={{
+                        settings: {
+                            validate: tag => {
+                                const transformedTag = tag.value.trim().toLowerCase();
+                                const match = transformedTag.match("[a-z ]+");
+                                const success = match && match.length === 1 && match[0].length === transformedTag.length;
+                                return success 
+                                    ? true 
+                                    : "Letters only!";
+                            }
+                        },
+                        whitelist: tagOptions,
+                        className: style.tags
+                    }}
+                    onChange={handleChange}
+                    error={errors.tags}
+                    value={formData.tags}
+                />
+                
+                <TextArea 
+                    name="description" id="description" label="Description" 
+                    maxheight={400} 
+                    onChange={handleChange}
+                    error={errors.description}
+                    value={formData.description}
+                />
+                <Input 
+                    id="duration" name="duration" label="Duration" 
+                    placeholder="hh:mm:ss"
+                    onChange={handleChange}
+                    error={errors.duration}
+                    value={formData.duration}
+                />
+                
+                <Dropzone 
+                    id="thumbnail" name="thumbnail" label="Thumbnail Image" 
+                    className={style.dropzone}
+                    hoveringClassName={style.dropzoneon}
+                    instruction="Drag + drop a thumbnail image, or click to select one"
+                    options={{
+                        accept: [
+                            "image/png",
+                            "image/jpeg",
+                        ],
+                        maxSize: 2000000, //2MB
+                        multiple: false,
+                        noKeyboard: true,
+                        preventDropOnDocument: true,
+                    }}
+                    onChange={handleChange}
+                    onError={setError}
+                    error={errors.thumbnail}
+                    value={formData.thumbnail}
+                />
+                <Input 
+                    id="sourceUrl" name="sourceUrl" label="Source URL" 
+                    onChange={handleChange}
+                    error={errors.sourceUrl}
+                    value={formData.sourceUrl}
+                />
+                <Input 
+                    id="streamingUrl" name="streamingUrl" label="Streaming URL" 
+                    onChange={handleChange}
+                    error={errors.streamingUrl}
+                    value={formData.streamingUrl}
+                />
+                <Autocomplete 
+                    id="studio" name="studio" label="Studio" 
+                    tagProps={{
                         className: style.tags,
                         whitelist: studioOptions,
-                    }} />
-                    <Tags 
-                        name="talent"
-                        id="talent"
-                        label="Talent"
-                        tagProps={{
-                            whitelist: talentOptions,
-                            className: style.tags
-                        }}
-                    />
+                    }} 
+                    onChange={handleChange}
+                    error={errors.studio}
+                    value={formData.studio}
+                />
+                <Tags 
+                    name="talent" id="talent" label="Talent"
+                    tagProps={{
+                        whitelist: talentOptions,
+                        className: style.tags
+                    }}
+                    onChange={handleChange}
+                    error={errors.talent}
+                    value={formData.talent}
+                />
+                <Datepicker
+                    name="created" id="created" label="Creation Date (if not today)"
+                    wrapperClassName={style.datepicker}
+                    popperClassName={style.datepickercalendar}
+                    onChange={handleChange}
+                    error={errors.created}
+                    value={formData.created}
+                />
 
-                    <button type="submit">Add Script</button>
-                    <pre style={{position: "fixed", right: "1em", top: "100px"}}>{JSON.stringify(props, null, 2)}</pre>
-                </Form>
-            )}
-            
-        </Formik>
+                <button type="submit">Add Script</button>
+                <pre style={{position: "fixed", right: "1em", top: "100px"}}>{JSON.stringify({formData, errors}, null, 2)}</pre>
+            </form>
+        )}
         </div>
     );
 }
 
-const doRequest = async postData => {
+const createScript = async (postData, onSuccess, onFail) => {
     //upload the thumbnail and add it to the database
-    const fileUrl = await FirebaseUtils.uploadFile(thumbnailFile, `thumbnails/thumbnail_${postData.slug}`, progress => console.log((progress * 100) + "%"));
-    postData.thumbnail = fileUrl;
+    try {
+        const fileUrl = await FirebaseUtils.uploadFile(
+            postData.thumbnail[0], 
+            `thumbnails/thumbnail_${postData.slug}`, 
+            progress => console.log("Thumbnail File uploading", progress * 100)
+        );
+        postData.thumbnail = fileUrl;
+    } catch(error) {
+        onFail(error);
+    }
+
+    postData.duration = ScriptUtils.stringToDuration(postData.duration);
 
     try {
         const response = await axios.post("/api/scripts/create", postData);
-        console.log(response);
-        Router.push("/");
+        onSuccess(response.data);
     } catch(error) {
-        console.log("Failed with error", error.response.data);
-        alert("Failed with error:\n" + JSON.stringify(error.response.data));
+        onFail(error);
     };
 }
 

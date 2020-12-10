@@ -1,25 +1,21 @@
-import {useRef, useState} from 'react'
-import { Field, FieldArray } from 'formik'
+import {useRef, useState, useEffect} from 'react'
 import {useDropzone} from 'react-dropzone'
 
 import dynamic from 'next/dynamic'
 const TagifyTags = dynamic(() => import("@yaireo/tagify/dist/react.tagify"), { ssr: false });
+import ReactDatepicker from 'react-datepicker'
 
-const Input = ({...props}) => {
+const Input = props => {
     return (
-        <Field {...props}>
-            {({field, form}) => (
-                <div>
-                    <label htmlFor={props.name}>{props.label}</label>
-                    <input type="text" {...props} {...field} />
-                    {form.errors[props.name] ? <aside>{form.errors[props.name]}</aside> : null}
-                </div>
-            )}
-        </Field>
+        <div>
+            <label htmlFor={props.name}>{props.label}</label>
+            <input type="text" {...props} />
+            {props.error ? <aside>{props.error}</aside> : null}
+        </div>
     )
 }
 
-const TextArea = ({...props}) => {
+const TextArea = props => {
     const textArea = useRef();
 
     const getNewHeight = scrollHeight => {
@@ -30,99 +26,122 @@ const TextArea = ({...props}) => {
     }
 
     return (
-        <Field {...props}>
-            {({field, form}) => (
-                <div>
-                    <label htmlFor={props.name}>{props.label}</label>
-                    <textarea 
-                        {...props} {...field}
-                        ref={textArea}
-                        onInput={e => {
-                            textArea.current.style.setProperty("height", getNewHeight(textArea.current.scrollHeight));
-                            console.log(textArea.current.style);
-                        }}
-                    >
-                    </textarea>
-                    {form.errors[props.name] ? <aside>{form.errors[props.name]}</aside> : null}
-                </div>
-            )}
-        </Field>
+        <div>
+            <label htmlFor={props.name}>{props.label}</label>
+            <textarea 
+                {...props}
+                ref={textArea}
+                style={{resize:"none"}}
+                onInput={() => {
+                    textArea.current.style.setProperty("height", getNewHeight(textArea.current.scrollHeight));
+                    console.log(textArea.current.style);
+                }}
+            >
+            </textarea>
+            {props.error ? <aside>{props.error}</aside> : null}
+        </div>
     )
 }
 
-const Select = ({...props}) => {
+const Select = props => {
     return (
-        <Field {...props} as="select">
-            {({field, form}) => (
-                <div>
-                    <label htmlFor={props.name}>{props.label}</label>
-                    <select {...props} {...field}>
-                    {!props.options ? null : props.options.map(option => {
-                        return <option key={props.name + "_" + option.value} value={option.value}>{option.label}</option>
-                    })}
-                    </select>
-                    {form.errors[props.name] ? <aside>{form.errors[props.name]}</aside> : null}
-                </div>
-            )}
-        </Field>
+        <div>
+            <label htmlFor={props.name}>{props.label}</label>
+            <select {...props} value={props.value}>
+            {!props.options ? null : props.options.map(option => {
+                return <option key={props.name + "_" + option.value} value={option.value}>{option.label}</option>
+            })}
+            </select>
+            {props.error ? <aside>{props.error}</aside> : null}
+        </div>
     )
 }
 
-const Autocomplete = ({...props}) => {
+const Autocomplete = props => {
 
-    const tagify = useRef();
-
+    const [value, setValue] = useState([]);
+    useEffect(() => {
+        setValue(props.value);
+    }, [props.value])
+    
     return (
-        <Field {...props}>
-            {({field, form}) => (
-                <div>
-                    <label htmlFor={props.name}>{props.label}</label>
-                    <TagifyTags
-                        {...props} {...field}
-                        value={form.initialValues[props.name]}
-                        {...props.tagProps}
-                        settings={{...props.tagProps.settings, mode: "select"}}
-                        onChange={e => {
-                            try {
-                                e.target.value = JSON.parse(e.target.value)[0].value;
-                                form.handleChange(e);
-                                form.setFieldTouched(props.name);
-                            } catch {
-                                form.handleChange(e);
-                            }
-                        }}
-                        ref={tagify}
-                    />
-                    {form.errors[props.name] ? <aside>{form.errors[props.name]}</aside> : null}
-                    <pre>{JSON.stringify(props, null, 2)}</pre>
-                </div>
-            )}
-        </Field>
+        <div>
+            <label htmlFor={props.name}>{props.label}</label>
+            <TagifyTags
+                {...props}
+                {...props.tagProps}
+                value={value}
+                settings={{...props.tagProps.settings, mode: "select"}}
+                onChange={e => {
+                    try {
+                        if(e.target.value[0].value === "")
+                            props.onChange({target: {id: props.id, value: ""}});
+                        else 
+                            props.onChange({target: {id: props.id, value: JSON.parse(e.target.value)[0].value}});
+                    } catch {}
+                }}
+                onBlur={e => {
+                    props.onChange({target: {id: props.id, value: e.detail.tagify.state.inputText}});
+                }}
+            />
+            {props.error ? <aside>{props.error}</aside> : null}
+        </div>
     )
 }
 
-const Tags = ({...props}) => {
+const Tags = props => {
+
+    const [value, setValue] = useState([]);
+    const arraysEqual = (a, b) => {
+        if(!a && !b) return true;
+        if(!a && b || a && !b) return false;
+        if(a.length !== b.length) return false;
+        for(let i = 0; i < a.length; i++) {
+            if(a[i] !== b[i]) return false;
+        }
+        return true;
+    }
+
+    useEffect(() => {
+        setValue(props.value);
+    }, [])
+
+    const sendChange = val => {
+        props.onChange({
+            target: {
+                id: props.id,
+                value: val
+            }
+        });
+    }
+
+    const handleChange = e => {
+        let newVal = e.target.value;
+        if(newVal === "") newVal = [];
+        else {
+            try {
+                newVal = JSON.parse(newVal);
+                if(newVal.length > 0 && newVal[0].value) {
+                    newVal = newVal.map(val => val.value);
+                }
+            } catch {
+                newVal = [];
+            }
+        }
+        sendChange(newVal);
+    }
+    
     return (
-        <FieldArray {...props}>
-            {({ push, remove, form }) => (
-                <div>
-                    <label htmlFor={props.name}>{props.label}</label>
-                    <TagifyTags
-                        value={form.initialValues[props.name]}
-                        onAdd={e => {
-                            push(e.detail.data.value);
-                            form.setFieldTouched(props.name);
-                        }}
-                        onRemove={e => {
-                            remove(e.detail.index)
-                            form.setFieldTouched(props.name);
-                        }}
-                        {...props.tagProps}
-                    />
-                    {form.errors[props.name] ? <aside>{form.errors[props.name]}</aside> : null}
-                </div>
-            )}
-        </FieldArray>
+        <div>
+            <label htmlFor={props.name}>{props.label}</label>
+            <TagifyTags
+                {...props}
+                {...props.tagProps}
+                value={value}
+                onChange={handleChange}
+            />
+            {props.error ? <aside>{props.error}</aside> : null}
+        </div>
     )
 }
 
@@ -163,29 +182,54 @@ const InnerDropzone = ({fieldName, className, hoveringClassName, instruction, op
     )
 }
 
-const Dropzone = ({...props}) => {
+const Dropzone = props => {
     return (
-        <FieldArray {...props}>
-            {({form}) => (
-                <div>
-                <label htmlFor={props.name}>{props.label}</label>
-                <InnerDropzone 
-                    fieldName={props.name}
-                    className={props.className}
-                    hoveringClassName={props.hoveringClassName}
-                    instruction={props.instruction}
-                    options={props.options}
-                    onChange={files => {
-                        form.setFieldValue(props.name, files);
-                    }}
-                    onError={error => {
-                        form.setFieldError(props.name, error);
-                    }}
-                />
-                {form.errors[props.name] ? <aside>{form.errors[props.name]}</aside> : null}
-            </div>
-            )}
-        </FieldArray>
+        <div>
+            <label htmlFor={props.name}>{props.label}</label>
+            <InnerDropzone 
+                fieldName={props.name}
+                className={props.className}
+                hoveringClassName={props.hoveringClassName}
+                instruction={props.instruction}
+                options={props.options}
+                onChange={files => {
+                    props.onChange({
+                        target: {
+                            id: props.id,
+                            value: files
+                        }
+                    })
+                }}
+                onError={error => {
+                    props.onError({
+                        target: {
+                            id: props.id,
+                            error
+                        }
+                    })
+                }}
+            />
+            {props.error ? <aside>{props.error}</aside> : null}
+        </div>
+    )
+}
+
+const Datepicker = props => {
+    return (
+        <div>
+            <label htmlFor={props.name}>{props.label}</label>
+            <ReactDatepicker
+                {...props}
+                selected={props.value}
+                onChange={date => props.onChange({
+                    target: {
+                        id: props.id,
+                        value: date
+                    }
+                })} 
+            />
+            {props.error ? <aside>{props.error}</aside> : null}
+        </div>
     )
 }
 
@@ -199,3 +243,4 @@ export {Select};
 export {Autocomplete};
 export {Tags};
 export {Dropzone};
+export {Datepicker};

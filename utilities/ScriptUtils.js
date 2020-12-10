@@ -51,6 +51,27 @@ const ScriptUtils = {
     
         return -1;
     },
+    stringIsValidDuration: str => {
+        let pieces = str.split(":");
+        //no more than three items (e.g. 3:55:22)
+        if(pieces.length > 3) return false;
+
+        //each pieces can only be two digits, and no decimals
+        for(let i = 0; i < pieces.length; i++) {
+            if(pieces[i].length > 2) return false;
+            if(!pieces[i].match(/^[0-9]*$/)) return false;
+        }
+
+        //make sure that everything is a number, and for minutes/seconds, under 60
+        pieces = pieces.map(s => parseInt(s));
+        for(let i = 0; i < pieces.length; i++) {
+            if(Number.isNaN(pieces[i])) return false;
+            if(pieces[i] < 0) return false;
+            if(i !== 0 && pieces[i] > 59) return false;
+        }
+
+        return true;
+    },
     viewsToString: views => {
         if(views > 1000000) {
             return (Math.round(views / 100000) / 10) + "M";
