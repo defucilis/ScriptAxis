@@ -3,7 +3,6 @@ const ScriptUtils = {
         const output =  {
             id: script.id,
             name: script.name,
-            //name: "Debug Name",
             slug: script.slug,
             creator: script.creatorName,
             owner: script.owner,
@@ -12,10 +11,9 @@ const ScriptUtils = {
             description: script.description,
             duration: script.duration,
             thumbnail: script.thumbnail,
-            //thumbnail: "https://planethifi.com/wp-content/uploads/2020/06/720p-696x448.jpg",
             sourceUrl: script.sourceUrl,
             streamingUrl: script.streamingUrl,
-            studio: script.studio,
+            studio: script.studio || "",
             talent: script.talent || [],
             active: script.active,
             created: script.created.valueOf(),
@@ -24,6 +22,10 @@ const ScriptUtils = {
             thumbsUp: script.thumbsUp,
             thumbsDown: script.thumbsDown,
             views: script.views,
+            //SFW Overrides
+            //name: "Debug Name",
+            //thumbnail: "https://planethifi.com/wp-content/uploads/2020/06/720p-696x448.jpg",
+            //studio: "Debug Studio",
         };
         return output;
     },

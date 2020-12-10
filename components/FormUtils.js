@@ -18,6 +18,10 @@ const Input = props => {
 const TextArea = props => {
     const textArea = useRef();
 
+    useEffect(() => {
+        textArea.current.style.setProperty("height", getNewHeight(textArea.current.scrollHeight));
+    }, [textArea, props.value])
+
     const getNewHeight = scrollHeight => {
         if(!props.minheight && !props.maxheight) return (scrollHeight + 2) + "px";
         if(!props.minheight) return Math.min(props.maxheight, (scrollHeight + 2)) + "px";

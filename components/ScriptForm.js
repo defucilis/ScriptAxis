@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext} from 'react'
+import {useState, useEffect, useContext, useRef} from 'react'
 
 import * as yup from 'yup';
 import slugify from 'slugify'
@@ -11,26 +11,29 @@ import UserContext from '../utilities/UserContext'
 
 import style from './ScriptForm.module.css'
 
-const defaultFormData = {
-    name: "",
-    creator: "",
-    category: "",
-    tags: [],
-    description: "",
-    duration: "",
-    thumbnail: [],
-    sourceUrl: "",
-    streamingUrl: "",
-    studio: "",
-    talent: [],
-    created: (new Date()),
-};
-
-const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPassed}) => {
+const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPassed, defaultFormData, options}) => {
 
     const {user} = useContext(UserContext);
 
-    const [formData, setFormData] = useState({...defaultFormData});
+    const [formData, setFormData] = useState({});
+
+    const tagsRef = useRef();
+    const talentRef = useRef();
+    useEffect(() => {
+        console.log("Setting form data", defaultFormData)
+        setFormData(defaultFormData);
+        setTimeout(() => {
+            if(defaultFormData.tags && defaultFormData.tags.length > 0) {
+                tagsRef.current.removeAllTags();
+                tagsRef.current.addTags(defaultFormData.tags);
+            }
+            if(defaultFormData.talent && defaultFormData.talent.length > 0) {
+                talentRef.current.removeAllTags();
+                talentRef.current.addTags(defaultFormData.talent);
+            }
+        }, 100)
+    }, [defaultFormData, tagsRef, talentRef])
+
     const [errors, setErrors] = useState({})
     const [dirty, setDirty] = useState(false);
     const handleChange = e => {
@@ -113,7 +116,9 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
             tags: yup.array().notRequired(),
             description: yup.string().notRequired(""),
             duration: yup.string().required("A duration is required"),
-            thumbnail: yup.array().length(1, "A thumbnail is required"),
+            thumbnail: options.thumbnailOptional 
+                ? yup.array().notRequired() 
+                : yup.array().length(1, "A thumbnail is required"),
             sourceUrl: yup.string().notRequired().url("Source URL provided is invalid"),
             streamingUrl: yup.string().notRequired().url("Streaming URL provided is invalid"),
             studio: yup.string().notRequired(),
@@ -204,7 +209,8 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
                         }
                     },
                     whitelist: tagOptions,
-                    className: style.tags
+                    className: style.tags,
+                    tagifyRef: tagsRef
                 }}
                 onChange={handleChange}
                 error={errors.tags}
@@ -272,7 +278,8 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
                 name="talent" id="talent" label="Talent"
                 tagProps={{
                     whitelist: talentOptions,
-                    className: style.tags
+                    className: style.tags,
+                    tagifyRef: talentRef
                 }}
                 onChange={handleChange}
                 error={errors.talent}

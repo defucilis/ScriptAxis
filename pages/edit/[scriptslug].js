@@ -1,0 +1,72 @@
+import {useContext, useEffect} from 'react'
+import Router from 'next/router'
+import Head from 'next/head'
+
+import Layout from '../../components/Layout'
+import EditScript from '../../components/EditScript'
+
+import ScriptUtils from '../../utilities/ScriptUtils'
+import UserContext from '../../utilities/UserContext'
+import {FetchScript} from '../api/scripts/slug'
+import {FetchLists} from '../api/loadlists'
+
+const Script = ({script, tags, categories, talent, studios, creators}) => {
+
+    //page is blocked if user is not signed in
+    const {user} = useContext(UserContext);
+    useEffect(() => {
+        if(user && user.waiting) return;
+        if(user === null) {
+            Router.push("/");
+            return;
+        }
+        //page is also blocked if the user doesn't own this script!
+        if(user.username !== script.owner.username) {
+            Router.push("/");
+        }
+    }, [user])
+
+    return (
+        <Layout page="scripts">
+            <Head>
+                <title>ScriptAxis | Editing "{script.name}"</title>
+            </Head>
+            <h1>Edit Script</h1>
+            <EditScript 
+                script={script}
+                tags={tags}
+                categories={categories}
+                talent={talent}
+                studios={studios}
+                creators={creators}
+            />
+        </Layout>
+    )
+}
+
+export async function getServerSideProps({query,res}) {
+    let script = null;
+    let data = {};
+    try {
+        //the 'true' means that the view count won't be updated for this fetch
+        script = await FetchScript(query.scriptslug, true);
+        data = await FetchLists();
+        script = ScriptUtils.parseScriptDocument(script);
+        console.log(script);
+    } catch(error) {
+        console.log(error);
+    } finally {
+        return {
+            props: {
+                script,
+                tags:       !data.tags       ? [] : data.tags.map(t => ScriptUtils.getPrettyCategory(t.name)),
+                categories: !data.categories ? [] : data.categories.map(c => ScriptUtils.getPrettyCategory(c.name)),
+                talent:     !data.talent     ? [] : data.talent.map(t => t.name),
+                studios:    !data.studios    ? [] : data.studios.map(s => s.name),
+                creators:   !data.creators   ? [] : data.creators.map(c => c.name),
+            }
+        }
+    }
+}
+
+export default Script;

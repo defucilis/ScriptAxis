@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import Router from 'next/router';
 
 import axios from 'axios'
@@ -24,14 +24,40 @@ const defaultFormData = {
     created: (new Date()),
 };
 
-const AddScript = ({tags, categories, talent, studios, creators}) => {
-    const [submitting, setSubmitting] = useState(true);
+const EditScript = ({script, tags, categories, talent, studios, creators}) => {
+    const [submitting, setSubmitting] = useState(false);
+    const [formData, setFormData] = useState({});
+    useEffect(() => {
+        setFormData({
+            name: script.name,
+            creator: script.creator,
+            category: script.category,
+            tags: script.tags,
+            description: script.description,
+            duration: ScriptUtils.durationToString(script.duration),
+            thumbnail: [],
+            sourceUrl: script.sourceUrl,
+            streamingUrl: script.streamingUrl,
+            studio: script.studio,
+            talent: script.talent,
+            created: new Date(script.created),
+        })
+    }, [script])
 
     const handleValidationPassed = data => {
+
+        console.log("Validation passed for data", data);
         setSubmitting(true);
-        createScript(data, response => {
-            console.log("Script created successfully", response);
-            if(Router.pathname === "/add")
+        setTimeout(() => {
+            alert("Todo - actually update the script with data\n" + JSON.stringify(data));
+            setSubmitting(false);
+        }, 1000);
+        return;
+
+        setSubmitting(true);
+        updateScript(data, response => {
+            console.log("Script updated successfully", response);
+            if(Router.pathname.includes("/edit"))
                 Router.push(`/script/${response[0].slug}`);
             else {
                 if(confirm("Your script has finished processing. Click OK to go to its page, or Cancel to stay where you are.\nIn the future I'll make this a little less annoying!")) {
@@ -50,8 +76,8 @@ const AddScript = ({tags, categories, talent, studios, creators}) => {
                 <p>
                     <span><FaCog /></span>
                     <span>Your script is processing - this may take up to a minute or two.</span>
-                    <span>Feel free to leave this page, it will appear on the site when it's finished processing.</span>
-                    <span>Alternatively, you can wait here - once your script is ready you will be automatically redirected.</span>
+                    <span>Feel free to leave this page, its information will be updated once it's finished processing.</span>
+                    <span>Alternatively, you can wait here - once your script has been updated you will be automatically redirected.</span>
                 </p>
             </div>
         ) : (
@@ -60,13 +86,16 @@ const AddScript = ({tags, categories, talent, studios, creators}) => {
                 talent={talent} studios={studios} 
                 creators={creators}
                 onValidationPassed={handleValidationPassed}
-                defaultFormData={defaultFormData}
-                />
+                defaultFormData={formData}
+                options={{
+                    thumbnailOptional: true
+                }}
+            />
         )
     )
 }
 
-const createScript = async (postData, onSuccess, onFail) => {
+const updateScript = async (postData, onSuccess, onFail) => {
     //upload the thumbnail and add it to the database
     try {
         const fileUrl = await FirebaseUtils.uploadFile(
@@ -89,4 +118,4 @@ const createScript = async (postData, onSuccess, onFail) => {
     };
 }
 
-export default AddScript;
+export default EditScript;

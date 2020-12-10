@@ -110,6 +110,15 @@ const ScriptDetails = ({script}) => {
     return (
         <div className={style.script}>
             <h1 className={style.name}>{script.name}</h1>
+            {
+                user && user.username === script.owner.username ? (
+                    <div>
+                        <Link href={`/edit/${script.slug}`}>
+                            <a style={{fontSize: "2em", display: "block", textAlign: "right"}}>[Edit Script]</a>
+                        </Link>
+                    </div>
+                ) : null
+            }
             <div className={style.creator}>
                 <Link href={`/creator/${script.creator}`}>
                     <span>By <a>{script.creator}</a></span>
