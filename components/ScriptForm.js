@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import slugify from 'slugify'
 import ReactMarkdown from 'react-markdown'
 
-import {Input, TextArea, Select, Autocomplete, Tags, Dropzone, Datepicker} from './FormUtils';
+import {Input, TextArea, Select, Autocomplete, Tags, Dropzone, Datepicker, Collapsible} from './FormUtils';
 import NavigationPrompt from './NavigationPrompt'
 import ScriptUtils from '../utilities/ScriptUtils'
 import UserContext from '../utilities/UserContext'
@@ -221,13 +221,19 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
                 value={formData.tags}
             />
             
-            <TextArea 
-                name="description" id="description" label="Description" 
-                maxheight={400} 
-                onChange={handleChange}
-                error={errors.description}
-                value={formData.description}
-            />
+            <div className={style.descriptionwrapper}>
+                <TextArea 
+                    name="description" id="description" label="Description"
+                    placeholder="Uses Markdown syntax (like on EroScripts and Reddit)" 
+                    maxheight={400} 
+                    onChange={handleChange}
+                    error={errors.description}
+                    value={formData.description}
+                />
+                <Collapsible label="Preview" collapsed={false}>
+                    <ReactMarkdown source={formData.description} />
+                </Collapsible>
+            </div>
             <Input 
                 id="duration" name="duration" label="Duration" 
                 placeholder="hh:mm:ss"

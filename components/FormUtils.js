@@ -4,6 +4,9 @@ import {useDropzone} from 'react-dropzone'
 import dynamic from 'next/dynamic'
 const TagifyTags = dynamic(() => import("@yaireo/tagify/dist/react.tagify"), { ssr: false });
 import ReactDatepicker from 'react-datepicker'
+import {BsCaretRightFill} from 'react-icons/bs'
+import {BsCaretDownFill} from 'react-icons/bs'
+import {Collapse} from 'react-collapse'
 
 const Input = props => {
     return (
@@ -96,16 +99,6 @@ const Autocomplete = props => {
 const Tags = props => {
 
     const [value, setValue] = useState([]);
-    const arraysEqual = (a, b) => {
-        if(!a && !b) return true;
-        if(!a && b || a && !b) return false;
-        if(a.length !== b.length) return false;
-        for(let i = 0; i < a.length; i++) {
-            if(a[i] !== b[i]) return false;
-        }
-        return true;
-    }
-
     useEffect(() => {
         setValue(props.value);
     }, [])
@@ -237,6 +230,29 @@ const Datepicker = props => {
     )
 }
 
+const Collapsible = props => {
+
+    const [collapsed, setCollapsed] = useState(props.collapsed || false)
+
+    const iconStyle = {
+        position: "relative",
+        top: "0.2em",
+        fontSize: "1.5em",
+        marginRight: "0.5em"
+    }
+
+    return (
+        <div>
+            <p onClick={() => setCollapsed(cur => !cur)}>
+                {collapsed ? <BsCaretRightFill style={iconStyle} /> : <BsCaretDownFill style={iconStyle} />}
+                {props.label}
+            </p>
+            <Collapse isOpened={!collapsed}>
+                {props.children}
+            </Collapse>
+        </div>
+    )
+}
 
 
 
@@ -248,3 +264,4 @@ export {Autocomplete};
 export {Tags};
 export {Dropzone};
 export {Datepicker};
+export {Collapsible};
