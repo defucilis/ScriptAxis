@@ -55,7 +55,7 @@ export async function getServerSideProps({query,res}) {
         script = ScriptUtils.parseScriptDocument(script);
         console.log(script);
     } catch(error) {
-        console.log(error);
+        console.error(error);
     } finally {
         return {
             props: {

@@ -40,7 +40,7 @@ const AddScript = ({tags, categories, talent, studios, creators}) => {
                 }
             }
         }, error => {
-            console.log("Upload failed", error);
+            console.log("Upload failed", ScriptUtils.tryFormatError(error.message));
             setSubmitting(false);
         });
     }
@@ -89,6 +89,7 @@ const createScript = async (postData, onSuccess, onFail) => {
 
     try {
         const response = await axios.post("/api/scripts/create", data);
+        if(response.data.error) throw response.data.error;
         onSuccess(response.data);
     } catch(error) {
         onFail(error);

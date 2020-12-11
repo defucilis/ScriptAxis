@@ -282,6 +282,27 @@ const getScriptDifferences = (oldScript, newScript) => {
     return output;
 }
 
+const tryFormatError = error => {
+    const searchString = "user_facing_error: Some(KnownError { message: ";
+
+    try {
+        const startIndex = error.indexOf(searchString);
+        if(startIndex === -1) {
+            console.log("Failed to find starting string, returning original error", error)
+            return error;
+        }
+        let output = error.substr(startIndex + searchString.length + 1);
+        const endIndex = output.indexOf("\"");
+        if(endIndex === -1) {
+            console.log("Failed to find end quotation, returning original error", error)
+            return error;
+        }
+        return output.substr(0, endIndex);
+    } catch(e) {
+        console.log("Failed to format error", error, e);
+    }
+}
+
 const ScriptUtils = {
     parseScriptDocument,
     parseDatabaseLists,
@@ -297,6 +318,7 @@ const ScriptUtils = {
     objectToQuery,
     queryToObject,
     getScriptDifferences,
+    tryFormatError
 }
 
 export default ScriptUtils;

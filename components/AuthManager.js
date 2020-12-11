@@ -10,17 +10,19 @@ const AuthManager = ({children}) => {
         const doSignIn = async (email) => {
             try {
                 const user = await axios.post("/api/users/email", {email});
+                if(user.data.error) throw user.data.error;
                 console.log("Loaded database user value", user.data);
                 setUser(user.data)
                 console.log("user vs firebase", user.data.emailVerified, firebase.auth().currentUser.emailVerified);
                 if(!user.data.emailVerified && firebase.auth().currentUser.emailVerified) {
-                    await axios.post("/api/users/verifyemail", {email});
+                    const response = await axios.post("/api/users/verifyemail", {email});
+                    if(response.data.error) throw response.data.error;
                 }
                 window.localStorage.setItem("userdata", JSON.stringify(user.data));
             } catch(error) {
                 firebase.auth().signOut();
                 window.localStorage.removeItem("userdata");
-                console.log(error.message);
+                console.error(ScriptUtils.tryFormatError(error.message));
             }
         }
 

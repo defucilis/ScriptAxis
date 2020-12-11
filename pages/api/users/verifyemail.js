@@ -29,10 +29,9 @@ export default async (req, res) => {
         res.status(200);
         res.json(script);
     } catch(error) {
-        console.log("Error fetching script - " + error);
-        res.status(400);
+        console.error("error fetching script - " + error);
         res.json({
-            error
+            error: { message: error.message }
         });
     }
 };

@@ -20,8 +20,9 @@ const Header = ({page}) => {
     useEffect(() => {
         const loadScriptCount = async () => {
             try {
-                const res = await axios.get("/api/loadlists");
-                const {tags, categories, talent, studios} = ScriptUtils.parseDatabaseListsWithCount(res.data);
+                const response = await axios.get("/api/loadlists");
+                if(response.data.error) throw response.data.error;
+                const {tags, categories, talent, studios} = ScriptUtils.parseDatabaseListsWithCount(response.data);
                 console.warn({tags, categories, talent, studios})
                 const scriptCount = categories.reduce((acc, category) => acc + category.count, 0);
                 setCategoryCounts(categories);
@@ -33,7 +34,7 @@ const Header = ({page}) => {
                 window.localStorage.setItem("storedTalent", JSON.stringify(talent));
                 window.localStorage.setItem("storedStudios", JSON.stringify(studios));
             } catch(error) {
-                console.log(error);
+                console.error(error);
             }
         }
         const storedScriptCount = window.localStorage.getItem("scriptCount");

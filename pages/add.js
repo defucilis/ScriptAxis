@@ -26,8 +26,8 @@ const Add = ({tags, categories, talent, studios, creators}) => {
         try {
             await firebase.auth().currentUser.sendEmailVerification();
         } catch(error) {
-            console.log(error.message);
-            alert("Failed to send verificationemail\n" + error.message);
+            console.error(error.message);
+            alert("Failed to send verificationemail\n" + ScriptUtils.tryFormatError(error.message));
         }
     }
 

@@ -106,7 +106,9 @@ const UpdateScript = async (req, res) => {
         res.json(results)
     } catch(error) {
         console.log("Failed to create script", error.message);
-        res.json({error: error.message});
+        res.json({
+            error: { message: error.message }
+        });
     } finally {
         await prisma.$disconnect();
     }

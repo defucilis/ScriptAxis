@@ -27,7 +27,7 @@ export async function getServerSideProps({query}) {
     try {
         scripts = await FetchCreatorScripts(query.creatorname);
     } catch(error) {
-        console.log(error);
+        console.error(error);
     } finally {
         return {
             props: {

@@ -71,7 +71,7 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
                 onPass(validation);
             } catch(err) {
                 let mappedErrors = {};
-                //console.log(err);
+                //console.error(err);
                 err.inner.forEach(error => {
                     mappedErrors[error.path] = error.errors[0];
                 })

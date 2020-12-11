@@ -1,4 +1,3 @@
-import {NextApiRequest, NextApiResponse } from 'next'
 import {PrismaClient} from '@prisma/client'
 
 const CreateCategory = async (req, res) => {
@@ -10,11 +9,8 @@ const CreateCategory = async (req, res) => {
         res.status(201);
         res.json(newCategory)
     } catch(error) {
-        const usefulError = error.message.split("\n").filter(line => line && !line.match(/[{}[\]:]+/g)?.length);
-        console.log("Failed to create category - " + usefulError);
-        res.status(400);
         res.json({
-            error: usefulError
+            error: { message: error.message }
         });
     } finally {
         await prisma.$disconnect();

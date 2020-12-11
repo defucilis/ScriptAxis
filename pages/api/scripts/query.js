@@ -103,10 +103,9 @@ export default async (req, res) => {
         res.status(200);
         res.json(scripts);
     } catch(error) {
-        console.log("Error fetching scripts - " + error);
-        res.status(400);
+        console.error("error fetching scripts - " + error.message);
         res.json({
-            error
+            error: { message: error.message }
         });
     }
 };

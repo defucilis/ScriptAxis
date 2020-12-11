@@ -55,7 +55,7 @@ const EditScript = ({script, tags, categories, talent, studios, creators}) => {
         }, error => {
             console.log("Upload failed", error);
             setFormData(data);
-            setFormError(error);
+            setFormError(ScriptUtils.tryFormatError(error.message));
             setSubmitting(false);
         });
     }
@@ -171,13 +171,8 @@ const updateScript = async (newPostData, oldPostData, onSuccess, onFail) => {
     //return;
 
     try {
-        const response = await axios.post("/api/scripts/update", finalUpdateData).catch(err => {
-            console.log(err);
-            throw(err);
-        });
-        if(response.data.error) {
-            throw response.data.error;
-        }
+        const response = await axios.post("/api/scripts/update", finalUpdateData);
+        if(response.data.error) throw response.data.error;
         onSuccess(response.data);
     } catch(error) {
         onFail(error);

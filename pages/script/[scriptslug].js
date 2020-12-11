@@ -22,7 +22,7 @@ export async function getServerSideProps({query,res}) {
         script = await FetchScript(query.scriptslug);
         script = ScriptUtils.parseScriptDocument(script);
     } catch(error) {
-        console.log(error);
+        console.error(error);
     } finally {
         return {
             props: {

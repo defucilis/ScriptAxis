@@ -91,19 +91,32 @@ const ScriptDetails = ({script}) => {
 
     const toggleLike = async () => {
         const newValue = !isLiked;
+        const curValue = isLiked;
         setIsLiked(newValue);
         if(newValue) {
             setScriptLikes(cur => cur + 1);
         } else {
             setScriptLikes(cur => cur - 1);
         }
-        const likeData = await axios.post("/api/scripts/changelike", {
-            slug: script.slug, 
-            uid: user.id,
-            creator: script.creator,
-            isLiked: newValue
-        })
-        console.log(likeData);
+        try {
+            const response = await axios.post("/api/scripts/changelike", {
+                slug: script.slug, 
+                uid: user.id,
+                creator: script.creator,
+                isLiked: newValue
+            });
+            if(response.data.error) throw response.data.error;
+            console.log(response.data);
+        } catch(error) {
+            console.error(error);
+            
+            setIsLiked(curValue);
+            if(curValue) {
+                setScriptLikes(cur => cur - 1);
+            } else {
+                setScriptLikes(cur => cur + 1);
+            }
+        }
     }
 
     //todo - we could show the thumbnail while waiting for the iframe to load...
