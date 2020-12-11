@@ -1,24 +1,32 @@
 import {useState, useEffect, useContext} from 'react'
-import Layout from '../components/Layout'
-import Head from 'next/head'
-import axios from 'axios'
-import GetTestData from '../utilities/TestData'
-import style from './testdata.module.css'
-import UserContext from '../utilities/UserContext'
 import Router from 'next/router'
+import Head from 'next/head'
+
+import axios from 'axios'
+
+import Layout from '../components/Layout'
+
+import {FetchSlugs} from './api/scripts/allslugs'
+import GetTestData from '../utilities/TestData'
+import UserContext from '../utilities/UserContext'
+import ScriptUtils from '../utilities/ScriptUtils'
+
+import style from './testdata.module.css'
+
 
 const ClearData = async (onSuccess, onFail) => {
     try {
         const response = await axios("/api/admin/clear");
+        if(response.data.error) throw response.data.error;
         console.log("data", response.data);
         onSuccess(response.data);
     } catch(error) {
-        console.log("error", error.message);
-        onFail(error.message);
+        console.error("error", error);
+        onFail(ScriptUtils.tryFormatError(error.message));
     }
 }
 
-const AddData = async(count, onProgress, onSuccess, onFail) => {
+const AddData = async(count, existingScripts, onProgress, onSuccess, onFail) => {
     const scripts = GetTestData().slice(0, count);
     let errorCount = 0;
 
@@ -29,13 +37,19 @@ const AddData = async(count, onProgress, onSuccess, onFail) => {
 
         try {
             onProgress(`Inserting ${script.name}`)
+
+            if(existingScripts.findIndex(s => s.name === script.name) !== -1) throw ({ message: "Script already exists!"});
+
             const response = await axios.post("/api/scripts/create", script);
+            if(response.data.error) throw response.data.error;
             console.log("data", response.data);
+
             onProgress(`${script.name} sucessfully inserted (${i + 1}/${scripts.length})`);
             onProgress("");
         } catch(error) {
-            console.log("error", error.message, error.data);
-            onProgress({...error.data, errorMessage: error.message});
+            console.error("error", error);
+            onProgress("Error: " + ScriptUtils.tryFormatError(error.message));
+            onProgress("");
             errorCount++;
         }
     }
@@ -49,21 +63,29 @@ const Aggregate = async(onProgress, onSuccess, onFail) => {
 
     try {
         const response = await axios.get("/api/admin/aggregate");
+        if(response.data.error) throw response.data.error;
         console.log("data", response.data);
         onProgress(`Finished aggregating creator data: ${JSON.stringify(response.data, null, 2)}`);
+        onProgress("");
         onSuccess();
     } catch(error) {
-        console.log("error", error.message, error.data);
-        onProgress({...error.data, errorMessage: error.message});
+        console.error("error", error);
+        onProgress("Error: " + ScriptUtils.tryFormatError(error.message));
+        onProgress("");
         onFail();
     }
 }
 
-const TestData = () => {
+const TestData = ({existingScripts}) => {
     
     const [running, setRunning] = useState(false);
     const [messages, setMessages] = useState({list: []});
     const [count, setCount] = useState(41);
+    const [scripts, setScripts] = useState([]);
+
+    useEffect(() => {
+        setScripts(existingScripts);
+    }, [existingScripts])
 
     useEffect(() => {
         setCount(GetTestData().length);
@@ -89,6 +111,7 @@ const TestData = () => {
             addMessage("Data cleared successfully");
             addMessage("");
             setRunning(false);
+            setScripts([]);
         }, error => {
             addMessage("Failed to clear data");
             addMessage(error);
@@ -100,14 +123,15 @@ const TestData = () => {
     const StartAddData = () => {
         setRunning(true);
 
-        AddData(count, progressMessage => {
+        AddData(count, scripts, progressMessage => {
             addMessage(progressMessage);
         }, addedCount => {
             addMessage(`Successfully added ${addedCount} scripts to database`);
             addMessage("");
             setRunning(false);
         }, (failCount, scriptCount) => {
-            addMessage(`Finished adding scripts - failed ${failCount} out of ${scriptCount}`);
+            addMessage("Finished adding scripts");
+            addMessage(`Error: failed ${failCount} out of ${scriptCount}`);
             addMessage("");
             setRunning(false);
         })
@@ -121,7 +145,7 @@ const TestData = () => {
             addMessage("");
             setRunning(false);
         }, () => {
-            addMessage("Failed aggregating data");
+            addMessage("Error: Failed aggregating data");
             addMessage("");
             setRunning(false);
         });
@@ -150,7 +174,9 @@ const TestData = () => {
                 <ul>
                 {
                     messages.list.map((message, index) => {
-                        return <li key={index}>{JSON.stringify(message, null, 2)}</li>
+                        return message === "" 
+                            ? <br key={index} /> 
+                            : <li key={index} style={message.includes("Error") ? {color: "salmon"} : null}>{message}</li>
                     })
                 }
                 </ul>
@@ -159,6 +185,21 @@ const TestData = () => {
             <div className={`loader bottom ${running ? "loadingbottom" : "notloadingbottom"}`}></div>
         </Layout>
     )
+}
+
+export async function getServerSideProps({query}) {
+    let scripts = [];
+    try {
+        scripts = await FetchSlugs();
+    } catch(error) {
+        console.log("Failed to load scripts", error);
+    } finally {
+        return {
+            props: {
+                existingScripts: scripts
+            }
+        }
+    }
 }
 
 export default TestData;
