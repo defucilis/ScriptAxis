@@ -2,6 +2,7 @@ import {useState} from 'react'
 import Router from 'next/router';
 
 import axios from 'axios'
+import slugify from 'slugify'
 import { FaCog } from 'react-icons/fa'
 
 import FirebaseUtils from '../utilities/FirebaseUtils'
@@ -61,28 +62,36 @@ const AddScript = ({tags, categories, talent, studios, creators}) => {
                 creators={creators}
                 onValidationPassed={handleValidationPassed}
                 defaultFormData={defaultFormData}
-                />
+                submitLabel="Add Script"
+            />
         )
     )
 }
 
 const createScript = async (postData, onSuccess, onFail) => {
+
+    const data = {...postData}
+
     //upload the thumbnail and add it to the database
     try {
         const fileUrl = await FirebaseUtils.uploadFile(
-            postData.thumbnail[0], 
-            `thumbnails/thumbnail_${postData.slug}`, 
+            data.thumbnail[0], 
+            `thumbnails/thumbnail_${data.slug}`, 
             progress => console.log("Thumbnail File uploading", progress * 100)
         );
-        postData.thumbnail = fileUrl;
+        data.thumbnail = fileUrl;
     } catch(error) {
         onFail(error);
     }
 
-    postData.duration = ScriptUtils.stringToDuration(postData.duration);
+    //modify the form data into something useful for the database
+    data.slug = slugify(data.name, {lower: true});
+    data.category = slugify(data.category, {lower: true});
+    data.tags = data.tags ? data.tags.map(tag => slugify(tag, {lower: true})) : null;
+    data.duration = ScriptUtils.stringToDuration(data.duration);
 
     try {
-        const response = await axios.post("/api/scripts/create", postData);
+        const response = await axios.post("/api/scripts/create", data);
         onSuccess(response.data);
     } catch(error) {
         onFail(error);

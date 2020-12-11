@@ -1,3 +1,13 @@
+const arraysIdentical = (a, b) => {
+    if(!a && !b) return true;
+    if(!a && b || a && !b) return false;
+    if(a.length !== b.length) return false;
+    for(let i = 0; i < a.length; i++) {
+        if(a[i] !== b[i]) return false;
+    }
+    return true;
+}
+
 const ScriptUtils = {
     parseScriptDocument: script => {
         const output =  {
@@ -217,6 +227,39 @@ const ScriptUtils = {
     queryToString: query => {
         if(Object.keys(query).length === 0) return "";
         return "?" + Object.keys(query).map(key => `${key}=${query[key]}`).join("&");
+    },
+    getScriptDifferences: (oldScript, newScript) => {
+        console.warn("Diffing data");
+        let output = {};
+
+        //merge keys to get full list of properties on both objects
+        let keys = Object.keys(oldScript);
+        let newKeys = Object.keys(newScript);
+        newKeys.forEach(key => {
+            if(keys.findIndex(k => k === key) === -1) keys.push(key);
+        })
+
+        //find differences between an 'old' script and a 'new' script
+        //used to update the database when editing a script
+        keys.forEach(key => {
+            const oldValue = oldScript[key];
+            const newValue = newScript[key];
+            if(oldValue && newValue) {
+                if(Array.isArray(oldValue)) {
+                    if(!arraysIdentical(oldValue, newValue)) {
+                        output[key] = newValue;
+                    }
+                } else if(oldValue != newValue) {
+                    output[key] = newValue;
+                }
+            } else if(oldValue && !newValue) {
+                output[key] = null;
+            } else if(!oldValue && newValue) {
+                output[key] = newValue;
+            }
+        })
+
+        return output;
     }
 }
 

@@ -10,7 +10,7 @@ const FetchScript = (slug, noview) => {
             };
             const include = {
                 creator: { select: { name: true }},
-                owner: { select: { username: true }}
+                owner: { select: { username: true, id: true }}
             };
             const promise = noview
                 ? prisma.script.findFirst({where, include})

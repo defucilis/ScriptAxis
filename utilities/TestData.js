@@ -429,7 +429,7 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0016_edging-joi-countdown-cock-trickery.jpg?alt=media&token=2751024e-61c5-4756-b220-47ad655885c8",
         description:    "This is my second attempt at a script. This time with FunJoy Scripter. This site needs more trans/Futa stuff here so I’m gonna try to get some of that content going.\n\nHope you enjoy. Again let me know what you think and let me know what I can do to get better.",
         duration:       "11:23",
-        category:       "cum-challenge",
+        category:       "challenge",
         tags: [
             "trans",
             "joi",

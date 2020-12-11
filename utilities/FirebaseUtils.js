@@ -18,6 +18,19 @@ const FirebaseUtils = {
                 resolve(downloadURL);
             })
         })
+    },
+    deleteFile: path => {
+        return new Promise((resolve, reject) => {
+            console.log("Deleting file", path)
+            const storage = firebase.storage();
+            const ref = storage.ref().child(path);
+            const uploadTask = ref.delete(file).then(() => {
+                resolve();
+            }).catch(error => {
+                console.log("Failed to delete file", error);
+                reject("Failed to delete file - ", error.message)
+            })
+        })
     }
 }
 

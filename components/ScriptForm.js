@@ -1,7 +1,6 @@
 import {useState, useEffect, useContext, useRef} from 'react'
 
 import * as yup from 'yup';
-import slugify from 'slugify'
 import ReactMarkdown from 'react-markdown'
 
 import {Input, TextArea, Select, Autocomplete, Tags, Dropzone, Datepicker, Collapsible} from './FormUtils';
@@ -11,7 +10,7 @@ import UserContext from '../utilities/UserContext'
 
 import style from './ScriptForm.module.css'
 
-const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPassed, defaultFormData, options}) => {
+const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPassed, defaultFormData, options, submitLabel}) => {
 
     const {user} = useContext(UserContext);
 
@@ -41,7 +40,7 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
     const [errors, setErrors] = useState({})
     const [dirty, setDirty] = useState(false);
     const handleChange = e => {
-        console.log(`Form: Setting ${e.target.id} to`, e.target.value)
+        //console.log(`Form: Setting ${e.target.id} to`, e.target.value)
         setFormData(cur => ({...cur, [e.target.id]: e.target.value}));
         if(errors[e.target.id]) {
             setErrors(cur => {
@@ -93,7 +92,6 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
         doValidation(formData, () => {
             onValidationPassed({
                 name: formData.name,
-                slug: slugify(formData.name, {lower: true}),
                 creator: formData.creator,
                 owner: user.id,
                 category: formData.category,
@@ -118,14 +116,14 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
             creator: yup.string().required("A creator is required"),
             category: yup.string().required("A category is required"),
             tags: yup.array().notRequired(),
-            description: yup.string().notRequired(""),
+            description: yup.string().nullable().notRequired(""),
             duration: yup.string().required("A duration is required"),
             thumbnail: options.thumbnailOptional 
                 ? yup.array().notRequired() 
                 : yup.array().length(1, "A thumbnail is required"),
-            sourceUrl: yup.string().notRequired().url("Source URL provided is invalid"),
-            streamingUrl: yup.string().notRequired().url("Streaming URL provided is invalid"),
-            studio: yup.string().notRequired(),
+            sourceUrl: yup.string().nullable().notRequired().url("Source URL provided is invalid"),
+            streamingUrl: yup.string().nullable().notRequired().url("Streaming URL provided is invalid"),
+            studio: yup.string().nullable().notRequired(),
             talent: yup.array().notRequired(),
             created: yup.date().notRequired().max(new Date(), "Cannot set a future date!"),
         });
@@ -304,7 +302,7 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
                 value={formData.created}
             />
 
-            <button type="submit">Add Script</button>
+            <button type="submit">{submitLabel}</button>
         </form>
         </div>
     );
