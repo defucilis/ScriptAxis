@@ -4,6 +4,7 @@ import Router from 'next/router';
 import axios from 'axios'
 import slugify from 'slugify'
 import { FaCog } from 'react-icons/fa'
+import ReactMarkdown from 'react-markdown'
 
 import FirebaseUtils from '../utilities/FirebaseUtils'
 import ScriptUtils from '../utilities/ScriptUtils'
@@ -14,6 +15,7 @@ const EditScript = ({script, tags, categories, talent, studios, creators}) => {
     const [submitting, setSubmitting] = useState(false);
     const [formData, setFormData] = useState({});
     const [oldFormData, setOldFormData] = useState({});
+    const [formError, setFormError] = useState("");
     useEffect(() => {
         console.warn("Script changed");
         const data = {
@@ -53,6 +55,7 @@ const EditScript = ({script, tags, categories, talent, studios, creators}) => {
         }, error => {
             console.log("Upload failed", error);
             setFormData(data);
+            setFormError(error);
             setSubmitting(false);
         });
     }
@@ -63,11 +66,11 @@ const EditScript = ({script, tags, categories, talent, studios, creators}) => {
                 <p>
                     <span><FaCog /></span>
                     <span>Your script is processing - this may take up to a minute or two.</span>
-                    <span>Feel free to leave this page, its information will be updated once it's finished processing.</span>
-                    <span>Alternatively, you can wait here - once your script has been updated you will be automatically redirected.</span>
+                    <span>Please don't leave this page - once your script has been updated you will be automatically redirected.</span>
                 </p>
             </div>
         ) : (
+            <>
             <ScriptForm 
                 tags={tags} categories={categories} 
                 talent={talent} studios={studios} 
@@ -79,6 +82,8 @@ const EditScript = ({script, tags, categories, talent, studios, creators}) => {
                 }}
                 submitLabel="Update Script"
             />
+            {formError ? <pre style={{color: "salmon"}}>{formError}</pre> : null}
+            </>
         )
     )
 }
@@ -107,12 +112,6 @@ const updateScript = async (newPostData, oldPostData, onSuccess, onFail) => {
     newData.slug = slugify(newData.name, {lower: true});
     oldData.slug = slugify(oldData.name, {lower: true});
 
-    newData.category = slugify(newData.category, {lower: true});
-    oldData.category = slugify(oldData.category, {lower: true});
-
-    newData.tags = newData.tags ? newData.tags.map(tag => slugify(tag, {lower: true})) : [];
-    oldData.tags = oldData.tags ? oldData.tags.map(tag => slugify(tag, {lower: true})) : [];
-
     newData.duration = ScriptUtils.stringToDuration(newData.duration);
     oldData.duration = ScriptUtils.stringToDuration(oldData.duration);
 
@@ -133,9 +132,21 @@ const updateScript = async (newPostData, oldPostData, onSuccess, onFail) => {
         remove: {}, 
         add: {}
     };
-    Object.keys(diffData).forEach(key => {
-        finalUpdateData.set[key] = diffData[key];
-    })
+
+    //the values that can just be straight set
+    if(diffData.name) finalUpdateData.set.name = diffData.name;
+    if(diffData.slug) finalUpdateData.set.slug = diffData.slug;
+    if(diffData.description) finalUpdateData.set.description = diffData.description;
+    if(diffData.duration) finalUpdateData.set.duration = diffData.duration;
+    if(diffData.thumbnail) finalUpdateData.set.thumbnail = diffData.thumbnail;
+    if(diffData.sourceUrl) finalUpdateData.set.sourceUrl = diffData.sourceUrl;
+    if(diffData.streamingUrl) finalUpdateData.set.streamingUrl = diffData.streamingUrl;
+    if(diffData.studio) finalUpdateData.set.studio = diffData.studio;
+    if(diffData.created) finalUpdateData.set.created = diffData.created;
+
+    //lists of strings need to be handled slightly differently...
+    if(diffData.tags) finalUpdateData.set.tags = newData.tags;
+    if(diffData.talent) finalUpdateData.set.talent = newData.talent;
 
     //these values refer to other tables, so they need fancier treatment
     if(diffData.creator) {
@@ -144,23 +155,29 @@ const updateScript = async (newPostData, oldPostData, onSuccess, onFail) => {
     }
     if(diffData.category) {
         finalUpdateData.remove.category = oldPostData.category;
-        finalUpdateData.add.category = newPostData.creator;
+        finalUpdateData.add.category = newPostData.category;
     }
     if(diffData.tags) {
-        finalUpdateData.remove.tags = oldPostData.tags.filter(tag => newPostData.findIndex(t => t === tag) === -1);
-        finalUpdateData.add.tags = newPostData.tags.filter(tag => oldPostData.findIndex(t => t === tag) === -1);
+        finalUpdateData.remove.tags = oldPostData.tags.filter(tag => newPostData.tags.findIndex(t => t === tag) === -1);
+        finalUpdateData.add.tags = newPostData.tags.filter(tag => oldPostData.tags.findIndex(t => t === tag) === -1);
     }
     if(diffData.talent) {
-        finalUpdateData.remove.talent = oldPostData.talent.filter(talent => newPostData.findIndex(t => t === talent) === -1);
-        finalUpdateData.add.talent = newPostData.talent.filter(talent => oldPostData.findIndex(t => t === talent) === -1);
+        finalUpdateData.remove.talent = oldPostData.talent.filter(talent => newPostData.talent.findIndex(t => t === talent) === -1);
+        finalUpdateData.add.talent = newPostData.talent.filter(talent => oldPostData.talent.findIndex(t => t === talent) === -1);
     }
 
-    console.warn("Final diff data", diffData);
-    onFail("Skipping for now");
-    return;
+    console.warn("Final Data", finalUpdateData);
+    //onFail("Skipping for now");
+    //return;
 
     try {
-        const response = await axios.post("/api/scripts/update", finalUpdateData);
+        const response = await axios.post("/api/scripts/update", finalUpdateData).catch(err => {
+            console.log(err);
+            throw(err);
+        });
+        if(response.data.error) {
+            throw response.data.error;
+        }
         onSuccess(response.data);
     } catch(error) {
         onFail(error);

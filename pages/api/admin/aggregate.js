@@ -34,6 +34,9 @@ const Aggregate = () => {
             })
         }
 
+        //todo: (separate) improve the aggregate function to also remove any tags, studios or talents that have no associated scripts
+        //                 this isn't really urgent
+
         try {
             const creators = await prisma.creator.findMany();
             const output = await Promise.all(creators.map(creator => {

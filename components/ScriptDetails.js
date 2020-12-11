@@ -73,6 +73,7 @@ const ScriptDetails = ({script}) => {
     const {user} = useContext(UserContext);
     const [isLiked, setIsLiked] = useState(false);
     const [scriptLikes, setScriptLikes] = useState(0);
+    const [iFrameLoading, setIFrameLoading] = useState(true);
     useEffect(() => {
         if(!user || !script) return;
         if(!user.likedScripts) {
@@ -127,15 +128,22 @@ const ScriptDetails = ({script}) => {
             <p className={style.created}>{moment(script.created, "x").format("Do MMMM YYYY")}</p>
             <div className={style.sidebyside}>
                 <div className={style.imagewrapper}>
-                    {getEmbed(script.streamingUrl) ? 
-                        <iframe src={getEmbed(script.streamingUrl)} width={1000} height={500} allowFullScreen onLoad={() => console.log("iFrame loaded!")} /> : 
-                        <img src={script.thumbnail} />
+                    {getEmbed(script.streamingUrl) ? (<>
+                            <iframe 
+                                style={{display: iFrameLoading ? "none" : "block"}} 
+                                src={getEmbed(script.streamingUrl)} 
+                                width={1000} height={500} 
+                                allowFullScreen 
+                                onLoad={() => setIFrameLoading(false)} 
+                            />
+                            {iFrameLoading ? <img src={script.thumbnail} /> : null}
+                    </>) : <img src={script.thumbnail} />
                     }
                 </div>
                 <div className={style.details}>
                     <p className={style.category}>{!script.category ? "No Category" : (
                         <Link href={`/scripts?category=${script.category}`}>
-                            <a>{ScriptUtils.getPrettyCategory(script.category)}</a>
+                            <a>{script.category}</a>
                         </Link>
                     )}</p>
                     <ul className={style.tags}>
@@ -144,7 +152,7 @@ const ScriptDetails = ({script}) => {
                             : script.tags.map(tag => {
                                 return (<li key={tag}>
                                     <Link href={`/scripts?include=${tag}`}>
-                                        <a>{ScriptUtils.getPrettyCategory(tag)}</a>
+                                        <a>{tag}</a>
                                     </Link>
                                 </li>);
                             })

@@ -11,6 +11,8 @@ const ClearData = async (req, res) => {
         transaction.push(prisma.$queryRaw('TRUNCATE TABLE public."Creator" CONTINUE IDENTITY CASCADE;'))
         transaction.push(prisma.$queryRaw('TRUNCATE TABLE public."Script" CONTINUE IDENTITY CASCADE;'))
         transaction.push(prisma.$queryRaw('TRUNCATE TABLE public."Tag" CONTINUE IDENTITY CASCADE;'))
+        transaction.push(prisma.$queryRaw('TRUNCATE TABLE public."Talent" CONTINUE IDENTITY CASCADE;'))
+        transaction.push(prisma.$queryRaw('TRUNCATE TABLE public."Studio" CONTINUE IDENTITY CASCADE;'))
         //transaction.push(prisma.$queryRaw('TRUNCATE TABLE public."User" CONTINUE IDENTITY CASCADE;'))
         transaction.push(prisma.$queryRaw('TRUNCATE TABLE public."VerificationRequest" CONTINUE IDENTITY CASCADE;'))
         transaction.push(prisma.$queryRaw('TRUNCATE TABLE public."_ScriptLiker" CONTINUE IDENTITY CASCADE;'))

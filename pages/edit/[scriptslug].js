@@ -51,6 +51,7 @@ export async function getServerSideProps({query,res}) {
         //the 'true' means that the view count won't be updated for this fetch
         script = await FetchScript(query.scriptslug, true);
         data = await FetchLists();
+        data = ScriptUtils.parseDatabaseLists(data);
         script = ScriptUtils.parseScriptDocument(script);
         console.log(script);
     } catch(error) {
@@ -59,11 +60,7 @@ export async function getServerSideProps({query,res}) {
         return {
             props: {
                 script,
-                tags:       !data.tags       ? [] : data.tags.map(t => ScriptUtils.getPrettyCategory(t.name)),
-                categories: !data.categories ? [] : data.categories.map(c => ScriptUtils.getPrettyCategory(c.name)),
-                talent:     !data.talent     ? [] : data.talent.map(t => t.name),
-                studios:    !data.studios    ? [] : data.studios.map(s => s.name),
-                creators:   !data.creators   ? [] : data.creators.map(c => c.name),
+                ...data
             }
         }
     }

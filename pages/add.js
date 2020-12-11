@@ -56,17 +56,14 @@ export async function getServerSideProps() {
     let data = {};
     try {
         data = await FetchLists();
+        data = ScriptUtils.parseLists();
         console.log(data);
     } catch(error) {
         console.log("Failed to get scripts", error);        
     } finally {
         return {
             props: {
-                tags:       !data.tags       ? [] : data.tags.map(t => ScriptUtils.getPrettyCategory(t.name)),
-                categories: !data.categories ? [] : data.categories.map(c => ScriptUtils.getPrettyCategory(c.name)),
-                talent:     !data.talent     ? [] : data.talent.map(t => t.name),
-                studios:    !data.studios    ? [] : data.studios.map(s => s.name),
-                creators:   !data.creators   ? [] : data.creators.map(c => c.name),
+                ...data
             }
         }   
     }

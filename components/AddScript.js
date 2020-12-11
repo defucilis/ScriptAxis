@@ -51,8 +51,7 @@ const AddScript = ({tags, categories, talent, studios, creators}) => {
                 <p>
                     <span><FaCog /></span>
                     <span>Your script is processing - this may take up to a minute or two.</span>
-                    <span>Feel free to leave this page, it will appear on the site when it's finished processing.</span>
-                    <span>Alternatively, you can wait here - once your script is ready you will be automatically redirected.</span>
+                    <span>Please don't leave this page - once your script has finished processing you will be automatically redirected.</span>
                 </p>
             </div>
         ) : (
@@ -86,8 +85,6 @@ const createScript = async (postData, onSuccess, onFail) => {
 
     //modify the form data into something useful for the database
     data.slug = slugify(data.name, {lower: true});
-    data.category = slugify(data.category, {lower: true});
-    data.tags = data.tags ? data.tags.map(tag => slugify(tag, {lower: true})) : null;
     data.duration = ScriptUtils.stringToDuration(data.duration);
 
     try {

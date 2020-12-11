@@ -147,7 +147,7 @@ const Filters = ({query, onFilter}) => {
             
             action.category = !query.filters.category ? clearOp : {
                 operation: "set",
-                value: query.filters.category.name.equals
+                value: query.filters.category.name.equals,
             }
 
             action.minDuration = !query.filters.minDuration ? clearOp : {
@@ -264,7 +264,7 @@ const Filters = ({query, onFilter}) => {
                                                         value: category.name
                                                     }})}
                                         >
-                                            {ScriptUtils.getPrettyCategory(category.name)} ({category.count})
+                                            {category.name} ({category.count})
                                         </a>
                                     </li>
                                 );

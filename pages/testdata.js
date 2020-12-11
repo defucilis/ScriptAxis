@@ -65,6 +65,10 @@ const TestData = () => {
     const [messages, setMessages] = useState({list: []});
     const [count, setCount] = useState(41);
 
+    useEffect(() => {
+        setCount(GetTestData().length);
+    }, [])
+
     //page is blocked if user is not signed in
     const {user} = useContext(UserContext);
     useEffect(() => {

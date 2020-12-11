@@ -19,11 +19,8 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
     const tagsRef = useRef();
     const talentRef = useRef();
     useEffect(() => {
-        console.log("Setting form data", defaultFormData);
+        //console.log("Setting form data", defaultFormData);
         const newData = {...defaultFormData};
-        if(newData.tags) {
-            newData.tags = newData.tags.map(tag => ScriptUtils.getPrettyCategory(tag))
-        }
         setFormData(newData);
         setTimeout(() => {
             if(newData.tags && newData.tags.length > 0) {
@@ -74,7 +71,7 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
                 onPass(validation);
             } catch(err) {
                 let mappedErrors = {};
-                console.log(err);
+                //console.log(err);
                 err.inner.forEach(error => {
                     mappedErrors[error.path] = error.errors[0];
                 })
@@ -87,7 +84,7 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
         }
 
         e.preventDefault();
-        console.log("Submitting with values", formData);
+        //console.log("Submitting with values", formData);
 
         doValidation(formData, () => {
             onValidationPassed({
@@ -106,7 +103,7 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
                 created: formData.created
             });
         }, errors => {
-            console.log("Validation Failed", errors);
+            //console.log("Validation Failed", errors);
         });
     }
 
@@ -118,7 +115,7 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
             tags: yup.array().notRequired(),
             description: yup.string().nullable().notRequired(""),
             duration: yup.string().required("A duration is required"),
-            thumbnail: options.thumbnailOptional 
+            thumbnail: options && options.thumbnailOptional 
                 ? yup.array().notRequired() 
                 : yup.array().length(1, "A thumbnail is required"),
             sourceUrl: yup.string().nullable().notRequired().url("Source URL provided is invalid"),
@@ -135,7 +132,7 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
         
         setCategoryOptions([{label: "Select a Category", value: ""}, ...categories.map(category => {
             return {
-                label: ScriptUtils.getPrettyCategory(category),
+                label: category,
                 value: category
             }
         })]);
