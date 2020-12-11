@@ -1,7 +1,7 @@
 import {PrismaClient} from '@prisma/client'
 
 const CreateScript = async (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     const prisma = new PrismaClient({log: ["query"]});
 
     try {
@@ -48,13 +48,15 @@ const CreateScript = async (req, res) => {
         transaction.push(prisma.script.create({data}));
 
         //Create or insert any necessary tags
-        rawData.tags.forEach(tag => {
-            transaction.push(prisma.tag.upsert({
-                where: { name: tag },
-                create: { name: tag, count: 1 },
-                update: { count: { increment: 1 }}
-            }))
-        })
+        if(rawData.tags) {
+            rawData.tags.forEach(tag => {
+                transaction.push(prisma.tag.upsert({
+                    where: { name: tag },
+                    create: { name: tag, count: 1 },
+                    update: { count: { increment: 1 }}
+                }))
+            })
+        }
 
         //Add the script to its category
         transaction.push(prisma.category.update({
@@ -82,13 +84,15 @@ const CreateScript = async (req, res) => {
         }))
 
         //If talents were included, add them to the talent table
-        rawData.talent.forEach(talent => {
-            transaction.push(prisma.talent.upsert({
-                where: {name: talent},
-                create: {name: talent},
-                update: {}
-            }))
-        });
+        if(rawData.talent) {
+            rawData.talent.forEach(talent => {
+                transaction.push(prisma.talent.upsert({
+                    where: {name: talent},
+                    create: {name: talent},
+                    update: {}
+                }))
+            });
+        }
 
         //If a studio was included, add it to the studio table
         if(rawData.studio) {
@@ -104,11 +108,9 @@ const CreateScript = async (req, res) => {
         res.status(201);
         res.json(results)
     } catch(error) {
-        const usefulError = error.message.split("\n").filter(line => line && !line.match(/[{}[\]:]+/g)?.length);
         console.log("Failed to create script", error.message);
-        res.status(400);
         res.json({
-            error: usefulError
+            error: { message: error.message }
         });
     } finally {
         await prisma.$disconnect();

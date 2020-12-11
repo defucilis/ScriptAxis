@@ -20,16 +20,16 @@ const BrowseScripts = ({propScripts, tags, categories, query}) => {
     const getHeadTitle = query => {
         if(customFilters) return "Filtered Scripts";
         if(query.filters.name) return `Results for '${query.filters.name.contains}'`;
-        if(query.filters.category) return `Category: ${ScriptUtils.getPrettyCategory(query.filters.category.name.equals)}`;
-        if(query.filters.include) return `Tag: ${ScriptUtils.getPrettyCategory(query.filters.include[0])}`;
+        if(query.filters.category) return `Category: ${query.filters.category.name.equals}`;
+        if(query.filters.include) return `Tag: ${query.filters.include[0]}`;
         return "Scripts";
     }
 
     const getBodyTitle = query => {
         if(customFilters) return "Filtered Scripts";
         if(query.filters.name) return `Scripts matching "${query.filters.name.contains}"`;
-        if(query.filters.category) return `${ScriptUtils.getPrettyCategory(query.filters.category.name.equals)} Scripts`;
-        if(query.filters.include) return `Scripts tagged with "${ScriptUtils.getPrettyCategory(query.filters.include[0])}"`;
+        if(query.filters.category) return `${query.filters.category.name.equals} Scripts`;
+        if(query.filters.include) return `Scripts tagged with "${query.filters.include[0]}"`;
         return "All Scripts";
     }
 

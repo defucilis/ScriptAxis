@@ -21,8 +21,8 @@ const SignIn = () => {
                 await firebase.auth().sendPasswordResetEmail(email);
                 callback({success: true});
             } catch(error) {
-                console.log(error.message);
-                callback({success: false, error: "Failed to send reset email - " + error.message});
+                console.error(error.message);
+                callback({success: false, error: "Failed to send reset email - " + ScriptUtils.tryFormatError(error.message)});
             }
         }
 

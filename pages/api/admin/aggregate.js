@@ -34,6 +34,9 @@ const Aggregate = () => {
             })
         }
 
+        //todo: (separate) improve the aggregate function to also remove any tags, studios or talents that have no associated scripts
+        //                 this isn't really urgent
+
         try {
             const creators = await prisma.creator.findMany();
             const output = await Promise.all(creators.map(creator => {
@@ -62,10 +65,9 @@ export default async (req, res) => {
         res.status(200);
         res.json(scripts);
     } catch(error) {
-        console.log("Error fetching tags and categories - " + error);
-        res.status(400);
+        console.error("error fetching tags and categories - " + error);
         res.json({
-            error
+            error: { message: error.message }
         });
     }
 };

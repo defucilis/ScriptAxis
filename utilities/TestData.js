@@ -5,7 +5,7 @@ const TestData = [
     {
         name:           "TemplateScript",
         creator:        "CreatorName",
-        sourceUrl:      "SourceUrl",
+        sourceUrl:      "Sourceurl",
         streamingUrl:   "StreamingUrl",
         thumbnail:      "SourceThumbnail",
         description:    "OptionalDescription",
@@ -26,7 +26,24 @@ const TestData = [
         created:        new Date(2020, 10, 5).valueOf(),
     },
 
-
+    {
+        name:           "How Long Can You Last 2",
+        creator:        "Schorsche",
+        sourceUrl:      "https://discuss.eroscripts.com/t/cock-hero-how-long-can-you-last-2/10892",
+        streamingUrl:   "https://www.pornhub.com/view_video.php?viewkey=ph5b0adaad0b92e",
+        thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0041_how-long-can-you-last-2.jpg?alt=media&token=1911fff4-d859-44bf-891d-ebd9b04865ae",
+        duration:       "17:59",
+        category:       "Challenge",
+        tags: [
+            "JOI",
+            "Cock Hero"
+        ],
+        likeCount:      3,
+        views:          0,
+        thumbsUp:       1,
+        thumbsDown:     0,
+        created:        new Date(2020, 11, 11).valueOf(),
+    },
     {
         name:           "Nurse Edges to Ultimate Reward",
         creator:        "Jamned",
@@ -34,14 +51,14 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0040_nurse-edges-to-ultimate-reward.jpg?alt=media&token=a0b2fb0d-2304-4971-b66d-efc5130050cb",
         description:    "Hello everyone,\n\nthis script was requested by @phaserblazer,\n\nsome feedback would be appreciated,\n\nEnjoy",
         duration:       "1:13:15",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "handjob",
-            "vaginal",
-            "pov",
-            "creampie",
-            "hd",
-            "cosplay"
+            "Handjob",
+            "Vaginal",
+            "POV",
+            "Creampie",
+            "HD",
+            "Cosplay"
         ],
         studio:         "Primal Fetish",
         talent:          [
@@ -59,10 +76,10 @@ const TestData = [
         sourceUrl:      "http://realtouchscripts.com/viewtopic.php?f=55&t=8680&sid=02ee479ed387ab0d524fd404c4b8cf1f",
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0000_hotel-hookup.jpg?alt=media&token=650c789a-edae-4557-8d24-c525ebca6ef3",
         duration:       "22:08",
-        category:       "vaginal",
+        category:       "Vaginal",
         tags: [
-            "blowjob",
-            "facial"
+            "Blowjob",
+            "Facial"
         ],
         studio:         "MHBHJ",
         talent:          [
@@ -81,12 +98,12 @@ const TestData = [
         streamingUrl:   "https://www.pornhub.com/view_video.php?viewkey=1436041584",
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0001_hot-onlyteenbj-girl.jpg?alt=media&token=f4841c7f-4bfe-4088-845d-b64509e850b9",
         duration:       "10:36",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "blowjob",
-            "pov",
-            "hd",
-            "teen"
+            "Blowjob",
+            "POV",
+            "HD",
+            "Teen"
         ],
         studio:         "Only Teen Blowjobs",
         talent:          [
@@ -106,11 +123,11 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0002_hentai-blowjob.jpg?alt=media&token=2e7a8e92-b20e-4858-9768-bff7d4443875",
         description:    "Easily one of the most frustrating scenes I have scripted to date. I was pretty fed up by the end so apologies if some things are rougher around the edges than is ideal.",
         duration:       "14:01",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "pov",
-            "facial",
-            "hd"
+            "POV",
+            "Facial",
+            "HD"
         ],
         studio:         "Sloppy Toppy",
         talent:          [
@@ -129,10 +146,10 @@ const TestData = [
         streamingUrl:   "https://www.pornhub.com/view_video.php?viewkey=ph5a008ec04f539",
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0003_he-couldnt-handle-the-pussy.jpg?alt=media&token=724a8437-26ed-45e7-9ef0-56baa4d45582",
         duration:       "12:37",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "pov",
-            "hd"
+            "POV",
+            "HD"
         ],
         studio:         "MHBHJ",
         talent:          [
@@ -151,9 +168,9 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0004_hard-work-joi.jpg?alt=media&token=5ac3dda9-a5e3-4964-af02-d7f63297a2f8",
         description:    "Please note the video source is very low res, if anyone has better image let us know.",
         duration:       "8:13",
-        category:       "joi",
+        category:       "JOI",
         tags: [
-            "handjob",
+            "Handjob",
         ],
         talent:          [
             "Mitsuko Doll",
@@ -172,11 +189,11 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0005_handjob-so-good-he-cums-three-times.jpg?alt=media&token=560b74f3-579f-4e39-bc90-3902d83db9b5",
         description:    "Another amazing handjob by Asian Good Girl, think the script turned out great but feedback welcome xd",
         duration:       "17:21",
-        category:       "handjob",
+        category:       "Handjob",
         tags: [
-            "pov",
-            "multiple-cumshots",
-            "hd",
+            "POV",
+            "Multiple Cumshots",
+            "HD",
         ],
         talent:          [
             "Asian Good Girl",
@@ -195,13 +212,13 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0006_handjob-doctor-instructions.jpg?alt=media&token=689295be-7454-4097-9ac7-6b610538dfe0",
         description:    "Tested with Kiiro Launch. Made with JoyFunScripter 0.13.1 (Thanks for the good app!).\n\nLikes, comments and help are always welcome.",
         duration:       "16:19",
-        category:       "handjob",
+        category:       "Handjob",
         tags: [
-            "pov",
-            "milf",
-            "pov",
-            "hd",
-            "threesome"
+            "POV",
+            "MILF",
+            "POV",
+            "HD",
+            "Threesome"
         ],
         studio:         "Taboo Handjobs",
         talent:          [
@@ -222,10 +239,10 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0007_gorgeous-sloppy-blowjob.jpg?alt=media&token=22af88e5-5401-4ed3-b3b7-3b36f2730974",
         description:    "This is my second script after taking down a few notes from my first. Feedback is appreciated. Thank you! ",
         duration:       "8:01",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "oral-creampie",
-            "hd"
+            "Oral Creampie",
+            "HD"
         ],
         talent:          [
             "Redkittycat",
@@ -242,11 +259,11 @@ const TestData = [
         sourceUrl:      "https://discuss.eroscripts.com/t/riley-reid-good-moaning-snapchat-film/8619",
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0008_good-moaning-snapchat.jpg?alt=media&token=35907c6f-3531-4062-8460-766459085bc9",
         duration:       "22:39",
-        category:       "vaginal",
+        category:       "Vaginal",
         tags: [
-            "blowjob",
-            "portrait",
-            "pov"
+            "Blowjob",
+            "Portrait",
+            "POV"
         ],
         studio:         "Reid My Lips",
         talent:          [
@@ -265,11 +282,11 @@ const TestData = [
         streamingUrl:   "https://www.pornhub.com/view_video.php?viewkey=ph591820e506121",
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0009_good-job-ava.jpg?alt=media&token=c8e3e7b7-0da9-464e-aa27-d784bb2ed7c9",
         duration:       "9:39",
-        category:       "handjob",
+        category:       "Handjob",
         tags: [
-            "blowjob",
-            "pov",
-            "hd",
+            "Blowjob",
+            "POV",
+            "HD",
         ],
         studio:         "Bangbros",
         talent:          [
@@ -289,11 +306,11 @@ const TestData = [
         streamingUrl:   "https://www.pornhub.com/view_video.php?viewkey=ph5ef35fc3a692d",
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0010_fucked-lucifer-while-she-cooked-pancakes.jpg?alt=media&token=411e1fcf-0249-4188-972e-6e64920ffc11",
         duration:       "12:29",
-        category:       "vaginal",
+        category:       "Vaginal",
         tags: [
-            "facial",
-            "hd",
-            "cosplay"
+            "Facial",
+            "HD",
+            "Cosplay"
         ],
         talent:          [
             "Molly Red Wolf",
@@ -311,12 +328,12 @@ const TestData = [
         streamingUrl:   "https://www.pornhub.com/view_video.php?viewkey=ph5fa4824f548e2",
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0011_fuck-your-angry-boss.jpg?alt=media&token=9f852ccc-b1df-4f70-bb5e-212696148dc7",
         duration:       "34:27",
-        category:       "joi",
+        category:       "JOI",
         tags: [
-            "blowjob",
-            "vaginal",
-            "femdom",
-            "hd"
+            "Blowjob",
+            "Vaginal",
+            "Femdom",
+            "HD"
         ],
         studio:         "Try Not to Cum",
         talent:          [
@@ -335,12 +352,12 @@ const TestData = [
         streamingUrl:   "https://www.pornhub.com/view_video.php?viewkey=ph55dabb9e119e5",
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0012_femdom-teens-take-turns.jpg?alt=media&token=c2fa962e-8d6a-47ea-8bce-ee2aa127f0c1",
         duration:       "7:00",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "incomplete",
-            "group",
-            "femdom",
-            "cfnm"
+            "Incomplete",
+            "Group",
+            "Femdom",
+            "CFNM"
         ],
         studio:         "Hot CFNM Spot",
         talent:          [
@@ -362,12 +379,12 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0013_epic-cumshots-pmv-volume-1.jpg?alt=media&token=c8b5959d-2114-4142-916f-c4c6952e98cc",
         description:    "MHBHJ…only one i know is sasha foxxx\n\ntested with launch…I scripted this morning. It was a quick one…so it isn’t great…but not bad. It isn’t all scripted to the action…some was based off how I just thought it should be. I wanted the cumshots to coincide with the 0 or 100 setting…but I might have set them a bit too early…Anyway, just saw the vid and thought it might be a BLAST! ",
         duration:       "3:04",
-        category:       "music-video",
+        category:       "Music Video",
         tags: [
-            "pov",
-            "blowjob",
-            "handjob",
-            "hd"
+            "POV",
+            "Blowjob",
+            "Handjob",
+            "HD"
         ],
         studio:         "Gemcutter",
         likeCount:      13,
@@ -383,11 +400,11 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0014_enthusiastic-blowjob.jpg?alt=media&token=b431d75c-de57-4a28-9baa-e7b658f71b1a",
         description:    "Tested only in Handy.",
         duration:       "17:59",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "pov",
-            "oral-creampie",
-            "hd"
+            "POV",
+            "Oral Creampie",
+            "HD"
         ],
         talent:          [
             "Ravashing103",
@@ -406,11 +423,11 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0015_english-teacher-blows-her-student-after-class.jpg?alt=media&token=62c192c4-7554-46cb-a2e4-3a45239ce0dc",
         description:    "SPOILER ALERT!! There is no English class and no fucking!\n\nSingle camera POV style scene. Holy FUCK, though… this girl is cute.\n\nTested on Launch",
         duration:       "9:26",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "pov",
-            "hd",
-            "facial"
+            "POV",
+            "HD",
+            "Facial"
         ],
         talent:          [
             "Kate Kurray",
@@ -429,11 +446,11 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0016_edging-joi-countdown-cock-trickery.jpg?alt=media&token=2751024e-61c5-4756-b220-47ad655885c8",
         description:    "This is my second attempt at a script. This time with FunJoy Scripter. This site needs more trans/Futa stuff here so I’m gonna try to get some of that content going.\n\nHope you enjoy. Again let me know what you think and let me know what I can do to get better.",
         duration:       "11:23",
-        category:       "cum-challenge",
+        category:       "Challenge",
         tags: [
-            "trans",
-            "joi",
-            "music"
+            "Trans",
+            "JOI",
+            "Music"
         ],
         likeCount:      8,
         views:          385,
@@ -449,10 +466,10 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0017_double-pump-or-double-load-pov.jpg?alt=media&token=260f8db7-04f5-4232-9ed0-a2aab8a22a89",
         description:    "Hi everyone\n\nEnjoy",
         duration:       "12:59",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "pov",
-            "hd"
+            "POV",
+            "HD"
         ],
         studio:         "Primal Fetish",
         talent:          [
@@ -471,11 +488,11 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0018_daily-facial.jpg?alt=media&token=41e76dba-7f9d-4531-bcfe-cfaa5766133c",
         description:    "Did 4 quick vids by request, figured I’d throw them up here\n\nFour pretty quick videos on their own, but together they make for a pretty decent session. Launch users: I have not tested any of these videos on the device. The riding video will work fine, the BJ videos will likely be a bit too quick.",
         duration:       "4:21",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "blowjob",
-            "facial",
-            "portrait",
+            "Blowjob",
+            "Facial",
+            "Portrait",
         ],
         talent:         [
             "Catkitty21",
@@ -493,13 +510,13 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0019_dad-crush.jpg?alt=media&token=59ea0dc0-33e5-4e5c-894b-c6da6fc9bfaa",
         description:    "OK, this one is epic. Three scenes in one again - first with Rosalyn, second with Danni, third with both.\n\nScene 1 starts at 03:15, Scene 2 at 17:45, Scene 3 at about 36:01. Scene three gets very fast and will test the Launch (I have only tested the Handy and it performed fine). Danni rides deep, so I accentuated the strokes just a touch when at all possible while trying to remain relatively true to what’s happening on screen.\n\nEnjoy! (I’m going to take a break :sunglasses:)",
         duration:       "55:53",
-        category:       "full-scene",
+        category:       "Full Scene",
         tags: [
-            "blowjob",
-            "vaginal",
-            "threesome",
-            "hd",
-            "pov"
+            "Blowjob",
+            "Vaginal",
+            "Threesome",
+            "HD",
+            "POV"
         ],
         studio:         "Dad Crush",
         talent:          [
@@ -520,12 +537,12 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0020_dva-swallows-it-all.jpg?alt=media&token=4e7c80d6-1be2-4d25-bf83-10c45c07ac6c",
         description:    "Note my best script. Some difficulties because the movements are slow\n\nTested on launch and it’s not so bad but not always perfectly matching",
         duration:       "9:07",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "pov",
-            "facial",
-            "hd",
-            "cosplay",
+            "POV",
+            "Facial",
+            "HD",
+            "Cosplay",
         ],
         talent:          [
             "Miss Banana",
@@ -546,10 +563,10 @@ const TestData = [
         duration:       "12:43",
         category:       "anal",
         tags: [
-            "vaginal",
-            "anal-creampie",
-            "hd",
-            "pov"
+            "Vaginal",
+            "Anal Creampie",
+            "HD",
+            "POV"
         ],
         talent:          [
             "Lana Emotional",
@@ -567,13 +584,13 @@ const TestData = [
         streamingUrl:   "https://www.pornhub.com/view_video.php?viewkey=ph5df4fde876bc2",
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0022_cum-on-the-glasses-of-a-redhead-teen.jpg?alt=media&token=f96647d8-c167-4b0e-9b8b-23fb62498814",
         description:    "Just two videos that caught my eye.\n\nAlso, these are my first 2 scripts so any feedback will be greatly appreciated.",
-        duration:       "0001:0001",
-        category:       "vaginal",
+        duration:       "12:06",
+        category:       "Vaginal",
         tags: [
-            "blowjob",
-            "facial",
-            "hd",
-            "pov"
+            "Blowjob",
+            "Facial",
+            "HD",
+            "POV"
         ],
         talent:          [
             "Molly Red Wolf",
@@ -592,10 +609,10 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0023_cum-on-hair-ruined-orgasm-handjob.jpg?alt=media&token=fef85bd9-c088-4e5e-adfa-9cb6d998d350",
         description:    "Saffron looks amazing without glasses. Like goddamn.\n\nI did this one really fast. I don’t think it’s accurate in some areas. Her technique in some parts are a little hard to script. Still a good time though… ",
         duration:       "11:10",
-        category:       "handjob",
+        category:       "Handjob",
         tags: [
-            "ruined-orgasm",
-            "hd"
+            "Ruined Orgasm",
+            "HD"
         ],
         studio:         "Sexy Saffron",
         talent:          [
@@ -614,10 +631,10 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0024_cum-dump.jpg?alt=media&token=0705e460-b89e-47db-8bb8-93a887d6f217",
         description:    "Christy Mack strips and gives an unforgettable blowjob.",
         duration:       "16:10",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "facial",
-            "hd"
+            "Facial",
+            "HD"
         ],
         studio:         "MHBHJ",
         talent:          [
@@ -637,11 +654,11 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0025_cool-juicy-pussy-fuck.jpg?alt=media&token=7dd28300-d91b-43fc-a1a6-9ca9ec926af4",
         description:    "Came accross this Kate Kuray video so I happened to script it on a whim. Plus this can be a Halloween treat, enjoy!",
         duration:       "17:54",
-        category:       "vaginal",
+        category:       "Vaginal",
         tags: [
-            "blowjob",
-            "pov",
-            "hd"
+            "Blowjob",
+            "POV",
+            "HD"
         ],
         studio:         "Kate Kurray",
         talent:          [
@@ -660,12 +677,12 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0026_chloe-couture-pov-god.jpg?alt=media&token=a5880907-b253-4fa1-88ea-2bc14c0b0f70",
         description:    "Hello everyone,\n\nThis is my very first script! I scripted using JFS with the OnTheFlyMode at 0.20 playback speed. I was hoping to receive some feedback to improve in the future! Let \n\nknow what you think!",
         duration:       "12:37",
-        category:       "vaginal",
+        category:       "Vaginal",
         tags: [
-            "blowjob",
-            "pov",
-            "hd",
-            "oral-creampie"
+            "Blowjob",
+            "POV",
+            "HD",
+            "Oral Creampie"
         ],
         studio:         "The POV God",
         talent:          [
@@ -684,10 +701,10 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0027_caugh-by-my-boyfriends-roommate.jpg?alt=media&token=25333e3c-31fb-4bde-8032-8765844dba8c",
         description:    "This is my first JOI Script. I never tried one before too, so don’t hate me if this is crap :sweat_smile: . Robin Mae is so f***ing hot in this video, I had to script it.\n\nTested with Kiiro Launch. Made with JoyFunScripter 0.13.1 (Thanks for the good app!).\n\nLikes and feedback are always welcome.",
         duration:       "7:52",
-        category:       "joi",
+        category:       "JOI",
         tags: [
-            "pov",
-            "hd"
+            "POV",
+            "HD"
         ],
         talent:          [
             "Robin Mae",
@@ -706,12 +723,12 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0028_caugh-again-by-my-stepmoms-best-friend.jpg?alt=media&token=e194c632-bc6d-4fe5-a98d-9a5fe140f389",
         description:    "This video is a part of a series where Zoey Holloway and her friends or family members caught the POV Guy jerk off. You cant find the first part of this series on [realsync.us](https://realsync.us/products/taboohandjobs-zoey-holloway-caught-in-action)\n\nTested with Kiiro Launch. Made with JoyFunScripter 0.13.1 (Thanks for the good app!).\n\nLikes and feedback are always welcome.\n\n[Premium Video Link](https://www.clips4sale.com/studio/55153/19650381/caught-again-by-moms-best-friend-hd1080)",
         duration:       "15:58",
-        category:       "handjob",
+        category:       "Handjob",
         tags: [
-            "threesome",
-            "cfnm",
-            "hd",
-            "pov"
+            "Threesome",
+            "CFNM",
+            "HD",
+            "POV"
         ],
         studio:         "Taboo Handjobs",
         talent:          [
@@ -732,11 +749,11 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0029_busty-wife-gives-slow-bj-and-hj.jpg?alt=media&token=1dcbade5-476c-4cb3-9f14-32ef4e7fd7df",
         description:    "First script, feedback is welcome. As I’m learning I’ve committed (to myself) to create 10 new scripts in the next 14 days. I’ll work to implement all feedback provided into my new scripts.",
         duration:       "5:24",
-        category:       "handjob",
+        category:       "Handjob",
         tags: [
-            "ruined-orgasm",
-            "cum-on-tits",
-            "hd"
+            "Ruined Orgasm",
+            "Cum On Tits",
+            "HD"
         ],
         likeCount:      14,
         views:          1500,
@@ -749,11 +766,11 @@ const TestData = [
         creator:        "scibbles",
         sourceUrl:      "https://discuss.eroscripts.com/t/cassidy-klein-bored-sister-hj/921",
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0030_bored-sister-handjob.jpg?alt=media&token=759eb5a9-0b7f-44ec-b90b-e08d98697368",
-        description:    "[Vid Link](https://mega.nz/file/J6hRiTxT#3ozqt0cEI2Zu8AiKf5FY3ozhdIVnh-a0UqTNU-YM-LU)",
-        duration:       "0001:0001",
-        category:       "handjob",
+        description:    "[Vid Link](https://mega.nz/file/J6hRiTxT#3ozqt0cEI2Zu8AiKf5FY3ozHDIVnh-a0UqTNU-YM-LU)",
+        duration:       "9:16",
+        category:       "Handjob",
         tags: [
-            "cfnm"
+            "CFNM"
         ],
         studio:         "Primal Fetish",
         talent:          [
@@ -773,10 +790,10 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0031_blue-eyes.jpg?alt=media&token=4fcfaf6f-9068-4dca-a2ff-b95d3d0d198b",
         description:    "Hi, this is the first script that I will post on this forum.\n\nI made it using JFS, but my FleshlightLaunch was broken, so I checked the script with another instrument aka Vorze A10 piston SA.\n\nSo I am not sure my script can work well on Launch. If you try runnning my script on Launch, I would like some feedback.\n\nThank you.",
         duration:       "10:10",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "pov",
-            "cum-on-tits"
+            "POV",
+            "Cum On Tits"
         ],
         talent:          [
             "Risi Simms",
@@ -795,11 +812,11 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0032_blowjob-pov-with-facial.jpg?alt=media&token=6bd7fa4c-0d32-4d05-90e4-aac14d765ab6",
         description:    "Just two videos that caught my eye.\n\nAlso, these are my first 2 scripts so any feedback will be greatly appreciated.",
         duration:       "11:18",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "pov",
-            "facial",
-            "hd",
+            "POV",
+            "Facial",
+            "HD",
         ],
         talent:          [
             "Kissamorous",
@@ -818,11 +835,11 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0033_blowing-my-brother.jpg?alt=media&token=d6e89ed8-727d-4b36-8890-315afab7c886",
         description:    "Video link [Arabelle Raphael - Blowing My Brother](http://www.camvideos.tv/793/arabelle-raphael-blowing-my-brother/) - Camvideos.tv 101 (better quality in the request [Blowing My Brother - Arabelle 78](https://discuss.eroscripts.com/t/blowing-my-brother-arabelle/8893))",
         duration:       "19:15",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "pov",
-            "oral-creampie",
-            "hd",
+            "POV",
+            "Oral Creampie",
+            "HD",
         ],
         studio:         "Arabelle's Playground",
         talent:          [
@@ -842,11 +859,11 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0034_blonde-in-red-lingerie-feasts-on-cock.jpg?alt=media&token=fc4bd704-034a-474d-84a4-943bb8b0557c",
         description:    "I hope you guys would enjoy this Oral creampie from her and hope to have your support in my JAV scripts as well! Best worked with handy\n\nI would love to hear your comments down below on what you would like to see from me in the future and what you felt in the script!",
         duration:       "9:32",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "pov",
-            "oral-creampie",
-            "hd",
+            "POV",
+            "Oral Creampie",
+            "HD",
         ],
         talent:          [
             "Kate Pie",
@@ -865,10 +882,10 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0035_best-amateur-deepthroat-blowjob.jpg?alt=media&token=e30695da-5853-499b-b6f0-3d27541e0392",
         description:    "An oldie so not quite up to modern standards graphically, but hopefully you will forgive me. :wink: Quite fast, so buckle up.",
         duration:       "8:15",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "deepthroat",
-            "oral-creampie"
+            "Deepthroat",
+            "Oral Creampie"
         ],
         talent:          [
             "Nasty19",
@@ -887,11 +904,11 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0036_ball-sucker-pov.jpg?alt=media&token=d0ce7f2d-bc76-4d52-a71f-43eb32780be8",
         description:    "Another multi-axis experiment hot off the presses. Feedback is greatly appreciated. Stroke axis created first to ensure movement for Launch/Handy is not under-represented. I still have barely any idea what I’m doing so the style of different segments in the various axes may not be perfectly consistent throughout. Script may be subject to change over time.",
         duration:       "14:40",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "pov",
-            "facial",
-            "hd",
+            "POV",
+            "Facial",
+            "HD",
         ],
         talent:          [
             "Cherry Crush",
@@ -909,10 +926,10 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0037_asmr-sexy-jerk-off-instruction.jpg?alt=media&token=73b83626-7989-4ed3-8aae-4bc9c1ed34d4",
         description:    "10 min. Script is my 2nd script I’ve ever done. First one I did was to music, this one I attempted matching her strokes.\n\nVideo\n\n[https://mega.nz/file/5Whiwb6I#N44phjgqMsLNLasD5fITQppyPKETazTsarlir1ev4hE](https://mega.nz/file/5Whiwb6I#N44phjgqMsLNLasD5fITQppyPKETazTsarlir1ev4hE)\n\nI’d love feedback on this as it’s my first attempt.\n\nAlso: Apologies to icyprotocol as he said he was working on this script. I got a bit impatient\n\nNo offense meant whatsoever, I just love Cherry and wanted to try this one myself.",
         duration:       "9:56",
-        category:       "joi",
+        category:       "JOI",
         tags: [
-            "facial",
-            "hd",
+            "Facial",
+            "HD",
         ],
         studio:         "Angel Eyes",
         talent:          [
@@ -932,11 +949,11 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0038_angela-white-x-david.jpg?alt=media&token=ef247946-48c5-4a22-94a2-d7959d67caa8",
         description:    "Hey folks! This one is pretty straightforward, Angela White goes to town on you for ~20 minutes. Tested and works great on Handy.\n\nEDIT: dusted off the Launch (literally dusted…it’s been awhile) and this works shocking well on there. I’d say 99% compatible (a handful of stutters when it gets VERY fast).\n\nEnjoy!",
         duration:       "20:02",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "pov",
-            "facial",
-            "hd",
+            "POV",
+            "Facial",
+            "HD",
         ],
         studio:         "AngelaWhite.com",
         talent:         [
@@ -955,11 +972,11 @@ const TestData = [
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumb_0039_all-i-wanted-was-to-suck-cock-today.jpg?alt=media&token=201a19cb-11ba-40d9-b952-d3f930906e83",
         description:    "Did 4 quick vids by request, figured I’d throw them up here\n\nFour pretty quick videos on their own, but together they make for a pretty decent session. Launch users: I have not tested any of these videos on the device. The riding video will work fine, the BJ videos will likely be a bit too quick.",
         duration:       "3:01",
-        category:       "blowjob",
+        category:       "Blowjob",
         tags: [
-            "oral-creampie",
-            "portrait",
-            "hd"
+            "Oral Creampie",
+            "Portrait",
+            "HD"
         ],
         talent:         [
             "Catkitty21",

@@ -20,6 +20,7 @@ const SignIn = () => {
             try {
                 await firebase.auth().signInWithEmailAndPassword(email, password);
                 const user = await axios.post("/api/users/email", {email});
+                if(user.data.error) throw user.data.error;
                 setUser(user.data)
                 console.log("Found user data", user.data);
                 window.localStorage.setItem("userdata", JSON.stringify(user.data));
@@ -27,7 +28,7 @@ const SignIn = () => {
             } catch(error) {
                 firebase.auth().signOut();
                 window.localStorage.removeItem("userdata");
-                console.log(error.message);
+                console.error(ScriptUtils.tryFormatError(error.message));
                 callback({success: false, error: "Incorrect username/password combination"});
             }
         }

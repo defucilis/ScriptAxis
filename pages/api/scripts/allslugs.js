@@ -1,19 +1,12 @@
 import {PrismaClient} from '@prisma/client'
 
-const VerifyEmail = (email) => {
+const FetchSlugs = () => {
     return new Promise(async (resolve, reject) => {
         const prisma = new PrismaClient({log: ["query"]});
         try {
-            const user = await prisma.user.update({
-                where: {
-                    email: email
-                },
-                data: {
-                    emailVerified: true
-                }
-            })
+            let scripts = await prisma.script.findMany({select: { id: true, slug: true, name: true}});
             await prisma.$disconnect();
-            resolve(user);
+            resolve(scripts);
         } catch(error) {
             await prisma.$disconnect();
             reject(error);
@@ -21,15 +14,15 @@ const VerifyEmail = (email) => {
     })
 }
 
-export {VerifyEmail}
+export {FetchSlugs}
 
 export default async (req, res) => {
     try {
-        const script = await VerifyEmail(req.body.email);
+        const scripts = await FetchSlugs();
         res.status(200);
-        res.json(script);
+        res.json(scripts);
     } catch(error) {
-        console.error("error fetching script - " + error);
+        console.error("error fetching script slugs etc - " + error);
         res.json({
             error: { message: error.message }
         });

@@ -1,17 +1,16 @@
 import {PrismaClient} from '@prisma/client'
 
-const VerifyEmail = (email) => {
+const ViewScript = (scriptSlug) => {
     return new Promise(async (resolve, reject) => {
         const prisma = new PrismaClient({log: ["query"]});
         try {
-            const user = await prisma.user.update({
-                where: {
-                    email: email
-                },
+            const result = await prisma.script.update({
+                where: {slug: scriptSlug},
                 data: {
-                    emailVerified: true
+                    views: { increment: 1 }
                 }
-            })
+            });
+            resolve(result);
             await prisma.$disconnect();
             resolve(user);
         } catch(error) {
@@ -21,11 +20,11 @@ const VerifyEmail = (email) => {
     })
 }
 
-export {VerifyEmail}
+export {ViewScript}
 
 export default async (req, res) => {
     try {
-        const script = await VerifyEmail(req.body.email);
+        const script = await ViewScript(req.body.slug);
         res.status(200);
         res.json(script);
     } catch(error) {

@@ -20,8 +20,10 @@ const Header = ({page}) => {
     useEffect(() => {
         const loadScriptCount = async () => {
             try {
-                const res = await axios.get("/api/loadlists");
-                const {tags, categories, talent, studios} = res.data;
+                const response = await axios.get("/api/loadlists");
+                if(response.data.error) throw response.data.error;
+                const {tags, categories, talent, studios} = ScriptUtils.parseDatabaseListsWithCount(response.data);
+                console.warn({tags, categories, talent, studios})
                 const scriptCount = categories.reduce((acc, category) => acc + category.count, 0);
                 setCategoryCounts(categories);
                 setTagCounts(tags);
@@ -32,7 +34,7 @@ const Header = ({page}) => {
                 window.localStorage.setItem("storedTalent", JSON.stringify(talent));
                 window.localStorage.setItem("storedStudios", JSON.stringify(studios));
             } catch(error) {
-                console.log(error);
+                console.error(error);
             }
         }
         const storedScriptCount = window.localStorage.getItem("scriptCount");
@@ -151,7 +153,7 @@ const Header = ({page}) => {
                                 <li key={category.name}>
                                     <Link href={`/scripts?category=${category.name}`}>
                                         <a>
-                                            {ScriptUtils.getPrettyCategory(category.name)}
+                                            {category.name}
                                             <br/>
                                             ({category.count} Script{category.count > 1 ? "s" : ""})
                                         </a>
@@ -175,7 +177,7 @@ const Header = ({page}) => {
                                 <li key={tag.name}>
                                     <Link href={`/scripts?include=${tag.name}`}>
                                         <a>
-                                            {ScriptUtils.getPrettyCategory(tag.name)}
+                                            {tag.name}
                                             <br/>
                                             ({tag.count} Script{tag.count > 1 ? "s" : ""})
                                         </a>

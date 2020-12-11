@@ -21,6 +21,7 @@ const SignUp = () => {
                 console.log(firebase.auth().currentUser);
                 firebase.auth().currentUser.sendEmailVerification();
                 const user = await axios.post("/api/users/create", {email, username});
+                if(user.data.error) throw user.data.error;
                 setUser(user.data)
                 console.log("Found user data", user.data);
                 window.localStorage.setItem("userdata", JSON.stringify(user.data));
@@ -28,8 +29,8 @@ const SignUp = () => {
             } catch(error) {
                 firebase.auth().signOut();
                 window.localStorage.removeItem("userdata");
-                console.log(error.message);
-                callback({success: false, error: error.message});
+                console.error(error.message);
+                callback({success: false, error: { message: error.message }});
             }
         }
 
@@ -44,7 +45,7 @@ const SignUp = () => {
             if(result.success) {
                 Router.push("/");
             } else {
-                setError(result.error);
+                setError(ScriptUtils.tryFormatError(result.error));
             }
         })
     }

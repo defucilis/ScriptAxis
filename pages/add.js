@@ -1,12 +1,14 @@
 import Layout from '../components/Layout'
-import AddScriptForm from '../components/AddScriptForm'
+import AddScript from '../components/AddScript'
 import firebase from '../utilities/Firebase'
 import Head from 'next/head'
 import Router from 'next/router'
 import {useContext, useEffect} from 'react'
 import UserContext from '../utilities/UserContext'
+import {FetchLists} from './api/loadlists'
+import ScriptUtils from '../utilities/ScriptUtils'
 
-const Add = ({tags, categories}) => {
+const Add = ({tags, categories, talent, studios, creators}) => {
 
     //page is blocked if user is not signed in
     const {user} = useContext(UserContext);
@@ -24,8 +26,8 @@ const Add = ({tags, categories}) => {
         try {
             await firebase.auth().currentUser.sendEmailVerification();
         } catch(error) {
-            console.log(error.message);
-            alert("Failed to send verificationemail\n" + error.message);
+            console.error(error.message);
+            alert("Failed to send verificationemail\n" + ScriptUtils.tryFormatError(error.message));
         }
     }
 
@@ -37,7 +39,7 @@ const Add = ({tags, categories}) => {
             <h1>Add a Script</h1>
             {
                 user && user.emailVerified
-                ? <AddScriptForm tags={tags} categories={categories}/>
+                ? <AddScript tags={tags} categories={categories} talent={talent} studios={studios} creators={creators}/>
                 : (
                     <div>
                         <p>Please verify your email address to create scripts</p>
@@ -51,18 +53,19 @@ const Add = ({tags, categories}) => {
 }
 
 export async function getServerSideProps() {
-    const db = firebase.firestore();
-    let dbQuery = db.collection("tags");
-    let snapshot = await dbQuery.get();
-    const tags = snapshot.docs.map(doc => doc.id);
-    dbQuery = db.collection("categories");
-    snapshot = await dbQuery.get();
-    const categories = snapshot.docs.map(doc => doc.id);
-    return {
-        props: {
-            tags,
-            categories
-        }
+    let data = {};
+    try {
+        data = await FetchLists();
+        data = ScriptUtils.parseLists();
+        console.log(data);
+    } catch(error) {
+        console.log("Failed to get scripts", error);        
+    } finally {
+        return {
+            props: {
+                ...data
+            }
+        }   
     }
 }
 

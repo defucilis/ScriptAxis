@@ -13,11 +13,9 @@ const CreateUser = async (req, res) => {
         res.status(201);
         res.json(newUser)
     } catch(error) {
-        const usefulError = error.message.split("\n").filter(line => line && !line.match(/[{}[\]:]+/g)?.length);
         console.log("Failed to create user" + error.message);
-        res.status(400);
         res.json({
-            error: usefulError
+            error: { message: error.message }
         });
     } finally {
         await prisma.$disconnect();

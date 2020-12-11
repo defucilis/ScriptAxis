@@ -10,8 +10,13 @@ const FetchLists = () => {
             categories = categories.sort((a, b) => b.count - a.count);
             let talent = await prisma.talent.findMany();
             let studios = await prisma.studio.findMany();
+            let creators = await prisma.creator.findMany({
+                select: {
+                    name: true
+                }
+            })
             await prisma.$disconnect();
-            resolve({tags, categories, talent, studios});
+            resolve({tags, categories, talent, studios, creators});
         } catch(error) {
             await prisma.$disconnect();
             reject(error);
@@ -27,10 +32,9 @@ export default async (req, res) => {
         res.status(200);
         res.json(scripts);
     } catch(error) {
-        console.log("Error fetching tags and categories - " + error);
-        res.status(400);
+        console.error("error fetching tags and categories - " + error);
         res.json({
-            error
+            error: { message: error.message }
         });
     }
 };
