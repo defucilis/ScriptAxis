@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext} from 'react'
+import {useState, useEffect, useContext, useRef} from 'react'
 import style from './ScriptDetails.module.css'
 import Link from 'next/link'
 import ScriptUtils from '../utilities/ScriptUtils'
@@ -73,6 +73,7 @@ const ScriptDetails = ({script}) => {
     const {user} = useContext(UserContext);
     const [isLiked, setIsLiked] = useState(false);
     const [scriptLikes, setScriptLikes] = useState(0);
+    const iFrameRef = useRef();
     const [iFrameLoading, setIFrameLoading] = useState(true);
     useEffect(() => {
         if(!user || !script) return;
@@ -119,6 +120,20 @@ const ScriptDetails = ({script}) => {
         }
     }
 
+    const [videoElement, setVideoElement] = useState(null);
+    const handleIFrameLoaded = () => {
+        setIFrameLoading(false);
+
+        //this doesn't work due to CORS, bummer...
+        /*
+        const element = iFrameRef.current.contentWindow.document.getElementsByTagName("video");
+        setVideoElement(element)
+        const videos = element.ontimeupdate = () => {
+            if(videoElement) console.log("Playback Time", videoElement.currentTime);
+        }
+        */
+    }
+
     //todo - we could show the thumbnail while waiting for the iframe to load...
 
     return (
@@ -146,8 +161,9 @@ const ScriptDetails = ({script}) => {
                                 style={{display: iFrameLoading ? "none" : "block"}} 
                                 src={getEmbed(script.streamingUrl)} 
                                 width={1000} height={500} 
+                                ref={iFrameRef}
                                 allowFullScreen 
-                                onLoad={() => setIFrameLoading(false)} 
+                                onLoad={() => handleIFrameLoaded()} 
                             />
                             {iFrameLoading ? <img src={script.thumbnail} /> : null}
                     </>) : <img src={script.thumbnail} />
