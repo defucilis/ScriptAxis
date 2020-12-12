@@ -1,5 +1,6 @@
-import Layout from '../components/Layout'
 import Head from 'next/head'
+
+import Layout from '../components/layout/Layout'
 
 const NotFound = () => {
     return (

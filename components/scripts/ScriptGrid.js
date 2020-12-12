@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react';
 
 import ScriptTile from './ScriptTile'
+
 import style from './ScriptGrid.module.css';
 
 const ScriptGrid = ({scripts, customStyle}) => {

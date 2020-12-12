@@ -1,9 +1,12 @@
-import Layout from '../components/Layout'
-import AddScript from '../components/AddScript'
-import firebase from '../utilities/Firebase'
+import {useContext, useEffect} from 'react'
 import Head from 'next/head'
 import Router from 'next/router'
-import {useContext, useEffect} from 'react'
+
+import firebase from '../utilities/Firebase'
+
+import Layout from '../components/layout/Layout'
+import AddScript from '../components/forms/AddScript'
+
 import UserContext from '../utilities/UserContext'
 import {FetchLists} from './api/loadlists'
 import ScriptUtils from '../utilities/ScriptUtils'

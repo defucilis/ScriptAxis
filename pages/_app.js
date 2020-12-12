@@ -1,10 +1,12 @@
-import firebase from '../utilities/Firebase'
+import {useState, useEffect} from 'react'
+import Router from "next/router";
+
 import "@yaireo/tagify/dist/tagify.css"
 import "react-datepicker/dist/react-datepicker.css";
+
+import AuthManager from '../components/functional/AuthManager'
+
 import './index.css'
-import Router from "next/router";
-import {useState, useEffect} from 'react'
-import AuthManager from '../components/AuthManager'
 
 const App = ({Component, pageProps}) => {
     const [loading, setLoading] = useState(false);

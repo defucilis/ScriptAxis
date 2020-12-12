@@ -2,10 +2,12 @@ import {useState, useEffect, useRef, useContext} from 'react'
 import Link from 'next/link'
 import Router from 'next/router'
 import Image from 'next/image'
+
 import {FaSearch} from 'react-icons/fa'
-import ScriptUtils from '../utilities/ScriptUtils'
 import axios from 'axios'
-import UserContext from '../utilities/UserContext'
+
+import ScriptUtils from '../../utilities/ScriptUtils'
+import UserContext from '../../utilities/UserContext'
 
 import styles from './Header.module.css'
 

@@ -1,14 +1,17 @@
 import {useState, useEffect, useContext, useRef} from 'react'
-import style from './ScriptDetails.module.css'
 import Link from 'next/link'
-import ScriptUtils from '../utilities/ScriptUtils'
+
+import moment from 'moment'
+import axios from 'axios'
 import { FaThumbsUp } from 'react-icons/fa'
 import { FaHeart } from 'react-icons/fa'
 import { FaRegEye } from 'react-icons/fa'
 import ReactMarkdown from 'react-markdown'
-import moment from 'moment'
-import UserContext from '../utilities/UserContext'
-import axios from 'axios'
+
+import ScriptUtils from '../../utilities/ScriptUtils'
+import UserContext from '../../utilities/UserContext'
+
+import style from './ScriptDetails.module.css'
 
 const getEmbed = url => {
     let iframeLink = "";

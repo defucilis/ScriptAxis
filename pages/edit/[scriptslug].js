@@ -2,8 +2,8 @@ import {useContext, useEffect} from 'react'
 import Router from 'next/router'
 import Head from 'next/head'
 
-import Layout from '../../components/Layout'
-import EditScript from '../../components/EditScript'
+import Layout from '../../components/layout/Layout'
+import EditScript from '../../components/forms/EditScript'
 
 import ScriptUtils from '../../utilities/ScriptUtils'
 import UserContext from '../../utilities/UserContext'

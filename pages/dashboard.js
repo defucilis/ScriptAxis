@@ -1,9 +1,12 @@
-import Layout from '../components/Layout'
+import {useContext, useEffect} from 'react'
 import Head from 'next/head'
 import Router from 'next/router'
 import Link from 'next/link'
+
 import firebase from '../utilities/Firebase'
-import {useContext, useEffect} from 'react'
+
+import Layout from '../components/layout/Layout'
+
 import UserContext from '../utilities/UserContext'
 
 const Dashboard = () => {

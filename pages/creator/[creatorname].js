@@ -1,8 +1,10 @@
-import Layout from '../../components/Layout'
 import {useRouter} from 'next/router'
+import Head from 'next/head'
+
+import Layout from '../../components/layout/Layout'
 import ScriptUtils from '../../utilities/ScriptUtils'
 import ScriptGrid from '../../components/ScriptGrid'
-import Head from 'next/head'
+
 import {FetchCreatorScripts} from '../api/scripts/creator'
 
 const Creator = ({scripts}) => {

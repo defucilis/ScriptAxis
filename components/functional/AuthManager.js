@@ -1,7 +1,9 @@
 import {useState, useEffect, useMemo} from 'react'
-import firebase from '../utilities/Firebase'
-import UserContext from '../utilities/UserContext'
+
 import axios from 'axios'
+import firebase from '../../utilities/Firebase'
+
+import UserContext from '../../utilities/UserContext'
 
 const AuthManager = ({children}) => {
     const [user, setUser] = useState({waiting: true});

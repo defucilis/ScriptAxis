@@ -1,7 +1,9 @@
 import Head from 'next/head'
-import Layout from '../components/Layout'
+
+import Layout from '../components/layout/Layout'
+import AdminPanel from '../components/dashboard/AdminPanel'
+
 import {FetchSlugs} from './api/scripts/allslugs'
-import AdminPanel from '../components/AdminPanel'
 
 const TestData = ({existingScripts}) => {
     

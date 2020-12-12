@@ -1,10 +1,10 @@
 import {useState, useContext} from 'react'
-import Layout from '../components/Layout'
 import Head from 'next/head'
-import Link from 'next/link'
 import Router from 'next/router'
+
+import Layout from '../components/layout/Layout'
+
 import firebase from '../utilities/Firebase'
-import axios from 'axios'
 import UserContext from '../utilities/UserContext'
 
 import style from './signin.module.css'

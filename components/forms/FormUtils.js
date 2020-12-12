@@ -1,7 +1,7 @@
 import {useRef, useState, useEffect} from 'react'
 import {useDropzone} from 'react-dropzone'
-
 import dynamic from 'next/dynamic'
+
 const TagifyTags = dynamic(() => import("@yaireo/tagify/dist/react.tagify"), { ssr: false });
 import ReactDatepicker from 'react-datepicker'
 import {BsCaretRightFill} from 'react-icons/bs'

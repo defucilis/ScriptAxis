@@ -1,13 +1,15 @@
 import {useState, useEffect, useReducer} from 'react'
-import style from './Filters.module.css'
-import ScriptUtils from '../utilities/ScriptUtils'
-import Checkbox from './Checkbox'
-import { FaCheck } from 'react-icons/fa'
-
 import dynamic from 'next/dynamic'
-const Tags = dynamic(() => import("@yaireo/tagify/dist/react.tagify"), { ssr: false });
 
+const Tags = dynamic(() => import("@yaireo/tagify/dist/react.tagify"), { ssr: false });
+import { FaCheck } from 'react-icons/fa'
 import ReactSlider from 'react-slider'
+
+import Checkbox from '../forms/Checkbox'
+
+import ScriptUtils from '../../utilities/ScriptUtils'
+
+import style from './Filters.module.css'
 
 const reduceFilters = (currentFilters, action) => {
     let newFilters = {...currentFilters};

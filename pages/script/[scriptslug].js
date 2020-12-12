@@ -1,7 +1,9 @@
-import Layout from '../../components/Layout'
-import ScriptUtils from '../../utilities/ScriptUtils'
-import ScriptDetails from '../../components/ScriptDetails'
 import Head from 'next/head'
+
+import Layout from '../../components/layout/Layout'
+import ScriptDetails from '../../components/scripts/ScriptDetails'
+
+import ScriptUtils from '../../utilities/ScriptUtils'
 import {FetchScript} from '../api/scripts/slug'
 
 const Script = ({script}) => {

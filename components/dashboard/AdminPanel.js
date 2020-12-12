@@ -4,11 +4,11 @@ import Router from 'next/router'
 import axios from 'axios'
 import slugify from 'slugify'
 
-import GetTestData from '../utilities/TestData'
-import UserContext from '../utilities/UserContext'
-import ScriptUtils from '../utilities/ScriptUtils'
-import FirebaseUtils from '../utilities/FirebaseUtils'
-import { Dropzone } from '../components/FormUtils'
+import GetTestData from '../../utilities/TestData'
+import UserContext from '../../utilities/UserContext'
+import ScriptUtils from '../../utilities/ScriptUtils'
+import FirebaseUtils from '../../utilities/FirebaseUtils'
+import { Dropzone } from '../forms/FormUtils'
 
 
 import style from './AdminPanel.module.css'

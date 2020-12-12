@@ -4,9 +4,9 @@ import * as yup from 'yup';
 import ReactMarkdown from 'react-markdown'
 
 import {Input, TextArea, Select, Autocomplete, Tags, Dropzone, Datepicker, Collapsible} from './FormUtils';
-import NavigationPrompt from './NavigationPrompt'
-import ScriptUtils from '../utilities/ScriptUtils'
-import UserContext from '../utilities/UserContext'
+import NavigationPrompt from '../functional/NavigationPrompt'
+import ScriptUtils from '../../utilities/ScriptUtils'
+import UserContext from '../../utilities/UserContext'
 
 import style from './ScriptForm.module.css'
 

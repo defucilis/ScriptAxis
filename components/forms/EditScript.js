@@ -4,10 +4,9 @@ import Router from 'next/router';
 import axios from 'axios'
 import slugify from 'slugify'
 import { FaCog } from 'react-icons/fa'
-import ReactMarkdown from 'react-markdown'
 
-import FirebaseUtils from '../utilities/FirebaseUtils'
-import ScriptUtils from '../utilities/ScriptUtils'
+import FirebaseUtils from '../../utilities/FirebaseUtils'
+import ScriptUtils from '../../utilities/ScriptUtils'
 import ScriptForm from './ScriptForm';
 import style from './AddScript.module.css'
 
