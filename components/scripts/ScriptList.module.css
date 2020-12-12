@@ -1,0 +1,57 @@
+.scriptlist {
+    margin: 1em 0;
+}
+
+.scriptlist > li {
+    height: 4em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
+.scriptlist > li > div {
+    display: flex;
+    height: 100%;
+}
+
+.scriptlist img {
+    height: 100%;
+    width: auto;
+    margin-right: 1em;
+    border-radius: 5px;
+}
+
+.scriptlist a {
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
+}
+
+.scriptlist a:hover {
+    color: #e8739c;
+}
+
+.overview {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.overview a:last-child {
+    color: #777;
+}
+
+.overview a:last-child:hover {
+    color: #e8739c;
+}
+
+.scriptlist button {
+    background-color: #202020;
+    color: #fff;
+    font-size: 1.2em;
+    border: 0;
+    border-radius: 5px;
+    margin-left: 1em;
+    height: 75%;
+}

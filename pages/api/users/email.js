@@ -4,14 +4,20 @@ const FetchUser = (email) => {
     return new Promise(async (resolve, reject) => {
         const prisma = new PrismaClient({log: ["query"]});
         try {
+            const scriptSelect = { select: { 
+                slug: true, 
+                name: true, 
+                thumbnail: true, 
+                creator: { select: { name: true } } 
+            }}
             const users = await prisma.user.findFirst({
                 where: {
                     email: email
                 },
                 include: {
                     creator: { select: { name: true }},
-                    likedScripts: { select: { slug: true, name: true, thumbnail: true }},
-                    ownedScripts: { select: { slug: true, name: true, thumbnail: true }}
+                    likedScripts: scriptSelect,
+                    ownedScripts: scriptSelect,
                 }
             });
             await prisma.$disconnect();

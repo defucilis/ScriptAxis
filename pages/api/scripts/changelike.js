@@ -10,7 +10,7 @@ const VerifyEmail = (scriptSlug, userId, creatorName, isLiked) => {
                 where: { id: userId },
                 data: { likedScripts: isLiked
                     ? { connect: { slug: scriptSlug } }
-                    : { disconnect: { slug: scriptSlug } } 
+                    : { disconnect: { slug: scriptSlug } }
                 }
             }));
 
@@ -20,11 +20,9 @@ const VerifyEmail = (scriptSlug, userId, creatorName, isLiked) => {
                 where: {slug: scriptSlug},
                 data: isLiked 
                     ? { 
-                        likedBy: { connect: { id: userId }},
                         likeCount: { increment: 1 }
                     }
                     : {
-                        likedBy: { disconnect: { id: userId }},
                         likeCount: { decrement: 1 }
                     }
             }));
