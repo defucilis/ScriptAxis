@@ -56,8 +56,7 @@ export async function getServerSideProps() {
     let data = {};
     try {
         data = await FetchLists();
-        data = ScriptUtils.parseLists();
-        console.log(data);
+        data = ScriptUtils.parseDatabaseLists(data);
     } catch(error) {
         console.log("Failed to get scripts", error);        
     } finally {
