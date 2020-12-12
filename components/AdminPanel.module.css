@@ -14,6 +14,10 @@
     padding: 0.25em 0.5em;
 }
 
+.buttons button:last-child {
+    margin-right: 0;
+}
+
 .buttons input {
     font-size: 1.2em;
     width: 4em;
@@ -33,4 +37,26 @@
 
 .output li {
     font-family: 'Courier New', Courier, monospace;
+}
+
+.dropzone {
+    min-height: 4em;
+    min-width: 36em;
+    border: 2px dashed #aaa;
+    display: grid;
+    place-items: center;
+    background-color: #050505;
+    transition: all 0.3s;
+    padding: 0em 1em;
+    margin-right: 1em;
+}
+
+.dropzoneon {
+    border: 2px solid #e8739c;
+    background-color: #963658;
+    transition: all 0.3s;
+}
+
+.dropzone p, .dropzone li {
+    font-size: 1.2em;
 }
