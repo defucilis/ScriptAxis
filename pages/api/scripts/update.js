@@ -79,7 +79,7 @@ const UpdateScript = async (req, res) => {
         //If talents were included, add them to the talent table
         if(add.talent) {
             add.talent.forEach(talent => {
-                console.log("Adding talent", tag);
+                console.log("Adding talent", talent);
                 transaction.push(prisma.talent.upsert({
                     where: {name: talent},
                     create: {name: talent},
