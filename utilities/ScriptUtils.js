@@ -299,7 +299,7 @@ const tryFormatError = error => {
         }
         return output.substr(0, endIndex);
     } catch(e) {
-        console.log("Failed to format error", error, e);
+        //console.log("Failed to format error", error, e);
     }
 }
 

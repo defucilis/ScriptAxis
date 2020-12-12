@@ -251,6 +251,7 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
                     multiple: false,
                     noKeyboard: true,
                     preventDropOnDocument: true,
+                    pasteable: true
                 }}
                 onChange={handleChange}
                 onError={setError}
