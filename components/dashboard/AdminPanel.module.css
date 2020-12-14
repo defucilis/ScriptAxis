@@ -1,9 +1,10 @@
 .buttons {
     display: flex;
     justify-content: flex-start;
+    margin-bottom: 1em;
 }
 
-.buttons button {
+.buttons button, .buttons a {
     font-size: 1.2em;
     border: 0;
     background-color: #e8739c;
@@ -12,6 +13,7 @@
     border-radius: 5px;
     margin-right: 1em;
     padding: 0.25em 0.5em;
+    cursor: pointer;
 }
 
 .buttons button:last-child {
@@ -59,4 +61,22 @@
 
 .dropzone p, .dropzone li {
     font-size: 1.2em;
+}
+
+.progressbg {
+    width: 100%;
+    height: 1em;
+    border: 1px solid white;
+    border-radius: 5px;
+    margin-bottom: 1em;
+    display: none;
+}
+
+.progressbar {
+    position: relative;
+    left: 0;
+    height: 100%;
+    background-color: #e8739c;
+    transition: all 0.5s;
+    width: 0%;
 }

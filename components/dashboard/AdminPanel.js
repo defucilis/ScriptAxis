@@ -1,5 +1,6 @@
-import {useState, useEffect, useContext} from 'react'
+import {useState, useEffect, useContext, useRef} from 'react'
 import Router from 'next/router'
+import Link from 'next/link'
 
 import axios from 'axios'
 import slugify from 'slugify'
@@ -21,21 +22,21 @@ const ClearData = async (onSuccess, onFail) => {
         onSuccess(response.data);
     } catch(error) {
         console.error("error", error);
-        onFail(ScriptUtils.tryFormatError(error.message));
+        onFail("Error: " + ScriptUtils.tryFormatError(error.message));
     }
 }
 
-const AddData = async(count, existingScripts, onProgress, onSuccess, onFail) => {
+const AddData = async(count, existingScripts, onMessage, onProgress, onSuccess, onFail) => {
     const scripts = GetTestData().slice(0, count);
     let errorCount = 0;
 
-    onProgress(`Adding ${scripts.length} scripts to the database`);
+    onMessage(`Adding ${scripts.length} scripts to the database`);
 
     for(let i = 0; i < scripts.length; i++) {
         const script = scripts[i];
 
         try {
-            onProgress(`Inserting ${script.name}`)
+            onMessage(`Inserting ${script.name}`)
 
             if(existingScripts.findIndex(s => s.name === script.name) !== -1) throw ({ message: "Script already exists!"});
 
@@ -43,12 +44,14 @@ const AddData = async(count, existingScripts, onProgress, onSuccess, onFail) => 
             if(response.data.error) throw response.data.error;
             console.log("data", response.data);
 
-            onProgress(`${script.name} sucessfully inserted (${i + 1}/${scripts.length})`);
-            onProgress("");
+            onProgress(i + 1, scripts.length);
+            onMessage(`${script.name} sucessfully inserted (${i + 1}/${scripts.length})`);
+            onMessage("");
         } catch(error) {
             console.error("error", error);
-            onProgress("Error: " + ScriptUtils.tryFormatError(error.message));
-            onProgress("");
+            onProgress(i + 1, scripts.length);
+            onMessage("Error: " + ScriptUtils.tryFormatError(error.message));
+            onMessage("");
             errorCount++;
         }
     }
@@ -57,20 +60,20 @@ const AddData = async(count, existingScripts, onProgress, onSuccess, onFail) => 
     else onFail(errorCount, scripts.length);
 }
 
-const Aggregate = async(onProgress, onSuccess, onFail) => {
-    onProgress(`Running data aggregation`);
+const Aggregate = async(onMessage, onSuccess, onFail) => {
+    onMessage(`Running data aggregation`);
 
     try {
         const response = await axios.get("/api/admin/aggregate");
         if(response.data.error) throw response.data.error;
         console.log("data", response.data);
-        onProgress(`Finished aggregating creator data: ${JSON.stringify(response.data, null, 2)}`);
-        onProgress("");
+        onMessage(`Finished aggregating creator data: ${JSON.stringify(response.data, null, 2)}`);
+        onMessage("");
         onSuccess();
     } catch(error) {
         console.error("error", error);
-        onProgress("Error: " + ScriptUtils.tryFormatError(error.message));
-        onProgress("");
+        onMessage("Error: " + ScriptUtils.tryFormatError(error.message));
+        onMessage("");
         onFail();
     }
 }
@@ -86,7 +89,23 @@ const UploadFile = async (file, name, onMessage, onSuccess, onFail) => {
         onMessage("");
         onFail();
     }
+}
 
+const GetJsonBackup = async (onMessage, onSuccess, onFail) => {
+    onMessage("Fetching all scripts as JSON");
+    try {
+        const response = await axios({
+            url: "/api/scripts/asJson",
+            method: 'GET',
+            responseType: 'blob',
+        });
+        if(response.data.error) throw response.data.error;
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        onSuccess(url);
+    } catch(error) {
+        console.error("error", error);
+        onFail();
+    }
 }
 
 const AdminPanel = ({existingScripts}) => {
@@ -136,19 +155,26 @@ const AdminPanel = ({existingScripts}) => {
         })
     }
 
+    const progressBarRef = useRef();
+    const progressBarParentRef = useRef();
     const StartAddData = () => {
         setRunning(true);
 
-        AddData(count, scripts, progressMessage => {
-            addMessage(progressMessage);
+        progressBarParentRef.current.style.setProperty("display", "block");
+        progressBarRef.current.style.setProperty("width", "0%");
+
+        AddData(count, scripts, addMessage, (count, total) => {
+            progressBarRef.current.style.setProperty("width", `${Math.round(count * 100 / total)}%`);
         }, addedCount => {
             addMessage(`Successfully added ${addedCount} scripts to database`);
             addMessage("");
+            progressBarParentRef.current.style.setProperty("display", "none");
             setRunning(false);
         }, (failCount, scriptCount) => {
             addMessage("Finished adding scripts");
             addMessage(`Error: failed ${failCount} out of ${scriptCount}`);
             addMessage("");
+            progressBarParentRef.current.style.setProperty("display", "none");
             setRunning(false);
         })
     }
@@ -198,7 +224,18 @@ const AdminPanel = ({existingScripts}) => {
         })
 
         addMessage(`Uploading thumbnail image ${thumbnailImage.target.value[0].name} (${thumbnailImage.target.value[0].size} bytes)`);
+    }
 
+    const [preparedDownload, setPreparedDownload] = useState("");
+    const StartGetJsonBackup = () => {
+        setPreparedDownload("");
+        GetJsonBackup(addMessage, url => {
+            setPreparedDownload(url);
+            addMessage(`Successfully fetched script data. Click Download to get JSON file`);
+            addMessage("");
+        }, error => {
+            addMessage("Error: " + error);
+        });
     }
 
     
@@ -208,7 +245,7 @@ const AdminPanel = ({existingScripts}) => {
     return (
         <>
         <div className={`${style.buttons} ${running ? style.hidden : ""}`}>
-        <button onClick={ClearOutput}>Clear Output</button>
+            <button onClick={ClearOutput}>Clear Output</button>
             <button onClick={StartClearData}>Wipe Database</button>
             <button onClick={StartAddData}>Add Test Data</button>
             <input type="number" id="count" onChange={e => setCount(parseInt(e.target.value))} value={count}></input>
@@ -235,6 +272,20 @@ const AdminPanel = ({existingScripts}) => {
                 value={thumbnailImage}
             />
             <button onClick={StartUploadFile}>Upload Image</button>
+        </div>
+        <div className={`${style.buttons} ${running ? style.hidden : ""}`}>
+            <button onClick={StartGetJsonBackup}>Prepare JSON Backup</button>
+            <Link href={preparedDownload}>
+                <a 
+                    style={preparedDownload !== "" ? null : {display: "none"}}
+                    download={"ScriptAxisBackup.json"}
+                >
+                    Download JSON Backup
+                </a>
+            </Link>
+        </div>
+        <div className={style.progressbg} ref={progressBarParentRef}>
+            <div className={style.progressbar} ref={progressBarRef}></div>
         </div>
         <div className={style.output}>
             <ul>
