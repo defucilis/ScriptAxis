@@ -5,14 +5,13 @@ import Router from 'next/router'
 import Layout from '../components/layout/Layout'
 import Dashboard from '../components/dashboard/Dashboard'
 
-import UserContext from '../utilities/UserContext'
+import useUser from '../utilities/auth/useUser'
 
 const DashboardPage = () => {
 
     //page is blocked if user is not signed in
-    const {user} = useContext(UserContext);
+    const {user} = useUser();
     useEffect(() => {
-        if(user !== null && user.waiting) return;
         if(user === null) Router.push("/");
     }, [user])
 

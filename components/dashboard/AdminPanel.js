@@ -6,7 +6,7 @@ import axios from 'axios'
 import slugify from 'slugify'
 
 import GetTestData from '../../utilities/TestData'
-import UserContext from '../../utilities/UserContext'
+import useUser from '../../utilities/auth/useUser'
 import ScriptUtils from '../../utilities/ScriptUtils'
 import FirebaseUtils from '../../utilities/FirebaseUtils'
 import { Dropzone } from '../forms/FormUtils'
@@ -123,13 +123,19 @@ const AdminPanel = ({existingScripts}) => {
         setCount(GetTestData().length);
     }, [])
 
+    const {user} = useUser();
+    if(!user) Router.push("/");
+
     //page is blocked if user is not signed in
+    /*
     const {user} = useContext(UserContext);
+    /*
     useEffect(() => {
         if(user !== null && user.waiting) return;
         if(user === null) Router.push("/");
         else if(!user.isAdmin) Router.push("/");
     }, [user])
+    */
 
     const addMessage = message => {
         setMessages(cur => ({list: [...cur.list, message]}));
@@ -240,7 +246,7 @@ const AdminPanel = ({existingScripts}) => {
 
     
 
-    if(user === null || user.waiting) return <div></div>
+    //if(user === null || user.waiting) return <div></div>
 
     return (
         <>

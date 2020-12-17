@@ -1,20 +1,20 @@
-import {useState, useContext} from 'react'
+import {useState} from 'react'
 import Head from 'next/head'
 import Router from 'next/router'
 
 import axios from 'axios'
-import firebase from '../utilities/Firebase'
+import firebase from '../utilities/initFirebase'
 
 import Layout from '../components/layout/Layout'
 
-import UserContext from '../utilities/UserContext'
+import useUser from '../../utilities/auth/useUser'
 
 import style from './signin.module.css'
 
 const SignUp = () => {
 
     const [error, setError] = useState("");
-    const {setUser} = useContext(UserContext);
+    const {login} = useUser();
 
     const signUp = e => {
         const doSignUp = async (email, username, password, callback) => {
@@ -25,13 +25,11 @@ const SignUp = () => {
                 firebase.auth().currentUser.sendEmailVerification();
                 const user = await axios.post("/api/users/create", {email, username});
                 if(user.data.error) throw user.data.error;
-                setUser(user.data)
-                console.log("Found user data", user.data);
-                window.localStorage.setItem("userdata", JSON.stringify(user.data));
+                const finalUser = await login(email, password);
+                console.log("Found user data", finalUser);
                 callback({success: true});
             } catch(error) {
                 firebase.auth().signOut();
-                window.localStorage.removeItem("userdata");
                 console.error(error.message);
                 callback({success: false, error: { message: error.message }});
             }

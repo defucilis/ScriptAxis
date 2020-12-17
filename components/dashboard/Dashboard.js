@@ -5,13 +5,16 @@ import Link from 'next/link'
 import axios from 'axios'
 
 import ScriptList from '../scripts/ScriptList'
+import useUser from '../../utilities/auth/useUser'
 
 import style from './Dashboard.module.css'
 
 const Dashboard = ({user}) => {
+
+    const {logout} = useUser();
+
     const signOut = () => {
-        firebase.auth().signOut();
-        Router.push("/");
+        logout("/");
     }
 
     const [likedScripts, setLikedScripts] = useState([]);
@@ -49,6 +52,22 @@ const Dashboard = ({user}) => {
     const edit = script => {
 
     }
+
+    return (
+        <div className={style.dashboard}>
+            <div className={style.quickfunctions}>
+                <h3>Quick Functions</h3>
+                <button onClick={signOut}>Sign Out</button>
+                {
+                    !(user && user.isAdmin) ? null : (
+                        <Link href="/testdata">
+                            <a>Go to Admin Controls</a>
+                        </Link>
+                    )
+                }  
+            </div>
+        </div>
+    )
 
     return (
         <div className={style.dashboard}>

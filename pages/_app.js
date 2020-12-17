@@ -4,7 +4,7 @@ import Router from "next/router";
 import "@yaireo/tagify/dist/tagify.css"
 import "react-datepicker/dist/react-datepicker.css";
 
-import AuthManager from '../components/functional/AuthManager'
+import initFirebase from '../utilities/initFirebase'
 
 import './index.css'
 
@@ -21,15 +21,15 @@ const App = ({Component, pageProps}) => {
             Router.events.off("routeChangeComplete", endLoad);
             Router.events.off("routeChangeError", endLoad);
         }
+        
+        initFirebase();
     }, []);
 
     return (
         <>
             <div className={`loader top ${loading ? "loadingtop" : "notloadingtop"}`}></div>
             <div className={`loader bottom ${loading ? "loadingbottom" : "notloadingbottom"}`}></div>
-            <AuthManager>
-                <Component {...pageProps} />
-            </AuthManager>
+            <Component {...pageProps} />
         </>
     )
 }

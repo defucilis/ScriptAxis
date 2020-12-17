@@ -7,13 +7,13 @@ import {FaSearch} from 'react-icons/fa'
 import axios from 'axios'
 
 import ScriptUtils from '../../utilities/ScriptUtils'
-import UserContext from '../../utilities/UserContext'
+import useUser from '../../utilities/auth/useUser'
 
 import styles from './Header.module.css'
 
 const Header = ({page}) => {
 
-    const {user} = useContext(UserContext)
+    const {user} = useUser();
     const [scriptCount, setScriptCount] = useState(0);
     const [categoryCounts, setCategoryCounts] = useState([]);
     const [tagCounts, setTagCounts] = useState([]);

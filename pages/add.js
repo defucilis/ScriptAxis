@@ -1,20 +1,20 @@
-import {useContext, useEffect} from 'react'
+import {useEffect} from 'react'
 import Head from 'next/head'
 import Router from 'next/router'
 
-import firebase from '../utilities/Firebase'
+import firebase from '../utilities/initFirebase'
 
 import Layout from '../components/layout/Layout'
 import AddScript from '../components/forms/AddScript'
 
-import UserContext from '../utilities/UserContext'
+import useUser from '../../utilities/auth/useUser'
 import {FetchLists} from './api/loadlists'
 import ScriptUtils from '../utilities/ScriptUtils'
 
 const Add = ({tags, categories, talent, studios, creators}) => {
 
     //page is blocked if user is not signed in
-    const {user} = useContext(UserContext);
+    const {user} = useUser();
     useEffect(() => {
         if(user && user.waiting) return;
         if(user === null) Router.push("/");

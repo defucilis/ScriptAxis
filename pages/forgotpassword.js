@@ -4,15 +4,13 @@ import Router from 'next/router'
 
 import Layout from '../components/layout/Layout'
 
-import firebase from '../utilities/Firebase'
-import UserContext from '../utilities/UserContext'
+import firebase from '../utilities/initFirebase'
 
 import style from './signin.module.css'
 
 const SignIn = () => {
 
     const [error, setError] = useState("");
-    const {setUser} = useContext(UserContext);
 
     const reset = e => {
         const doReset = async (email, callback) => {
