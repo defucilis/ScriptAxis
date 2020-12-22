@@ -15,7 +15,8 @@ import { mapUserData } from './mapUserData'
 const authContext = createContext();
 
 const useProvideAuth = () => {
-    const [user, setUser] = useState()
+    const [user, setUser] = useState();
+    const [fbUser, setFbUser] = useState();
     const router = useRouter()
 
     //Promise-style login method
@@ -116,15 +117,12 @@ const useProvideAuth = () => {
                 if (user) {
                     console.log("ID token received for user ", user.email);
                     let userData = await mapUserData(user);
-                    const userFromCookie = getUserFromCookie();
-                    if(userFromCookie) userData = {...userFromCookie, ...userData};
-                    console.log("Setting cookie and user");
-                    setUserCookie(userData);
-                    setUser(userData);
+                    setFbUser(userData);
                 } else {
                     console.log("ID token unset - removing cookie and user");
-                    removeUserCookie()
-                    setUser(null)
+                    setFbUser(null);
+                    setUser(null);
+                    removeUserCookie();
                 }
             });
 
@@ -138,11 +136,19 @@ const useProvideAuth = () => {
         const userFromCookie = getUserFromCookie();
         if (!userFromCookie) {
             console.warn("No user cookie is present");
+            setFbUser(null);
             setUser(null);
             return
         }
-        setUser(userFromCookie)
+        setUser(userFromCookie);
     }, [])
+
+    useEffect(() => {
+        if(!fbUser) {
+            return;
+        }
+        refreshUserDbValues();
+    }, [fbUser])
 
     return { user, login, loginAndRedirect, logout, logoutAndRedirect, refreshUserDbValues }
 }
