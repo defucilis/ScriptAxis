@@ -9,6 +9,8 @@ const ScriptList = ({scripts, buttons}) => {
     useEffect(() => {
         if(!scripts) return;
 
+        console.log(scripts);
+
         setScriptDom(scripts.map(script => {
             return (
                 <li key={script.slug}>

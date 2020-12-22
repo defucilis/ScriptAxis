@@ -7,22 +7,41 @@ import ScriptList from '../scripts/ScriptList'
 import useUser from '../../utilities/auth/useUser'
 
 import style from './Dashboard.module.css'
+import ScriptUtils from '../../utilities/ScriptUtils'
 
-const Dashboard = ({user}) => {
+const Dashboard = () => {
 
-    const {logoutAndRedirect} = useUser();
+    const {user, refreshUserDbValues, logoutAndRedirect} = useUser();
 
     const signOut = () => {
         logoutAndRedirect("/");
     }
 
-    const [likedScripts, setLikedScripts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [likedScripts, setLikedScripts] = useState(null);
+    const [savedSearches, setSavedSearches] = useState(null);
+    const [ownedScripts, setOwnedScripts] = useState(null);
     useEffect(() => {
-        if(!user || !user.likedScripts || user.likedScripts.length === 0) {
-            setLikedScripts([]);
-            return;
+        const loadAllUserData = async email => {
+            setLoading(true);
+            const response = await axios.post("/api/users/email", {email, lean: false});
+            const userData = response.data;
+
+            if(!userData) return;
+
+            if(userData.likedScripts) setLikedScripts(userData.likedScripts.map(script => ScriptUtils.parseScriptDocument(script)));
+            else setLikedScripts([]);
+
+            if(userData.savedSearches) setSavedSearches(userData.savedSearches);
+            else setSavedSearches([]);
+
+            if(userData.ownedScripts) setOwnedScripts(userData.ownedScripts.map(script => ScriptUtils.parseScriptDocument(script)));
+            else setOwnedScripts([]);
+
+            setLoading(false);
         }
-        setLikedScripts(user.likedScripts);
+
+        if(user) loadAllUserData(user.email);
     }, [user])
 
     const unlike = async script => {
@@ -40,6 +59,7 @@ const Dashboard = ({user}) => {
                 creator: script.creator.name,
                 isLiked: false
             });
+            await refreshUserDbValues();
             if(response.data.error) throw response.data.error;
             console.log(response.data);
         } catch(error) {
@@ -65,68 +85,65 @@ const Dashboard = ({user}) => {
                     )
                 }  
             </div>
-        </div>
-    )
-
-    return (
-        <div className={style.dashboard}>
-            <div className={style.quickfunctions}>
-                <h3>Quick Functions</h3>
-                <button onClick={signOut}>Sign Out</button>
-                {
-                    !(user && user.isAdmin) ? null : (
-                        <Link href="/admin">
-                            <a>Go to Admin Controls</a>
-                        </Link>
-                    )
-                }  
-            </div>
-            <div style={{marginBottom: "2em"}}>
-                <h3>Your Favourite Scripts</h3>
-                {
-                    (likedScripts.length === 0)
-                        ? <p>You have no favorite scripts yet!</p>
-                        : (
-                            <ScriptList 
-                                scripts={likedScripts} 
+            {
+                loading ? <p>Loading...</p> : null
+            }
+            {
+                loading ? null : (
+                    <div style={{marginBottom: "2em"}}>
+                    <h3>Your Favourite Scripts</h3>
+                    {
+                        likedScripts.length === 0
+                            ? <p>You have no favorite scripts yet!</p>
+                            : (
+                                <ScriptList 
+                                    scripts={likedScripts} 
+                                    buttons={[
+                                        { text: "Un-Favorite", function: unlike }
+                                    ]}
+                                />
+                            )
+                    }
+                    </div>
+                )
+            }
+            {
+                loading ? null : (
+                    <div style={{marginBottom: "2em"}}>
+                    <h3>Your Saved Searches</h3>
+                    {
+                        savedSearches.length === 0
+                            ? (<p>You have no saved searches yet!</p>)
+                            : (
+                                <ul>
+                                    { savedSearches.map(search => {
+                                        return (<ul key={search}>
+                                            <Link href={`/scripts?${search}`}><a>{search}</a></Link>
+                                        </ul>)
+                                    })}
+                                </ul>
+                            )
+                    }
+                    </div>
+                )
+            }
+            {
+                loading ? null : (
+                    <div style={{marginBottom: "2em"}}>
+                    <h3>Your Added Scripts</h3>
+                    {
+                        ownedScripts.length === 0
+                            ? <p>You haven't created any scripts yet! <a href="/add">Create your first one now!</a></p>
+                            : <ScriptList 
+                                scripts={ownedScripts} 
                                 buttons={[
-                                    { text: "Un-Favorite", function: unlike }
+                                    { text: "Edit", function: edit }
                                 ]}
                             />
-                        )
-                }
-            </div>
-
-            <div style={{marginBottom: "2em"}}>
-                <h3>Your Saved Searches</h3>
-                {
-                    (!user || !user.savedSearches || user.savedSearches.length === 0)
-                        ? (<p>You have no saved searches yet!</p>)
-                        : (
-                            <ul>
-                                { user.savedSearches.map(search => {
-                                    return (<ul key={search}>
-                                        <Link href={`/scripts?${search}`}><a>{search}</a></Link>
-                                    </ul>)
-                                })}
-                            </ul>
-                        )
-                }
-            </div>
-
-            <div>
-                <h3>Your Added Scripts</h3>
-                {
-                    (!user || !user.ownedScripts || user.ownedScripts.length === 0)
-                        ? <p>You haven't created any scripts yet! <a href="/add">Create your first one now!</a></p>
-                        : <ScriptList 
-                            scripts={user.ownedScripts} 
-                            buttons={[
-                                { text: "Edit", function: edit }
-                            ]}
-                        />
-                }
-            </div>
+                    }
+                    </div>
+                )
+            }
         </div>
     )
 }
