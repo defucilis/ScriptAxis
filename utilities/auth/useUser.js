@@ -104,12 +104,12 @@ const useProvideAuth = () => {
             }
         })
     }
-
     
     // Firebase updates the id token every hour, this
     // makes sure the react state and the cookie are
     // both kept up to date
     useEffect(() => {
+        console.log("Adding listener");
         const cancelAuthListener = firebase
             .auth()
             .onIdTokenChanged(async (user) => {
@@ -126,7 +126,7 @@ const useProvideAuth = () => {
                     removeUserCookie()
                     setUser(null)
                 }
-            })
+            });
 
         return () => {
             cancelAuthListener()
@@ -164,6 +164,10 @@ const useUser = props => {
             setRedirecting(true);
             console.log("No user present, redirecting to", props.redirectTo);
             router.push(props.redirectTo);
+        } else if(user && !user.isAdmin && props && props.redirectIfNotAdmin && !redirecting) {
+            setRedirecting(true);
+            console.log("Logged in user isn't an admin, redirecting to", props.redirectIfNotAdmin);
+            router.push(props.redirectIfNotAdmin);
         }
     }, [props, user, redirecting])
 

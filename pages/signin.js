@@ -13,6 +13,7 @@ const SignIn = () => {
 
     const [error, setError] = useState("");
     const {login} = useUser();
+    const [waiting, setWaiting] = useState(false);
 
     const signIn = e => {
         const doSignIn = async (email, password, callback) => {
@@ -22,7 +23,11 @@ const SignIn = () => {
                 callback({success: true});
             } catch(error) {
                 console.error(error);
-                callback({success: false, error: "Incorrect username/password combination"});
+                if(error.code === "auth/wrong-password" || error.code === "auth/user-not-found") {
+                    callback({success: false, error: "Incorrect username/password combination"});
+                } else  {
+                    callback({success: false, error: "Unexpected authentication failure. Wait a minute and try again"});
+                }
             }
         }
 
@@ -30,10 +35,12 @@ const SignIn = () => {
 
         
 
+        setWaiting(true);
         doSignIn(e.target.email.value, e.target.password.value, result => {
             if(result.success) {
                 Router.push("/");
             } else {
+                setWaiting(false);
                 setError(result.error);
             }
         })
@@ -51,7 +58,12 @@ const SignIn = () => {
                 <label htmlFor="password">Password</label>
                 <input type="password" id="password" />
                 <Link href="/forgotpassword"><a className={style.forgot}>Forgot Password</a></Link>
-                <input type="submit" value="Sign In" />
+                { waiting ? (
+                    <p>Please wait...</p>
+                ) : (
+                    <input type="submit" value="Sign In" />
+                )}
+                
                 <p style={{color: "red"}}>{error}</p>
             </form>
         </Layout>

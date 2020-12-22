@@ -5,9 +5,11 @@ import AdminPanel from '../components/dashboard/AdminPanel'
 
 import {FetchSlugs} from './api/scripts/allslugs'
 
-const TestData = ({existingScripts}) => {
+import useUser from '../utilities/auth/useUser'
+
+const Admin = ({existingScripts}) => {
     
-    
+    const {user} = useUser({redirectIfNotAdmin: "/"});
 
     return (
         <Layout>
@@ -15,7 +17,7 @@ const TestData = ({existingScripts}) => {
                 <title>ScriptAxis | Admin Functions</title>
             </Head>
             <h1>Admin Functions</h1>
-            <AdminPanel existingScripts={existingScripts}/>
+            <AdminPanel user={user} existingScripts={existingScripts}/>
         </Layout>
     )
 }
@@ -35,4 +37,4 @@ export async function getServerSideProps({query}) {
     }
 }
 
-export default TestData;
+export default Admin;

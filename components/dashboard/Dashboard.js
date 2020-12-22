@@ -1,5 +1,4 @@
 import {useState, useEffect} from 'react'
-import Router from 'next/router'
 import Link from 'next/link'
 
 import axios from 'axios'
@@ -11,10 +10,10 @@ import style from './Dashboard.module.css'
 
 const Dashboard = ({user}) => {
 
-    const {logout} = useUser();
+    const {logoutAndRedirect} = useUser();
 
     const signOut = () => {
-        logout("/");
+        logoutAndRedirect("/");
     }
 
     const [likedScripts, setLikedScripts] = useState([]);
@@ -60,7 +59,7 @@ const Dashboard = ({user}) => {
                 <button onClick={signOut}>Sign Out</button>
                 {
                     !(user && user.isAdmin) ? null : (
-                        <Link href="/testdata">
+                        <Link href="/admin">
                             <a>Go to Admin Controls</a>
                         </Link>
                     )
@@ -76,7 +75,7 @@ const Dashboard = ({user}) => {
                 <button onClick={signOut}>Sign Out</button>
                 {
                     !(user && user.isAdmin) ? null : (
-                        <Link href="/testdata">
+                        <Link href="/admin">
                             <a>Go to Admin Controls</a>
                         </Link>
                     )

@@ -1,12 +1,10 @@
-import {useState, useEffect, useContext, useRef} from 'react'
-import Router from 'next/router'
+import {useState, useEffect, useRef} from 'react'
 import Link from 'next/link'
 
 import axios from 'axios'
 import slugify from 'slugify'
 
 import GetTestData from '../../utilities/TestData'
-import useUser from '../../utilities/auth/useUser'
 import ScriptUtils from '../../utilities/ScriptUtils'
 import FirebaseUtils from '../../utilities/FirebaseUtils'
 import { Dropzone } from '../forms/FormUtils'
@@ -108,7 +106,7 @@ const GetJsonBackup = async (onMessage, onSuccess, onFail) => {
     }
 }
 
-const AdminPanel = ({existingScripts}) => {
+const AdminPanel = ({user, existingScripts}) => {
 
     const [running, setRunning] = useState(false);
     const [messages, setMessages] = useState({list: []});
@@ -122,9 +120,6 @@ const AdminPanel = ({existingScripts}) => {
     useEffect(() => {
         setCount(GetTestData().length);
     }, [])
-
-    const {user} = useUser();
-    if(!user) Router.push("/");
 
     //page is blocked if user is not signed in
     /*

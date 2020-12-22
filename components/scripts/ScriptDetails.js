@@ -73,7 +73,7 @@ const getEmbed = url => {
 
 const ScriptDetails = ({script}) => {
 
-    const {user} = useUser();
+    const {user, refreshUserDbValues} = useUser();
     const [isLiked, setIsLiked] = useState(false);
     const [scriptLikes, setScriptLikes] = useState(0);
     const iFrameRef = useRef();
@@ -109,6 +109,7 @@ const ScriptDetails = ({script}) => {
                 creator: script.creator,
                 isLiked: newValue
             });
+            refreshUserDbValues();
             if(response.data.error) throw response.data.error;
             console.log(response.data);
         } catch(error) {

@@ -7,18 +7,14 @@ import firebase from '../utilities/initFirebase'
 import Layout from '../components/layout/Layout'
 import AddScript from '../components/forms/AddScript'
 
-import useUser from '../../utilities/auth/useUser'
+import useUser from '../utilities/auth/useUser'
 import {FetchLists} from './api/loadlists'
 import ScriptUtils from '../utilities/ScriptUtils'
 
 const Add = ({tags, categories, talent, studios, creators}) => {
 
     //page is blocked if user is not signed in
-    const {user} = useUser();
-    useEffect(() => {
-        if(user && user.waiting) return;
-        if(user === null) Router.push("/");
-    }, [user])
+    const {user} = useUser({redirectTo: "/"});
 
     const signOut = () => {
         firebase.auth().signOut();
