@@ -32,9 +32,13 @@ const parseScriptDocument = script => {
         thumbsDown: script.thumbsDown,
         views: script.views,
         //SFW Overrides
-        //name: "Debug Name",
-        //thumbnail: "https://planethifi.com/wp-content/uploads/2020/06/720p-696x448.jpg",
-        //studio: "Debug Studio",
+        name: script.name.split("").reverse().join(""),
+        thumbnail: "https://planethifi.com/wp-content/uploads/2020/06/720p-696x448.jpg",
+        studio: !script.studio ? null : script.studio.split("").reverse().join(""),
+        category: script.categoryName.split("").reverse().join(""),
+        tags: !script.tags ? [] : script.tags.map(tag => tag.split("").reverse().join("")),
+        streamingUrl: "https://www.google.com",
+        sourceurl: "https://www.google.com"
     };
     return output;
 }

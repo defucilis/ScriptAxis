@@ -28,6 +28,7 @@
     "react-dropzone": "^11.2.4",
     "react-formik-ui": "^5.0.2",
     "react-icons": "^4.1.0",
+    "react-json-view": "^1.19.1",
     "react-markdown": "^5.0.3",
     "react-query": "^2.26.4",
     "react-slider": "^1.1.2",

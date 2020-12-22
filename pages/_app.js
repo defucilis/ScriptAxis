@@ -6,6 +6,8 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import initFirebase from '../utilities/initFirebase'
 
+import {AuthProvider} from '../utilities/auth/useUser'
+
 import './index.css'
 
 const App = ({Component, pageProps}) => {
@@ -21,16 +23,14 @@ const App = ({Component, pageProps}) => {
             Router.events.off("routeChangeComplete", endLoad);
             Router.events.off("routeChangeError", endLoad);
         }
-        
-        initFirebase();
     }, []);
 
     return (
-        <>
+        <AuthProvider>
             <div className={`loader top ${loading ? "loadingtop" : "notloadingtop"}`}></div>
             <div className={`loader bottom ${loading ? "loadingbottom" : "notloadingbottom"}`}></div>
             <Component {...pageProps} />
-        </>
+        </AuthProvider>
     )
 }
 
