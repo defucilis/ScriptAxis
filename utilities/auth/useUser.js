@@ -17,6 +17,7 @@ const authContext = createContext();
 const useProvideAuth = () => {
     const [user, setUser] = useState();
     const [fbUser, setFbUser] = useState();
+    const [updatingFromDb, setUpdatingFromDb] = useState(false);
     const router = useRouter()
 
     //Promise-style login method
@@ -49,12 +50,16 @@ const useProvideAuth = () => {
     //Userful if we've just changed somethjing like the user's display name, liked / owner scripts, etc
     const refreshUserDbValues = () => {
         return new Promise(async (resolve, reject) => {
+            if(updatingFromDb) reject("Already running DB refresh");
+            setUpdatingFromDb(true);
             try {
                 if(!user) throw "User is not logged in!";
 
                 const newUserData = await addDbUserToCookie(user);
+                setUpdatingFromDb(false);
                 resolve(newUserData);
             } catch(error) {
+                setUpdatingFromDb(false);
                 reject(error);
             }
         })
