@@ -4,7 +4,7 @@ const FetchCreator = (name) => {
     return new Promise(async (resolve, reject) => {
         const prisma = new PrismaClient();
         try {
-            console.log("Fetching creator with data", req.body);
+            console.log("Fetching creator with data", name);
             const creator = await prisma.creator
                 .findUnique({
                     where: {
