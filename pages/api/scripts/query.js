@@ -1,7 +1,7 @@
 import {PrismaClient} from '@prisma/client'
 import ScriptUtils from '../../../utilities/ScriptUtils';
 
-const QueryScripts = ({filters, sorting}) => {
+const QueryScripts = ({filters, sorting, page}) => {
     return new Promise(async (resolve, reject) => {
         const prisma = new PrismaClient({log: ["query"]});
         try {
@@ -38,6 +38,8 @@ const QueryScripts = ({filters, sorting}) => {
             //I really don't want to do that, so I think I'll just filter them myself...
 
             let scripts = await prisma.script.findMany({
+                skip: page && page > 1 ? 18 * (page - 1) : 0,
+                take: 18,
                 where: finalWhere,
                 orderBy: sorting,
                 include: {

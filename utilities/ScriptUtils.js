@@ -234,8 +234,10 @@ const objectToQuery = input => {
     
     const filters = input.filters;
     const sorting = input.sorting;
+    const page = input.page;
     const defaultSorting = (sorting && sorting.length > 0 && sorting[0].created && sorting[0].created === "desc");
-    if(defaultSorting && (!filters || Object.keys(filters).length === 0)) return "";
+    const defaultPage = page && page == 1;
+    if(defaultSorting && defaultPage && (!filters || Object.keys(filters).length === 0)) return "";
 
     let output = {};
     if(filters.name) output.search = filters.name.contains;
@@ -252,12 +254,15 @@ const objectToQuery = input => {
     if(!defaultSorting && sorting && sorting.length > 0) {
         output.sorting = `${Object.keys(sorting[0])[0]}+${sorting[0][Object.keys(sorting[0])[0]]}`;
     }
+    if(!defaultPage && page) {
+        output.page = page;
+    }
 
     return output;
 }
 //goes from a query object parsed from a URL string and turns it into a filter object to be applied to the databas
 const queryToObject = query => {
-    let output = {filters: {}, sorting: {created: "desc"}};
+    let output = {filters: {}, sorting: {created: "desc"}, page: 1};
 
     if(query.search) output.filters.name = { contains: query.search, mode: "insensitive" };
     if(query.category) output.filters.category = {name: {equals: query.category}};
@@ -272,6 +277,9 @@ const queryToObject = query => {
     if(query.sorting) {
         const pieces = query.sorting.split(" ");
         output.sorting = [{[pieces[0]]: pieces[1]}];
+    }
+    if(query.page) {
+        output.page = query.page;
     }
 
     return output;
