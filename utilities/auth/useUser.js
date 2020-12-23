@@ -53,9 +53,9 @@ const useProvideAuth = () => {
             if(updatingFromDb) reject("Already running DB refresh");
             setUpdatingFromDb(true);
             try {
-                if(!user) throw "User is not logged in!";
+                if(!fbUser) throw "User is not logged in!";
 
-                const newUserData = await addDbUserToCookie(user);
+                const newUserData = await addDbUserToCookie(fbUser);
                 setUpdatingFromDb(false);
                 resolve(newUserData);
             } catch(error) {
