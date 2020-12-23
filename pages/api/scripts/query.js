@@ -1,25 +1,5 @@
 import {PrismaClient} from '@prisma/client'
-
-const transformDuration = index => {
-    switch(index) {
-        case 0:
-            return 0;
-        case 1:
-            return 300; //5 minutes
-        case 2:
-            return 600; //10 minutes
-        case 3:
-            return 900; //15 minutes
-        case 4:
-            return 1200; //20 minutes
-        case 5:
-            return 1800; //30 minutes
-        case 6:
-            return 3600; //60 minutes
-        case 7:
-            return 7200; //120 minutes
-    }
-}
+import ScriptUtils from '../../../utilities/ScriptUtils';
 
 const QueryScripts = ({filters, sorting}) => {
     return new Promise(async (resolve, reject) => {
@@ -43,8 +23,8 @@ const QueryScripts = ({filters, sorting}) => {
             if(filters.category) finalWhere.AND.push({category: filters.category});
 
             //duration needs to be split into two checks for min and max
-            if(filters.minDuration) finalWhere.AND.push({duration: {gte: transformDuration(Number(filters.minDuration))}});
-            if(filters.maxDuration) finalWhere.AND.push({duration: {lte: transformDuration(Number(filters.maxDuration))}});
+            if(filters.minDuration) finalWhere.AND.push({duration: {gte: ScriptUtils.indexToDuration(Number(filters.minDuration))}});
+            if(filters.maxDuration) finalWhere.AND.push({duration: {lte: ScriptUtils.indexToDuration(Number(filters.maxDuration))}});
 
             if(filters.studio) finalWhere.AND.push({studio: filters.studio});
 

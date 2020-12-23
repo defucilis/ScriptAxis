@@ -141,3 +141,16 @@
     width: 60%;
     height: 60%;
 }
+
+.button {
+    display: grid;
+    place-items: center;
+}
+
+.button button {
+    border: 0;
+    background-color: #e8739c;
+    font-size: 1.2em;
+    padding: 0.5em;
+    border-radius: 5px;
+}

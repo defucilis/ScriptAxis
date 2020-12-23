@@ -17,7 +17,7 @@ const FetchUser = (email, lean) => {
                 creator: { select: { name: true } } 
             }};
 
-            const users = await prisma.user.findFirst({
+            let users = await prisma.user.findFirst({
                 where: {
                     email: email
                 },
@@ -27,6 +27,7 @@ const FetchUser = (email, lean) => {
                     ownedScripts: scriptSelect,
                 }
             });
+            if(lean) delete(users.savedFilters);
             await prisma.$disconnect();
             resolve(users);
         } catch(error) {

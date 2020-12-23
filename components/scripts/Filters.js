@@ -4,10 +4,12 @@ import dynamic from 'next/dynamic'
 const Tags = dynamic(() => import("@yaireo/tagify/dist/react.tagify"), { ssr: false });
 import { FaCheck } from 'react-icons/fa'
 import ReactSlider from 'react-slider'
+import axios from 'axios'
 
 import Checkbox from '../forms/Checkbox'
 
 import ScriptUtils from '../../utilities/ScriptUtils'
+import useUser from '../../utilities/auth/useUser'
 
 import style from './Filters.module.css'
 
@@ -112,6 +114,7 @@ const Filters = ({query, onFilter}) => {
     const [initialStudio, setInitialStudio] = useState([]);
     const [sourceUrl, setSourceUrl] = useState("");
     const [streamingUrl, setStreamingUrl] = useState("");
+    const {user} = useUser();
     useEffect(() => {
         window.setTimeout(() => {
             const storedTagCounts = window.localStorage.getItem("storedTagCounts");
@@ -235,6 +238,33 @@ const Filters = ({query, onFilter}) => {
         setFilters({
             streamingUrl: e.target.checked ? {value: true} : {}
         })
+    }
+
+    const [savingSearch, setSavingSearch] = useState(false);
+    const saveSearch = async () => {
+        if(!user) {
+            console.error("No user logged in, how did you even call this method?")
+            return;
+        }
+
+        const queryString = ScriptUtils.queryToString(ScriptUtils.objectToQuery(query));
+        if(queryString === "") {
+            console.error("No queries applied");
+            return;
+        }
+
+        console.log("Saving query", queryString);
+
+        setSavingSearch(true);
+
+        try {
+            const response = await axios.post("/api/users/savesearch", {uid: user.id, searchString: queryString});
+
+        } catch(error) {
+            console.error("Failed saving search", error);
+        }
+
+        setSavingSearch(false);
     }
 
     return (
@@ -445,6 +475,18 @@ const Filters = ({query, onFilter}) => {
                         <FaCheck />
                     </Checkbox>
                 </div>
+
+                { user ? (
+                    <>
+                        <label htmlFor="save">Save</label>
+                        <div className={`${style.field} ${style.button}`}>
+                            { savingSearch 
+                                ? <p>Saving...</p>
+                                : <button onClick={() => saveSearch()}>Save Current Search Settings</button>
+                            }
+                        </div>
+                    </>
+                ) : null}
             </div>
         </div>
     )

@@ -1,13 +1,16 @@
 import {useState, useEffect} from 'react'
 import Link from 'next/link'
+import Router from 'next/router'
 
 import axios from 'axios'
 
 import ScriptList from '../scripts/ScriptList'
+import SavedSearch from './SavedSearch'
+
 import useUser from '../../utilities/auth/useUser'
+import ScriptUtils from '../../utilities/ScriptUtils'
 
 import style from './Dashboard.module.css'
-import ScriptUtils from '../../utilities/ScriptUtils'
 
 const Dashboard = () => {
 
@@ -17,22 +20,25 @@ const Dashboard = () => {
         logoutAndRedirect("/");
     }
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState("initial");
     const [likedScripts, setLikedScripts] = useState(null);
     const [savedSearches, setSavedSearches] = useState(null);
     const [ownedScripts, setOwnedScripts] = useState(null);
     useEffect(() => {
         const loadAllUserData = async email => {
+            console.warn("Loading user data", user.email, loading);
             setLoading(true);
             const response = await axios.post("/api/users/email", {email, lean: false});
             const userData = response.data;
+
+            console.log(userData);
 
             if(!userData) return;
 
             if(userData.likedScripts) setLikedScripts(userData.likedScripts.map(script => ScriptUtils.parseScriptDocument(script)));
             else setLikedScripts([]);
 
-            if(userData.savedSearches) setSavedSearches(userData.savedSearches);
+            if(userData.savedFilters) setSavedSearches(userData.savedFilters.map(filter => ScriptUtils.queryToPrettyString(filter)));
             else setSavedSearches([]);
 
             if(userData.ownedScripts) setOwnedScripts(userData.ownedScripts.map(script => ScriptUtils.parseScriptDocument(script)));
@@ -41,11 +47,11 @@ const Dashboard = () => {
             setLoading(false);
         }
 
-        if(user) loadAllUserData(user.email);
-    }, [user])
+        if(user && likedScripts === null && (!loading || loading === "initial")) loadAllUserData(user.email);
+    }, [user, likedScripts])
 
     const unlike = async script => {
-        const savedScripts = [likedScripts];
+        const savedScripts = [...likedScripts];
 
         console.log("Removing script from favorites", script, user);
 
@@ -70,6 +76,26 @@ const Dashboard = () => {
 
     const edit = script => {
         Router.push("/edit/" + script.slug);
+    }
+
+    const deleteSavedFilter = async filter => {
+        const savedFilters = [...savedSearches];
+        console.log("Removing filter from ", savedSearches, filter)
+
+        const newFilters = savedSearches.filter(f => f.queryString !== filter.queryString)
+        setSavedSearches(newFilters);
+
+        try {
+            const response = await axios.post("/api/users/unsavesearch", {
+                uid: user.id,
+                filters: newFilters.map(f => f.queryString)
+            });
+            if(response.data.error) throw response.data.error;
+            console.log(response.data);
+        } catch(error) {
+            console.error(error);
+            setSavedSearches(savedFilters);
+        }
     }
 
     return (
@@ -115,12 +141,16 @@ const Dashboard = () => {
                         savedSearches.length === 0
                             ? (<p>You have no saved searches yet!</p>)
                             : (
-                                <ul>
-                                    { savedSearches.map(search => {
-                                        return (<ul key={search}>
-                                            <Link href={`/scripts?${search}`}><a>{search}</a></Link>
-                                        </ul>)
-                                    })}
+                                <ul className={style.savedSearches}>
+                                {
+                                    savedSearches.map((query, index) => {
+                                        return <SavedSearch 
+                                            key={"user-saved-search-" + index}
+                                            query={query}
+                                            onDeleteClicked={deleteSavedFilter}
+                                        />
+                                    })
+                                }
                                 </ul>
                             )
                     }
