@@ -25,7 +25,6 @@ const Header = ({page}) => {
                 const response = await axios.get("/api/loadlists");
                 if(response.data.error) throw response.data.error;
                 const {tags, categories, talent, studios} = ScriptUtils.parseDatabaseListsWithCount(response.data);
-                console.warn({tags, categories, talent, studios})
                 const scriptCount = categories.reduce((acc, category) => acc + category.count, 0);
                 setCategoryCounts(categories);
                 setTagCounts(tags);
