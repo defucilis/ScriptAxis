@@ -2,7 +2,7 @@ import {PrismaClient} from '@prisma/client'
 
 const SetSavedSearches = (uid, filters) => {
     return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient({log: ["query"]});
+        const prisma = new PrismaClient();
 
         try {
             console.log("Setting saved searches for user " + uid, filters);
