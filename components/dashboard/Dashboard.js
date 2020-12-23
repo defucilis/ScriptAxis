@@ -69,7 +69,7 @@ const Dashboard = () => {
     }
 
     const edit = script => {
-
+        Router.push("/edit/" + script.slug);
     }
 
     return (
