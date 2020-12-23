@@ -114,6 +114,7 @@ const Filters = ({query, onFilter}) => {
     const [initialStudio, setInitialStudio] = useState([]);
     const [sourceUrl, setSourceUrl] = useState("");
     const [streamingUrl, setStreamingUrl] = useState("");
+    const [saved, setSaved] = useState(false);
     const {user} = useUser();
     useEffect(() => {
         window.setTimeout(() => {
@@ -188,6 +189,7 @@ const Filters = ({query, onFilter}) => {
             ]);
             setSourceUrl(query.filters.sourceUrl ? true : false);
             setStreamingUrl(query.filters.streamingUrl ? true : false);
+            setSaved(false);
             
         }, 100);
     }, [query])
@@ -267,6 +269,7 @@ const Filters = ({query, onFilter}) => {
         }
 
         setSavingSearch(false);
+        setSaved(true);
     }
 
     return (
@@ -484,7 +487,9 @@ const Filters = ({query, onFilter}) => {
                         <div className={`${style.field} ${style.button}`}>
                             { savingSearch 
                                 ? <p>Saving...</p>
-                                : <button onClick={() => saveSearch()}>Save Current Search Settings</button>
+                                : saved 
+                                    ? <p>Search parameters saved. Check your Dashboard!</p> 
+                                    : <button onClick={() => saveSearch()}>Save Current Search Settings</button>
                             }
                         </div>
                     </>
