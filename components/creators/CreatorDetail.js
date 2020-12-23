@@ -1,5 +1,5 @@
 
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { FaHeart } from 'react-icons/fa'
 import { FaRegEye } from 'react-icons/fa'
 
@@ -15,7 +15,7 @@ const CreatorDetail = ({creator}) => {
     return (
         <div className={style.creator}>
             <h1>{creator.name}</h1>
-            <h3>Scripting since {moment(creator.scripts[creator.scripts.length - 1].created, "x").format("MMMM YYYY")}</h3>
+            <h3>Scripting since {dayjs(Number(creator.scripts[creator.scripts.length - 1].created)).format("MMMM YYYY")}</h3>
             <div className={style.stats}>
                 <div>
                     <div>
