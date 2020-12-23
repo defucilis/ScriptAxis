@@ -2,8 +2,9 @@ import {PrismaClient} from '@prisma/client'
 
 const FetchSlugs = () => {
     return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient({log: ["query"]});
+        const prisma = new PrismaClient();
         try {
+            console.log("Fetching all script slugs");
             let scripts = await prisma.script.findMany({select: { id: true, slug: true, name: true}});
             await prisma.$disconnect();
             resolve(scripts);

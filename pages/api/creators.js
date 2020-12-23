@@ -2,8 +2,9 @@ import {PrismaClient} from '@prisma/client'
 
 const FetchCreators = () => {
     return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient({log: ["query"]});
+        const prisma = new PrismaClient();
         try {
+            console.log("Fetching all creators");
             const creators = await prisma.creator.findMany({
                 orderBy: {
                     totalViews: "desc"

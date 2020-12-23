@@ -2,9 +2,11 @@ import {PrismaClient} from '@prisma/client'
 
 const CreateScript = async (req, res) => {
     //console.log(req.body);
-    const prisma = new PrismaClient({log: ["query"]});
+    const prisma = new PrismaClient();
 
     try {
+        console.log("Creating script with data", req.body);
+
         let transaction = [];
         
         //Create the script object

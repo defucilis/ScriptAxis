@@ -2,8 +2,9 @@ import {PrismaClient} from '@prisma/client'
 
 const FetchCreator = (name) => {
     return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient({log: ["query"]});
+        const prisma = new PrismaClient();
         try {
+            console.log("Fetching creator with data", req.body);
             const creator = await prisma.creator
                 .findUnique({
                     where: {

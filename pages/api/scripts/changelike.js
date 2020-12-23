@@ -1,9 +1,10 @@
 import {PrismaClient} from '@prisma/client'
 
-const VerifyEmail = (scriptSlug, userId, creatorName, isLiked) => {
+const ChangeLike = (scriptSlug, userId, creatorName, isLiked) => {
     return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient({log: ["query"]});
+        const prisma = new PrismaClient();
         try {
+            console.log("Setting scriptLiked to " + isLiked, {scriptSlug, userId, creatorName})
             let transaction = [];
             //add or remove the script from the user's liked scripts
             transaction.push(prisma.user.update({
@@ -48,11 +49,11 @@ const VerifyEmail = (scriptSlug, userId, creatorName, isLiked) => {
     })
 }
 
-export {VerifyEmail}
+export {ChangeLike}
 
 export default async (req, res) => {
     try {
-        const script = await VerifyEmail(req.body.slug, req.body.uid, req.body.creator, req.body.isLiked);
+        const script = await ChangeLike(req.body.slug, req.body.uid, req.body.creator, req.body.isLiked);
         res.status(200);
         res.json(script);
     } catch(error) {

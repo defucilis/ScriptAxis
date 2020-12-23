@@ -2,8 +2,9 @@ import {PrismaClient} from '@prisma/client'
 
 const FetchScripts = () => {
     return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient({log: ["query"]});
+        const prisma = new PrismaClient();
         try {
+            console.log("Fetching all scripts");
             const scripts = await prisma.script.findMany({
                 where: {
                     active: true

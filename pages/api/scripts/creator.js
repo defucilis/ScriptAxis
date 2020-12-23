@@ -2,8 +2,9 @@ import {PrismaClient} from '@prisma/client'
 
 const FetchCreatorScripts = (name) => {
     return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient({log: ["query"]});
+        const prisma = new PrismaClient();
         try {
+            console.log("Fetching scripts belonging to creator", name);
             const scripts = await prisma.creator
                 .findUnique({
                     where: {

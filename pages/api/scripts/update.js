@@ -2,9 +2,11 @@ import {PrismaClient} from '@prisma/client'
 
 const UpdateScript = async (req, res) => {
     //console.log(req.body);
-    const prisma = new PrismaClient({log: ["query"]});
+    const prisma = new PrismaClient();
 
     try {
+        console.log("Updating script with data", req.body);
+
         let transaction = [];
 
         const id = req.body.id;

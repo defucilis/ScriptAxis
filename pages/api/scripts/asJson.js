@@ -3,8 +3,9 @@ import ScriptUtils from '../../../utilities/ScriptUtils'
 
 const FetchScripts = () => {
     return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient({log: ["query"]});
+        const prisma = new PrismaClient();
         try {
+            console.log("Fetching JSON dump of scripts");
             let scripts = await prisma.script.findMany({
                 where: {
                     active: true

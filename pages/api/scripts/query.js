@@ -3,8 +3,10 @@ import ScriptUtils from '../../../utilities/ScriptUtils';
 
 const QueryScripts = ({filters, sorting, page}) => {
     return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient({log: ["query"]});
+        const prisma = new PrismaClient();
         try {
+
+            console.log("Querying scripts", {page, sorting, filters});
 
             let finalWhere = {
                 AND: [

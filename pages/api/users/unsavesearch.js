@@ -1,12 +1,11 @@
 import {PrismaClient} from '@prisma/client'
 
-const VerifyEmail = (uid, filters) => {
+const SetSavedSearches = (uid, filters) => {
     return new Promise(async (resolve, reject) => {
         const prisma = new PrismaClient({log: ["query"]});
 
-        console.log("USER ID", uid);
-
         try {
+            console.log("Setting saved searches for user " + uid, filters);
             const response = await prisma.user.update({
                 where: {
                     id: uid
@@ -25,11 +24,11 @@ const VerifyEmail = (uid, filters) => {
     })
 }
 
-export {VerifyEmail}
+export {SetSavedSearches}
 
 export default async (req, res) => {
     try {
-        const script = await VerifyEmail(req.body.uid, req.body.filters);
+        const script = await SetSavedSearches(req.body.uid, req.body.filters);
         res.status(200);
         res.json(script);
     } catch(error) {

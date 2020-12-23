@@ -2,14 +2,20 @@ import {PrismaClient} from '@prisma/client'
 
 const FetchLists = () => {
     return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient({log: ["query"]});
+        const prisma = new PrismaClient();
         try {
+            console.log("Fetching all data lists...");
+            console.log("\tFething tags");
             let tags = await prisma.tag.findMany();
             tags = tags.sort((a, b) => b.count - a.count);
+            console.log("\tFetching categories");
             let categories = await prisma.category.findMany();
             categories = categories.sort((a, b) => b.count - a.count);
+            console.log("\tFetching talent");
             let talent = await prisma.talent.findMany();
+            console.log("\tFetching studios");
             let studios = await prisma.studio.findMany();
+            console.log("\tFetching creators");
             let creators = await prisma.creator.findMany({
                 select: {
                     name: true
