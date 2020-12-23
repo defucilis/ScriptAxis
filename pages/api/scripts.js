@@ -9,6 +9,7 @@ const FetchScripts = () => {
                 where: {
                     active: true
                 },
+                take: 16,
                 orderBy: {
                     created: "desc"
                 },

@@ -247,7 +247,9 @@ const Filters = ({query, onFilter}) => {
             return;
         }
 
-        const queryString = ScriptUtils.queryToString(ScriptUtils.objectToQuery(query));
+        let saveQuery = {...query};
+        delete(saveQuery.page);
+        const queryString = ScriptUtils.queryToString(ScriptUtils.objectToQuery(saveQuery));
         if(queryString === "") {
             console.error("No queries applied");
             return;

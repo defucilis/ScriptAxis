@@ -5,12 +5,13 @@ import Router from 'next/router'
 import ScriptGrid from './ScriptGrid'
 import Filters from './Filters'
 import Sorting from './Sorting'
+import Pagination from './Pagination'
 
 import ScriptUtils from '../../utilities/ScriptUtils'
 
 import style from './BrowseScripts.module.css'
 
-const BrowseScripts = ({propScripts, tags, categories, query}) => {
+const BrowseScripts = ({propScripts, scriptCount, tags, categories, query}) => {
     const [scripts, setScripts] = useState([]);
     const [cachedFilters, setCachedFilters] = useState({...query.filters});
     const [cachedSorting, setCachedSorting] = useState([{created:"desc"}]);
@@ -83,9 +84,15 @@ const BrowseScripts = ({propScripts, tags, categories, query}) => {
                             <p>No scripts match your selected filters</p>
                         </div>
                     ) : (
+                        <>
                         <ScriptGrid scripts={scripts} customStyle={{
                             gridTemplateColumns: `repeat(3, 1fr)`
                         }} />
+                        {scriptCount < 18 
+                            ? null 
+                            : <Pagination curPage={Number(query.page) || 1} totalPages={Math.ceil(scriptCount / 18.0)} query={query} />
+                        }
+                        </>
                     )}
                     
                 </div>
