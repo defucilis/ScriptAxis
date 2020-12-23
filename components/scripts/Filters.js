@@ -121,10 +121,10 @@ const Filters = ({query, onFilter}) => {
             if(storedCategoryCounts) setCategories(JSON.parse(storedCategoryCounts));
 
             const storedTalent = window.localStorage.getItem("storedTalent");
-            if(storedTalent) setTalentOptions(JSON.parse(storedTalent).map(talent => talent.name));
+            if(storedTalent) setTalentOptions(JSON.parse(storedTalent));
 
             const storedStudios = window.localStorage.getItem("storedStudios");
-            if(storedStudios) setStudioOptions(JSON.parse(storedStudios).map(studio => studio.name));
+            if(storedStudios) setStudioOptions(JSON.parse(storedStudios));
         }, 50)
     }, []);
 
