@@ -2,12 +2,12 @@ import {useRouter} from 'next/router'
 import Head from 'next/head'
 
 import Layout from '../../components/layout/Layout'
+import CreatorDetail from '../../components/creators/CreatorDetail'
+
 import ScriptUtils from '../../utilities/ScriptUtils'
-import ScriptGrid from '../../components/ScriptGrid'
+import {FetchCreator} from '../api/creator/name'
 
-import {FetchCreatorScripts} from '../api/scripts/creator'
-
-const Creator = ({scripts}) => {
+const Creator = ({creator}) => {
 
     const router = useRouter();
     const {creatorname} = router.query;
@@ -15,28 +15,31 @@ const Creator = ({scripts}) => {
     return (
         <Layout page="creators">
          <Head>
-                <title>ScriptAxis | {creatorname}</title>
+            <title>ScriptAxis | {creatorname}</title>
             </Head>
-            <h1>Creator {creatorname}</h1>
-            <ScriptGrid scripts={scripts} />
+            <CreatorDetail creator={creator}/>
         </Layout>
     )
 }
 
 export async function getServerSideProps({query}) {
 
-    let scripts = [];
+    let creator = [];
     try {
-        scripts = await FetchCreatorScripts(query.creatorname);
+        creator = await FetchCreator(query.creatorname);
+        creator.created = creator.created.valueOf();
+        creator.modified = creator.modified.valueOf();
+        console.log(creator);
     } catch(error) {
         console.error(error);
     } finally {
+        if(creator.scripts && creator.scripts.length > 0) {
+            creator.scripts = creator.scripts
+            .map(doc => ScriptUtils.parseScriptDocument(doc))
+            .sort((a, b) => b.created - a.created)
+        }
         return {
-            props: {
-                scripts: scripts
-                            .map(doc => ScriptUtils.parseScriptDocument(doc))
-                            .sort((a, b) => b.created - a.created)
-            }
+            props: { creator }
         }
     }
 }
