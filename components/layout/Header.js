@@ -134,10 +134,9 @@ const Header = ({page}) => {
                         </li>
                         <li className={page === "creators" 
                             ? styles.currentnav 
-                            : null} 
-                            onClick={() => alert("Coming soon!")}
+                            : null}
                         >
-                            <Link href="/">CREATORS</Link>
+                            <Link href="/creators">CREATORS</Link>
                         </li>
                     </ul>
                 </div>

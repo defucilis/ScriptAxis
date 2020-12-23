@@ -42,7 +42,6 @@ const ScriptTile = ({script}) => {
                 </div>
                 )}
             </div>
-            
         </div>
     )
 }
