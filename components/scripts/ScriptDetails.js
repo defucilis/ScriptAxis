@@ -1,7 +1,7 @@
 import {useState, useEffect, useContext, useRef} from 'react'
 import Link from 'next/link'
 
-import moment from 'moment'
+import dayjs from 'dayjs'
 import axios from 'axios'
 import { FaThumbsUp } from 'react-icons/fa'
 import { FaHeart } from 'react-icons/fa'
@@ -157,7 +157,7 @@ const ScriptDetails = ({script}) => {
                     <span>By <a>{script.creator}</a></span>
                 </Link>
             </div>
-            <p className={style.created}>{moment(script.created, "x").format("Do MMMM YYYY")}</p>
+            <p className={style.created}>{dayjs(Number(script.created)).format("D MMMM YYYY")}</p>
             <div className={style.sidebyside}>
                 <div className={style.imagewrapper}>
                     {getEmbed(script.streamingUrl) ? (<>

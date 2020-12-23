@@ -7,7 +7,7 @@ import firebase from '../utilities/initFirebase'
 
 import Layout from '../components/layout/Layout'
 
-import useUser from '../../utilities/auth/useUser'
+import useUser from '../utilities/auth/useUser'
 
 import style from './signin.module.css'
 
