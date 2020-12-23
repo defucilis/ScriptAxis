@@ -2,8 +2,9 @@ import {PrismaClient} from '@prisma/client'
 
 const ViewScript = (scriptSlug) => {
     return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient({log: ["query"]});
+        const prisma = new PrismaClient();
         try {
+            console.log("Registering script view for", scriptSlug);
             const result = await prisma.script.update({
                 where: {slug: scriptSlug},
                 data: {

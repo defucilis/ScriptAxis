@@ -13,15 +13,10 @@ import {FetchLists} from '../api/loadlists'
 const Script = ({script, tags, categories, talent, studios, creators}) => {
 
     //page is blocked if user is not signed in
-    const {user} = useUser();
+    const {user} = useUser({redirectTo: "/"});
     useEffect(() => {
-        if(user && user.waiting) return;
-        if(user === null) {
-            Router.push("/");
-            return;
-        }
-        //page is also blocked if the user doesn't own this script!
-        if(user.username !== script.owner.username) {
+        //page is blocked if the user doesn't own this script!
+        if(user && user.username !== script.owner) {
             Router.push("/");
         }
     }, [user])

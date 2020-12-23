@@ -1,36 +1,38 @@
 import {PrismaClient} from '@prisma/client'
 
-const VerifyEmail = (email) => {
+const SetSavedSearches = (uid, filters) => {
     return new Promise(async (resolve, reject) => {
         const prisma = new PrismaClient();
+
         try {
-            console.log("Registering verified email for user " + email);
-            const user = await prisma.user.update({
+            console.log("Setting saved searches for user " + uid, filters);
+            const response = await prisma.user.update({
                 where: {
-                    email: email
+                    id: uid
                 },
                 data: {
-                    emailVerified: true
+                    savedFilters: filters
                 }
             })
+            
             await prisma.$disconnect();
-            resolve(user);
+            resolve(response);
         } catch(error) {
-            await prisma.$disconnect();
             reject(error);
+            await prisma.$disconnect();
         }
     })
 }
 
-export {VerifyEmail}
+export {SetSavedSearches}
 
 export default async (req, res) => {
     try {
-        const script = await VerifyEmail(req.body.email);
+        const script = await SetSavedSearches(req.body.uid, req.body.filters);
         res.status(200);
         res.json(script);
     } catch(error) {
-        console.error("error fetching script - " + error);
+        console.error("error saving search - " + error);
         res.json({
             error: { message: error.message }
         });

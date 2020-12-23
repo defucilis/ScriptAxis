@@ -5,9 +5,10 @@ import {PrismaClient} from '@prisma/client'
 //       which should have a different endpoint
 const CreateUser = async (req, res) => {
     console.log(req.body);
-    const prisma = new PrismaClient({log: ["query"]});
+    const prisma = new PrismaClient();
 
     try {
+        console.log("Creating new user with data", req.body);
         const data = req.body;
         const newUser = await prisma.user.create({data});
         res.status(201);

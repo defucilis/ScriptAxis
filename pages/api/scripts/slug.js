@@ -2,8 +2,9 @@ import {PrismaClient} from '@prisma/client'
 
 const FetchScript = (slug, noview) => {
     return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient({log: ["query"]});
+        const prisma = new PrismaClient();
         try {
+            console.log("Fetching script", {slug, noview});
             const where = {
                 slug: slug,
                 active: true

@@ -2,8 +2,10 @@ import {PrismaClient} from '@prisma/client'
 
 const FetchUser = (email, lean) => {
     return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient({log: ["query"]});
+        const prisma = new PrismaClient();
         try {
+            console.log("Fetching user with email", {email, lean});
+
             //if lean, we only want the slugs of the liked and owned scripts
             //even that might be too much for the 4096kB user cookie
             const scriptSelect = lean
@@ -17,7 +19,7 @@ const FetchUser = (email, lean) => {
                 creator: { select: { name: true } } 
             }};
 
-            const users = await prisma.user.findFirst({
+            let users = await prisma.user.findFirst({
                 where: {
                     email: email
                 },
@@ -27,6 +29,7 @@ const FetchUser = (email, lean) => {
                     ownedScripts: scriptSelect,
                 }
             });
+            if(lean) delete(users.savedFilters);
             await prisma.$disconnect();
             resolve(users);
         } catch(error) {

@@ -1,30 +1,12 @@
 import {PrismaClient} from '@prisma/client'
+import ScriptUtils from '../../../utilities/ScriptUtils';
 
-const transformDuration = index => {
-    switch(index) {
-        case 0:
-            return 0;
-        case 1:
-            return 300; //5 minutes
-        case 2:
-            return 600; //10 minutes
-        case 3:
-            return 900; //15 minutes
-        case 4:
-            return 1200; //20 minutes
-        case 5:
-            return 1800; //30 minutes
-        case 6:
-            return 3600; //60 minutes
-        case 7:
-            return 7200; //120 minutes
-    }
-}
-
-const QueryScripts = ({filters, sorting}) => {
+const QueryScripts = ({filters, sorting, page}) => {
     return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient({log: ["query"]});
+        const prisma = new PrismaClient();
         try {
+
+            console.log("Querying scripts", {page, sorting, filters});
 
             let finalWhere = {
                 AND: [
@@ -43,8 +25,8 @@ const QueryScripts = ({filters, sorting}) => {
             if(filters.category) finalWhere.AND.push({category: filters.category});
 
             //duration needs to be split into two checks for min and max
-            if(filters.minDuration) finalWhere.AND.push({duration: {gte: transformDuration(Number(filters.minDuration))}});
-            if(filters.maxDuration) finalWhere.AND.push({duration: {lte: transformDuration(Number(filters.maxDuration))}});
+            if(filters.minDuration) finalWhere.AND.push({duration: {gte: ScriptUtils.indexToDuration(Number(filters.minDuration))}});
+            if(filters.maxDuration) finalWhere.AND.push({duration: {lte: ScriptUtils.indexToDuration(Number(filters.maxDuration))}});
 
             if(filters.studio) finalWhere.AND.push({studio: filters.studio});
 
@@ -54,10 +36,21 @@ const QueryScripts = ({filters, sorting}) => {
             //todo: God damn it Prisma doesn't support filtering with lists
             //see: https://github.com/prisma/prisma-client-js/issues/341
             //see: https://github.com/prisma/prisma/issues/3475
-            //Until this is added, I'll need to workaround either raw SQL
+            //Until this is added, I'll need to workaround with raw SQL
             //I really don't want to do that, so I think I'll just filter them myself...
 
+            //This is especially problematic because it kind of breaks pagination. The server
+            //isn't able to count accurately how many scripts match the filters - it will count
+            //all those scripts which match the filters, but will disregard tags and talent when
+            //counting... bummer
+
+            let count = await prisma.script.count({
+                where: finalWhere,
+            });
+
             let scripts = await prisma.script.findMany({
+                skip: page && page > 1 ? 18 * (page - 1) : 0,
+                take: 18,
                 where: finalWhere,
                 orderBy: sorting,
                 include: {
@@ -86,7 +79,7 @@ const QueryScripts = ({filters, sorting}) => {
             }
 
             await prisma.$disconnect();
-            resolve(scripts);
+            resolve({count, scripts});
         } catch(error) {
             await prisma.$disconnect();
             reject(error);
@@ -99,9 +92,9 @@ export {QueryScripts}
 export default async (req, res) => {
     console.log("Request Body", req.body);
     try {
-        const scripts = await QueryScripts(req.body);
+        const output = await QueryScripts(req.body);
         res.status(200);
-        res.json(scripts);
+        res.json(output);
     } catch(error) {
         console.error("error fetching scripts - " + error.message);
         res.json({

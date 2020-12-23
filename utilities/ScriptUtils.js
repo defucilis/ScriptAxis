@@ -1,3 +1,28 @@
+const durationToIndex = duration => {
+
+}
+
+const indexToDuration = index => {
+    switch(index) {
+        case 0:
+            return 0;
+        case 1:
+            return 300; //5 minutes
+        case 2:
+            return 600; //10 minutes
+        case 3:
+            return 900; //15 minutes
+        case 4:
+            return 1200; //20 minutes
+        case 5:
+            return 1800; //30 minutes
+        case 6:
+            return 3600; //60 minutes
+        case 7:
+            return 7200; //120 minutes
+    }
+}
+
 const arraysIdentical = (a, b) => {
     if(!a && !b) return true;
     if(!a && b || a && !b) return false;
@@ -209,8 +234,10 @@ const objectToQuery = input => {
     
     const filters = input.filters;
     const sorting = input.sorting;
+    const page = input.page;
     const defaultSorting = (sorting && sorting.length > 0 && sorting[0].created && sorting[0].created === "desc");
-    if(defaultSorting && (!filters || Object.keys(filters).length === 0)) return "";
+    const defaultPage = page && page == 1;
+    if(defaultSorting && defaultPage && (!filters || Object.keys(filters).length === 0)) return "";
 
     let output = {};
     if(filters.name) output.search = filters.name.contains;
@@ -227,12 +254,15 @@ const objectToQuery = input => {
     if(!defaultSorting && sorting && sorting.length > 0) {
         output.sorting = `${Object.keys(sorting[0])[0]}+${sorting[0][Object.keys(sorting[0])[0]]}`;
     }
+    if(!defaultPage && page) {
+        output.page = page;
+    }
 
     return output;
 }
 //goes from a query object parsed from a URL string and turns it into a filter object to be applied to the databas
 const queryToObject = query => {
-    let output = {filters: {}, sorting: {created: "desc"}};
+    let output = {filters: {}, sorting: {created: "desc"}, page: 1};
 
     if(query.search) output.filters.name = { contains: query.search, mode: "insensitive" };
     if(query.category) output.filters.category = {name: {equals: query.category}};
@@ -248,6 +278,9 @@ const queryToObject = query => {
         const pieces = query.sorting.split(" ");
         output.sorting = [{[pieces[0]]: pieces[1]}];
     }
+    if(query.page) {
+        output.page = query.page;
+    }
 
     return output;
 }
@@ -256,6 +289,53 @@ const queryToString = query => {
     let finalQuery = {...query};
     if(Object.keys(finalQuery).length === 0) return "";
     return "?" + Object.keys(finalQuery).map(key => `${key}=${finalQuery[key]}`).join("&");
+}
+
+const queryToPrettyString = queryString => {
+    let pieces = queryString.substring(1).split("&");
+    let params = {};
+    pieces.forEach(param => {
+        const subPieces = param.split("=").map(str => str.substr(0, 1).toUpperCase() + str.substr(1));
+        params[subPieces[0]] = subPieces[1];
+    })
+
+    let output = {};
+
+    if(params.MinDuration) {
+        const min = indexToDuration(Number(params.MinDuration)) / 60.0;
+
+        if(params.MaxDuration) {
+            const max = indexToDuration(Number(params.MaxDuration)) / 60.0;
+            params.Duration = min + " - " + max + " min";
+
+            delete params.MaxDuration;
+        } else {
+            params.Duration = ">" + min + " min";
+        }
+        delete params.MinDuration;
+    } else if(params.MaxDuration) {
+        const max = indexToDuration(Number(params.MaxDuration)) / 60.0;
+        params.Duration = "<" + max + " min";
+        delete params.MaxDuration;
+    }
+    if(params.Search) {
+        params.Search = `"${params.Search}"`;
+        output.search = params.Search;
+        delete params.Search;
+    }
+    if(params.Sorting) {
+        let subPieces = params.Sorting.split("+");
+        if(subPieces.length > 1) {
+            if(subPieces[1] === "asc") subPieces[1] = "Ascending";
+            else if(subPieces[1] === "desc") subPieces[1] = "Descending";
+            params.Sorting = `${subPieces[0]} (${subPieces[1]})`;
+        }
+        output.sorting = params.Sorting;
+        delete params.Sorting;
+    }
+    output = {...output, params, queryString};
+
+    return output;
 }
 
 const getScriptDifferences = (oldScript, newScript) => {
@@ -315,6 +395,7 @@ const tryFormatError = error => {
 
 const ScriptUtils = {
     parseScriptDocument,
+    indexToDuration,
     parseDatabaseLists,
     parseDatabaseListsWithCount,
     durationToString,
@@ -327,6 +408,7 @@ const ScriptUtils = {
     queryToString,
     objectToQuery,
     queryToObject,
+    queryToPrettyString,
     getScriptDifferences,
     tryFormatError
 }

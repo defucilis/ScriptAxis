@@ -1,0 +1,29 @@
+.pagination {
+    width: 100%;
+    display: grid;
+    place-items: center;
+    margin-top: 1em;
+}
+
+.pagination > ul {
+    display: flex;
+}
+
+.pagination > ul > li {
+    display: block;
+    background-color: #202020;
+    border-radius: 5px;
+    padding: 0.5em;
+    margin-right: 1em;
+    cursor: pointer;
+}
+
+.pagination > ul > li:last-child {
+    margin-right: 0;
+}
+
+.pagination > ul > li.currentpage {
+    background-color: #e8739c;
+    color: #000;
+    font-weight: bold;
+}

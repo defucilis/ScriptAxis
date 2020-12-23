@@ -144,7 +144,7 @@ const ScriptDetails = ({script}) => {
         <div className={style.script}>
             <h1 className={style.name}>{script.name}</h1>
             {
-                user && user.username === script.owner.username ? (
+                user && user.username === script.owner ? (
                     <div>
                         <Link href={`/edit/${script.slug}`}>
                             <a style={{fontSize: "2em", display: "block", textAlign: "right"}}>[Edit Script]</a>

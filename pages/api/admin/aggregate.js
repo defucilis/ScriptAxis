@@ -2,7 +2,7 @@ import {PrismaClient} from '@prisma/client'
 
 const Aggregate = () => {
     return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient({log: ["query"]});
+        const prisma = new PrismaClient();
 
         const updateCreator = creator => {
             return new Promise(async (resolve, reject) => {
@@ -53,11 +53,13 @@ const Aggregate = () => {
         //                 this isn't really urgent
 
         try {
+            console.log("Running aggregation...");
             const creators = await prisma.creator.findMany();
             let output = [];
             for(let i = 0; i < creators.length; i++) {
                 const creator = await updateCreator(creators[i]);
                 output.push(creator);
+                console.log(`Updated creator ${i + 1} / ${creators.length}`)
             }
             await prisma.$disconnect();
             resolve(output);
