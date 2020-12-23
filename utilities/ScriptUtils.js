@@ -9,13 +9,18 @@ const arraysIdentical = (a, b) => {
 }
 
 const parseScriptDocument = script => {
+
+    const category = script.category ? script.category.name : script.categoryName || "Category";
+    const creator = script.creator ? script.creator.name : script.creatorName || "Creator";
+    const owner = script.owner ? script.owner.username : script.ownerName || "Owner";
+
     const output =  {
         id: script.id,
         name: script.name,
         slug: script.slug,
-        creator: script.creatorName,
-        owner: script.owner,
-        category: script.categoryName || "",
+        creator,
+        owner,
+        category,
         tags: !script.tags ? [] : script.tags,
         description: script.description,
         duration: script.duration,
@@ -25,16 +30,21 @@ const parseScriptDocument = script => {
         studio: script.studio || "",
         talent: script.talent || [],
         active: script.active,
-        created: script.created.valueOf(),
-        modified: script.modified.valueOf(),
+        created: script.created ? script.created.valueOf() : null,
+        modified: script.modified ? script.modified.valueOf() : null,
         likes: script.likeCount,
         thumbsUp: script.thumbsUp,
         thumbsDown: script.thumbsDown,
         views: script.views,
+        
         //SFW Overrides
-        //name: "Debug Name",
-        //thumbnail: "https://planethifi.com/wp-content/uploads/2020/06/720p-696x448.jpg",
-        //studio: "Debug Studio",
+        // name: !script.name ? "Script" : script.name.split("").reverse().join(""),
+        // thumbnail: "https://planethifi.com/wp-content/uploads/2020/06/720p-696x448.jpg",
+        // studio: !script.studio ? null : script.studio.split("").reverse().join(""),
+        // category: !script.categoryName ? "Category" : script.categoryName.split("").reverse().join(""),
+        // tags: !script.tags ? [] : script.tags.map(tag => tag.split("").reverse().join("")),
+        // streamingUrl: "https://www.google.com",
+        // sourceurl: "https://www.google.com"
     };
     return output;
 }
@@ -299,7 +309,7 @@ const tryFormatError = error => {
         }
         return output.substr(0, endIndex);
     } catch(e) {
-        console.log("Failed to format error", error, e);
+        //console.log("Failed to format error", error, e);
     }
 }
 

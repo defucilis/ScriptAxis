@@ -1,14 +1,17 @@
-import {useState, useEffect, useContext} from 'react'
-import style from './ScriptDetails.module.css'
+import {useState, useEffect, useContext, useRef} from 'react'
 import Link from 'next/link'
-import ScriptUtils from '../utilities/ScriptUtils'
+
+import moment from 'moment'
+import axios from 'axios'
 import { FaThumbsUp } from 'react-icons/fa'
 import { FaHeart } from 'react-icons/fa'
 import { FaRegEye } from 'react-icons/fa'
 import ReactMarkdown from 'react-markdown'
-import moment from 'moment'
-import UserContext from '../utilities/UserContext'
-import axios from 'axios'
+
+import ScriptUtils from '../../utilities/ScriptUtils'
+import useUser from '../../utilities/auth/useUser'
+
+import style from './ScriptDetails.module.css'
 
 const getEmbed = url => {
     let iframeLink = "";
@@ -70,9 +73,10 @@ const getEmbed = url => {
 
 const ScriptDetails = ({script}) => {
 
-    const {user} = useContext(UserContext);
+    const {user, refreshUserDbValues} = useUser();
     const [isLiked, setIsLiked] = useState(false);
     const [scriptLikes, setScriptLikes] = useState(0);
+    const iFrameRef = useRef();
     const [iFrameLoading, setIFrameLoading] = useState(true);
     useEffect(() => {
         if(!user || !script) return;
@@ -105,6 +109,7 @@ const ScriptDetails = ({script}) => {
                 creator: script.creator,
                 isLiked: newValue
             });
+            refreshUserDbValues();
             if(response.data.error) throw response.data.error;
             console.log(response.data);
         } catch(error) {
@@ -117,6 +122,20 @@ const ScriptDetails = ({script}) => {
                 setScriptLikes(cur => cur + 1);
             }
         }
+    }
+
+    const [videoElement, setVideoElement] = useState(null);
+    const handleIFrameLoaded = () => {
+        setIFrameLoading(false);
+
+        //this doesn't work due to CORS, bummer...
+        /*
+        const element = iFrameRef.current.contentWindow.document.getElementsByTagName("video");
+        setVideoElement(element)
+        const videos = element.ontimeupdate = () => {
+            if(videoElement) console.log("Playback Time", videoElement.currentTime);
+        }
+        */
     }
 
     //todo - we could show the thumbnail while waiting for the iframe to load...
@@ -146,8 +165,9 @@ const ScriptDetails = ({script}) => {
                                 style={{display: iFrameLoading ? "none" : "block"}} 
                                 src={getEmbed(script.streamingUrl)} 
                                 width={1000} height={500} 
+                                ref={iFrameRef}
                                 allowFullScreen 
-                                onLoad={() => setIFrameLoading(false)} 
+                                onLoad={() => handleIFrameLoaded()} 
                             />
                             {iFrameLoading ? <img src={script.thumbnail} /> : null}
                     </>) : <img src={script.thumbnail} />

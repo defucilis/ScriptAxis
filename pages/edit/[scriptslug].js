@@ -2,18 +2,18 @@ import {useContext, useEffect} from 'react'
 import Router from 'next/router'
 import Head from 'next/head'
 
-import Layout from '../../components/Layout'
-import EditScript from '../../components/EditScript'
+import Layout from '../../components/layout/Layout'
+import EditScript from '../../components/forms/EditScript'
 
 import ScriptUtils from '../../utilities/ScriptUtils'
-import UserContext from '../../utilities/UserContext'
+import useUser from '../../utilities/auth/useUser'
 import {FetchScript} from '../api/scripts/slug'
 import {FetchLists} from '../api/loadlists'
 
 const Script = ({script, tags, categories, talent, studios, creators}) => {
 
     //page is blocked if user is not signed in
-    const {user} = useContext(UserContext);
+    const {user} = useUser();
     useEffect(() => {
         if(user && user.waiting) return;
         if(user === null) {

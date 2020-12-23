@@ -1,7 +1,9 @@
-import Layout from '../components/Layout'
-import ScriptGrid from '../components/ScriptGrid'
-import ScriptUtils from '../utilities/ScriptUtils'
 import Head from 'next/head'
+
+import Layout from '../components/layout/Layout'
+import ScriptGrid from '../components/scripts/ScriptGrid'
+
+import ScriptUtils from '../utilities/ScriptUtils'
 import {FetchScripts} from './api/scripts'
 
 const Index = ({scripts}) => {

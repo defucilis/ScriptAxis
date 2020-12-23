@@ -1,21 +1,20 @@
-import Layout from '../components/Layout'
-import AddScript from '../components/AddScript'
-import firebase from '../utilities/Firebase'
+import {useEffect} from 'react'
 import Head from 'next/head'
 import Router from 'next/router'
-import {useContext, useEffect} from 'react'
-import UserContext from '../utilities/UserContext'
+
+import firebase from '../utilities/initFirebase'
+
+import Layout from '../components/layout/Layout'
+import AddScript from '../components/forms/AddScript'
+
+import useUser from '../utilities/auth/useUser'
 import {FetchLists} from './api/loadlists'
 import ScriptUtils from '../utilities/ScriptUtils'
 
 const Add = ({tags, categories, talent, studios, creators}) => {
 
     //page is blocked if user is not signed in
-    const {user} = useContext(UserContext);
-    useEffect(() => {
-        if(user && user.waiting) return;
-        if(user === null) Router.push("/");
-    }, [user])
+    const {user} = useUser({redirectTo: "/"});
 
     const signOut = () => {
         firebase.auth().signOut();
@@ -56,8 +55,7 @@ export async function getServerSideProps() {
     let data = {};
     try {
         data = await FetchLists();
-        data = ScriptUtils.parseLists();
-        console.log(data);
+        data = ScriptUtils.parseDatabaseLists(data);
     } catch(error) {
         console.log("Failed to get scripts", error);        
     } finally {

@@ -41,6 +41,7 @@ model Script {
 model Creator {
   name              String      @id
   user              User?
+  thumbnail         String      @default("")
   scripts           Script[]
   totalViews        Int         @default(0)
   totalLikes        Int         @default(0)

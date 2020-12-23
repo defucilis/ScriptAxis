@@ -1,7 +1,7 @@
 import {useRef, useState, useEffect} from 'react'
 import {useDropzone} from 'react-dropzone'
-
 import dynamic from 'next/dynamic'
+
 const TagifyTags = dynamic(() => import("@yaireo/tagify/dist/react.tagify"), { ssr: false });
 import ReactDatepicker from 'react-datepicker'
 import {BsCaretRightFill} from 'react-icons/bs'
@@ -143,7 +143,37 @@ const Tags = props => {
 }
 
 const InnerDropzone = ({fieldName, className, hoveringClassName, instruction, options, onChange, onError}) => {
+
     const [files, setFiles] = useState([]);
+
+    const validateFile = file => {
+        let error = "";
+        if(options.accept && options.accept.findIndex(type => file.type === type) === -1) {
+            error = "File must be png or jpg";
+            handleErrors([{errors: [{message: error}]}]);
+            return false;
+        }
+        if(options.maxSize && file.size > options.maxSize) {
+            error = "Max size is 2MB";
+            handleErrors([{errors: [{message: error}]}]);
+            return false;
+        }
+        return true;
+    }
+
+    const handlePasteEvent = e => {
+        if(e.clipboardData == false || !e.clipboardData || !e.clipboardData.items) return;
+        if(!e.clipboardData.files || e.clipboardData.files.length == 0) return;
+        if(!validateFile(e.clipboardData.files[0])) return;
+        handleFiles([e.clipboardData.files[0]]);
+    }
+
+    useEffect(() => {
+        if(!options.pasteable) return () => window.removeEventListener("paste", handlePasteEvent);
+        window.addEventListener("paste", handlePasteEvent);
+        return () => window.removeEventListener("paste", handlePasteEvent);
+    }, [options.pasteable])
+
     const [fileLabels, setFileLabels] = useState([]);
     const [over, setOver] = useState(false);
     const handleFiles = newFiles => {

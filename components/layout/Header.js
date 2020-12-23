@@ -2,16 +2,18 @@ import {useState, useEffect, useRef, useContext} from 'react'
 import Link from 'next/link'
 import Router from 'next/router'
 import Image from 'next/image'
+
 import {FaSearch} from 'react-icons/fa'
-import ScriptUtils from '../utilities/ScriptUtils'
 import axios from 'axios'
-import UserContext from '../utilities/UserContext'
+
+import ScriptUtils from '../../utilities/ScriptUtils'
+import useUser from '../../utilities/auth/useUser'
 
 import styles from './Header.module.css'
 
 const Header = ({page}) => {
 
-    const {user} = useContext(UserContext)
+    const {user} = useUser();
     const [scriptCount, setScriptCount] = useState(0);
     const [categoryCounts, setCategoryCounts] = useState([]);
     const [tagCounts, setTagCounts] = useState([]);
@@ -132,10 +134,9 @@ const Header = ({page}) => {
                         </li>
                         <li className={page === "creators" 
                             ? styles.currentnav 
-                            : null} 
-                            onClick={() => alert("Coming soon!")}
+                            : null}
                         >
-                            <Link href="/">CREATORS</Link>
+                            <Link href="/creators">CREATORS</Link>
                         </li>
                     </ul>
                 </div>

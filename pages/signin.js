@@ -1,44 +1,46 @@
-import {useState, useContext} from 'react'
-import Layout from '../components/Layout'
+import {useState} from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import Router from 'next/router'
-import firebase from '../utilities/Firebase'
-import axios from 'axios'
-import UserContext from '../utilities/UserContext'
+
+import Layout from '../components/layout/Layout'
+
+import useUser from '../utilities/auth/useUser'
 
 import style from './signin.module.css'
 
 const SignIn = () => {
 
     const [error, setError] = useState("");
-    const {setUser} = useContext(UserContext);
+    const {login} = useUser();
+    const [waiting, setWaiting] = useState(false);
 
     const signIn = e => {
         const doSignIn = async (email, password, callback) => {
             setError("");
             try {
-                await firebase.auth().signInWithEmailAndPassword(email, password);
-                const user = await axios.post("/api/users/email", {email});
-                if(user.data.error) throw user.data.error;
-                setUser(user.data)
-                console.log("Found user data", user.data);
-                window.localStorage.setItem("userdata", JSON.stringify(user.data));
+                await login(email, password);
                 callback({success: true});
             } catch(error) {
-                firebase.auth().signOut();
-                window.localStorage.removeItem("userdata");
-                console.error(ScriptUtils.tryFormatError(error.message));
-                callback({success: false, error: "Incorrect username/password combination"});
+                console.error(error);
+                if(error.code === "auth/wrong-password" || error.code === "auth/user-not-found") {
+                    callback({success: false, error: "Incorrect username/password combination"});
+                } else  {
+                    callback({success: false, error: "Unexpected authentication failure. Wait a minute and try again"});
+                }
             }
         }
 
         e.preventDefault();
 
+        
+
+        setWaiting(true);
         doSignIn(e.target.email.value, e.target.password.value, result => {
             if(result.success) {
                 Router.push("/");
             } else {
+                setWaiting(false);
                 setError(result.error);
             }
         })
@@ -56,7 +58,12 @@ const SignIn = () => {
                 <label htmlFor="password">Password</label>
                 <input type="password" id="password" />
                 <Link href="/forgotpassword"><a className={style.forgot}>Forgot Password</a></Link>
-                <input type="submit" value="Sign In" />
+                { waiting ? (
+                    <p>Please wait...</p>
+                ) : (
+                    <input type="submit" value="Sign In" />
+                )}
+                
                 <p style={{color: "red"}}>{error}</p>
             </form>
         </Layout>

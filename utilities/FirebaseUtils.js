@@ -1,4 +1,5 @@
-import firebase from './Firebase'
+import firebase from 'firebase'
+import 'firebase/storage'
 
 const FirebaseUtils = {
     uploadFile: (file, path, handleProgress) => {

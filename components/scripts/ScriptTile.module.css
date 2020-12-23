@@ -56,8 +56,9 @@
 .scriptcreator {
     margin: 0;
 }
-.scriptcreator > a {
+.scriptcreator > a, .scriptcreator > p {
     color: #777;
+    margin: 0;
 }
 .scriptcreator > a:hover {
     color: #e8739c;
@@ -79,4 +80,7 @@
 .bottomrow .rating, .bottomrow .likes {
     display: flex;
     margin-left: 1.5em;
+}
+.bottomrow .rating:first-child {
+    margin-left: 0;
 }

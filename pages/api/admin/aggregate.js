@@ -7,6 +7,20 @@ const Aggregate = () => {
         const updateCreator = creator => {
             return new Promise(async (resolve, reject) => {
                 try {
+                    //Get the creator's most-viewed script for the thumbnail
+                    const allScripts = await prisma.script.findMany({
+                        where: {
+                            creator: {
+                                name: creator.name
+                            }
+                        }
+                    });
+
+                    //todo - this isn't correctly selecting the most viewed script?
+                    const thumbnail = allScripts.length > 0 
+                        ? allScripts.sort((a, b) => a.viewCount - b.viewCount)[0].thumbnail 
+                        : "";
+
                     const aggregations = await prisma.script.aggregate({
                         where: {
                             creator: {
@@ -25,6 +39,7 @@ const Aggregate = () => {
                         data: {
                             totalViews: aggregations.sum.views,
                             totalLikes: aggregations.sum.likeCount,
+                            thumbnail
                         }
                     });
                     resolve(updatedCreator);
@@ -39,16 +54,12 @@ const Aggregate = () => {
 
         try {
             const creators = await prisma.creator.findMany();
-            const output = await Promise.all(creators.map(creator => {
-                return new Promise(async (resolve, reject) => {
-                    try {
-                        const updatedCreator = await updateCreator(creator);
-                        resolve(updatedCreator);
-                    } catch(error) {
-                        reject(error);
-                    }
-                })
-            }))
+            let output = [];
+            for(let i = 0; i < creators.length; i++) {
+                const creator = await updateCreator(creators[i]);
+                output.push(creator);
+            }
+            await prisma.$disconnect();
             resolve(output);
         } catch(error) {
             await prisma.$disconnect();

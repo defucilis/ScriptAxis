@@ -1,7 +1,7 @@
-import Layout from '../components/Layout'
+import Layout from '../components/layout/Layout'
+import BrowseScripts from '../components/scripts/BrowseScripts'
+
 import ScriptUtils from '../utilities/ScriptUtils'
-import Fuse from 'fuse.js'
-import BrowseScripts from '../components/BrowseScripts'
 import {QueryScripts} from './api/scripts/query'
 
 const Scripts = ({propScripts, tags, categories, query}) => {

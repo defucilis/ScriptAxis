@@ -1,11 +1,14 @@
 import {useState, useEffect} from 'react'
-import ScriptGrid from '../components/ScriptGrid'
-import ScriptUtils from '../utilities/ScriptUtils'
 import Head from 'next/head'
+import Router from 'next/router'
+
+import ScriptGrid from './ScriptGrid'
 import Filters from './Filters'
 import Sorting from './Sorting'
+
+import ScriptUtils from '../../utilities/ScriptUtils'
+
 import style from './BrowseScripts.module.css'
-import Router from 'next/router'
 
 const BrowseScripts = ({propScripts, tags, categories, query}) => {
     const [scripts, setScripts] = useState([]);

@@ -1,7 +1,10 @@
 import Link from 'next/link'
+
 import { FaThumbsUp } from 'react-icons/fa'
 import { FaHeart } from 'react-icons/fa'
-import ScriptUtils from '../utilities/ScriptUtils'
+
+import ScriptUtils from '../../utilities/ScriptUtils'
+
 import style from './ScriptTile.module.css'
 
 const ScriptTile = ({script}) => {
@@ -39,7 +42,6 @@ const ScriptTile = ({script}) => {
                 </div>
                 )}
             </div>
-            
         </div>
     )
 }

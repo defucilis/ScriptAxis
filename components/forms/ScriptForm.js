@@ -4,15 +4,15 @@ import * as yup from 'yup';
 import ReactMarkdown from 'react-markdown'
 
 import {Input, TextArea, Select, Autocomplete, Tags, Dropzone, Datepicker, Collapsible} from './FormUtils';
-import NavigationPrompt from './NavigationPrompt'
-import ScriptUtils from '../utilities/ScriptUtils'
-import UserContext from '../utilities/UserContext'
+import NavigationPrompt from '../functional/NavigationPrompt'
+import ScriptUtils from '../../utilities/ScriptUtils'
+import useUser from '../../utilities/auth/useUser'
 
 import style from './ScriptForm.module.css'
 
 const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPassed, defaultFormData, options, submitLabel}) => {
 
-    const {user} = useContext(UserContext);
+    const {user} = useUser();
 
     const [formData, setFormData] = useState({});
 
@@ -251,6 +251,7 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
                     multiple: false,
                     noKeyboard: true,
                     preventDropOnDocument: true,
+                    pasteable: true
                 }}
                 onChange={handleChange}
                 onError={setError}

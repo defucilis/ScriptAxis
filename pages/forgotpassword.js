@@ -1,18 +1,16 @@
 import {useState, useContext} from 'react'
-import Layout from '../components/Layout'
 import Head from 'next/head'
-import Link from 'next/link'
 import Router from 'next/router'
-import firebase from '../utilities/Firebase'
-import axios from 'axios'
-import UserContext from '../utilities/UserContext'
+
+import Layout from '../components/layout/Layout'
+
+import firebase from '../utilities/initFirebase'
 
 import style from './signin.module.css'
 
 const SignIn = () => {
 
     const [error, setError] = useState("");
-    const {setUser} = useContext(UserContext);
 
     const reset = e => {
         const doReset = async (email, callback) => {
