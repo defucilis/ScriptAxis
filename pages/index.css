@@ -47,7 +47,7 @@ body {
 }
 
 .content {
-    min-height: calc(100vh - 200px);
+    min-height: calc(100vh - 230px);
     padding-bottom: 50px;
 }
 

@@ -1,0 +1,17 @@
+.topbar {
+    height: 30px;
+}
+
+.topbar > div {
+    display: grid;
+    place-items: center;
+    height: 100%;
+}
+
+.topbar p {
+    margin: 0;
+}
+
+.topbar a {
+    color: #e8739c;
+}
