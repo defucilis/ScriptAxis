@@ -263,7 +263,7 @@ const Filters = ({query, onFilter}) => {
 
         try {
             const response = await axios.post("/api/users/savesearch", {uid: user.id, searchString: queryString});
-
+            if(response.data.error) throw response.data.error;
         } catch(error) {
             console.error("Failed saving search", error);
         }

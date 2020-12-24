@@ -80,9 +80,10 @@ const EditScript = ({script, tags, categories, talent, studios, creators}) => {
                     thumbnailOptional: true
                 }}
                 submitLabel="Update Script"
+                busy={submitting}
             />
             {formError ? <pre style={{color: "salmon"}}>{formError}</pre> : null}
-            </>
+            </> //
         )
     )
 }

@@ -66,6 +66,7 @@ const AddScript = ({tags, categories, talent, studios, creators}) => {
                 options={{
                     thumbnailOptional: true
                 }}
+                busy={submitting}
             />
         )
     )

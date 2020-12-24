@@ -109,8 +109,8 @@ const ScriptDetails = ({script}) => {
                 creator: script.creator,
                 isLiked: newValue
             });
-            refreshUserDbValues();
             if(response.data.error) throw response.data.error;
+            refreshUserDbValues();
             console.log(response.data);
         } catch(error) {
             console.error(error);
