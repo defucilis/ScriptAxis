@@ -143,20 +143,23 @@ const stringIsValidDuration = str => {
     return true;
 }
 
-const viewsToString = views => {
+const viewsToString = (views, addViews = false) => {
+
+    const suffix = addViews ? (views === 1 ? " View" : " Views") : "";
+
     if(views > 1000000) {
-        return (Math.round(views / 100000) / 10) + "M";
+        return (Math.round(views / 100000) / 10) + "M" + suffix;
     }
     
     if(views > 10000) {
-        return Math.round(views / 1000) + "k";
+        return Math.round(views / 1000) + "k" + suffix;
     }
     
     if(views > 1000) {
-        return (Math.round(views / 100) / 10) + "k";
+        return (Math.round(views / 100) / 10) + "k" + suffix;
     }
 
-    return Math.round(views) + "";
+    return Math.round(views) + suffix;
 }
 
 const thumbsToPercentage = (thumbsup, thumbsdown) => {

@@ -30,7 +30,7 @@ const ScriptTile = ({script}) => {
                 </Link>
             </div>
             <div className={style.bottomrow}>
-                <p className={style.views}>{ScriptUtils.viewsToString(script.views)} Views</p>
+                <p className={style.views}>{ScriptUtils.viewsToString(script.views, true)}</p>
                 <div className={style.rating}>
                     <FaThumbsUp />
                     <p>{ScriptUtils.thumbsToPercentage(script.thumbsUp, script.thumbsDown)}%</p>
