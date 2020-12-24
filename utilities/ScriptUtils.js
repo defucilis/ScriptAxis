@@ -49,7 +49,7 @@ const parseScriptDocument = script => {
         tags: !script.tags ? [] : script.tags,
         description: script.description,
         duration: script.duration,
-        thumbnail: script.thumbnail,
+        thumbnail: script.thumbnail || "/img/placeholder-thumbnail.png",
         sourceUrl: script.sourceUrl,
         streamingUrl: script.streamingUrl,
         studio: script.studio || "",
@@ -64,7 +64,7 @@ const parseScriptDocument = script => {
         
         //SFW Overrides
         // name: !script.name ? "Script" : script.name.split("").reverse().join(""),
-        // thumbnail: "https://planethifi.com/wp-content/uploads/2020/06/720p-696x448.jpg",
+        //thumbnail: "/img/placeholder-thumbnail.png",
         // studio: !script.studio ? null : script.studio.split("").reverse().join(""),
         // category: !script.categoryName ? "Category" : script.categoryName.split("").reverse().join(""),
         // tags: !script.tags ? [] : script.tags.map(tag => tag.split("").reverse().join("")),
