@@ -229,6 +229,7 @@ const filtersEqual = (filterA, filterB) => {
 }
 
 //goes from a filters object applied to the database and turns it into a query object to be turned into a URL query strin
+//Note that this takes place on the *client* whenever it's necessary to prepare a query string or send query data to the server
 const objectToQuery = input => {
     if(!input) return "";
     
@@ -242,8 +243,8 @@ const objectToQuery = input => {
     let output = {};
     if(filters.name) output.search = filters.name.contains;
     if(filters.category) output.category = filters.category.name.equals;
-    if(filters.include) output.include = filters.include.join("+");
-    if(filters.exclude) output.exclude = filters.exclude.join("+");
+    if(filters.include) output.include = filters.include.join("_");
+    if(filters.exclude) output.exclude = filters.exclude.join("_");
     if(filters.minDuration) output.minDuration = filters.minDuration;
     if(filters.maxDuration) output.maxDuration = filters.maxDuration;
     if(filters.talent) output.talent = filters.talent.contains;
@@ -260,14 +261,15 @@ const objectToQuery = input => {
 
     return output;
 }
-//goes from a query object parsed from a URL string and turns it into a filter object to be applied to the databas
+//goes from a query object parsed from a URL string and turns it into a filter object to be applied to the database
+//Note that this takes place on the *server* from the next.js `query` input into getServerSideProps
 const queryToObject = query => {
     let output = {filters: {}, sorting: {created: "desc"}, page: 1};
 
     if(query.search) output.filters.name = { contains: query.search, mode: "insensitive" };
     if(query.category) output.filters.category = {name: {equals: query.category}};
-    if(query.include) output.filters.include = query.include.split(" ");
-    if(query.exclude) output.filters.exclude = query.exclude.split(" ");
+    if(query.include) output.filters.include = query.include.split("_");
+    if(query.exclude) output.filters.exclude = query.exclude.split("_");
     if(query.minDuration) output.filters.minDuration = query.minDuration;
     if(query.maxDuration) output.filters.maxDuration = query.maxDuration;
     if(query.talent) output.filters.talent = { contains: query.talent, mode: "insensitive" };
@@ -288,7 +290,7 @@ const queryToObject = query => {
 const queryToString = query => {
     let finalQuery = {...query};
     if(Object.keys(finalQuery).length === 0) return "";
-    return "?" + Object.keys(finalQuery).map(key => `${key}=${finalQuery[key]}`).join("&");
+    return encodeURI("?" + Object.keys(finalQuery).map(key => `${key}=${finalQuery[key]}`).join("&"));
 }
 
 const queryToPrettyString = queryString => {
