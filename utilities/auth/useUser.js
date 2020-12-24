@@ -50,7 +50,10 @@ const useProvideAuth = () => {
     //Userful if we've just changed somethjing like the user's display name, liked / owner scripts, etc
     const refreshUserDbValues = () => {
         return new Promise(async (resolve, reject) => {
-            if(updatingFromDb) reject("Already running DB refresh");
+            if(updatingFromDb) {
+                reject("Already running DB refresh");
+                return;
+            }
             setUpdatingFromDb(true);
             try {
                 if(!fbUser) throw "User is not logged in!";
