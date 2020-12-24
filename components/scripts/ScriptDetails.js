@@ -160,7 +160,9 @@ const ScriptDetails = ({script}) => {
             <p className={style.created}>{dayjs(Number(script.created)).format("D MMMM YYYY")}</p>
             <div className={style.sidebyside}>
                 <div className={style.imagewrapper}>
-                    {getEmbed(script.streamingUrl) ? (<>
+                    {getEmbed(script.streamingUrl) 
+                        ? (
+                        <>
                             <iframe 
                                 style={{display: iFrameLoading ? "none" : "block"}} 
                                 src={getEmbed(script.streamingUrl)} 
@@ -170,7 +172,9 @@ const ScriptDetails = ({script}) => {
                                 onLoad={() => handleIFrameLoaded()} 
                             />
                             {iFrameLoading ? <img src={script.thumbnail} /> : null}
-                    </>) : <img src={script.thumbnail} />
+                        </> //
+                    ) 
+                    : <img src={script.thumbnail} />
                     }
                 </div>
                 <div className={style.details}>
@@ -182,7 +186,7 @@ const ScriptDetails = ({script}) => {
                     <ul className={style.tags}>
                         {!script.tags 
                             ? null 
-                            : script.tags.map(tag => {
+                            : script.tags.filter(t => t !== script.category).map(tag => {
                                 return (<li key={tag}>
                                     <Link href={`/scripts?include=${tag}`}>
                                         <a>{tag}</a>
