@@ -10,7 +10,7 @@ import useUser from '../../utilities/auth/useUser'
 
 import style from './ScriptForm.module.css'
 
-const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPassed, defaultFormData, options, submitLabel}) => {
+const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPassed, defaultFormData, options, submitLabel, busy}) => {
 
     const {user} = useUser();
 
@@ -300,7 +300,10 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
                 value={formData.created}
             />
 
-            <button type="submit">{submitLabel}</button>
+            {busy
+                ? <p>Please wait...</p>
+                : <button type="submit">{submitLabel}</button>
+            }
         </form>
         </div>
     );

@@ -63,6 +63,10 @@ const AddScript = ({tags, categories, talent, studios, creators}) => {
                 onValidationPassed={handleValidationPassed}
                 defaultFormData={defaultFormData}
                 submitLabel="Add Script"
+                options={{
+                    thumbnailOptional: true
+                }}
+                busy={submitting}
             />
         )
     )

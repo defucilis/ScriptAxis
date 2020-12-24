@@ -17,13 +17,18 @@ const EditScript = ({script, tags, categories, talent, studios, creators}) => {
     const [formError, setFormError] = useState("");
     useEffect(() => {
         console.warn("Script changed");
+
+        //don't show the category in the tag list
+        let trimmedTags = script.tags || [];
+        trimmedTags = trimmedTags.filter(t => t !== script.category);
+
         const data = {
             name: script.name || "",
             slug: script.slug,
             owner: script.owner.id,
             creator: script.creator || "",
             category: script.category || "",
-            tags: script.tags || [],
+            tags: trimmedTags,
             description: script.description || "",
             duration: ScriptUtils.durationToString(script.duration),
             thumbnail: [],
@@ -80,9 +85,10 @@ const EditScript = ({script, tags, categories, talent, studios, creators}) => {
                     thumbnailOptional: true
                 }}
                 submitLabel="Update Script"
+                busy={submitting}
             />
             {formError ? <pre style={{color: "salmon"}}>{formError}</pre> : null}
-            </>
+            </> //
         )
     )
 }
@@ -155,6 +161,13 @@ const updateScript = async (newPostData, oldPostData, onSuccess, onFail) => {
     if(diffData.category) {
         finalUpdateData.remove.category = oldPostData.category;
         finalUpdateData.add.category = newPostData.category;
+
+        //we also need to remove the 'category tag' from the script and add the new category as a tag
+        //this is actually done in the next if block, but this flag ensures that the new tag list contains the new category
+        diffData.tags = true;
+        newPostData.tags = [...newPostData.tags.filter(t => t !== oldPostData.category), newPostData.category];
+        if(finalUpdateData.set.tags) finalUpdateData.set.tags.push(newData.category);
+        else finalUpdateData.set.tags = [...newData.tags, newData.category];
     }
     if(diffData.tags) {
         finalUpdateData.remove.tags = oldPostData.tags.filter(tag => newPostData.tags.findIndex(t => t === tag) === -1);

@@ -34,6 +34,7 @@ const Header = ({page}) => {
                 window.localStorage.setItem("storedCategoryCounts", JSON.stringify(categories));
                 window.localStorage.setItem("storedTalent", JSON.stringify(talent));
                 window.localStorage.setItem("storedStudios", JSON.stringify(studios));
+                window.localStorage.setItem("lastListFetchTime", (new Date()).valueOf());
             } catch(error) {
                 console.error(error);
             }
@@ -41,10 +42,14 @@ const Header = ({page}) => {
         const storedScriptCount = window.localStorage.getItem("scriptCount");
         const storedTagCounts = window.localStorage.getItem("storedTagCounts");
         const storedCategoryCounts = window.localStorage.getItem("storedCategoryCounts");
+        const lastListFetchTime = window.localStorage.getItem("lastListFetchTime");
         if(storedScriptCount) setScriptCount(storedScriptCount);
         if(storedTagCounts) setTagCounts(JSON.parse(storedTagCounts));
         if(storedCategoryCounts) setCategoryCounts(JSON.parse(storedCategoryCounts));
-        loadScriptCount();
+        
+        if(!lastListFetchTime || (new Date(Number(lastListFetchTime))) < (new Date() - 1000 * 60 * 60)) {
+            loadScriptCount();
+        }
     }, [])
 
     const doSearch = e => {

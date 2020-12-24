@@ -16,9 +16,8 @@ const Aggregate = () => {
                         }
                     });
 
-                    //todo - this isn't correctly selecting the most viewed script?
                     const thumbnail = allScripts.length > 0 
-                        ? allScripts.sort((a, b) => a.viewCount - b.viewCount)[0].thumbnail 
+                        ? allScripts.sort((a, b) => b.views - a.views)[0].thumbnail 
                         : "";
 
                     const aggregations = await prisma.script.aggregate({

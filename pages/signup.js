@@ -14,12 +14,14 @@ import style from './signin.module.css'
 const SignUp = () => {
 
     const [error, setError] = useState("");
+    const [signingUp, setSigningUp] = useState(false);
     const {login} = useUser();
 
     const signUp = e => {
         const doSignUp = async (email, username, password, callback) => {
             setError("");
             try {
+                setSigningUp(true);
                 await firebase.auth().createUserWithEmailAndPassword(email, password);
                 console.log(firebase.auth().currentUser);
                 firebase.auth().currentUser.sendEmailVerification();
@@ -27,10 +29,12 @@ const SignUp = () => {
                 if(user.data.error) throw user.data.error;
                 const finalUser = await login(email, password);
                 console.log("Found user data", finalUser);
+                setSigningUp(false);
                 callback({success: true});
             } catch(error) {
                 firebase.auth().signOut();
                 console.error(error.message);
+                setSigningUp(false);
                 callback({success: false, error: { message: error.message }});
             }
         }
@@ -77,7 +81,10 @@ const SignUp = () => {
                 <input type="password" id="password" />
                 <label htmlFor="confirm">Confirm Password</label>
                 <input type="password" id="confirm" />
-                <input type="submit" value="Sign Up" />
+                { signingUp 
+                    ? <p>Please wait...</p>
+                    : <input type="submit" value="Sign Up" />
+                }
                 <p style={{color: "red"}}>{error}</p>
             </form>
         </Layout>
