@@ -10,7 +10,7 @@ import style from '../scripts/ScriptTile.module.css'
 const CreatorTile = ({creator}) => {
     return (
         <div className={style.scripttile}>
-            <Link href={`/creators/${creator.name}`}>
+            <Link href={`/creator/${creator.name}`}>
                 <a className={style.thumbnail}>
                     <div className={style.imagewrapper}>
                         <img src={creator.thumbnail} />
@@ -19,7 +19,7 @@ const CreatorTile = ({creator}) => {
                 </a>
             </Link>
             <div className={style.scriptname}>
-                <Link href={`/creators/${creator.name}`}>
+                <Link href={`/creator/${creator.name}`}>
                     <a>{creator.name}</a>
                 </Link>
             </div>
