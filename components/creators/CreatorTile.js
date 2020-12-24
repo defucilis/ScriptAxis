@@ -29,7 +29,7 @@ const CreatorTile = ({creator}) => {
             <div className={style.bottomrow}>
                 <div className={style.rating}>
                     <FaEye />
-                    <p>{ScriptUtils.viewsToString(creator.totalViews)} Views</p>
+                    <p>{ScriptUtils.viewsToString(creator.totalViews, true)}</p>
                 </div>
                 { creator.totalLikes == 0 ? null : (
                 <div className={style.likes}>
