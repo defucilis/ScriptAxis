@@ -21,7 +21,7 @@ model Script {
   tags              String[]
   description       String?
   duration          Int
-  thumbnail         String?
+  thumbnail         String
   funscripts        String[]
   sourceUrl         String?
   streamingUrl      String?
