@@ -100,8 +100,14 @@ const durationToString = duration => {
     const hours = Math.floor(duration / 3600);
     const minutes = Math.floor((duration - hours * 3600) / 60);
     const seconds = duration - (minutes * 60) - (hours * 3600);
-    if(hours > 0) output += hours + ":";
-    if(minutes > 0) output += minutes + ":";
+    if(hours > 0) {
+        output += hours + ":";
+        if(minutes > 10) output += minutes + ":";
+        else if(minutes > 0) output += "0" + minutes + ":";
+        else output += "00:";
+    } else if(minutes > 0) {
+        output += minutes + ":";
+    }
     if(seconds >= 10) output += seconds;
     else if(seconds > 0) output += "0" + seconds;
     else output += "00";

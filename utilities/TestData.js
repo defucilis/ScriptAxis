@@ -55,7 +55,7 @@ const TestData = [
         streamingUrl:   "https://milovana.com/forum/viewtopic.php?p=290996#p290996",
         thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/salon-desade-digitalis?alt=media&token=7a9d5d17-d0c0-401d-932f-091e60cf7054",
         description:    "I don’t know why but I keep reading Digitails instead of DigiTALIS.\n\nBonus is about 35 minutes, main episode is 1 hr and 3 minutes or so. Scripts start during warm up phase. Sorry for imperfect beats, I did most of this at 2x speed so I wouldn’t spoil the audio for myself when I play it. That said, I have not tested this. It’s SLOW intentionally. I’m not a fucking God when it comes to lasting inside the handy sleeve or a fleshlight so I did that on purpose in HOPES I can make it to the end haha. Good luck to the rest of you. (If you want a faster script, pretty sure there are tools to double my speed)\n\nRLGL CH Salon DeSade’s Digitalis [1080p HD].funscript (124.5 KB)\n\nRlgl Ch Salon Desade’s Digitalis Bonus Triple Episode [1080P Hd]-1.funscript (62.8 KB)\n\nThis should work on the Launch, though I think some slower beats may not? Not sure how slow launch can get, but I have both toys so I’ll probably test both. I’m posting here before testing because I don’t really intend on editing this anymore. I’m going to be just fine with it as is lol ",
-        duration:       "60:03",
+        duration:       "1:03:36",
         category:       "Cock Hero",
         tags: [
             "Music Based",
