@@ -43,15 +43,16 @@ body {
     margin-top: -8px;
 }
 
-.content {
-    min-height: calc(100vh - 230px);
-    padding-bottom: 50px;
-}
-
 .container {
     min-width: 991px;
     max-width: 1323px;
     margin: 0 auto;
+    padding: 0 10px;
+}
+
+.content {
+    min-height: calc(100vh - 230px);
+    padding-bottom: 50px;
 }
 
 ::-webkit-input-placeholder { /* Edge */
