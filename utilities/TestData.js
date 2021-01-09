@@ -1717,6 +1717,7 @@ const GetTestData = () => {
             return {
                 ...data,
                 slug: slugify(data.name).toLowerCase(),
+                thumbnail: data.thumbnail || "/img/placeholder-thumbnail.png",
                 duration: ScriptUtils.stringToDuration(data.duration),
                 owner: "9cf9dc87-a8cf-4c17-bb95-1f5c05b8d791",
             }
