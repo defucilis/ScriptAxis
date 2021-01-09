@@ -6,6 +6,7 @@
 html, body {
     margin: 0;
     padding: 0;
+    min-width: 991px;
 }
 
 h1, h2, h3, h4, h5, h6, p, ul, a, span {
@@ -33,10 +34,6 @@ ul {
 
 html {
     background-color: #000;
-}
-
-a {
-    text-decoration: none;
 }
 
 /* I have no idea why my body is getting an explicit 8px bottom margin applied... */

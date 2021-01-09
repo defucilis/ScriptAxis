@@ -32,6 +32,13 @@ const Index = () => {
 
         fetchScripts();
     }, [])
+    
+
+    useEffect(() => {
+        if(window.innerWidth < 950) {
+            alert("ScriptAxis in in early development and doesn't yet support small displays.\n\nIf you are on your phone, try viewing the site in desktop mode, or viewing the site in landscape orientation.");
+        }
+    }, [])
 
     return (
         <Layout>
