@@ -6,6 +6,7 @@
 html, body {
     margin: 0;
     padding: 0;
+    min-width: 991px;
 }
 
 h1, h2, h3, h4, h5, h6, p, ul, a, span {
@@ -35,10 +36,6 @@ html {
     background-color: #000;
 }
 
-a {
-    text-decoration: none;
-}
-
 /* I have no idea why my body is getting an explicit 8px bottom margin applied... */
 body {
     position: relative;
@@ -46,15 +43,16 @@ body {
     margin-top: -8px;
 }
 
-.content {
-    min-height: calc(100vh - 230px);
-    padding-bottom: 50px;
-}
-
 .container {
     min-width: 991px;
     max-width: 1323px;
     margin: 0 auto;
+    padding: 0 10px;
+}
+
+.content {
+    min-height: calc(100vh - 230px);
+    padding-bottom: 50px;
 }
 
 ::-webkit-input-placeholder { /* Edge */

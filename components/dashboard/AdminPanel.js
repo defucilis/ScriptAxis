@@ -85,7 +85,7 @@ const UploadFile = async (file, name, onMessage, onSuccess, onFail) => {
         console.error("error", error);
         
         onMessage("");
-        onFail();
+        onFail(error);
     }
 }
 
@@ -218,7 +218,7 @@ const AdminPanel = ({user, existingScripts}) => {
             addMessage(url);
             addMessage("");
             setRunning(false);
-        }, () => {
+        }, error => {
             addMessage("Error: " + error);
             addMessage("");
             setRunning(false);
