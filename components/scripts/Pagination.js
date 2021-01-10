@@ -7,7 +7,9 @@ const Pagination = ({curPage, totalPages, query}) => {
     const getLinkTarget = (query, page) => {
         let newQuery = {...query};
         newQuery.page = page;
-        return ScriptUtils.queryToString(ScriptUtils.objectToQuery(newQuery));
+        let queryString = ScriptUtils.queryToString(ScriptUtils.objectToQuery(newQuery));
+        if(page === 1) queryString += queryString === "" ? "?page=1" : "&page=1";
+        return queryString;
     }
 
     return (
