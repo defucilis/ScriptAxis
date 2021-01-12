@@ -4,6 +4,7 @@ import Router from 'next/router';
 import axios from 'axios'
 import slugify from 'slugify'
 import { FaCog } from 'react-icons/fa'
+import * as imageConversion from 'image-conversion'
 
 import FirebaseUtils from '../../utilities/FirebaseUtils'
 import ScriptUtils from '../../utilities/ScriptUtils'
@@ -78,9 +79,13 @@ const createScript = async (postData, onSuccess, onFail) => {
 
     //upload the thumbnail and add it to the database
     try {
+        const compressedFile = await imageConversion.compressAccurately(data.thumbnail[0], {
+            size: 100,
+            type: "image/jpeg"
+        });
         const fileUrl = await FirebaseUtils.uploadFile(
-            data.thumbnail[0], 
-            `thumbnails/thumbnail_${data.slug}`, 
+            compressedFile, 
+            `thumbnails/${data.slug}`, 
             progress => console.log("Thumbnail File uploading", progress * 100)
         );
         data.thumbnail = fileUrl;
