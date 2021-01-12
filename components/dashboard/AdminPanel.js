@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 import axios from 'axios'
 import slugify from 'slugify'
+import * as imageConversion from 'image-conversion'
 
 import GetTestData from '../../utilities/TestData'
 import ScriptUtils from '../../utilities/ScriptUtils'
@@ -79,7 +80,11 @@ const Aggregate = async(onMessage, onSuccess, onFail) => {
 const UploadFile = async (file, name, onMessage, onSuccess, onFail) => {
     onMessage(`Uploading ${file.name} (${file.size} bytes)`);
     try {
-        const url = await FirebaseUtils.uploadFile(file, name, () => {});
+        const compressedFile = await imageConversion.compressAccurately(file, {
+            size: 100,
+            type: "image/jpeg"
+        });
+        const url = await FirebaseUtils.uploadFile(compressedFile, "adminthumbnails/" + name, () => {});
         onSuccess(url);
     } catch(error) {
         console.error("error", error);
@@ -261,7 +266,7 @@ const AdminPanel = ({user, existingScripts}) => {
                         "image/png",
                         "image/jpeg",
                     ],
-                    maxSize: 2000000, //2MB
+                    //maxSize: 2000000, //2MB
                     multiple: false,
                     noKeyboard: true,
                     preventDropOnDocument: true,
