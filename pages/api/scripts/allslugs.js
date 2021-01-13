@@ -5,7 +5,7 @@ const FetchSlugs = () => {
         const prisma = new PrismaClient();
         try {
             console.log("Fetching all script slugs");
-            let scripts = await prisma.script.findMany({select: { id: true, slug: true, name: true}});
+            let scripts = await prisma.script.findMany({select: { id: true, slug: true, name: true, sourceUrl: true}});
             await prisma.$disconnect();
             resolve(scripts);
         } catch(error) {
