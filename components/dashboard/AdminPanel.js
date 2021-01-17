@@ -25,8 +25,7 @@ const ClearData = async (onSuccess, onFail) => {
     }
 }
 
-const AddData = async(count, existingScripts, onMessage, onProgress, onSuccess, onFail) => {
-    const scripts = GetTestData().slice(0, count);
+const AddData = async(scripts, onMessage, onProgress, onSuccess, onFail) => {
     let errorCount = 0;
 
     onMessage(`Adding ${scripts.length} scripts to the database`);
@@ -36,8 +35,6 @@ const AddData = async(count, existingScripts, onMessage, onProgress, onSuccess, 
 
         try {
             onMessage(`Inserting ${script.name}`)
-
-            if(existingScripts.findIndex(s => s.name === script.name) !== -1) throw ({ message: "Script already exists!"});
 
             const response = await axios.post("/api/scripts/create", script);
             if(response.data.error) throw response.data.error;
@@ -192,7 +189,11 @@ const AdminPanel = ({user, existingScripts}) => {
         progressBarParentRef.current.style.setProperty("display", "block");
         progressBarRef.current.style.setProperty("width", "0%");
 
-        AddData(count, scripts, addMessage, (count, total) => {
+        const scriptsToAdd = GetTestData().slice(0, count).filter(script => {
+            return scripts.findIndex(s => s.name === script.name) === -1
+        });
+
+        AddData(scriptsToAdd, addMessage, (count, total) => {
             progressBarRef.current.style.setProperty("width", `${Math.round(count * 100 / total)}%`);
         }, addedCount => {
             addMessage(`Successfully added ${addedCount} scripts to database`);
