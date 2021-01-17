@@ -23,6 +23,7 @@ const Scrape = async (scriptSlug, scriptUrl, cookie) => {
 
     const views = threadData.views;
     const likeCount = threadData.like_count;
+    const created = new Date(threadData.created_at);
 
     const prisma = new PrismaClient();
     try {
@@ -32,7 +33,8 @@ const Scrape = async (scriptSlug, scriptUrl, cookie) => {
             },
             data: {
                 views,
-                likeCount
+                likeCount,
+                created
             }
         });
         await prisma.$disconnect();

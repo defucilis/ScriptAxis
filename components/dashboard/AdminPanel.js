@@ -121,7 +121,7 @@ const RunScrape = async (scripts, cookie, onMessage, onProgress, onComplete, onE
             });
             console.log(response.data);
             if(response.data.error) throw response.data.error.message;
-            onMessage(`----Success - set likes to ${response.data.likeCount} and views to ${response.data.views}`);
+            onMessage(`----Success - set likes to ${response.data.likeCount}, views to ${response.data.views} and date to ${response.data.created}`);
         } catch(error) {
             onError(error.message || error);
         } finally {
