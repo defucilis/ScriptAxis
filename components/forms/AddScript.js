@@ -77,6 +77,10 @@ const createScript = async (postData, onSuccess, onFail) => {
 
     const data = {...postData}
 
+    console.log(data);
+    
+    data.slug = slugify(data.name, {lower: true});
+
     //upload the thumbnail and add it to the database
     try {
         const compressedFile = await imageConversion.compressAccurately(data.thumbnail[0], {
@@ -93,8 +97,15 @@ const createScript = async (postData, onSuccess, onFail) => {
         onFail(error);
     }
 
+    const testDataString = ScriptUtils.getScriptObjectCode(data);
+    try {
+        await navigator.clipboard.writeText(testDataString);
+        console.log("Wrote data to clipboard");
+    } catch(error) {
+        console.error("Failed to write test data to clipboard", error);
+    }
+
     //modify the form data into something useful for the database
-    data.slug = slugify(data.name, {lower: true});
     data.duration = ScriptUtils.stringToDuration(data.duration);
 
     try {

@@ -247,7 +247,7 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
                         "image/png",
                         "image/jpeg",
                     ],
-                    maxSize: 2000000, //2MB
+                    //maxSize: 2000000, //2MB
                     multiple: false,
                     noKeyboard: true,
                     preventDropOnDocument: true,

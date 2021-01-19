@@ -25,8 +25,7 @@ const ClearData = async (onSuccess, onFail) => {
     }
 }
 
-const AddData = async(count, existingScripts, onMessage, onProgress, onSuccess, onFail) => {
-    const scripts = GetTestData().slice(0, count);
+const AddData = async(scripts, onMessage, onProgress, onSuccess, onFail) => {
     let errorCount = 0;
 
     onMessage(`Adding ${scripts.length} scripts to the database`);
@@ -36,8 +35,6 @@ const AddData = async(count, existingScripts, onMessage, onProgress, onSuccess, 
 
         try {
             onMessage(`Inserting ${script.name}`)
-
-            if(existingScripts.findIndex(s => s.name === script.name) !== -1) throw ({ message: "Script already exists!"});
 
             const response = await axios.post("/api/scripts/create", script);
             if(response.data.error) throw response.data.error;
@@ -111,6 +108,29 @@ const GetJsonBackup = async (onMessage, onSuccess, onFail) => {
     }
 }
 
+const RunScrape = async (scripts, cookie, onMessage, onProgress, onComplete, onError) => {
+    onMessage("Scraping all views and likes from EroScripts");
+    for(let i = 0; i < scripts.length; i++) {
+        const script = scripts[i];
+        try {
+            onMessage("--Scraping data for " + script.slug)
+            const response = await axios.post("/api/admin/scrape", {
+                slug: script.slug, 
+                url: script.sourceUrl, 
+                cookie
+            });
+            console.log(response.data);
+            if(response.data.error) throw response.data.error.message;
+            onMessage(`----Success - set likes to ${response.data.likeCount}, views to ${response.data.views} and date to ${response.data.created}`);
+        } catch(error) {
+            onError(error.message || error);
+        } finally {
+            onProgress(i + 1, scripts.length);
+        }
+    }
+    onComplete();
+}
+
 const AdminPanel = ({user, existingScripts}) => {
 
     const [running, setRunning] = useState(false);
@@ -169,7 +189,11 @@ const AdminPanel = ({user, existingScripts}) => {
         progressBarParentRef.current.style.setProperty("display", "block");
         progressBarRef.current.style.setProperty("width", "0%");
 
-        AddData(count, scripts, addMessage, (count, total) => {
+        const scriptsToAdd = GetTestData().slice(0, count).filter(script => {
+            return scripts.findIndex(s => s.name === script.name) === -1
+        });
+
+        AddData(scriptsToAdd, addMessage, (count, total) => {
             progressBarRef.current.style.setProperty("width", `${Math.round(count * 100 / total)}%`);
         }, addedCount => {
             addMessage(`Successfully added ${addedCount} scripts to database`);
@@ -244,6 +268,24 @@ const AdminPanel = ({user, existingScripts}) => {
         });
     }
 
+    const [scrapeCookie, setScrapeCookie] = useState("");
+    const StartScrape = () => {
+        setRunning(true);
+        progressBarParentRef.current.style.setProperty("display", "block");
+        progressBarRef.current.style.setProperty("width", "0%");
+
+        RunScrape(existingScripts, scrapeCookie, addMessage, (count, total) => {
+            progressBarRef.current.style.setProperty("width", `${Math.round(count * 100 / total)}%`);
+        }, () => {
+            addMessage("Scrape completed successfully");
+            addMessage("");
+            setRunning(""); 
+            progressBarParentRef.current.style.setProperty("display", "none");
+        }, error => {
+            addMessage("Error: " + error);
+        });
+    }
+
     
 
     //if(user === null || user.waiting) return <div></div>
@@ -289,6 +331,16 @@ const AdminPanel = ({user, existingScripts}) => {
                     Download JSON Backup
                 </a>
             </Link>
+            <div>
+                <input 
+                    id="scrapeCookie" 
+                    type="text" 
+                    value={scrapeCookie} 
+                    onChange={e => setScrapeCookie(e.target.value)} 
+                    placeholder="Scrape Cookie"
+                />
+                <button onClick={StartScrape}>Scrape Views and Likes</button>
+            </div>
         </div>
         <div className={style.progressbg} ref={progressBarParentRef}>
             <div className={style.progressbar} ref={progressBarRef}></div>
