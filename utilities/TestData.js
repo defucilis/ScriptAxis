@@ -1,6 +1,14 @@
 import slugify from "slugify";
 import ScriptUtils from './ScriptUtils'
 
+/*
+This file represents a manual backup of the entire database. It means that I can wipe the whole database and not have to worry about losing data
+Obviously, this only works while scripts are being added manually by me. Once the community starts adding scripts, this file will no longer be useful.
+(Instead, I'll have to rely on manually-created backups to restore the database should I need to wipe it)
+
+To add a script, copy the 'template script' first item (which is ignored when this file is processed) and update all fields.
+*/
+
 const TestData = [
     {
         name:           "TemplateScript",
@@ -24,6 +32,147 @@ const TestData = [
         thumbsUp:       1,
         thumbsDown:     0,
         created:        new Date(2020, 0, 5).valueOf(),
+    },
+    {
+        name:           "Salon DeSade's Oblivion",
+        creator:        "LondonGent",
+        sourceUrl:      "https://discuss.eroscripts.com/t/rlgl-cock-hero-salon-desades-oblivion/7908",
+        thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumbnails%2Fsalon-desade's-oblivion?alt=media&token=fdf47c93-2c45-4edd-a291-4e80a500eac1",
+        description:    "Video Description: “I am very pleased to announce the latest release from the Salon DeSade stable. A RLGL CH entitled Oblivion . I will spare you the hype, but suffice to say, I think lovers of T&D Blowjobs, Handjobs and Softcore Glamour babes will quite like it.”\n\nSince this is a Redlight-Greenlight video, I’ve not synced the script to either the music or action. It’s just natural strokes that gradually speed up as the video progresses with pauses for the relevant sections. Hopefully still very enjoyable!",
+        duration:       "1:17:47",
+        category:       "Cock Hero",
+        tags: [
+            "Challenge",
+            "HD",
+        ],
+        studio:         "numberonefan",
+        likeCount:      21,
+        views:          1900,
+        thumbsUp:       1,
+        thumbsDown:     0,
+        created:        new Date(2020, 10, 1).valueOf(),
+    },
+    {
+        name:           "Blasphemous Actions with Brotner-in-Law",
+        creator:        "Nitesurgeon",
+        sourceUrl:      "https://discuss.eroscripts.com/t/siri-taboo-handjob-blasphemous-actions-with-brother-n-law/14014",
+        streamingUrl:   "https://www.youporn.com/watch/9304269/blasphemous-actions-with-brother-in-law-siri-taboo-handjob/",
+        thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/adminthumbnails%2Fblasphemous-actions-with-brotner-in-law?alt=media&token=589c9003-ecf5-4446-be47-3e6310acf522",
+        description:    "I had made a request for this script a few months ago, but got no takers. So...\n\nThis is my first ever script, so constructive criticism is welcome.",
+        duration:       "15:43",
+        category:       "Handjob",
+        tags: [
+            "POV",
+            "Incest",
+            "HD",
+        ],
+        studio:         "Taboo Handjobs",
+        talent: [
+            "Siri",
+        ],
+        likeCount:      12,
+        views:          543,
+        thumbsUp:       1,
+        thumbsDown:     0,
+        created:        new Date(2020, 0, 19).valueOf(),
+    },
+    {
+        name:           "Finished by his Stepsis",
+        creator:        "jacecolm",
+        sourceUrl:      "https://discuss.eroscripts.com/t/bailey-base-teen-tugs/14028",
+        streamingUrl:   "https://hqporner.com/hdporn/100194-finished_by_his_stepsis.html",
+        thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/adminthumbnails%2Ffinished-by-his-stepsis?alt=media&token=72b23767-6fa7-4a6e-9ab6-7ec2c028f41c",
+        duration:       "12:07",
+        category:       "Handjob",
+        tags: [
+            "Incest",
+            "HD"
+        ],
+        studio:         "Teen Tugs",
+        talent:          [
+            "Bailey Base",
+        ],
+        likeCount:      6,
+        views:          384,
+        thumbsUp:       1,
+        thumbsDown:     0,
+        created:        new Date(2020, 0, 19).valueOf(),
+    },
+    {
+        name:           "MHBHJ - Kleio",
+        creator:        "Galbine",
+        sourceUrl:      "https://discuss.eroscripts.com/t/mhbhj-kleio/14041",
+        streamingUrl:   "https://www.pornhub.com/view_video.php?viewkey=ph5b1407f517a0c",
+        thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/adminthumbnails%2Fmhbhj-kleo?alt=media&token=75d22225-a771-45e3-b5e2-a361d2df53ea",
+        description:    "Hi everyone",
+        duration:       "11:01",
+        category:       "Blowjob",
+        tags: [
+            "Footjob",
+            "HD",
+            "POV",
+        ],
+        studio:         "MHBHJ",
+        talent:          [
+            "Kleio Valentien",
+        ],
+        likeCount:      18,
+        views:          310,
+        thumbsUp:       1,
+        thumbsDown:     0,
+        created:        new Date(2020, 0, 19).valueOf(),
+    },
+    {
+        name:           "An Innocent Christmas Prank",
+        creator:        "jacecolm",
+        sourceUrl:      "https://discuss.eroscripts.com/t/lulu-chu-vanna-bardot-bratty-sis/13936",
+        streamingUrl:   "https://hqporner.com/hdporn/99892-an_innocent_Christmas_prank_4K.html",
+        thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/adminthumbnails%2Fan-innocent-christmas-prank?alt=media&token=76fbfe5e-ebd6-4ff7-8794-f80b0dc7bf08",
+        description:    "Big drop coming from me in February",
+        duration:       "22:51",
+        category:       "Full Scene",
+        tags: [
+            "Vaginal",
+            "Threesome",
+            "Incest",
+            "HD",
+        ],
+        studio:         "Bratty Sis",
+        talent:          [
+            "Lulu Chu",
+            "Vanna Bardot",
+        ],
+        likeCount:      14,
+        views:          278,
+        thumbsUp:       1,
+        thumbsDown:     0,
+        created:        new Date(2020, 0, 18).valueOf(),
+    },
+    {
+        name:           "Oiled All Over",
+        creator:        "po3po3",
+        sourceUrl:      "https://discuss.eroscripts.com/t/keisha-grey-lubed-oiled-all-over/13954",
+        thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/adminthumbnails%2Foiled-all-over?alt=media&token=9bf2e8cd-fadf-4f6c-a97b-28f4e27db129",
+        description:    "Keisha Grey one of my all time favorites. This one is from Lubed and the title is Oiled All over. I’m very new to scripting being this is my 2nd script so far, any feedback is appreciated.\n\nI found some video downloads that matched the video length of the file I used to create the script on other sites but for some reason the action didn’t sync. Seemed off by a second so I uploaded my video copy I used and linked it below.",
+        duration:       "42:49",
+        category:       "Full Scene",
+        tags: [
+            "Vaginal",
+            "Pussy Licking",
+            "Blowjob",
+            "Handjob",
+            "Facial",
+            "HD",
+        ],
+        studio:         "Lubed",
+        talent:          [
+            "Keisha Grey",
+        ],
+        likeCount:      8,
+        views:          198,
+        thumbsUp:       1,
+        thumbsDown:     0,
+        created:        new Date(2020, 0, 18).valueOf(),
     },
     {
         name:           "Tittyfuck Cumpilation",
@@ -657,7 +806,7 @@ const TestData = [
             "Blowjob",
             "POV",
             "HD",
-            "Cum on Tits",
+            "Cum On Tits",
         ],
         talent:          [
             "DickForLily",
@@ -940,7 +1089,7 @@ const TestData = [
             "Titfuck",
             "Vaginal",
             "POV",
-            "Cum on Tits",
+            "Cum On Tits",
             "HD"
         ],
         studio:         "Bangbros",
