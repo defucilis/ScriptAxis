@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 const durationToIndex = duration => {
 
 }
@@ -404,6 +406,48 @@ const tryFormatError = error => {
     }
 }
 
+//used to generate JS object code for pasting into TestData.js as a backup
+const getScriptObjectCode = data => {
+    const lines = [];
+    lines.push("{");
+    lines.push(`    name:           "${data.name}",`);
+    lines.push(`    creator:        "${data.creator}",`);
+    lines.push(`    sourceUrl:      "${data.sourceUrl}",`);
+    if(data.streamingUrl && data.streamingUrl !== "")
+        lines.push(`    streamingUrl:   "${data.streamingUrl}",`);
+    lines.push(`    thumbnail:      "${data.thumbnail}",`);
+    if(data.description && data.description !== "")
+        lines.push(`    description:    "${data.description.replace(/\r?\n|\r/g, "\\n")}",`);
+    lines.push(`    duration:       "${data.duration}",`);
+    lines.push(`    category:       "${data.category}",`);
+    lines.push("    tags: [");
+    if(data.tags && data.tags.length > 0) {
+        data.tags.forEach(tag => {
+            lines.push(`        "${tag}",`);
+        })
+    }
+    lines.push("    ],");
+    if(data.studio && data.studio !== "") {
+        lines.push(`    studio:         "${data.studio}",`);
+    }
+    if(data.talent && data.talent.length > 0) {
+        lines.push("    talent: [");
+        data.talent.forEach(talent => {
+            lines.push(`        "${talent}",`);
+        })
+        lines.push("    ],");
+    }
+    
+    lines.push("    likeCount:      0,");
+    lines.push("    views:          0,");
+    lines.push("    thumbsUp:       1,");
+    lines.push("    thumbsDown:     0,");
+    const djs = dayjs(data.created);
+    lines.push(`    created:        new Date(${djs.year()}, ${djs.month()}, ${djs.date()}).valueOf(),`);
+    lines.push("},");
+    return lines.map(line => "    " + line).join("\n");
+}
+
 const ScriptUtils = {
     parseScriptDocument,
     indexToDuration,
@@ -421,7 +465,8 @@ const ScriptUtils = {
     queryToObject,
     queryToPrettyString,
     getScriptDifferences,
-    tryFormatError
+    tryFormatError,
+    getScriptObjectCode
 }
 
 export default ScriptUtils;
