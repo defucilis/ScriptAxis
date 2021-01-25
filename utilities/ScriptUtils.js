@@ -1,5 +1,3 @@
-import dayjs from 'dayjs'
-
 const durationToIndex = duration => {
 
 }
@@ -442,10 +440,24 @@ const getScriptObjectCode = data => {
     lines.push("    views:          0,");
     lines.push("    thumbsUp:       1,");
     lines.push("    thumbsDown:     0,");
-    const djs = dayjs(data.created);
-    lines.push(`    created:        new Date(${djs.year()}, ${djs.month()}, ${djs.date()}).valueOf(),`);
+    const created = new Date(data.created);
+    lines.push(`    created:        new Date(${created.getFullYear()}, ${created.getMonth()}, ${created.getDate()}).valueOf(),`);
     lines.push("},");
     return lines.map(line => "    " + line).join("\n");
+}
+
+const longAcronyms = [
+    "MILF", "DILF", "GILF",
+    "CFNM", "BDSM", 
+]
+const formatTag = tag => {
+    const foundAcronym = longAcronyms.find(a => a === tag.toUpperCase());
+    if(foundAcronym) return foundAcronym;
+
+    if(tag.length <= 3) return tag.toUpperCase();
+
+    const pieces = tag.replace("-", " ").split(" ");
+    return pieces.map(piece => piece.substr(0, 1).toUpperCase() + piece.substr(1).toLowerCase()).join(" ");
 }
 
 const ScriptUtils = {
@@ -466,7 +478,9 @@ const ScriptUtils = {
     queryToPrettyString,
     getScriptDifferences,
     tryFormatError,
-    getScriptObjectCode
+    getScriptObjectCode,
+    formatTag,
 }
 
-export default ScriptUtils;
+module.exports = ScriptUtils;
+//export default ScriptUtils;

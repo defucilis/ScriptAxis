@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "scrape": "node nodescripts/scrape.js"
   },
   "author": "",
   "license": "ISC",

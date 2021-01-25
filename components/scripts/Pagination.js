@@ -19,7 +19,7 @@ const Pagination = ({curPage, totalPages, query}) => {
                 <li><a href={getLinkTarget(query, 1)}>1</a></li>
             }
             {curPage <= 3 ? null : 
-                <li>...</li>
+                <li className={style.nolink}>...</li>
             }
             {curPage <= 2 ? null : 
                 <li><a href={getLinkTarget(query, curPage - 1)}>{curPage - 1}</a></li>
@@ -29,7 +29,7 @@ const Pagination = ({curPage, totalPages, query}) => {
                 <li><a href={getLinkTarget(query, curPage + 1)}>{curPage + 1}</a></li>
             }
             {curPage >= totalPages - 2 ? null : 
-                <li>...</li>
+                <li className={style.nolink}>...</li>
             }
             {curPage === totalPages ? null : 
                 <li><a href={getLinkTarget(query, totalPages)}>{totalPages}</a></li>

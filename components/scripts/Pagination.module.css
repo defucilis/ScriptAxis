@@ -13,9 +13,17 @@
     display: block;
     background-color: #202020;
     border-radius: 5px;
-    padding: 0.5em;
     margin-right: 1em;
     cursor: pointer;
+}
+
+.pagination > ul > li.nolink {
+    padding: 0.5em;
+}
+
+.pagination > ul > li a {
+    padding: 0.5em;
+    display: block;
 }
 
 .pagination > ul > li:last-child {
