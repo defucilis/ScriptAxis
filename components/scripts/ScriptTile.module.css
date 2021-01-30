@@ -20,7 +20,8 @@
 .imagewrapper > img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
+    max-height: 176px; /* fixes bug on chrome and brave */
 }
 .thumbnail > span {
     display: block;
