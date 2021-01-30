@@ -147,7 +147,7 @@ const updateScript = async (newPostData, oldPostData, onSuccess, onFail) => {
     if(diffData.sourceUrl) finalUpdateData.set.sourceUrl = diffData.sourceUrl;
     if(diffData.streamingUrl) finalUpdateData.set.streamingUrl = diffData.streamingUrl;
     if(diffData.studio) finalUpdateData.set.studio = diffData.studio;
-    if(diffData.created) finalUpdateData.set.created = diffData.created;
+    if(diffData.created) finalUpdateData.set.created = new Date(diffData.created);
 
     //lists of strings need to be handled slightly differently...
     if(diffData.tags) finalUpdateData.set.tags = newData.tags;
@@ -179,8 +179,6 @@ const updateScript = async (newPostData, oldPostData, onSuccess, onFail) => {
     }
 
     console.warn("Final Data", finalUpdateData);
-    //onFail("Skipping for now");
-    //return;
 
     try {
         const response = await axios.post("/api/scripts/update", finalUpdateData);
