@@ -3,11 +3,14 @@ import {useState, useEffect} from 'react'
 import Head from 'next/head'
 
 import axios from 'axios'
+import { FaCog } from 'react-icons/fa'
 
 import Layout from '../components/layout/Layout'
 import ScriptGrid from '../components/scripts/ScriptGrid'
 
 import ScriptUtils from '../utilities/ScriptUtils'
+
+import style from './index.module.css'
 
 const Index = () => {
 
@@ -47,7 +50,12 @@ const Index = () => {
             </Head>
             {
                 loading ? (
-                    <p>Loading the latest scripts just for you...</p>
+                    <div className={style.indexLoading}>
+                        <p>
+                            <span><FaCog /></span>
+                            <span>Loading the latest scripts just for you...</span>
+                        </p>
+                    </div>
                 ) : error ? <p style={{color: "salmon"}}>{error}</p> : (
                     <>
                         <h1>Recently added scripts</h1>

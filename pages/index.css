@@ -221,3 +221,18 @@ pre {
         background-size: 1%;
     }
 }
+
+
+/* Style NProgress */
+#nprogress .bar {
+    background: #e8739c !important;
+}
+
+#nprogress .peg {
+    box-shadow: 0 0 10px #e8739c, 0 0 5px #e8739c !important;
+}
+
+#nprogress .spinner-icon {
+    border-top-color: #e8739c !important;
+    border-left-color: #e8739c !important;
+}

@@ -1,4 +1,3 @@
-import {useState, useEffect} from 'react'
 import Router from "next/router";
 
 import "@yaireo/tagify/dist/tagify.css"
@@ -8,27 +7,18 @@ import initFirebase from '../utilities/initFirebase'
 
 import {AuthProvider} from '../utilities/auth/useUser'
 
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+
 import './index.css'
 
-const App = ({Component, pageProps}) => {
-    const [loading, setLoading] = useState(false);
-    useEffect(() => {
-        const startLoad = () => setLoading(true);
-        const endLoad = () => setLoading(false);
-        Router.events.on("routeChangeStart", startLoad);
-        Router.events.on("routeChangeComplete", endLoad);
-        Router.events.on("routeChangeError", endLoad);
-        return () => {
-            Router.events.off("routeChangeStart", startLoad);
-            Router.events.off("routeChangeComplete", endLoad);
-            Router.events.off("routeChangeError", endLoad);
-        }
-    }, []);
+Router.events.on("routeChangeStart", () => NProgress.start());
+Router.events.on("routeChangeComplete", () => NProgress.done());
+Router.events.on("routeChangeError", () => NProgress.done());
 
+const App = ({Component, pageProps}) => {
     return (
         <AuthProvider>
-            <div className={`loader top ${loading ? "loadingtop" : "notloadingtop"}`}></div>
-            <div className={`loader bottom ${loading ? "loadingbottom" : "notloadingbottom"}`}></div>
             <Component {...pageProps} />
         </AuthProvider>
     )
