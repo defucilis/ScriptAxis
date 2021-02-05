@@ -34,6 +34,8 @@ const AddScript = ({tags, categories, talent, studios, creators}) => {
         setSubmitting(true);
         createScript(data, response => {
             console.log("Script created successfully", response);
+            //ensure the homepage reloads properly
+            window.localStorage.removeItem("recentScriptsTime");
             if(Router.pathname === "/add")
                 Router.push(`/script/${response[0].slug}`);
             else {

@@ -49,6 +49,8 @@ const EditScript = ({script, tags, categories, talent, studios, creators}) => {
         setSubmitting(true);
         updateScript({...data, id: script.id}, {...oldFormData, id: script.id}, response => {
             console.log("Script updated successfully", response);
+            //ensure the homepage reloads properly
+            window.localStorage.removeItem("recentScriptsTime");
             if(Router.pathname.includes("/edit"))
                 Router.push(`/script/${response[0].slug}`);
             else {
