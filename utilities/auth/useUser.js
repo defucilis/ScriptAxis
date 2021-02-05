@@ -16,6 +16,7 @@ const authContext = createContext();
 
 const useProvideAuth = () => {
     const [user, setUser] = useState();
+    const [loading, setLoading] = useState(true);
     const [fbUser, setFbUser] = useState();
     const [updatingFromDb, setUpdatingFromDb] = useState(false);
     const router = useRouter()
@@ -107,6 +108,8 @@ const useProvideAuth = () => {
                 if(userFromCookie) userData = {...userFromCookie, ...userData};
                 setUserCookie(userData);
                 setUser(userData);
+                setLoading(false);
+                console.log("Set loading false");
                 resolve(userData);
             } catch(error) {
                 reject(error);
@@ -130,6 +133,8 @@ const useProvideAuth = () => {
                     console.log("ID token unset - removing cookie and user");
                     setFbUser(null);
                     setUser(null);
+                    setLoading(false);
+                    console.log("Set loading false");
                     removeUserCookie();
                 }
             });
@@ -146,9 +151,12 @@ const useProvideAuth = () => {
             console.warn("No user cookie is present");
             setFbUser(null);
             setUser(null);
+            console.log("Set loading false");
             return
         }
         setUser(userFromCookie);
+        setLoading(false);
+        console.log("Set loading false");
     }, [])
 
     useEffect(() => {
@@ -158,7 +166,7 @@ const useProvideAuth = () => {
         refreshUserDbValues();
     }, [fbUser])
 
-    return { user, login, loginAndRedirect, logout, logoutAndRedirect, refreshUserDbValues }
+    return { user, loading, login, loginAndRedirect, logout, logoutAndRedirect, refreshUserDbValues }
 }
 
 const AuthProvider = ({children}) => {
@@ -168,7 +176,7 @@ const AuthProvider = ({children}) => {
 
 const useUser = props => {
 
-    const { user, login, loginAndRedirect, logout, logoutAndRedirect, refreshUserDbValues } = useContext(authContext);
+    const { user, loading, login, loginAndRedirect, logout, logoutAndRedirect, refreshUserDbValues } = useContext(authContext);
     const router = useRouter()
     const [redirecting, setRedirecting] = useState(false);
 
