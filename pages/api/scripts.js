@@ -1,6 +1,7 @@
 import {PrismaClient} from '@prisma/client'
+import { number } from 'yup';
 
-const FetchScripts = () => {
+const FetchScripts = (amount) => {
     return new Promise(async (resolve, reject) => {
         const prisma = new PrismaClient();
         try {
@@ -9,7 +10,7 @@ const FetchScripts = () => {
                 where: {
                     active: true
                 },
-                take: 16,
+                take: amount,
                 orderBy: {
                     created: "desc"
                 },
@@ -31,7 +32,8 @@ export {FetchScripts}
 
 export default async (req, res) => {
     try {
-        const scripts = await FetchScripts();
+        const amount = req.body && req.body.take ? Number(req.body.take) : 16;
+        const scripts = await FetchScripts(amount);
         res.status(200);
         res.json(scripts);
     } catch(error) {

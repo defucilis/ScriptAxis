@@ -153,3 +153,21 @@
 .categories li a:hover, .tags li a:hover {
     box-shadow: 0px 0px 0px 2px #fff;
 }
+
+.loadinguser {
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
+}
+
+.loadinguser svg {
+    color: #fff;
+    -webkit-animation:spin 4s linear infinite;
+    -moz-animation:spin 4s linear infinite;
+    animation:spin 4s linear infinite;
+    margin-right: 0.5em;
+}
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }

@@ -2,6 +2,7 @@
     display: flex;
     justify-content: flex-start;
     margin-bottom: 1em;
+    height: 4rem;
 }
 
 .buttons button, .buttons a {
@@ -84,4 +85,39 @@
     background-color: #e8739c;
     transition: all 0.5s;
     width: 0%;
+}
+
+.scrape {
+    display: flex;
+    align-items: center;
+}
+
+.scrape label {
+    margin-right: 0.5em;
+    display: block;
+    font-size: 1.2em;
+}
+
+.checkbox {
+    background-color: #1b1b1b;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: grid;
+    place-items: center;
+    height: 100%;
+    width: 4rem;
+    margin: 0;
+    margin-right: 1em;
+}
+
+.checkbox svg {
+    color: #e8739c;
+    font-size: 2rem;
+}
+
+.scrape button {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    display: inline-block;
 }

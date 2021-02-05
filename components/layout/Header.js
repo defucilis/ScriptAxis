@@ -4,6 +4,7 @@ import Router from 'next/router'
 import Image from 'next/image'
 
 import {FaSearch} from 'react-icons/fa'
+import { FaSync } from 'react-icons/fa'
 import axios from 'axios'
 
 import ScriptUtils from '../../utilities/ScriptUtils'
@@ -13,7 +14,7 @@ import styles from './Header.module.css'
 
 const Header = ({page}) => {
 
-    const {user} = useUser();
+    const {user, loading} = useUser();
     const [scriptCount, setScriptCount] = useState(0);
     const [categoryCounts, setCategoryCounts] = useState([]);
     const [tagCounts, setTagCounts] = useState([]);
@@ -85,23 +86,29 @@ const Header = ({page}) => {
                         </button>
                     </form>
                     {
-                        user === null 
-                        ? (<div className={styles.userbuttons}>
-                            <Link href="/signin">
-                                <a>Sign In</a>
-                            </Link>
-                            <Link href="/signup">
-                                <a>Sign Up</a>
-                            </Link>
-                        </div>)
-                        : (<div>
-                            <Link href="/add">
-                                <a className={styles.addscript}>+ Add a Script</a>
-                            </Link>
-                            <Link href="/dashboard">
-                                <a className={styles.addscript}>Dashboard</a>
-                            </Link>
-                        </div>)
+                        loading ? (
+                            <div className={styles.loadinguser}>
+                                <FaSync />
+                                <p>Loading...</p>
+                            </div>
+                        ) : 
+                            user === null 
+                            ? (<div className={styles.userbuttons}>
+                                <Link href="/signin">
+                                    <a>Sign In</a>
+                                </Link>
+                                <Link href="/signup">
+                                    <a>Sign Up</a>
+                                </Link>
+                            </div>)
+                            : (<div>
+                                <Link href="/add">
+                                    <a className={styles.addscript}>+ Add a Script</a>
+                                </Link>
+                                <Link href="/dashboard">
+                                    <a className={styles.addscript}>Dashboard</a>
+                                </Link>
+                            </div>)
                     }
                 </div>
             </div>
