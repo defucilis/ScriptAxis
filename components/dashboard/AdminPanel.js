@@ -4,11 +4,14 @@ import Link from 'next/link'
 import axios from 'axios'
 import slugify from 'slugify'
 import * as imageConversion from 'image-conversion'
+import dayjs from 'dayjs'
+import { FaCheck } from 'react-icons/fa'
 
 import GetTestData from '../../utilities/TestData'
 import ScriptUtils from '../../utilities/ScriptUtils'
 import FirebaseUtils from '../../utilities/FirebaseUtils'
 import { Dropzone } from '../forms/FormUtils'
+import Checkbox from '../forms/Checkbox'
 
 
 import style from './AdminPanel.module.css'
@@ -108,8 +111,20 @@ const GetJsonBackup = async (onMessage, onSuccess, onFail) => {
     }
 }
 
-const RunScrape = async (scripts, cookie, onMessage, onProgress, onComplete, onError) => {
+const RunScrape = async (scripts, cookie, subset, onMessage, onProgress, onComplete, onError) => {
     onMessage("Scraping all views and likes from EroScripts");
+    onMessage("--Fetching all scripts from database");
+    const response = await axios.post("/api/scripts", {take: 99999});
+    if(response.data.error) {
+        onError(response.data.error);
+        onComplete();
+        return;
+    }
+    scripts = !subset ? response.data.filter(script => script.sourceUrl.includes("eroscripts")) : response.data.filter(script => {
+        if(!script.sourceUrl.includes("eroscripts")) return false;
+        return script.views < 100 || script.likeCount < 5 || dayjs().diff(dayjs(script.created), "day") < 7;
+    });
+    onMessage(`----Complete - found ${scripts.length} scripts${subset ? " (after filtering)" : ""}`);
     for(let i = 0; i < scripts.length; i++) {
         const script = scripts[i];
         try {
@@ -269,12 +284,13 @@ const AdminPanel = ({user, existingScripts}) => {
     }
 
     const [scrapeCookie, setScrapeCookie] = useState("");
+    const [scrapeSubset, setScrapeSubset] = useState(true);
     const StartScrape = () => {
         setRunning(true);
         progressBarParentRef.current.style.setProperty("display", "block");
         progressBarRef.current.style.setProperty("width", "0%");
 
-        RunScrape(existingScripts, scrapeCookie, addMessage, (count, total) => {
+        RunScrape(existingScripts, scrapeCookie, scrapeSubset, addMessage, (count, total) => {
             progressBarRef.current.style.setProperty("width", `${Math.round(count * 100 / total)}%`);
         }, () => {
             addMessage("Scrape completed successfully");
@@ -331,7 +347,7 @@ const AdminPanel = ({user, existingScripts}) => {
                     Download JSON Backup
                 </a>
             </Link>
-            <div>
+            <div className={style.scrape}>
                 <input 
                     id="scrapeCookie" 
                     type="text" 
@@ -339,6 +355,14 @@ const AdminPanel = ({user, existingScripts}) => {
                     onChange={e => setScrapeCookie(e.target.value)} 
                     placeholder="Scrape Cookie"
                 />
+                <label>{"Scrape"}<br/>{"Subset"}</label>
+                <Checkbox
+                    className={style.checkbox}
+                    checked={scrapeSubset}
+                    onChange={e => setScrapeSubset(e.target.checked)}
+                >
+                    <FaCheck />
+                </Checkbox>
                 <button onClick={StartScrape}>Scrape Views and Likes</button>
             </div>
         </div>
