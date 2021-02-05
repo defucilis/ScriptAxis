@@ -14,26 +14,39 @@ import style from './index.module.css'
 
 const Index = () => {
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(0);
     const [error, setError] = useState(null);
     const [scripts, setScripts] = useState(null);
     useEffect(() => {
         const fetchScripts = async () => {
             try {
-                setLoading(true);
+                setLoading(1);
                 const response = await axios.get("/api/scripts");
                 console.log(response.data);
                 if(response.data.error) throw response.data.error;
-                setScripts(response.data.map(script => ScriptUtils.parseScriptDocument(script)));
-                setLoading(false);
+                const parsedScripts = response.data.map(script => ScriptUtils.parseScriptDocument(script));
+                setScripts(parsedScripts);
+                window.localStorage.setItem("recentScripts", JSON.stringify(parsedScripts));
+                window.localStorage.setItem("recentScriptsTime", new Date().valueOf());
+                setLoading(-1);
             } catch(error) {
                 console.error(error);
                 setError(error);
-                setLoading(false);
+                setLoading(-1);
             }
         }
 
-        fetchScripts();
+        const recentScriptsTime = window.localStorage.getItem("recentScriptsTime");
+        if(recentScriptsTime) {
+            const diff = new Date().valueOf() - recentScriptsTime;
+            //update if it's been more than a day
+            if(diff > 1000 * 60 * 60 * 24) fetchScripts();
+            else {
+                const cachedScripts = JSON.parse(window.localStorage.getItem("recentScripts"));
+                setScripts(cachedScripts);
+                setLoading(-1);
+            }
+        } else fetchScripts();
     }, [])
     
 
@@ -43,13 +56,23 @@ const Index = () => {
         }
     }, [])
 
+    if(loading === 0) {
+        return (
+            <Layout>
+                <Head>
+                    <title>ScriptAxis | The Funscript Library (Work in Progress!)</title>
+                </Head>
+            </Layout>
+        )
+    }
+
     return (
         <Layout>
             <Head>
                 <title>ScriptAxis | The Funscript Library (Work in Progress!)</title>
             </Head>
             {
-                loading ? (
+                loading === 1 ? (
                     <div className={style.indexLoading}>
                         <p>
                             <span><FaCog /></span>
