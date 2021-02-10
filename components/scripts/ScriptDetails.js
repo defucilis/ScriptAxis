@@ -201,12 +201,20 @@ const ScriptDetails = ({script}) => {
                     <div className={style.linkbuttons}>
                         {!script.sourceUrl ? null : (
                             <Link href={script.sourceUrl}>
-                                <a className={style.source} target="_blank">{"View on"}<br/>{ScriptUtils.getSiteName(script.sourceUrl)}</a>
+                                <a className={style.source} target="_blank">
+                                    {"Get script at"}
+                                    <br/>
+                                    {ScriptUtils.getSiteName(script.sourceUrl)}
+                                </a>
                             </Link>
                         )}
                         {!script.streamingUrl ? null : (
                             <Link href={script.streamingUrl}>
-                                <a className={style.source} target="_blank">{"Watch on"}<br/>{ScriptUtils.getSiteName(script.streamingUrl)}</a>
+                                <a className={style.source} target="_blank">
+                                    {script.category === "Audio Only" ? "Listen on" : "Watch on"}
+                                    <br/>
+                                    {ScriptUtils.getSiteName(script.streamingUrl)}
+                                </a>
                             </Link>
                         )}
                     </div>
