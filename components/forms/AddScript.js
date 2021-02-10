@@ -44,6 +44,7 @@ const AddScript = ({tags, categories, talent, studios, creators}) => {
                 }
             }
         }, error => {
+            window.alert("Upload failed - " + ScriptUtils.tryFormatError(error.message));
             console.log("Upload failed", ScriptUtils.tryFormatError(error.message));
             setSubmitting(false);
         });
@@ -66,9 +67,6 @@ const AddScript = ({tags, categories, talent, studios, creators}) => {
                 onValidationPassed={handleValidationPassed}
                 defaultFormData={defaultFormData}
                 submitLabel="Add Script"
-                options={{
-                    thumbnailOptional: true
-                }}
                 busy={submitting}
             />
         )
@@ -83,20 +81,25 @@ const createScript = async (postData, onSuccess, onFail) => {
     
     data.slug = slugify(data.name, {lower: true});
 
-    //upload the thumbnail and add it to the database
-    try {
-        const compressedFile = await imageConversion.compressAccurately(data.thumbnail[0], {
-            size: 100,
-            type: "image/jpeg"
-        });
-        const fileUrl = await FirebaseUtils.uploadFile(
-            compressedFile, 
-            `thumbnails/${data.slug}`, 
-            progress => console.log("Thumbnail File uploading", progress * 100)
-        );
-        data.thumbnail = fileUrl;
-    } catch(error) {
-        onFail(error);
+    if(data.thumbnail.length > 0) {
+        //upload the thumbnail and add it to the database
+        try {
+            const compressedFile = await imageConversion.compressAccurately(data.thumbnail[0], {
+                size: 100,
+                type: "image/jpeg"
+            });
+            const fileUrl = await FirebaseUtils.uploadFile(
+                compressedFile, 
+                `thumbnails/${data.slug}`, 
+                progress => console.log("Thumbnail File uploading", progress * 100)
+            );
+            data.thumbnail = fileUrl;
+        } catch(error) {
+            onFail(error);
+            return;
+        }
+    } else {
+        data.thumbnail = "/img/placeholder-thumbnail.png";
     }
 
     const testDataString = ScriptUtils.getScriptObjectCode(data);

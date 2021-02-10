@@ -115,9 +115,13 @@ const ScriptForm = ({tags, categories, talent, studios, creators, onValidationPa
             tags: yup.array().notRequired(),
             description: yup.string().nullable().notRequired(""),
             duration: yup.string().required("A duration is required"),
-            thumbnail: options && options.thumbnailOptional 
-                ? yup.array().notRequired() 
-                : yup.array().length(1, "A thumbnail is required"),
+            thumbnail: options && options.thumbnailOptional
+                ? yup.array().notRequired()
+                : yup.array().when('category', {
+                    is: "Audio Only",
+                    then: yup.array().notRequired(),
+                    otherwise: yup.array().length(1, "A thumbnail is required for video-based scripts")
+                }),
             sourceUrl: yup.string().nullable().notRequired().url("Source URL provided is invalid"),
             streamingUrl: yup.string().nullable().notRequired().url("Streaming URL provided is invalid"),
             studio: yup.string().nullable().notRequired(),
