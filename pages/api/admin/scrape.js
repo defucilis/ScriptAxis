@@ -2,20 +2,34 @@ import {PrismaClient} from '@prisma/client';
 
 import axios from 'axios';
 
-const Scrape = async (scriptSlug, scriptUrl, cookie) => {
+const Scrape = async (scriptSlug, scriptUrl) => {
     if(!scriptUrl.includes("discuss.eroscripts.com")) throw {message: "can only scrape scripts from EroScripts"};
 
-    scriptUrl = `https://discuss.eroscripts.com/t/${scriptUrl.split("/").slice(-1)[0]}.json?track_visit=false&forceLoad=true`;
-    console.log(scriptUrl);
+    const baseUrl = "https://discuss.eroscripts.com";
+    const headers = {
+        "Api-Key": process.env.NEXT_PUBLIC_DISCOURSE_API_KEY,
+        "Api-Username": process.env.NEXT_PUBLIC_DISCOURSE_USER,
+    };
+
+    const slices = scriptUrl.split("/");
+    const url = `${baseUrl}/t/${scriptUrl.split("/").slice(slices.length === 6 ? -1 : -2)[0]}.json`;
     const threadResponse = await axios({
         method: "get",
-        url: scriptUrl,
-        headers: {
-            "Discourse-Logged-In": "true",
-            "Discourse-Present": "true",
-            "Cookie": cookie
-        }
+        url,
+        headers
     });
+
+    //scriptUrl = `https://discuss.eroscripts.com/t/${scriptUrl.split("/").slice(-1)[0]}.json?track_visit=false&forceLoad=true`;
+    //console.log(scriptUrl);
+    //const threadResponse = await axios({
+    //    method: "get",
+    //    url: scriptUrl,
+    //    headers: {
+    //        "Discourse-Logged-In": "true",
+    //        "Discourse-Present": "true",
+    //        "Cookie": cookie
+    //    }
+    //});
     const threadData = threadResponse.data;
     if(typeof(threadData) === "string") throw {message: "Authentication failed for EroScripts - bad cookie?"};
 
