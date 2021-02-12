@@ -14,6 +14,7 @@ const initFirebase = () => {
         appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
         measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
     };
+    console.log("Init firebase widht config:", firebaseConfig);
     
     if(firebase.apps.length === 0) {
         firebase.initializeApp(firebaseConfig);
