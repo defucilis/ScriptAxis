@@ -4,4 +4,4 @@ prisma/.env
 prisma/migrations
 utilities/.env
 .env
-#.env.local
+.env.local
