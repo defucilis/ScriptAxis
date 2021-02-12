@@ -129,10 +129,10 @@ const RunScrape = async (scripts, cookie, subset, onMessage, onProgress, onCompl
         const script = scripts[i];
         try {
             onMessage("--Scraping data for " + script.slug)
+            console.log(process.env);
             const response = await axios.post("/api/admin/scrape", {
                 slug: script.slug, 
-                url: script.sourceUrl, 
-                cookie
+                url: script.sourceUrl,
             });
             console.log(response.data);
             if(response.data.error) throw response.data.error.message;
