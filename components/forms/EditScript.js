@@ -116,8 +116,8 @@ const updateScript = async (newPostData, oldPostData, onSuccess, onFail) => {
     }
 
     //Modify the form data to match what shoud be in the database
-    newData.slug = slugify(newData.name, {lower: true});
-    oldData.slug = slugify(oldData.name, {lower: true});
+    newData.slug = slugify(newData.name, {lower: true, strict: true});
+    oldData.slug = slugify(oldData.name, {lower: true, strict: true});
 
     newData.duration = ScriptUtils.stringToDuration(newData.duration);
     oldData.duration = ScriptUtils.stringToDuration(oldData.duration);

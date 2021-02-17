@@ -79,7 +79,7 @@ const createScript = async (postData, onSuccess, onFail) => {
 
     console.log(data);
     
-    data.slug = slugify(data.name, {lower: true});
+    data.slug = slugify(data.name, {lower: true, strict: true});
 
     if(data.thumbnail.length > 0) {
         //upload the thumbnail and add it to the database
