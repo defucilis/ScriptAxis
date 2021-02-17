@@ -251,7 +251,7 @@ const AdminPanel = ({user, existingScripts}) => {
         }
 
         let name = prompt("Input thumbnail file name (will be slugified)");
-        name = slugify(name, {lower: true});
+        name = slugify(name, {lower: true, strict: true});
 
         setRunning(true);
 
