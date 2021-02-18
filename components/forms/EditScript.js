@@ -4,6 +4,7 @@ import Router from 'next/router';
 import axios from 'axios'
 import slugify from 'slugify'
 import { FaCog } from 'react-icons/fa'
+import * as imageConversion from 'image-conversion'
 
 import FirebaseUtils from '../../utilities/FirebaseUtils'
 import ScriptUtils from '../../utilities/ScriptUtils'
@@ -100,13 +101,23 @@ const updateScript = async (newPostData, oldPostData, onSuccess, onFail) => {
     let oldData = {...oldPostData};
     let newData = {...newPostData};
 
+    console.log({oldData, newData});
+
     //upload the thumbnail and add it to the database
     try {
-        if(newData.thumbnail.length > 0 && false) {
-            await FirebaseUtils.deleteFile(`thumbnails/thumbnail_${oldData.slug}`);
+        if(newData.thumbnail.length > 0) {
+            try {
+                await FirebaseUtils.deleteFile(`thumbnails/${oldData.slug}`);
+            } catch(err) {
+                console.warn(`Failed to delete file at thumbnails/${oldData.slug}, continuing with upload`)
+            }
+            const compressedFile = await imageConversion.compressAccurately(newData.thumbnail[0], {
+                size: 100,
+                type: "image/jpeg"
+            });
             const fileUrl = await FirebaseUtils.uploadFile(
-                newData.thumbnail[0], 
-                `thumbnails/thumbnail_${newData.slug}`, 
+                compressedFile, 
+                `thumbnails/${newData.slug}`, 
                 progress => console.log("Thumbnail File uploading", progress * 100)
             );
             newData.thumbnail = fileUrl;

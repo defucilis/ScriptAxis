@@ -25,7 +25,7 @@ const FirebaseUtils = {
             console.log("Deleting file", path)
             const storage = firebase.storage();
             const ref = storage.ref().child(path);
-            const uploadTask = ref.delete(file).then(() => {
+            const uploadTask = ref.delete().then(() => {
                 resolve();
             }).catch(error => {
                 console.log("Failed to delete file", error);
