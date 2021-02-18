@@ -4,6 +4,7 @@ import Router from 'next/router';
 import axios from 'axios'
 import slugify from 'slugify'
 import { FaCog } from 'react-icons/fa'
+import * as imageConversion from 'image-conversion'
 
 import FirebaseUtils from '../../utilities/FirebaseUtils'
 import ScriptUtils from '../../utilities/ScriptUtils'
@@ -100,13 +101,23 @@ const updateScript = async (newPostData, oldPostData, onSuccess, onFail) => {
     let oldData = {...oldPostData};
     let newData = {...newPostData};
 
+    console.log({oldData, newData});
+
     //upload the thumbnail and add it to the database
     try {
-        if(newData.thumbnail.length > 0 && false) {
-            await FirebaseUtils.deleteFile(`thumbnails/thumbnail_${oldData.slug}`);
+        if(newData.thumbnail.length > 0) {
+            try {
+                await FirebaseUtils.deleteFile(`thumbnails/${oldData.slug}`);
+            } catch(err) {
+                console.warn(`Failed to delete file at thumbnails/${oldData.slug}, continuing with upload`)
+            }
+            const compressedFile = await imageConversion.compressAccurately(newData.thumbnail[0], {
+                size: 100,
+                type: "image/jpeg"
+            });
             const fileUrl = await FirebaseUtils.uploadFile(
-                newData.thumbnail[0], 
-                `thumbnails/thumbnail_${newData.slug}`, 
+                compressedFile, 
+                `thumbnails/${newData.slug}`, 
                 progress => console.log("Thumbnail File uploading", progress * 100)
             );
             newData.thumbnail = fileUrl;
@@ -141,26 +152,26 @@ const updateScript = async (newPostData, oldPostData, onSuccess, onFail) => {
     };
 
     //the values that can just be straight set
-    if(diffData.name) finalUpdateData.set.name = diffData.name;
-    if(diffData.slug) finalUpdateData.set.slug = diffData.slug;
-    if(diffData.description) finalUpdateData.set.description = diffData.description;
-    if(diffData.duration) finalUpdateData.set.duration = diffData.duration;
-    if(diffData.thumbnail) finalUpdateData.set.thumbnail = diffData.thumbnail;
-    if(diffData.sourceUrl) finalUpdateData.set.sourceUrl = diffData.sourceUrl;
-    if(diffData.streamingUrl) finalUpdateData.set.streamingUrl = diffData.streamingUrl;
-    if(diffData.studio) finalUpdateData.set.studio = diffData.studio;
-    if(diffData.created) finalUpdateData.set.created = new Date(diffData.created);
+    if(diffData.name !== undefined) finalUpdateData.set.name = diffData.name;
+    if(diffData.slug !== undefined) finalUpdateData.set.slug = diffData.slug;
+    if(diffData.description !== undefined) finalUpdateData.set.description = diffData.description;
+    if(diffData.duration !== undefined) finalUpdateData.set.duration = diffData.duration;
+    if(diffData.thumbnail !== undefined) finalUpdateData.set.thumbnail = diffData.thumbnail;
+    if(diffData.sourceUrl !== undefined) finalUpdateData.set.sourceUrl = diffData.sourceUrl;
+    if(diffData.streamingUrl !== undefined) finalUpdateData.set.streamingUrl = diffData.streamingUrl;
+    if(diffData.studio !== undefined) finalUpdateData.set.studio = diffData.studio;
+    if(diffData.created !== undefined) finalUpdateData.set.created = new Date(diffData.created);
 
     //lists of strings need to be handled slightly differently...
-    if(diffData.tags) finalUpdateData.set.tags = newData.tags;
-    if(diffData.talent) finalUpdateData.set.talent = newData.talent;
+    if(diffData.tags !== undefined) finalUpdateData.set.tags = newData.tags;
+    if(diffData.talent !== undefined) finalUpdateData.set.talent = newData.talent;
 
     //these values refer to other tables, so they need fancier treatment
-    if(diffData.creator) {
+    if(diffData.creator !== undefined) {
         finalUpdateData.remove.creator = oldPostData.creator;
         finalUpdateData.add.creator = newPostData.creator;
     }
-    if(diffData.category) {
+    if(diffData.category !== undefined) {
         finalUpdateData.remove.category = oldPostData.category;
         finalUpdateData.add.category = newPostData.category;
 
@@ -180,7 +191,7 @@ const updateScript = async (newPostData, oldPostData, onSuccess, onFail) => {
         finalUpdateData.add.talent = newPostData.talent.filter(talent => oldPostData.talent.findIndex(t => t === talent) === -1);
     }
 
-    console.warn("Final Data", finalUpdateData);
+    console.warn("Final Data", {oldData, newData, diffData, finalUpdateData});
 
     try {
         const response = await axios.post("/api/scripts/update", finalUpdateData);
