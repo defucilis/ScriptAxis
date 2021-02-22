@@ -12,7 +12,7 @@ const Scrape = async (scriptSlug, scriptUrl) => {
     };
 
     const slices = scriptUrl.split("/");
-    const url = `${baseUrl}/t/${scriptUrl.split("/").slice(slices.length === 6 ? -1 : -2)[0]}.json`;
+    const url = `${baseUrl}/t/${scriptUrl.split("/").slice(slices.length === 6 ? -1 : -2)[0]}.json?track_visit=false`;
     const threadResponse = await axios({
         method: "get",
         url,
@@ -33,10 +33,15 @@ const Scrape = async (scriptSlug, scriptUrl) => {
     const threadData = threadResponse.data;
     if(typeof(threadData) === "string") throw {message: "Authentication failed for EroScripts - bad cookie?"};
 
-    if(!threadData.views) throw {message: "failed to get JSON data from EroScripts URL..."}
+    if(!threadData.views) throw {message: "failed to get JSON data from EroScripts URL..."};
 
     const views = threadData.views;
-    const likeCount = threadData.like_count;
+    let likeCount = 0;
+    try {
+        likeCount = threadData.post_stream.posts[0].actions_summary[0].count;
+    } catch {
+        likeCount = 0;
+    }
     const created = new Date(threadData.created_at);
 
     const prisma = new PrismaClient();
