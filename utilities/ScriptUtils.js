@@ -219,7 +219,7 @@ const filtersEqual = (filterA, filterB) => {
 
     if(filterA.talent || filterB.talent) {
         if(filterA.talent && !filterB.talent || !filterA.talent && filterB.talent) return false;
-        else if(filterA.talent.contains !== filterB.talent.contains) return false;
+        else if(filterA.talent !== filterB.talent) return false;
     }
 
     if(filterA.studio || filterB.studio) {
@@ -256,7 +256,7 @@ const objectToQuery = input => {
     if(filters.exclude) output.exclude = filters.exclude.join("_");
     if(filters.minDuration) output.minDuration = filters.minDuration;
     if(filters.maxDuration) output.maxDuration = filters.maxDuration;
-    if(filters.talent) output.talent = filters.talent.contains;
+    if(filters.talent) output.talent = filters.talent;
     if(filters.studio) output.studio = filters.studio.contains;
     if(filters.sourceUrl) output.sourceUrl = "true";
     if(filters.streamingUrl) output.streamingUrl = "true";
@@ -281,7 +281,7 @@ const queryToObject = query => {
     if(query.exclude) output.filters.exclude = query.exclude.split("_");
     if(query.minDuration) output.filters.minDuration = query.minDuration;
     if(query.maxDuration) output.filters.maxDuration = query.maxDuration;
-    if(query.talent) output.filters.talent = { contains: query.talent, mode: "insensitive" };
+    if(query.talent) output.filters.talent = query.talent;
     if(query.studio) output.filters.studio = { contains: query.studio, mode: "insensitive" };
     if(query.sourceUrl) output.filters.sourceUrl = { not: null };
     if(query.streamingUrl) output.filters.streamingUrl = { not: null };

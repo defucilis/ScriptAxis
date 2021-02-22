@@ -81,7 +81,7 @@ const reduceFilters = (currentFilters, action) => {
     }
     if(action.talent) {
         if(action.talent.operation === "clear") delete(newFilters.talent);
-        else newFilters.talent = {contains: action.talent.value}
+        else newFilters.talent = action.talent.value
     }
     if(action.studio) {
         if(action.studio.operation === "clear") delete(newFilters.studio);
@@ -165,7 +165,7 @@ const Filters = ({query, onFilter}) => {
             }
 
             action.talent = !query.filters.talent ? clearOp : {
-                value: query.filters.talent.contains
+                value: query.filters.talent
             }
 
             action.sourceUrl = !query.filters.sourceUrl ? clearOp : {
@@ -181,7 +181,7 @@ const Filters = ({query, onFilter}) => {
             setSearch(query.filters.name ? query.filters.name.contains : "");
             setInitialIncludeTags(query.filters.include ? [query.filters.include] : []);
             setInitialExcludeTags(query.filters.exclude ? [query.filters.exclude] : []);
-            setInitialTalent(query.filters.talent ? [query.filters.talent.contains] : []);
+            setInitialTalent(query.filters.talent ? [query.filters.talent] : []);
             setInitialStudio(query.filters.studio ? [query.filters.studio.contains] : []);
             setDurationValues([
                 query.filters.minDuration ? Number(query.filters.minDuration) : 0,

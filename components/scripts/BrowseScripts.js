@@ -15,26 +15,27 @@ const BrowseScripts = ({propScripts, scriptCount, tags, categories, query}) => {
     const [scripts, setScripts] = useState([]);
     const [cachedFilters, setCachedFilters] = useState({...query.filters});
     const [cachedSorting, setCachedSorting] = useState([{created:"desc"}]);
-    const [customFilters, setCustomFilters] = useState(false);
     
     useEffect(() => {
         setScripts(propScripts);
     }, [propScripts])
 
+    console.log(query.filters);
+
     const getHeadTitle = query => {
-        if(customFilters) return "Filtered Scripts";
-        if(query.filters.name) return `Results for '${query.filters.name.contains}'`;
-        if(query.filters.category) return `Category: ${query.filters.category.name.equals}`;
-        if(query.filters.include) return `Tag: ${query.filters.include[0]}`;
-        return "Scripts";
+        if(query.filters === {}) return `All Scripts (${scriptCount} total)`;
+        if(query.filters.name) return `Results for '${query.filters.name.contains}' (${scriptCount} total)`;
+        if(query.filters.category) return `Category: ${query.filters.category.name.equals} (${scriptCount} total)`;
+        if(query.filters.include) return `Tag: ${query.filters.include[0]} (${scriptCount} total)`;
+        return "Filtered Scripts (${scriptCount} total)";
     }
 
     const getBodyTitle = query => {
-        if(customFilters) return "Filtered Scripts";
-        if(query.filters.name) return `Scripts matching "${query.filters.name.contains}"`;
-        if(query.filters.category) return `${query.filters.category.name.equals} Scripts`;
-        if(query.filters.include) return `Scripts tagged with "${query.filters.include[0]}"`;
-        return "All Scripts";
+        if(query.filters === {}) return `All Scripts (${scriptCount} total)`;
+        if(query.filters.name) return `Scripts matching "${query.filters.name.contains}" (${scriptCount} total)`;
+        if(query.filters.category) return `${query.filters.category.name.equals} Scripts (${scriptCount} total)`;
+        if(query.filters.include) return `Scripts tagged with "${query.filters.include[0]}" (${scriptCount} total)`;
+        return `Filtered Scripts (${scriptCount} total after ${Object.keys(query.filters).length} filter${Object.keys(query.filters).length === 1 ? "" : "s"})`;
     }
 
     const handleFilters = filters => {

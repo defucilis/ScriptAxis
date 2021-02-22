@@ -33,6 +33,9 @@ const QueryScripts = ({filters, sorting, page}) => {
             if(filters.sourceUrl) finalWhere.AND.push({sourceUrl: filters.sourceUrl});
             if(filters.streamingUrl) finalWhere.AND.push({streamingUrl: filters.streamingUrl});
 
+            if(filters.include) finalWhere.AND.push({tags: {hasEvery: filters.include}});
+            if(filters.exclude) finalWhere.NOT = {tags: {hasSome: filters.exclude}};
+            if(filters.talent) finalWhere.AND.push({talent: {has: filters.talent}});
             //todo: God damn it Prisma doesn't support filtering with lists
             //see: https://github.com/prisma/prisma-client-js/issues/341
             //see: https://github.com/prisma/prisma/issues/3475
@@ -58,25 +61,6 @@ const QueryScripts = ({filters, sorting, page}) => {
                     owner: { select: { username: true }}
                 }
             });
-
-            //Filtering on the server after fetching everything, because that's how we have to do it
-            //Please halp prisma team :c
-            if(filters.include) scripts = scripts
-                .filter(script => filters.include.reduce((acc, tag) => {
-                    return acc && script.tags.findIndex(t => t === tag) !== -1;
-                }, true));
-            
-            if(filters.exclude) scripts = scripts
-                .filter(script => filters.exclude.reduce((acc, tag) => {
-                    return acc && script.tags.findIndex(t => t === tag) === -1;
-                }, true));
-
-            if(filters.talent) {
-                scripts = scripts
-                    .filter(script => script.talent && script.talent
-                        .findIndex(talent => talent.includes(filters.talent.contains)
-                    ) !== -1);
-            }
 
             await prisma.$disconnect();
             resolve({count, scripts});
