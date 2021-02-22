@@ -2,7 +2,6 @@ import packageJson from 'package.json'
 import style from './Footer.module.css'
 
 const Footer = () => {
-    console.log(packageJson);
     return (
         <div className={style.footer}>
             <div className="container">
