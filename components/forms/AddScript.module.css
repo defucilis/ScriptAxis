@@ -15,6 +15,11 @@
     -webkit-animation:spin 4s linear infinite;
     -moz-animation:spin 4s linear infinite;
     animation:spin 4s linear infinite;
+    transition: color 1s linear;
+}
+
+.clipboardWritten {
+    color: #e8739c;
 }
 
 @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }

@@ -29,6 +29,7 @@ const defaultFormData = {
 
 const AddScript = ({tags, categories, talent, studios, creators}) => {
     const [submitting, setSubmitting] = useState(false);
+    const [clipboardWritten, setClipboardWritten] = useState(false);
 
     const handleValidationPassed = data => {
         setSubmitting(true);
@@ -43,10 +44,11 @@ const AddScript = ({tags, categories, talent, studios, creators}) => {
                     Router.push(`/script/${response[0].slug}`);
                 }
             }
-        }, error => {
+        }, () => setClipboardWritten(true), error => {
             window.alert("Upload failed - " + ScriptUtils.tryFormatError(error.message));
             console.log("Upload failed", ScriptUtils.tryFormatError(error.message));
             setSubmitting(false);
+            setClipboardWritten(false);
         });
     }
 
@@ -54,7 +56,7 @@ const AddScript = ({tags, categories, talent, studios, creators}) => {
         submitting ? (
             <div className={style.processing}>
                 <p>
-                    <span><FaCog /></span>
+                    <span className={clipboardWritten ? style.clipboardWritten : null}><FaCog /></span>
                     <span>Your script is processing - this may take up to a minute or two.</span>
                     <span>Please don't leave this page - once your script has finished processing you will be automatically redirected.</span>
                 </p>
@@ -73,7 +75,7 @@ const AddScript = ({tags, categories, talent, studios, creators}) => {
     )
 }
 
-const createScript = async (postData, onSuccess, onFail) => {
+const createScript = async (postData, onSuccess, onClipboardWrite, onFail) => {
 
     const data = {...postData}
 
@@ -105,7 +107,8 @@ const createScript = async (postData, onSuccess, onFail) => {
     const testDataString = ScriptUtils.getScriptObjectCode(data);
     try {
         await navigator.clipboard.writeText(testDataString);
-        console.log("Wrote data to clipboard");
+        console.log("Wrote data to clipboard", testDataString);
+        onClipboardWrite();
     } catch(error) {
         console.error("Failed to write test data to clipboard", error);
     }
