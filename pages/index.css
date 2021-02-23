@@ -9,7 +9,7 @@ html, body {
     min-width: 991px;
 }
 
-h1, h2, h3, h4, h5, h6, p, ul, a, span, label {
+h1, h2, h3, h4, h5, h6, p, ul, ol, a, span, label {
     color: #fff;
 }
 
