@@ -44,7 +44,6 @@
     margin-top: 0.5em;
 }
 
-
 .category {
     margin-top: 0;
     font-size: 1.8em;
@@ -71,7 +70,7 @@
 
 .duration > p {
     font-size: 2em;
-    margin-top: 1em;;
+    margin-top: 1em;
 }
 
 .linkbuttons {
@@ -121,7 +120,7 @@
 }
 
 .isLiked {
-    color: #eb576b
+    color: #eb576b;
 }
 
 .studiotalent {

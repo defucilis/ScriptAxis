@@ -5,7 +5,8 @@
     height: 4rem;
 }
 
-.buttons button, .buttons a {
+.buttons button,
+.buttons a {
     font-size: 1.2em;
     border: 0;
     background-color: #e8739c;
@@ -44,7 +45,7 @@
 }
 
 .output li {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: "Courier New", Courier, monospace;
 }
 
 .dropzone {
@@ -65,7 +66,8 @@
     transition: all 0.3s;
 }
 
-.dropzone p, .dropzone li {
+.dropzone p,
+.dropzone li {
     font-size: 1.2em;
 }
 

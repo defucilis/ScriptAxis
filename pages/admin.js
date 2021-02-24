@@ -1,15 +1,14 @@
-import Head from 'next/head'
+import Head from "next/head";
 
-import Layout from '../components/layout/Layout'
-import AdminPanel from '../components/dashboard/AdminPanel'
+import Layout from "../components/layout/Layout";
+import AdminPanel from "../components/dashboard/AdminPanel";
 
-import {FetchSlugs} from './api/scripts/allslugs'
+import { FetchSlugs } from "./api/scripts/allslugs";
 
-import useUser from '../utilities/auth/useUser'
+import useUser from "../utilities/auth/useUser";
 
-const Admin = ({existingScripts}) => {
-    
-    const {user} = useUser({redirectIfNotAdmin: "/"});
+const Admin = ({ existingScripts }) => {
+    const { user } = useUser({ redirectIfNotAdmin: "/" });
 
     return (
         <Layout>
@@ -17,23 +16,23 @@ const Admin = ({existingScripts}) => {
                 <title>ScriptAxis | Admin Functions</title>
             </Head>
             <h1>Admin Functions</h1>
-            <AdminPanel user={user} existingScripts={existingScripts}/>
+            <AdminPanel user={user} existingScripts={existingScripts} />
         </Layout>
-    )
-}
+    );
+};
 
-export async function getServerSideProps({query}) {
+export async function getServerSideProps({ query }) {
     let scripts = [];
     try {
         scripts = await FetchSlugs();
-    } catch(error) {
+    } catch (error) {
         console.log("Failed to load scripts", error);
     } finally {
         return {
             props: {
-                existingScripts: scripts
-            }
-        }
+                existingScripts: scripts,
+            },
+        };
     }
 }
 

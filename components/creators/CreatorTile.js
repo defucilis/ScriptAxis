@@ -1,13 +1,13 @@
-import Link from 'next/link'
+import Link from "next/link";
 
-import { FaHeart } from 'react-icons/fa'
-import { FaEye } from 'react-icons/fa'
+import { FaHeart } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 
-import ScriptUtils from '../../utilities/ScriptUtils'
+import ScriptUtils from "../../utilities/ScriptUtils";
 
-import style from '../scripts/ScriptTile.module.css'
+import style from "../scripts/ScriptTile.module.css";
 
-const CreatorTile = ({creator}) => {
+const CreatorTile = ({ creator }) => {
     return (
         <div className={style.scripttile}>
             <Link href={`/creator/${creator.name}`}>
@@ -24,22 +24,24 @@ const CreatorTile = ({creator}) => {
                 </Link>
             </div>
             <div className={style.scriptcreator}>
-                <p>{creator.scripts.length} Script{creator.scripts.length === 1 ? "" : "s"}</p>
+                <p>
+                    {creator.scripts.length} Script{creator.scripts.length === 1 ? "" : "s"}
+                </p>
             </div>
             <div className={style.bottomrow}>
                 <div className={style.rating}>
                     <FaEye />
                     <p>{ScriptUtils.viewsToString(creator.totalViews, true)}</p>
                 </div>
-                { creator.totalLikes == 0 ? null : (
-                <div className={style.likes}>
-                    <FaHeart />
-                    <p>{creator.totalLikes}</p>
-                </div>
+                {creator.totalLikes == 0 ? null : (
+                    <div className={style.likes}>
+                        <FaHeart />
+                        <p>{creator.totalLikes}</p>
+                    </div>
                 )}
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default CreatorTile;

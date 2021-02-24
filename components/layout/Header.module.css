@@ -19,11 +19,10 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    
+
     align-items: center;
     height: 60px;
 }
-
 
 .searchbar h1 {
     color: #e8739c;
@@ -35,7 +34,7 @@
     padding: 0 2em;
 }
 
-.searchbar input[type=text] {
+.searchbar input[type="text"] {
     width: calc(100% - 6em);
     padding: 0 0.5em;
     height: 30px;
@@ -47,7 +46,7 @@
     transition: border 0.3s;
 }
 
-.searchbar input[type=text]:focus {
+.searchbar input[type="text"]:focus {
     border: 1px solid #e8739c;
 }
 
@@ -119,14 +118,15 @@
 }
 
 .navbar ul > li > a:hover {
-    background-color: rgba(0,0,0,0.2);
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 .currentnav {
     border-bottom: 2px solid #e8739c;
 }
 
-.categories, .tags {
+.categories,
+.tags {
     position: absolute;
     width: 100%;
     background-color: #202020;
@@ -135,22 +135,26 @@
     display: none;
 }
 
-.categories ul, .tags ul {
+.categories ul,
+.tags ul {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     grid-gap: 1em;
 }
-.categories li, .tags li {
+.categories li,
+.tags li {
     height: 80px;
     background-color: #1b1b1b;
 }
-.categories li a, .tags li a {
+.categories li a,
+.tags li a {
     height: 100%;
     text-align: center;
     display: grid;
     align-items: center;
 }
-.categories li a:hover, .tags li a:hover {
+.categories li a:hover,
+.tags li a:hover {
     box-shadow: 0px 0px 0px 2px #fff;
 }
 
@@ -162,12 +166,25 @@
 
 .loadinguser svg {
     color: #fff;
-    -webkit-animation:spin 4s linear infinite;
-    -moz-animation:spin 4s linear infinite;
-    animation:spin 4s linear infinite;
+    -webkit-animation: spin 4s linear infinite;
+    -moz-animation: spin 4s linear infinite;
+    animation: spin 4s linear infinite;
     margin-right: 0.5em;
 }
 
-@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
-@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
-@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+@-moz-keyframes spin {
+    100% {
+        -moz-transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}

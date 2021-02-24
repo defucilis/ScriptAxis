@@ -1,4 +1,4 @@
-import {PrismaClient} from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
 
 const SetSavedSearches = (uid, filters) => {
     return new Promise(async (resolve, reject) => {
@@ -8,33 +8,33 @@ const SetSavedSearches = (uid, filters) => {
             console.log("Setting saved searches for user " + uid, filters);
             const response = await prisma.user.update({
                 where: {
-                    id: uid
+                    id: uid,
                 },
                 data: {
-                    savedFilters: filters
-                }
-            })
-            
+                    savedFilters: filters,
+                },
+            });
+
             await prisma.$disconnect();
             resolve(response);
-        } catch(error) {
+        } catch (error) {
             reject(error);
             await prisma.$disconnect();
         }
-    })
-}
+    });
+};
 
-export {SetSavedSearches}
+export { SetSavedSearches };
 
 export default async (req, res) => {
     try {
         const script = await SetSavedSearches(req.body.uid, req.body.filters);
         res.status(200);
         res.json(script);
-    } catch(error) {
+    } catch (error) {
         console.error("error saving search - " + error);
         res.json({
-            error: { message: error.message }
+            error: { message: error.message },
         });
     }
 };

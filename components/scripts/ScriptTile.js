@@ -1,13 +1,13 @@
-import Link from 'next/link'
+import Link from "next/link";
 
-import { FaThumbsUp } from 'react-icons/fa'
-import { FaHeart } from 'react-icons/fa'
+import { FaThumbsUp } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
 
-import ScriptUtils from '../../utilities/ScriptUtils'
+import ScriptUtils from "../../utilities/ScriptUtils";
 
-import style from './ScriptTile.module.css'
+import style from "./ScriptTile.module.css";
 
-const ScriptTile = ({script}) => {
+const ScriptTile = ({ script }) => {
     return (
         <div className={style.scripttile}>
             <Link href={`/script/${script.slug}`}>
@@ -35,15 +35,15 @@ const ScriptTile = ({script}) => {
                     <FaThumbsUp />
                     <p>{ScriptUtils.thumbsToPercentage(script.thumbsUp, script.thumbsDown)}%</p>
                 </div>
-                { script.likes == 0 ? null : (
-                <div className={style.likes}>
-                    <FaHeart />
-                    <p>{script.likes}</p>
-                </div>
+                {script.likes == 0 ? null : (
+                    <div className={style.likes}>
+                        <FaHeart />
+                        <p>{script.likes}</p>
+                    </div>
                 )}
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default ScriptTile;

@@ -83,7 +83,8 @@
     transition: all 0.3s;
 }
 
-.dropzone p, .dropzone li {
+.dropzone p,
+.dropzone li {
     font-size: 1.2em;
 }
 
@@ -106,7 +107,10 @@
     margin-bottom: 0.25em;
 }
 
-.form input, .form textarea, .form select, .form button {
+.form input,
+.form textarea,
+.form select,
+.form button {
     width: 60%;
     font-size: 1.2em;
     padding: 0.25em 0.5em;

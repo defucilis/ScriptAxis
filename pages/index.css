@@ -3,17 +3,34 @@
     font-family: sans-serif;
 }
 
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     min-width: 991px;
 }
 
-h1, h2, h3, h4, h5, h6, p, ul, ol, a, span, label {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+a,
+span,
+label {
     color: #fff;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     margin: 0;
 }
 
@@ -59,11 +76,13 @@ body {
     padding-bottom: 50px;
 }
 
-::-webkit-input-placeholder { /* Edge */
+::-webkit-input-placeholder {
+    /* Edge */
     font-style: italic;
 }
 
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
+:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
     font-style: italic;
 }
 
@@ -71,7 +90,8 @@ body {
     font-style: italic;
 }
 
-input, textarea {
+input,
+textarea {
     background-color: #363636;
     color: #fff;
     border: 1px solid #aaa;
@@ -98,17 +118,17 @@ input, textarea {
 
 .top {
     border-top: 2px solid black;
-    animation:          scrollBackground 10s infinite;
-    -moz-animation:     scrollBackground 10s infinite;
-    -webkit-animation:  scrollBackground 10s infinite;
-    -o-animation:       scrollBackground 10s infinite;
+    animation: scrollBackground 10s infinite;
+    -moz-animation: scrollBackground 10s infinite;
+    -webkit-animation: scrollBackground 10s infinite;
+    -o-animation: scrollBackground 10s infinite;
 }
 .bottom {
     border-bottom: 2px solid black;
-    animation:          scrollBackground 10s 3.235s infinite;
-    -moz-animation:     scrollBackground 10s 3.235s infinite;
-    -webkit-animation:  scrollBackground 10s 3.235s infinite;
-    -o-animation:       scrollBackground 10s 3.235s infinite;
+    animation: scrollBackground 10s 3.235s infinite;
+    -moz-animation: scrollBackground 10s 3.235s infinite;
+    -webkit-animation: scrollBackground 10s 3.235s infinite;
+    -o-animation: scrollBackground 10s 3.235s infinite;
 }
 
 .grey {
@@ -122,7 +142,7 @@ input, textarea {
     margin: 0;
     width: 100%;
     text-align: center;
-    text-shadow: 2px 2px 3px rgba(0,0,0,0.5);
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
 }
 
 .loadingtop {
@@ -142,7 +162,7 @@ input, textarea {
 
 .notloadingbottom {
     top: -25px;
-    transition: top 0.2s;    
+    transition: top 0.2s;
 }
 
 pre {
@@ -151,77 +171,76 @@ pre {
 
 /* Animation Keyframes*/
 @keyframes scrollBackground {
-    0% { 
-        background-position-x: 0%; 
+    0% {
+        background-position-x: 0%;
         background-position-y: 1000%;
         background-size: 1%;
     }
-    50% { 
-        background-position-x: 100%; 
+    50% {
+        background-position-x: 100%;
         background-position-y: 0%;
         background-size: 5%;
     }
-    100% { 
-        background-position-x: 0%; 
+    100% {
+        background-position-x: 0%;
         background-position-y: 1000%;
         background-size: 1%;
     }
 }
 
 @-moz-keyframes scrollBackground {
-    0% { 
-        background-position-x: 0%; 
+    0% {
+        background-position-x: 0%;
         background-position-y: 1000%;
         background-size: 1%;
     }
-    50% { 
-        background-position-x: 100%; 
+    50% {
+        background-position-x: 100%;
         background-position-y: 0%;
         background-size: 5%;
     }
-    100% { 
-        background-position-x: 0%; 
+    100% {
+        background-position-x: 0%;
         background-position-y: 1000%;
         background-size: 1%;
     }
 }
 
 @-webkit-keyframes scrollBackground {
-    0% { 
-        background-position-x: 0%; 
+    0% {
+        background-position-x: 0%;
         background-position-y: 1000%;
         background-size: 1%;
     }
-    50% { 
-        background-position-x: 100%; 
+    50% {
+        background-position-x: 100%;
         background-position-y: 0%;
         background-size: 5%;
     }
-    100% { 
-        background-position-x: 0%; 
+    100% {
+        background-position-x: 0%;
         background-position-y: 1000%;
         background-size: 1%;
     }
 }
 
 @-o-keyframes scrollBackground {
-    0% { 
-        background-position-x: 0%; 
+    0% {
+        background-position-x: 0%;
         background-position-y: 1000%;
         background-size: 1%;
     }
-    50% { 
-        background-position-x: 100%; 
+    50% {
+        background-position-x: 100%;
         background-position-y: 0%;
         background-size: 5%;
     }
-    100% { 
-        background-position-x: 0%; 
+    100% {
+        background-position-x: 0%;
         background-position-y: 1000%;
         background-size: 1%;
     }
 }
-
 
 /* Style NProgress */
 #nprogress .bar {

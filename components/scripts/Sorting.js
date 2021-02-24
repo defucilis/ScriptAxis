@@ -1,77 +1,74 @@
-import style from './Sorting.module.css'
+import style from "./Sorting.module.css";
 
 const sortOptions = [
     {
         label: "Newest",
         sorting: [
             {
-                created: "desc"
-            }
-        ]
+                created: "desc",
+            },
+        ],
     },
     {
         label: "Oldest",
         sorting: [
             {
-                created: "asc"
-            }
-        ]
+                created: "asc",
+            },
+        ],
     },
     {
         label: "Most Viewed",
         sorting: [
             {
-                views: "desc"
-            }
-        ]
+                views: "desc",
+            },
+        ],
     },
     {
         label: "Most Liked",
         sorting: [
             {
-                likeCount: "desc"
-            }
-        ]
+                likeCount: "desc",
+            },
+        ],
     },
     {
         label: "Longest",
         sorting: [
             {
-                duration: "desc"
-            }
-        ]
+                duration: "desc",
+            },
+        ],
     },
     {
         label: "Shortest",
         sorting: [
             {
-                duration: "asc"
-            }
-        ]
+                duration: "asc",
+            },
+        ],
     },
-]
+];
 
-const Sorting = ({onSort}) => {
-
+const Sorting = ({ onSort }) => {
     const handleSortChange = e => {
         onSort(sortOptions[e.target.value].sorting);
-    }
+    };
 
     return (
         <div className={style.sorting}>
             <select onChange={handleSortChange}>
-                {
-                    sortOptions.map((option, index) => {
-                        return (
-                            <option key={index} value={index}>
-                                {option.label}
-                            </option>
-                        )
-                    })
-                }
+                {sortOptions.map((option, index) => {
+                    return (
+                        <option key={index} value={index}>
+                            {option.label}
+                        </option>
+                    );
+                })}
             </select>
         </div>
-    )
-}
+    );
+};
 
 export default Sorting;

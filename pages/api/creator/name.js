@@ -1,39 +1,38 @@
-import {PrismaClient} from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
 
-const FetchCreator = (name) => {
+const FetchCreator = name => {
     return new Promise(async (resolve, reject) => {
         const prisma = new PrismaClient();
         try {
             console.log("Fetching creator with data", name);
-            const creator = await prisma.creator
-                .findUnique({
-                    where: {
-                        name: name
-                    },
-                    include: {
-                        scripts: true
-                    }
-                });
+            const creator = await prisma.creator.findUnique({
+                where: {
+                    name: name,
+                },
+                include: {
+                    scripts: true,
+                },
+            });
             await prisma.$disconnect();
             resolve(creator);
-        } catch(error) {
+        } catch (error) {
             await prisma.$disconnect();
             reject(error);
         }
-    })
-}
+    });
+};
 
-export {FetchCreator}
+export { FetchCreator };
 
 export default async (req, res) => {
     try {
         const script = await FetchCreator(req.body.name);
         res.status(200);
         res.json(script);
-    } catch(error) {
+    } catch (error) {
         console.error("error fetching script - " + error);
         res.json({
-            error: { message: error.message }
+            error: { message: error.message },
         });
     }
 };

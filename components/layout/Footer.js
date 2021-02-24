@@ -1,5 +1,5 @@
-import packageJson from 'package.json'
-import style from './Footer.module.css'
+import packageJson from "package.json";
+import style from "./Footer.module.css";
 
 const Footer = () => {
     return (
@@ -9,7 +9,7 @@ const Footer = () => {
                 <p>v{packageJson.version}</p>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default Footer;

@@ -1,13 +1,12 @@
-import Head from 'next/head'
+import Head from "next/head";
 
-import Layout from '../../components/layout/Layout'
-import ScriptDetails from '../../components/scripts/ScriptDetails'
+import Layout from "../../components/layout/Layout";
+import ScriptDetails from "../../components/scripts/ScriptDetails";
 
-import ScriptUtils from '../../utilities/ScriptUtils'
-import {FetchScript} from '../api/scripts/slug'
+import ScriptUtils from "../../utilities/ScriptUtils";
+import { FetchScript } from "../api/scripts/slug";
 
-const Script = ({script}) => {
-
+const Script = ({ script }) => {
     return (
         <Layout page="scripts">
             <Head>
@@ -15,22 +14,22 @@ const Script = ({script}) => {
             </Head>
             <ScriptDetails script={script} />
         </Layout>
-    )
-}
+    );
+};
 
-export async function getServerSideProps({query,res}) {
+export async function getServerSideProps({ query, res }) {
     let script = null;
     try {
         script = await FetchScript(query.scriptslug);
         script = ScriptUtils.parseScriptDocument(script);
-    } catch(error) {
+    } catch (error) {
         console.error(error);
     } finally {
         return {
             props: {
-                script
-            }
-        }
+                script,
+            },
+        };
     }
 }
 

@@ -1,4 +1,4 @@
-import {PrismaClient} from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
 
 const FetchLists = () => {
     return new Promise(async (resolve, reject) => {
@@ -18,29 +18,29 @@ const FetchLists = () => {
             console.log("\tFetching creators");
             let creators = await prisma.creator.findMany({
                 select: {
-                    name: true
-                }
-            })
+                    name: true,
+                },
+            });
             await prisma.$disconnect();
-            resolve({tags, categories, talent, studios, creators});
-        } catch(error) {
+            resolve({ tags, categories, talent, studios, creators });
+        } catch (error) {
             await prisma.$disconnect();
             reject(error);
         }
-    })
-}
+    });
+};
 
-export {FetchLists}
+export { FetchLists };
 
 export default async (req, res) => {
     try {
         const scripts = await FetchLists();
         res.status(200);
         res.json(scripts);
-    } catch(error) {
+    } catch (error) {
         console.error("error fetching tags and categories - " + error);
         res.json({
-            error: { message: error.message }
+            error: { message: error.message },
         });
     }
 };

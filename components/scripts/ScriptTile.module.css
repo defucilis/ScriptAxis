@@ -13,7 +13,7 @@
 .imagewrapper {
     display: grid;
     place-items: center;
-    box-shadow: 0x 0px 0px 2px rgba(0,0,0,0);
+    box-shadow: 0x 0px 0px 2px rgba(0, 0, 0, 0);
     transition: box-shadow 0.2s;
     height: 176px;
 }
@@ -35,15 +35,47 @@
     height: 100%;
     left: 0;
     top: 0;
-    background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 70%, rgba(0,0,0, 0.7) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0, 0.5)), color-stop(30%, rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, rgba(0,47,75,0.5) 0%,rgba(0,0,0,0) 70%, rgba(0,0,0, 0.7) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 70%, rgba(0,0,0, 0.7) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 70%, rgba(0,0,0, 0.7) 100%); /* IE10+ */
-    background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 70%, rgba(0,0,0, 0.7) 100%); /* W3C */
+    background: -moz-linear-gradient(
+        top,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0) 70%,
+        rgba(0, 0, 0, 0.7) 100%
+    ); /* FF3.6+ */
+    background: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0%, rgba(0, 0, 0, 0.5)),
+        color-stop(30%, rgba(0, 0, 0, 0)),
+        color-stop(100%, rgba(0, 0, 0, 0))
+    ); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(
+        top,
+        rgba(0, 47, 75, 0.5) 0%,
+        rgba(0, 0, 0, 0) 70%,
+        rgba(0, 0, 0, 0.7) 100%
+    ); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(
+        top,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0) 70%,
+        rgba(0, 0, 0, 0.7) 100%
+    ); /* Opera 11.10+ */
+    background: -ms-linear-gradient(
+        top,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0) 70%,
+        rgba(0, 0, 0, 0.7) 100%
+    ); /* IE10+ */
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0) 70%,
+        rgba(0, 0, 0, 0.7) 100%
+    ); /* W3C */
 }
 
-.scriptname { 
+.scriptname {
     margin: 0.5em 0;
 }
 .scriptname > a {
@@ -57,7 +89,8 @@
 .scriptcreator {
     margin: 0;
 }
-.scriptcreator > a, .scriptcreator > p {
+.scriptcreator > a,
+.scriptcreator > p {
     color: #777;
     margin: 0;
 }
@@ -78,7 +111,8 @@
 .bottomrow svg {
     margin-right: 0.5em;
 }
-.bottomrow .rating, .bottomrow .likes {
+.bottomrow .rating,
+.bottomrow .likes {
     display: flex;
     margin-left: 1.5em;
 }

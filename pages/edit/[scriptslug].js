@@ -1,25 +1,24 @@
-import {useContext, useEffect} from 'react'
-import Router from 'next/router'
-import Head from 'next/head'
+import { useContext, useEffect } from "react";
+import Router from "next/router";
+import Head from "next/head";
 
-import Layout from '../../components/layout/Layout'
-import EditScript from '../../components/forms/EditScript'
+import Layout from "../../components/layout/Layout";
+import EditScript from "../../components/forms/EditScript";
 
-import ScriptUtils from '../../utilities/ScriptUtils'
-import useUser from '../../utilities/auth/useUser'
-import {FetchScript} from '../api/scripts/slug'
-import {FetchLists} from '../api/loadlists'
+import ScriptUtils from "../../utilities/ScriptUtils";
+import useUser from "../../utilities/auth/useUser";
+import { FetchScript } from "../api/scripts/slug";
+import { FetchLists } from "../api/loadlists";
 
-const Script = ({script, tags, categories, talent, studios, creators}) => {
-
+const Script = ({ script, tags, categories, talent, studios, creators }) => {
     //page is blocked if user is not signed in
-    const {user} = useUser({redirectTo: "/"});
+    const { user } = useUser({ redirectTo: "/" });
     useEffect(() => {
         //page is blocked if the user doesn't own this script!
-        if(user && user.username !== script.owner) {
+        if (user && user.username !== script.owner) {
             Router.push("/");
         }
-    }, [user])
+    }, [user]);
 
     return (
         <Layout page="scripts">
@@ -27,7 +26,7 @@ const Script = ({script, tags, categories, talent, studios, creators}) => {
                 <title>ScriptAxis | Editing "{script.name}"</title>
             </Head>
             <h1>Edit Script</h1>
-            <EditScript 
+            <EditScript
                 script={script}
                 tags={tags}
                 categories={categories}
@@ -36,10 +35,10 @@ const Script = ({script, tags, categories, talent, studios, creators}) => {
                 creators={creators}
             />
         </Layout>
-    )
-}
+    );
+};
 
-export async function getServerSideProps({query,res}) {
+export async function getServerSideProps({ query, res }) {
     let script = null;
     let data = {};
     try {
@@ -49,15 +48,15 @@ export async function getServerSideProps({query,res}) {
         data = ScriptUtils.parseDatabaseLists(data);
         script = ScriptUtils.parseScriptDocument(script);
         console.log(script);
-    } catch(error) {
+    } catch (error) {
         console.error(error);
     } finally {
         return {
             props: {
                 script,
-                ...data
-            }
-        }
+                ...data,
+            },
+        };
     }
 }
 

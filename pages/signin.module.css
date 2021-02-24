@@ -12,7 +12,7 @@
     width: 60%;
 }
 
-.signin input[type=submit] {
+.signin input[type="submit"] {
     background-color: #e8739c;
     color: #000;
     border: 0;
