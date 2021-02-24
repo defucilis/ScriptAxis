@@ -36,16 +36,6 @@ const QueryScripts = ({filters, sorting, page}) => {
             if(filters.include) finalWhere.AND.push({tags: {hasEvery: filters.include}});
             if(filters.exclude) finalWhere.NOT = {tags: {hasSome: filters.exclude}};
             if(filters.talent) finalWhere.AND.push({talent: {has: filters.talent}});
-            //todo: God damn it Prisma doesn't support filtering with lists
-            //see: https://github.com/prisma/prisma-client-js/issues/341
-            //see: https://github.com/prisma/prisma/issues/3475
-            //Until this is added, I'll need to workaround with raw SQL
-            //I really don't want to do that, so I think I'll just filter them myself...
-
-            //This is especially problematic because it kind of breaks pagination. The server
-            //isn't able to count accurately how many scripts match the filters - it will count
-            //all those scripts which match the filters, but will disregard tags and talent when
-            //counting... bummer
 
             let count = await prisma.script.count({
                 where: finalWhere,
