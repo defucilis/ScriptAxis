@@ -14,8 +14,8 @@ import {
     Collapsible,
 } from "./FormUtils";
 import NavigationPrompt from "../functional/NavigationPrompt";
-import ScriptUtils from "../../utilities/ScriptUtils";
-import useUser from "../../utilities/auth/useUser";
+import ScriptUtils from "../../lib/ScriptUtils";
+import useUser from "../../lib/auth/useUser";
 
 import style from "./ScriptForm.module.css";
 

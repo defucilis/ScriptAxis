@@ -5,8 +5,8 @@ import Head from "next/head";
 import Layout from "../../components/layout/Layout";
 import EditScript from "../../components/forms/EditScript";
 
-import ScriptUtils from "../../utilities/ScriptUtils";
-import useUser from "../../utilities/auth/useUser";
+import ScriptUtils from "../../lib/ScriptUtils";
+import useUser from "../../lib/auth/useUser";
 import { FetchScript } from "../api/scripts/slug";
 import { FetchLists } from "../api/loadlists";
 

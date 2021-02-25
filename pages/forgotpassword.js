@@ -4,7 +4,7 @@ import Router from "next/router";
 
 import Layout from "../components/layout/Layout";
 
-import firebase from "../utilities/initFirebase";
+import firebase from "../lib/initFirebase";
 
 import style from "./signin.module.css";
 

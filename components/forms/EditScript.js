@@ -6,8 +6,8 @@ import slugify from "slugify";
 import { FaCog } from "react-icons/fa";
 import * as imageConversion from "image-conversion";
 
-import FirebaseUtils from "../../utilities/FirebaseUtils";
-import ScriptUtils from "../../utilities/ScriptUtils";
+import FirebaseUtils from "../../lib/FirebaseUtils";
+import ScriptUtils from "../../lib/ScriptUtils";
 import ScriptForm from "./ScriptForm";
 import style from "./AddScript.module.css";
 

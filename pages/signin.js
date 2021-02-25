@@ -5,7 +5,7 @@ import Router from "next/router";
 
 import Layout from "../components/layout/Layout";
 
-import useUser from "../utilities/auth/useUser";
+import useUser from "../lib/auth/useUser";
 
 import style from "./signin.module.css";
 

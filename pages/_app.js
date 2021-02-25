@@ -4,9 +4,9 @@ import "@yaireo/tagify/dist/tagify.css";
 import "react-datepicker/dist/react-datepicker.css";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import initFirebase from "../utilities/initFirebase";
+import initFirebase from "../lib/initFirebase";
 
-import { AuthProvider } from "../utilities/auth/useUser";
+import { AuthProvider } from "../lib/auth/useUser";
 
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";

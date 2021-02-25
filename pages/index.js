@@ -8,7 +8,7 @@ import { FaCog } from "react-icons/fa";
 import Layout from "../components/layout/Layout";
 import ScriptGrid from "../components/scripts/ScriptGrid";
 
-import ScriptUtils from "../utilities/ScriptUtils";
+import ScriptUtils from "../lib/ScriptUtils";
 
 import style from "./index.module.css";
 

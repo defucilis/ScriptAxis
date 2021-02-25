@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import ScriptUtils from "../../../utilities/ScriptUtils";
+import ScriptUtils from "../../../lib/ScriptUtils";
 
 const FetchScripts = () => {
     return new Promise(async (resolve, reject) => {

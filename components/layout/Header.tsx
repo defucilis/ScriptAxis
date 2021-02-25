@@ -7,8 +7,8 @@ import { FaSearch } from "react-icons/fa";
 import { FaSync } from "react-icons/fa";
 import axios from "axios";
 
-import ScriptUtils from "../../utilities/ScriptUtils";
-import useUser from "../../utilities/auth/useUser";
+import ScriptUtils from "../../lib/ScriptUtils";
+import useUser from "../../lib/auth/useUser";
 
 import styles from "./Header.module.scss";
 
@@ -40,7 +40,7 @@ const Header = ({ page }: {page?: HeaderPage}): JSX.Element => {
                 setCategoryCounts(categories);
                 setTagCounts(tags);
                 setScriptCount(scriptCount);
-                window.localStorage.setItem("scriptCount", scriptCount);
+                window.localStorage.setItem("scriptCount", scriptCount.toString());
                 window.localStorage.setItem("storedTagCounts", JSON.stringify(tags));
                 window.localStorage.setItem("storedCategoryCounts", JSON.stringify(categories));
                 window.localStorage.setItem("storedTalent", JSON.stringify(talent));

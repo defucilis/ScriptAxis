@@ -7,8 +7,8 @@ import axios from "axios";
 import ScriptList from "../scripts/ScriptList";
 import SavedSearch from "./SavedSearch";
 
-import useUser from "../../utilities/auth/useUser";
-import ScriptUtils from "../../utilities/ScriptUtils";
+import useUser from "../../lib/auth/useUser";
+import ScriptUtils from "../../lib/ScriptUtils";
 
 import style from "./Dashboard.module.css";
 

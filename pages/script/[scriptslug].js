@@ -3,7 +3,7 @@ import Head from "next/head";
 import Layout from "../../components/layout/Layout";
 import ScriptDetails from "../../components/scripts/ScriptDetails";
 
-import ScriptUtils from "../../utilities/ScriptUtils";
+import ScriptUtils from "../../lib/ScriptUtils";
 import { FetchScript } from "../api/scripts/slug";
 
 const Script = ({ script }) => {

@@ -1,6 +1,6 @@
 const fs = require("fs");
 const axios = require("axios");
-const ScriptUtils = require("../utilities/ScriptUtils");
+const ScriptUtils = require("../lib/ScriptUtils");
 
 const cookie = process.env.npm_config_cookie;
 const page = process.env.npm_config_page || 0;

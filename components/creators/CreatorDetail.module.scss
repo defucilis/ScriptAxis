@@ -1,0 +1,64 @@
+.creator h1 {
+    font-size: 4em;
+}
+
+.creator h3 {
+    font-size: 2em;
+    font-weight: normal;
+}
+
+.stats {
+    display: flex;
+    margin-top: 1em;
+    margin-bottom: 2em;
+
+    color: var(--color-text);
+
+    font-size: 1.1rem;
+
+    >div {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    
+        margin-right: 4em;
+
+        // Total Likes
+        >p {
+            margin: 0;
+    
+            position: relative;
+            top: -0.5rem;
+        
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        >div {
+            text-align: center;
+            display: flex;
+        }
+        
+        >div > p:first-child {
+            display: block;
+        
+            margin: 0;
+        
+            color: var(--color-theme-500);
+        
+            font-size: 4rem;
+        }
+        
+        >div > p:last-child {
+            margin: 0;
+        
+            font-size: 3rem;
+            margin-left: 1rem;
+            margin-top: 0.5rem;
+        }
+    }
+    
+    
+}
+
+

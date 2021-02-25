@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 
 import CreatorTile from "./CreatorTile";
 
-import style from "./CreatorGrid.module.css";
+import style from "./CreatorGrid.module.scss";
+import { Creator } from "lib/types";
 
-const CreatorGrid = ({ creators }) => {
+const CreatorGrid = ({ creators }: {creators: Creator[]}): JSX.Element => {
     const [creatorTiles, setCreatorTiles] = useState([]);
     useEffect(() => {
         if (!creators) {

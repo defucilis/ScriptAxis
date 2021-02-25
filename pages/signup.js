@@ -3,11 +3,11 @@ import Head from "next/head";
 import Router from "next/router";
 
 import axios from "axios";
-import firebase from "../utilities/initFirebase";
+import firebase from "../lib/initFirebase";
 
 import Layout from "../components/layout/Layout";
 
-import useUser from "../utilities/auth/useUser";
+import useUser from "../lib/auth/useUser";
 
 import style from "./signin.module.css";
 

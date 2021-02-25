@@ -10,14 +10,15 @@
     background-color: var(--color-bg);
     display: grid;
     place-items: center left;
-}
-.imagewrapper > img {
-    max-height: 100%;
-    max-width: 100%;
-}
-.imagewrapper > iframe {
-    max-height: 100%;
-    max-width: 100%;
+
+    >img {
+        max-height: 100%;
+        max-width: 100%;
+    }
+    >iframe {
+        max-height: 100%;
+        max-width: 100%;
+    }
 }
 
 .details {
@@ -31,11 +32,11 @@
 
 .creator {
     font-size: 2em;
-}
 
-.creator a:hover {
-    color: var(--color-theme-500);
-    cursor: pointer;
+    a:hover {
+        color: var(--color-theme-500);
+        cursor: pointer;
+    }
 }
 
 .created {
@@ -47,25 +48,25 @@
 .category {
     margin-top: 0;
     font-size: 1.8em;
-}
 
-.category a:hover {
-    color: var(--color-theme-500);
+    a:hover {
+        color: var(--color-theme-500);
+    }
 }
 
 .tags > li {
     display: inline;
     margin-right: 0.5em;
-}
 
-.tags > li > a {
-    background-color: var(--color-neutral-300);
-    border-radius: 5px;
-    padding: 0.25em 0.5em;
-}
+    >a {
+        background-color: var(--color-neutral-300);
+        border-radius: 5px;
+        padding: 0.25em 0.5em;
 
-.tags > li > a:hover {
-    color: var(--color-theme-500);
+        &hover {
+            color: var(--color-theme-500);
+        }
+    }
 }
 
 .duration > p {
@@ -101,18 +102,18 @@
 .stats {
     font-size: 1.5em;
     color: var(--color-neutral-700);
-}
 
-.stats li {
-    margin-top: 0.5em;
-}
-
-.stats span {
-    color: var(--color-neutral-700);
-}
-
-.stats svg {
-    margin-right: 0.5em;
+    li {
+        margin-top: 0.5em;
+    }
+    
+    span {
+        color: var(--color-neutral-700);
+    }
+    
+    svg {
+        margin-right: 0.5em;
+    }
 }
 
 .clickable {
@@ -125,17 +126,17 @@
 
 .studiotalent {
     font-size: 1.2em;
-}
 
-.studiotalent a:hover {
-    color: var(--color-theme-500);
+    a:hover {
+        color: var(--color-theme-500);
+    }
 }
 
 .description {
     margin-top: 1em;
     font-size: 1.1em;
-}
 
-.description p {
-    margin: 0.5em 0;
+    p {
+        margin: 0.5em 0;
+    }
 }

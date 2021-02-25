@@ -2,14 +2,14 @@ import { useEffect } from "react";
 import Head from "next/head";
 import Router from "next/router";
 
-import firebase from "../utilities/initFirebase";
+import firebase from "../lib/initFirebase";
 
 import Layout from "../components/layout/Layout";
 import AddScript from "../components/forms/AddScript";
 
-import useUser from "../utilities/auth/useUser";
+import useUser from "../lib/auth/useUser";
 import { FetchLists } from "./api/loadlists";
-import ScriptUtils from "../utilities/ScriptUtils";
+import ScriptUtils from "../lib/ScriptUtils";
 
 const Add = ({ tags, categories, talent, studios, creators }) => {
     //page is blocked if user is not signed in

@@ -1,47 +1,74 @@
 import { useState, useEffect, useReducer } from "react";
-import dynamic from "next/dynamic";
+//import dynamic from "next/dynamic";
 
-const Tags = dynamic(() => import("@yaireo/tagify/dist/react.tagify"), { ssr: false });
+//const Tags = dynamic(() => import("@yaireo/tagify/dist/react.tagify"), { ssr: false });
+import Tags from "@yaireo/tagify/dist/react.tagify";
 import { FaCheck } from "react-icons/fa";
 import ReactSlider from "react-slider";
 import axios from "axios";
 
 import Checkbox from "../forms/Checkbox";
 
-import ScriptUtils from "../../utilities/ScriptUtils";
-import useUser from "../../utilities/auth/useUser";
+import ScriptUtils from "../../lib/ScriptUtils";
+import useUser from "../../lib/auth/useUser";
 
-import style from "./Filters.module.css";
+import style from "./Filters.module.scss";
+import { Filters, Query } from "lib/types";
 
-const reduceFilters = (currentFilters, action) => {
-    let newFilters = { ...currentFilters };
+interface FilterActions {
+    name?: FilterAction;
+    category?: FilterAction;
+    include?: FilterActionArray;
+    exclude?: FilterActionArray;
+    minDuration?: FilterAction;
+    maxDuration?: FilterAction;
+    talent?: FilterAction;
+    studio?: FilterAction;
+    sourceUrl?: FilterAction;
+    streamingUrl?: FilterAction;
+}
+interface FilterAction {
+    operation?: "clear" | "set" | "toggle";
+    stringValue?: string;
+    booleanValue?: boolean;
+    numberValue?: number;
+}
+
+interface FilterActionArray {
+    operation?: "clear" | "set" | "toggle" | "add" | "remove";
+    value?: string[];
+    item?: string;
+}
+
+const reduceFilters = (currentFilters: Filters, action: FilterActions) => {
+    const newFilters = { ...currentFilters };
     if (action.name) {
         if (action.name.operation === "clear") delete newFilters.name;
-        else newFilters.name = { contains: action.name.value };
+        else newFilters.name = { contains: action.name.stringValue };
     }
     if (action.category) {
         if (action.category.operation === "clear") {
             delete newFilters.category;
         } else if (action.category.operation === "set") {
-            newFilters.category = { name: { equals: action.category.value } };
+            newFilters.category = { name: { equals: action.category.stringValue } };
         } else if (action.category.operation === "toggle") {
             if (
-                action.category.value &&
+                action.category.stringValue &&
                 newFilters.category &&
-                newFilters.category.name.equals === action.category.value
+                newFilters.category.name.equals === action.category.stringValue
             )
                 delete newFilters.category;
-            else newFilters.category = { name: { equals: action.category.value } };
+            else newFilters.category = { name: { equals: action.category.stringValue } };
         }
     }
     if (action.include) {
         if (action.include.operation === "add") {
-            if (!newFilters.include) newFilters.include = [action.include.value];
-            else if (newFilters.include.findIndex(f => f === action.include.value) === -1)
-                newFilters.include.push(action.include.value);
+            if (!newFilters.include) newFilters.include = [action.include.item];
+            else if (newFilters.include.findIndex(f => f === action.include.item) === -1)
+                newFilters.include.push(action.include.item);
         } else if (action.include.operation === "remove") {
             if (!newFilters.include || newFilters.include.length === 0) delete newFilters.include;
-            newFilters.include = newFilters.include.filter(tag => tag !== action.include.value);
+            newFilters.include = newFilters.include.filter(tag => tag !== action.include.item);
             if (newFilters.include.length === 0) delete newFilters.include;
         } else if (action.include.operation === "set") {
             if (!action.include.value || action.include.value.length === 0)
@@ -57,12 +84,12 @@ const reduceFilters = (currentFilters, action) => {
     }
     if (action.exclude) {
         if (action.exclude.operation === "add") {
-            if (!newFilters.exclude) newFilters.exclude = [action.exclude.value];
-            else if (newFilters.exclude.findIndex(f => f === action.exclude.value) === -1)
-                newFilters.exclude.push(action.exclude.value);
+            if (!newFilters.exclude) newFilters.exclude = [action.exclude.item];
+            else if (newFilters.exclude.findIndex(f => f === action.exclude.item) === -1)
+                newFilters.exclude.push(action.exclude.item);
         } else if (action.exclude.operation === "remove") {
             if (!newFilters.exclude || newFilters.exclude.length === 0) delete newFilters.exclude;
-            newFilters.exclude = newFilters.exclude.filter(tag => tag !== action.exclude.value);
+            newFilters.exclude = newFilters.exclude.filter(tag => tag !== action.exclude.item);
             if (newFilters.exclude.length === 0) delete newFilters.exclude;
         } else if (action.exclude.operation === "clear") {
             delete newFilters.exclude;
@@ -74,26 +101,26 @@ const reduceFilters = (currentFilters, action) => {
     }
     if (action.minDuration) {
         if (action.minDuration.operation === "clear") delete newFilters.minDuration;
-        else newFilters.minDuration = action.minDuration.value;
+        else newFilters.minDuration = action.minDuration.numberValue;
     }
     if (action.maxDuration) {
         if (action.maxDuration.operation === "clear") delete newFilters.maxDuration;
-        else newFilters.maxDuration = action.maxDuration.value;
+        else newFilters.maxDuration = action.maxDuration.numberValue;
     }
     if (action.talent) {
         if (action.talent.operation === "clear") delete newFilters.talent;
-        else newFilters.talent = action.talent.value;
+        else newFilters.talent = action.talent.stringValue;
     }
     if (action.studio) {
         if (action.studio.operation === "clear") delete newFilters.studio;
-        else newFilters.studio = { contains: action.studio.value };
+        else newFilters.studio = { contains: action.studio.stringValue };
     }
     if (action.sourceUrl) {
-        if (!action.sourceUrl.value) delete newFilters.sourceUrl;
+        if (!action.sourceUrl.booleanValue) delete newFilters.sourceUrl;
         else newFilters.sourceUrl = { not: null };
     }
     if (action.streamingUrl) {
-        if (!action.streamingUrl.value) delete newFilters.streamingUrl;
+        if (!action.streamingUrl.booleanValue) delete newFilters.streamingUrl;
         else newFilters.streamingUrl = { not: null };
     }
 
@@ -101,10 +128,10 @@ const reduceFilters = (currentFilters, action) => {
     return newFilters;
 };
 
-const Filters = ({ query, onFilter }) => {
+const FiltersElement = ({ query, onFilter }: {query: Query, onFilter: (filters: Filters) => void}): JSX.Element => {
     const [filters, setFilters] = useReducer(reduceFilters, query.filters);
-    const [initialIncludeTags, setInitialIncludeTags] = useState("");
-    const [initialExcludeTags, setInitialExcludeTags] = useState("");
+    const [initialIncludeTags, setInitialIncludeTags] = useState<string[]>([]);
+    const [initialExcludeTags, setInitialExcludeTags] = useState<string[]>([]);
     const [durationValues, setDurationValues] = useState([0, 7]);
     const [tags, setTags] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -113,8 +140,8 @@ const Filters = ({ query, onFilter }) => {
     const [studioOptions, setStudioOptions] = useState([]);
     const [initialTalent, setInitialTalent] = useState([]);
     const [initialStudio, setInitialStudio] = useState([]);
-    const [sourceUrl, setSourceUrl] = useState("");
-    const [streamingUrl, setStreamingUrl] = useState("");
+    const [sourceUrl, setSourceUrl] = useState(false);
+    const [streamingUrl, setStreamingUrl] = useState(false);
     const [saved, setSaved] = useState(false);
     const { user } = useUser();
     useEffect(() => {
@@ -135,70 +162,70 @@ const Filters = ({ query, onFilter }) => {
 
     useEffect(() => {
         window.setTimeout(() => {
-            let action = {};
-            const clearOp = { operation: "clear" };
+            const action: FilterActions = {};
+            const clearOp: FilterAction = { operation: "clear" };
             action.name = !query.filters.name
                 ? clearOp
                 : {
-                      value: query.filters.name.contains,
+                      stringValue: query.filters.name.contains,
                   };
 
             action.include = !query.filters.include
                 ? clearOp
                 : {
                       operation: "add",
-                      value: query.filters.include[0],
+                      item: query.filters.include[0],
                   };
 
             action.exclude = !query.filters.exclude
                 ? clearOp
                 : {
                       operation: "add",
-                      value: query.filters.exclude[0],
+                      item: query.filters.exclude[0],
                   };
 
             action.category = !query.filters.category
                 ? clearOp
                 : {
                       operation: "set",
-                      value: query.filters.category.name.equals,
+                      stringValue: query.filters.category.name.equals,
                   };
 
             action.minDuration = !query.filters.minDuration
                 ? clearOp
                 : {
-                      value: query.filters.minDuration,
+                      numberValue: query.filters.minDuration,
                   };
 
             action.maxDuration = !query.filters.maxDuration
                 ? clearOp
                 : {
-                      value: query.filters.maxDuration,
+                      numberValue: query.filters.maxDuration,
                   };
 
             action.talent = !query.filters.talent
                 ? clearOp
                 : {
-                      value: query.filters.talent,
+                      stringValue: query.filters.talent,
                   };
 
             action.sourceUrl = !query.filters.sourceUrl
                 ? clearOp
                 : {
-                      value: true,
+                      booleanValue: true,
                   };
 
             action.streamingUrl = !query.filters.streamingUrl
                 ? clearOp
                 : {
-                      value: true,
+                      booleanValue: true,
                   };
 
             if (Object.keys(action).length > 0) setFilters(action);
 
             setSearch(query.filters.name ? query.filters.name.contains : "");
-            setInitialIncludeTags(query.filters.include ? [query.filters.include] : []);
-            setInitialExcludeTags(query.filters.exclude ? [query.filters.exclude] : []);
+            setInitialIncludeTags(query.filters.include ? query.filters.include : []);
+            setInitialExcludeTags(query.filters.exclude ? query.filters.exclude : []);
             setInitialTalent(query.filters.talent ? [query.filters.talent] : []);
             setInitialStudio(query.filters.studio ? [query.filters.studio.contains] : []);
             setDurationValues([
@@ -222,10 +249,10 @@ const Filters = ({ query, onFilter }) => {
     }, [filters]);
 
     const handleSliderChange = values => {
-        let action = {};
-        if (values[0] !== 0) action.minDuration = { value: values[0] };
+        const action: FilterActions = {};
+        if (values[0] !== 0) action.minDuration = { numberValue: values[0] };
         else action.minDuration = { operation: "clear" };
-        if (values[1] !== 7) action.maxDuration = { value: values[1] };
+        if (values[1] !== 7) action.maxDuration = { numberValue: values[1] };
         else action.maxDuration = { operation: "clear" };
         if (Object.keys(action).length > 0) setFilters(action);
     };
@@ -234,26 +261,30 @@ const Filters = ({ query, onFilter }) => {
         setDurationValues(values);
     };
 
-    const handleSearch = e => {
-        if (e.key && e.key !== "Enter") return;
+    const handleSearch = () => {
         if (filters.name && search === filters.name.contains) return;
 
         setFilters({
-            name: search && search !== "" ? { value: search } : { operation: "clear" },
+            name: search && search !== "" ? { stringValue: search } : { operation: "clear" },
         });
     };
 
-    const handleSourceChange = e => {
+    const handleSearchKey = (e: React.KeyboardEvent) => {
+        if(e.key !== "Enter") return;
+        handleSearch();
+    }
+
+    const handleSourceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSourceUrl(e.target.checked);
         setFilters({
-            sourceUrl: e.target.checked ? { value: true } : {},
+            sourceUrl: e.target.checked ? { booleanValue: true } : {},
         });
     };
 
-    const handleStreamingChange = e => {
+    const handleStreamingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setStreamingUrl(e.target.checked);
         setFilters({
-            streamingUrl: e.target.checked ? { value: true } : {},
+            streamingUrl: e.target.checked ? { booleanValue: true } : {},
         });
     };
 
@@ -264,7 +295,7 @@ const Filters = ({ query, onFilter }) => {
             return;
         }
 
-        let saveQuery = { ...query };
+        const saveQuery = { ...query };
         delete saveQuery.page;
         const queryString = ScriptUtils.queryToString(ScriptUtils.objectToQuery(saveQuery));
         if (queryString === "") {
@@ -299,7 +330,7 @@ const Filters = ({ query, onFilter }) => {
                         value={search}
                         onChange={e => setSearch(e.target.value)}
                         onBlur={handleSearch}
-                        onKeyDown={handleSearch}
+                        onKeyDown={handleSearchKey}
                         className={style.search}
                     ></input>
                 </div>
@@ -322,7 +353,7 @@ const Filters = ({ query, onFilter }) => {
                                             setFilters({
                                                 category: {
                                                     operation: "toggle",
-                                                    value: category.name,
+                                                    stringValue: category.name,
                                                 },
                                             })
                                         }
@@ -353,7 +384,7 @@ const Filters = ({ query, onFilter }) => {
                             setFilters({
                                 include: {
                                     operation: "add",
-                                    value: e.detail.data.value,
+                                    item: e.detail.data.value,
                                 },
                             });
                         }}
@@ -362,7 +393,7 @@ const Filters = ({ query, onFilter }) => {
                             setFilters({
                                 include: {
                                     operation: "remove",
-                                    value: e.detail.data.value,
+                                    item: e.detail.data.value,
                                 },
                             });
                         }}
@@ -382,20 +413,20 @@ const Filters = ({ query, onFilter }) => {
                         }}
                         value={initialExcludeTags}
                         whitelist={tags}
-                        onAdd={e => {
+                        onAdd={(e) => {
                             console.log("tag added ", e.detail.data);
                             setFilters({
                                 exclude: {
                                     operation: "add",
-                                    value: e.detail.data.value,
+                                    item: e.detail.data.value,
                                 },
                             });
                         }}
-                        onRemove={e => {
+                        onRemove={(e) => {
                             setFilters({
                                 exclude: {
                                     operation: "remove",
-                                    value: e.detail.data.value,
+                                    item: e.detail.data.value,
                                 },
                             });
                         }}
@@ -450,7 +481,7 @@ const Filters = ({ query, onFilter }) => {
                             console.log("talent added ", e.detail.data);
                             setFilters({
                                 talent: {
-                                    value: e.detail.data.value,
+                                    stringValue: e.detail.data.value,
                                 },
                             });
                         }}
@@ -483,7 +514,7 @@ const Filters = ({ query, onFilter }) => {
                             console.log("studio added ", e.detail.data);
                             setFilters({
                                 studio: {
-                                    value: e.detail.data.value,
+                                    stringValue: e.detail.data.value,
                                 },
                             });
                         }}
@@ -533,4 +564,4 @@ const Filters = ({ query, onFilter }) => {
     );
 };
 
-export default Filters;
+export default FiltersElement;

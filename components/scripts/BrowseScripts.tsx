@@ -3,18 +3,25 @@ import Head from "next/head";
 import Router from "next/router";
 
 import ScriptGrid from "./ScriptGrid";
-import Filters from "./Filters";
-import Sorting from "./Sorting";
+import FiltersElement from "./Filters";
+import SortingElement from "./Sorting";
 import Pagination from "./Pagination";
 
-import ScriptUtils from "../../utilities/ScriptUtils";
+import ScriptUtils from "../../lib/ScriptUtils";
 
-import style from "./BrowseScripts.module.css";
+import style from "./BrowseScripts.module.scss";
+import { Filters, Query, Script, Sorting } from "lib/types";
 
-const BrowseScripts = ({ propScripts, scriptCount, tags, categories, query }) => {
-    const [scripts, setScripts] = useState([]);
-    const [cachedFilters, setCachedFilters] = useState({ ...query.filters });
-    const [cachedSorting, setCachedSorting] = useState([{ created: "desc" }]);
+const BrowseScripts = ({ propScripts, scriptCount, query }: {
+    propScripts: Script[],
+    scriptCount: number,
+    tags: string[],
+    categories: string[],
+    query: Query
+}): JSX.Element => {
+    const [scripts, setScripts] = useState<Script[]>([]);
+    const [cachedFilters, setCachedFilters] = useState<Filters>({ ...query.filters });
+    const [cachedSorting, setCachedSorting] = useState<Sorting[]>([{ created: "desc" }]);
 
     useEffect(() => {
         setScripts(propScripts);
@@ -22,8 +29,8 @@ const BrowseScripts = ({ propScripts, scriptCount, tags, categories, query }) =>
 
     console.log(query.filters);
 
-    const getHeadTitle = query => {
-        if (query.filters === {}) return `All Scripts (${scriptCount} total)`;
+    const getHeadTitle = (query: Query) => {
+        if (!query.filters) return `All Scripts (${scriptCount} total)`;
         if (query.filters.name)
             return `Results for '${query.filters.name.contains}' (${scriptCount} total)`;
         if (query.filters.category)
@@ -32,8 +39,8 @@ const BrowseScripts = ({ propScripts, scriptCount, tags, categories, query }) =>
         return "Filtered Scripts (${scriptCount} total)";
     };
 
-    const getBodyTitle = query => {
-        if (query.filters === {}) return `All Scripts (${scriptCount} total)`;
+    const getBodyTitle = (query: Query) => {
+        if (!query.filters) return `All Scripts (${scriptCount} total)`;
         if (query.filters.name)
             return `Scripts matching "${query.filters.name.contains}" (${scriptCount} total)`;
         if (query.filters.category)
@@ -45,7 +52,7 @@ const BrowseScripts = ({ propScripts, scriptCount, tags, categories, query }) =>
         } filter${Object.keys(query.filters).length === 1 ? "" : "s"})`;
     };
 
-    const handleFilters = filters => {
+    const handleFilters = (filters: Filters) => {
         setCachedFilters(filters);
         const params = ScriptUtils.objectToQuery({ filters, sorting: cachedSorting });
         const newParamString = ScriptUtils.queryToString(params);
@@ -60,14 +67,14 @@ const BrowseScripts = ({ propScripts, scriptCount, tags, categories, query }) =>
         }
     };
 
-    const handleSort = sorting => {
+    const handleSort = (sorting: Sorting[]) => {
         setCachedSorting(sorting);
         const params = ScriptUtils.objectToQuery({ filters: cachedFilters, sorting });
         const newParamString = ScriptUtils.queryToString(params);
         if (newParamString && newParamString !== "") {
             console.log("BrowseScripts: New params, navigating", newParamString);
             Router.push("/scripts" + newParamString);
-        } else if (newParamString === "" && Object.keys(filters).length === 0) {
+        } else if (newParamString === "" && Object.keys(cachedFilters).length === 0) {
             console.log("BrowseScripts: No params, navigating to /scripts");
             Router.push("/scripts");
         } else {
@@ -81,16 +88,14 @@ const BrowseScripts = ({ propScripts, scriptCount, tags, categories, query }) =>
                 <title>ScriptAxis | {getHeadTitle(query)}</title>
             </Head>
             <div className={style.browsescripts}>
-                <Filters
-                    tags={tags}
-                    categories={categories}
+                <FiltersElement
                     onFilter={handleFilters}
                     query={query}
                 />
                 <div>
                     <div className={style.tileheader}>
                         <h1>{getBodyTitle(query)}</h1>
-                        <Sorting onSort={handleSort} />
+                        <SortingElement onSort={handleSort} />
                     </div>
                     {!scripts || scripts.length === 0 ? (
                         <div className={style.noscripts}>

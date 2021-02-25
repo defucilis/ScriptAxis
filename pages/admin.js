@@ -5,7 +5,7 @@ import AdminPanel from "../components/dashboard/AdminPanel";
 
 import { FetchSlugs } from "./api/scripts/allslugs";
 
-import useUser from "../utilities/auth/useUser";
+import useUser from "../lib/auth/useUser";
 
 const Admin = ({ existingScripts }) => {
     const { user } = useUser({ redirectIfNotAdmin: "/" });

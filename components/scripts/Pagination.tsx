@@ -1,10 +1,10 @@
-import ScriptUtils from "../../utilities/ScriptUtils";
+import ScriptUtils from "../../lib/ScriptUtils";
 
-import style from "./Pagination.module.css";
+import style from "./Pagination.module.scss";
 
-const Pagination = ({ curPage, totalPages, query }) => {
+const Pagination = ({ curPage, totalPages, query }: {curPage: number, totalPages: number, query: any}): JSX.Element => {
     const getLinkTarget = (query, page) => {
-        let newQuery = { ...query };
+        const newQuery = { ...query };
         newQuery.page = page;
         let queryString = ScriptUtils.queryToString(ScriptUtils.objectToQuery(newQuery));
         if (page === 1) queryString += queryString === "" ? "?page=1" : "&page=1";
@@ -26,14 +26,14 @@ const Pagination = ({ curPage, totalPages, query }) => {
                     </li>
                 )}
                 <li className={style.currentpage}>
-                    <a href={getLinkTarget(query, curPage)}>{curPage}</a>
+                    <button>{curPage}</button>
                 </li>
                 {curPage >= totalPages - 1 ? null : (
                     <li>
                         <a href={getLinkTarget(query, curPage + 1)}>{curPage + 1}</a>
                     </li>
                 )}
-                {curPage >= totalPages - 2 ? null : <li className={style.nolink}>...</li>}
+                {curPage >= totalPages - 2 ? null : <li className={style.nolink}><span>...</span></li>}
                 {curPage === totalPages ? null : (
                     <li>
                         <a href={getLinkTarget(query, totalPages)}>{totalPages}</a>

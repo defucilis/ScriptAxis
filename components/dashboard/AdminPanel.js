@@ -7,9 +7,9 @@ import * as imageConversion from "image-conversion";
 import dayjs from "dayjs";
 import { FaCheck } from "react-icons/fa";
 
-import GetTestData from "../../utilities/TestData";
-import ScriptUtils from "../../utilities/ScriptUtils";
-import FirebaseUtils from "../../utilities/FirebaseUtils";
+import GetTestData from "../../lib/TestData";
+import ScriptUtils from "../../lib/ScriptUtils";
+import FirebaseUtils from "../../lib/FirebaseUtils";
 import { Dropzone } from "../forms/FormUtils";
 import Checkbox from "../forms/Checkbox";
 

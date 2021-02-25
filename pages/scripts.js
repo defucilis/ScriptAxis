@@ -1,7 +1,7 @@
 import Layout from "../components/layout/Layout";
 import BrowseScripts from "../components/scripts/BrowseScripts";
 
-import ScriptUtils from "../utilities/ScriptUtils";
+import ScriptUtils from "../lib/ScriptUtils";
 import { QueryScripts } from "./api/scripts/query";
 
 const Scripts = ({ propScripts, matchCount, tags, categories, query }) => {

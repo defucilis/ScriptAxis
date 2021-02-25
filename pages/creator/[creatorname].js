@@ -4,7 +4,7 @@ import Head from "next/head";
 import Layout from "../../components/layout/Layout";
 import CreatorDetail from "../../components/creators/CreatorDetail";
 
-import ScriptUtils from "../../utilities/ScriptUtils";
+import ScriptUtils from "../../lib/ScriptUtils";
 import { FetchCreator } from "../api/creator/name";
 
 const Creator = ({ creator }) => {

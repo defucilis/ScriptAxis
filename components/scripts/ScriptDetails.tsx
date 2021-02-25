@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
 import dayjs from "dayjs";
@@ -8,12 +8,13 @@ import { FaHeart } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa";
 import ReactMarkdown from "react-markdown";
 
-import ScriptUtils from "../../utilities/ScriptUtils";
-import useUser from "../../utilities/auth/useUser";
+import ScriptUtils from "../../lib/ScriptUtils";
+import useUser from "../../lib/auth/useUser";
 
-import style from "./ScriptDetails.module.css";
+import style from "./ScriptDetails.module.scss";
+import { Script } from "lib/types";
 
-const getEmbed = url => {
+const getEmbed = (url: string) => {
     let iframeLink = "";
     if (!url) return null;
     if (url.includes("pornhub.com")) {
@@ -29,19 +30,19 @@ const getEmbed = url => {
         if (pieces.length < 2) return null;
         iframeLink = `https://www.xhamster.com/embed/${pieces[pieces.length - 1].split("?")[0]}`;
     } else if (url.includes("spankbang.com")) {
-        const pieces = url.replace("http://", "").replace("https://").split("/");
+        const pieces = url.replace("http://", "").replace("https://", "").split("/");
         if (pieces.length < 2) return null;
         iframeLink = `https://www.spankbang.com/${pieces[1]}/embed`;
     } else if (url.includes("xvideos.com")) {
-        const pieces = url.replace("http://", "").replace("https://").split("/");
+        const pieces = url.replace("http://", "").replace("https://", "").split("/");
         if (pieces.length < 2) return null;
         iframeLink = `https://www.xvideos.com/embedframe/${pieces[1].replace("video", "")}`;
     } else if (url.includes("redtube.com")) {
-        const pieces = url.replace("http://", "").replace("https://").split("/");
+        const pieces = url.replace("http://", "").replace("https://", "").split("/");
         if (pieces.length < 2) return null;
         iframeLink = `https://embed.redtube.com?id=${pieces[1]}`;
     } else if (url.includes("porntube.com")) {
-        let pieces = url.replace("http://", "").replace("https://").split("/");
+        let pieces = url.replace("http://", "").replace("https://", "").split("/");
         if (pieces.length < 2) return null;
         pieces = pieces[pieces.length - 1].split("?")[0].split("_");
         if (pieces.length < 2) return null;
@@ -51,31 +52,31 @@ const getEmbed = url => {
     } else if (url.includes("tube8.com")) {
         iframeLink = url.replace("tube8.com", "tube8.com/embed");
     } else if (url.includes("youjizz.com")) {
-        let pieces = url.replace("http://", "").replace("https://").split("/");
+        let pieces = url.replace("http://", "").replace("https://", "").split("/");
         if (pieces.length < 2) return null;
         pieces = pieces[pieces.length - 1].split("-");
         iframeLink = `https://www.youjizz.com/videos/embed/${
             pieces[pieces.length - 1].replace(".html", "").split("?")[0]
         }`;
     } else if (url.includes("eporner.com")) {
-        let pieces = url.replace("http://", "").replace("https://").split("/");
+        const pieces = url.replace("http://", "").replace("https://", "").split("/");
         if (pieces.length < 3) return null;
         iframeLink = `https://www.eporner.com/embed/${pieces[2]}`;
     } else if (url.includes("tnaflix.com")) {
-        let pieces = url.replace("http://", "").replace("https://").split("/");
+        const pieces = url.replace("http://", "").replace("https://", "").split("/");
         if (pieces.length < 4) return null;
         iframeLink = `https://player.tnaflix.com/video/${
             pieces[pieces.length - 1].replace("video", "").split("?")[0]
         }`;
     } else if (url.includes("homemoviestube.com")) {
-        let pieces = url.replace("http://", "").replace("https://").split("/");
+        const pieces = url.replace("http://", "").replace("https://", "").split("/");
         if (pieces.length < 3) return null;
         iframeLink = `https://www.homemoviestube.com/embed/${pieces[2]}`;
     }
     return iframeLink;
 };
 
-const ScriptDetails = ({ script }) => {
+const ScriptDetails = ({ script }: {script: Script}): JSX.Element => {
     const { user, refreshUserDbValues } = useUser();
     const [isLiked, setIsLiked] = useState(false);
     const [scriptLikes, setScriptLikes] = useState(0);
@@ -93,7 +94,7 @@ const ScriptDetails = ({ script }) => {
     useEffect(() => {
         console.log(script);
         if (!script) setScriptLikes(0);
-        else setScriptLikes(script.likes);
+        else setScriptLikes(script.likeCount);
     }, [script]);
 
     const toggleLike = async () => {
@@ -127,18 +128,8 @@ const ScriptDetails = ({ script }) => {
         }
     };
 
-    const [videoElement, setVideoElement] = useState(null);
     const handleIFrameLoaded = () => {
         setIFrameLoading(false);
-
-        //this doesn't work due to CORS, bummer...
-        /*
-        const element = iFrameRef.current.contentWindow.document.getElementsByTagName("video");
-        setVideoElement(element)
-        const videos = element.ontimeupdate = () => {
-            if(videoElement) console.log("Playback Time", videoElement.currentTime);
-        }
-        */
     };
 
     //todo - we could show the thumbnail while waiting for the iframe to load...
@@ -156,13 +147,13 @@ const ScriptDetails = ({ script }) => {
                 </div>
             ) : null}
             <div className={style.creator}>
-                <Link href={`/creator/${script.creator}`}>
+                <Link href={`/creator/${script.creator.name}`}>
                     <span>
                         By <a>{script.creator}</a>
                     </span>
                 </Link>
             </div>
-            <p className={style.created}>{dayjs(Number(script.created)).format("D MMMM YYYY")}</p>
+            <p className={style.created}>{dayjs(script.created).format("D MMMM YYYY")}</p>
             <div className={style.sidebyside}>
                 <div className={style.imagewrapper}>
                     {getEmbed(script.streamingUrl) ? (
@@ -187,7 +178,7 @@ const ScriptDetails = ({ script }) => {
                         {!script.category ? (
                             "No Category"
                         ) : (
-                            <Link href={`/scripts?category=${script.category}`}>
+                            <Link href={`/scripts?category=${script.category.name}`}>
                                 <a>{script.category}</a>
                             </Link>
                         )}
@@ -196,7 +187,7 @@ const ScriptDetails = ({ script }) => {
                         {!script.tags
                             ? null
                             : script.tags
-                                  .filter(t => t !== script.category)
+                                  .filter(t => t !== script.category.name)
                                   .map(tag => {
                                       return (
                                           <li key={tag}>
@@ -223,7 +214,7 @@ const ScriptDetails = ({ script }) => {
                         {!script.streamingUrl ? null : (
                             <Link href={script.streamingUrl}>
                                 <a className={style.source} target="_blank">
-                                    {script.category === "Audio Only" ? "Listen on" : "Watch on"}
+                                    {script.category.name === "Audio Only" ? "Listen on" : "Watch on"}
                                     <br />
                                     {ScriptUtils.getSiteName(script.streamingUrl)}
                                 </a>
@@ -254,7 +245,7 @@ const ScriptDetails = ({ script }) => {
                                                 ? `${style.isLiked} ${style.clickable}`
                                                 : style.clickable
                                         }
-                                        onClick={() => toggleLike(user.likedScripts)}
+                                        onClick={() => toggleLike()}
                                     />
                                 ) : (
                                     <FaHeart />

@@ -4,11 +4,12 @@ import { FaRegEye } from "react-icons/fa";
 
 import ScriptGrid from "../scripts/ScriptGrid";
 
-import ScriptUtils from "../../utilities/ScriptUtils";
+import ScriptUtils from "../../lib/ScriptUtils";
 
-import style from "./CreatorDetail.module.css";
+import style from "./CreatorDetail.module.scss";
+import { Creator } from "lib/types";
 
-const CreatorDetail = ({ creator }) => {
+const CreatorDetail = ({ creator }: {creator: Creator}): JSX.Element => {
     console.log(creator);
     return (
         <div className={style.creator}>

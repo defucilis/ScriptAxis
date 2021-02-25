@@ -1,6 +1,6 @@
-const durationToIndex = duration => {};
+import { Filters, Query, SavedQuery, Script, ScriptStub, UrlQuery } from "./types";
 
-const indexToDuration = index => {
+const indexToDuration = (index: number): number => {
     switch (index) {
         case 0:
             return 0;
@@ -21,7 +21,7 @@ const indexToDuration = index => {
     }
 };
 
-const arraysIdentical = (a, b) => {
+const arraysIdentical = (a: any[], b: any[]) => {
     if (!a && !b) return true;
     if ((!a && b) || (a && !b)) return false;
     if (a.length !== b.length) return false;
@@ -31,18 +31,17 @@ const arraysIdentical = (a, b) => {
     return true;
 };
 
-const parseScriptDocument = script => {
-    const category = script.category ? script.category.name : script.categoryName || "Category";
-    const creator = script.creator ? script.creator.name : script.creatorName || "Creator";
-    const owner = script.owner ? script.owner.username : script.ownerName || "Owner";
+const parseScriptDocument = (script: Script): ScriptStub => {
+    const creator = script.creator ? script.creator.name : script.creator.name || "Creator";
+    const owner = script.owner ? script.owner.username : script.owner.username || "Owner";
 
-    const output = {
+    const output: ScriptStub = {
         id: script.id,
         name: script.name,
         slug: script.slug,
         creator,
         owner,
-        category,
+        category: script.category,
         tags: !script.tags ? [] : script.tags,
         description: script.description,
         duration: script.duration,
@@ -54,10 +53,11 @@ const parseScriptDocument = script => {
         active: script.active,
         created: script.created ? script.created.valueOf() : null,
         modified: script.modified ? script.modified.valueOf() : null,
-        likes: script.likeCount,
+        likeCount: script.likeCount,
         thumbsUp: script.thumbsUp,
         thumbsDown: script.thumbsDown,
         views: script.views,
+        funscripts: [],
 
         //SFW Overrides
         // name: !script.name ? "Script" : script.name.split("").reverse().join(""),
@@ -71,7 +71,21 @@ const parseScriptDocument = script => {
     return output;
 };
 
-const parseDatabaseLists = data => {
+type namedItem = {name: string};
+type namedItemWithCount = {name: string, count: number};
+const parseDatabaseLists = (data: {
+        tags?: namedItem[], 
+        categories?: namedItem[],
+        talent?: namedItem[],
+        studios?: namedItem[],
+        creators?: namedItem[],
+    }): {
+        tags?: string[], 
+        categories?: string[],
+        talent?: string[],
+        studios?: string[],
+        creators?: string[],
+    } => {
     console.log("Parsing Data", data);
     return {
         tags: !data.tags ? [] : data.tags.map(t => t.name),
@@ -82,7 +96,19 @@ const parseDatabaseLists = data => {
     };
 };
 
-const parseDatabaseListsWithCount = data => {
+const parseDatabaseListsWithCount = (data: {
+    tags?: namedItemWithCount[], 
+    categories?: namedItemWithCount[],
+    talent?: namedItem[],
+    studios?: namedItem[],
+    creators?: namedItem[],
+}): {
+    tags?: namedItemWithCount[], 
+    categories?: namedItemWithCount[],
+    talent?: string[],
+    studios?: string[],
+    creators?: string[],
+} => {
     return {
         tags: !data.tags ? [] : data.tags.map(t => ({ name: t.name, count: t.count })),
         categories: !data.categories
@@ -94,7 +120,7 @@ const parseDatabaseListsWithCount = data => {
     };
 };
 
-const durationToString = duration => {
+const durationToString = (duration: number): string => {
     let output = "";
     const hours = Math.floor(duration / 3600);
     const minutes = Math.floor((duration - hours * 3600) / 60);
@@ -113,7 +139,7 @@ const durationToString = duration => {
     return output;
 };
 
-const stringToDuration = str => {
+const stringToDuration = (str: string): number => {
     const pieces = str.split(":");
     if (pieces.length === 1) {
         return parseInt(str);
@@ -126,8 +152,8 @@ const stringToDuration = str => {
     return -1;
 };
 
-const stringIsValidDuration = str => {
-    let pieces = str.split(":");
+const stringIsValidDuration = (str: string): boolean => {
+    const pieces = str.split(":");
     //no more than three items (e.g. 3:55:22)
     if (pieces.length > 3) return false;
 
@@ -138,17 +164,17 @@ const stringIsValidDuration = str => {
     }
 
     //make sure that everything is a number, and for minutes/seconds, under 60
-    pieces = pieces.map(s => parseInt(s));
-    for (let i = 0; i < pieces.length; i++) {
-        if (Number.isNaN(pieces[i])) return false;
-        if (pieces[i] < 0) return false;
-        if (i !== 0 && pieces[i] > 59) return false;
+    const numberPieces = pieces.map(s => parseInt(s));
+    for (let i = 0; i < numberPieces.length; i++) {
+        if (Number.isNaN(numberPieces[i])) return false;
+        if (numberPieces[i] < 0) return false;
+        if (i !== 0 && numberPieces[i] > 59) return false;
     }
 
     return true;
 };
 
-const viewsToString = (views, addViews = false) => {
+const viewsToString = (views: number, addViews = false): string => {
     const suffix = addViews ? (views === 1 ? " View" : " Views") : "";
 
     if (views > 1000000) {
@@ -166,12 +192,12 @@ const viewsToString = (views, addViews = false) => {
     return Math.round(views) + suffix;
 };
 
-const thumbsToPercentage = (thumbsup, thumbsdown) => {
+const thumbsToPercentage = (thumbsup: number, thumbsdown: number): number => {
     const percentage = thumbsup / (Number(thumbsup) + Number(thumbsdown));
     return Math.round(percentage * 100.0);
 };
 
-const getSiteName = url => {
+const getSiteName = (url: string): string => {
     return url
         .replace("http://", "")
         .replace("https://", "")
@@ -180,11 +206,11 @@ const getSiteName = url => {
         .toLowerCase();
 };
 
-const filtersEqual = (filterA, filterB) => {
-    const stringArrayEqual = (arrayA, arrayB) => {
+const filtersEqual = (filterA: Filters, filterB: Filters): boolean => {
+    const stringArrayEqual = (arrayA: string[], arrayB: string[]) => {
         if ((arrayA && !arrayB) || (!arrayA && arrayB)) return false;
         if (arrayA.length !== arrayB.length) return false;
-        for (var i = 0; i < arrayA.length; i++) {
+        for (let i = 0; i < arrayA.length; i++) {
             if (arrayA[i] !== arrayB[i]) return false;
         }
         return true;
@@ -260,8 +286,8 @@ const filtersEqual = (filterA, filterB) => {
 
 //goes from a filters object applied to the database and turns it into a query object to be turned into a URL query strin
 //Note that this takes place on the *client* whenever it's necessary to prepare a query string or send query data to the server
-const objectToQuery = input => {
-    if (!input) return "";
+const queryToUrlQuery = (input: Query): UrlQuery => {
+    if (!input) return {};
 
     const filters = input.filters;
     const sorting = input.sorting;
@@ -269,9 +295,9 @@ const objectToQuery = input => {
     const defaultSorting =
         sorting && sorting.length > 0 && sorting[0].created && sorting[0].created === "desc";
     const defaultPage = page && page == 1;
-    if (defaultSorting && defaultPage && (!filters || Object.keys(filters).length === 0)) return "";
+    if (defaultSorting && defaultPage && (!filters || Object.keys(filters).length === 0)) return {};
 
-    let output = {};
+    const output: UrlQuery = {};
     if (filters.name) output.search = filters.name.contains;
     if (filters.category) output.category = filters.category.name.equals;
     if (filters.include) output.include = filters.include.join("_");
@@ -294,8 +320,8 @@ const objectToQuery = input => {
 };
 //goes from a query object parsed from a URL string and turns it into a filter object to be applied to the database
 //Note that this takes place on the *server* from the next.js `query` input into getServerSideProps
-const queryToObject = query => {
-    let output = { filters: {}, sorting: { created: "desc" }, page: 1 };
+const stringObjectToQuery = (query: UrlQuery): Query => {
+    const output: Query = { filters: {}, sorting: [{ created: "desc" }], page: 1};
 
     if (query.search) output.filters.name = { contains: query.search, mode: "insensitive" };
     if (query.category) output.filters.category = { name: { equals: query.category } };
@@ -315,23 +341,25 @@ const queryToObject = query => {
         output.page = query.page;
     }
 
+    if(output.filters === {}) delete(output.filters);
+
     return output;
 };
 
-const queryToString = query => {
-    let finalQuery = { ...query };
-    if (Object.keys(finalQuery).length === 0) return "";
+const queryToString = (query: UrlQuery): string => {
+    if (Object.keys(query).length === 0) return "";
     return encodeURI(
         "?" +
-            Object.keys(finalQuery)
-                .map(key => `${key}=${finalQuery[key]}`)
+            Object.keys(query)
+                .map(key => `${key}=${query[key]}`)
                 .join("&")
     );
 };
 
-const queryToPrettyString = queryString => {
-    let pieces = queryString.substring(1).split("&");
-    let params = {};
+//todo - need to figure out exactly what the shape of this data is...
+const queryToPrettyString = (queryString: string): SavedQuery => {
+    const pieces = queryString.substring(1).split("&");
+    const params: any = {};
     pieces.forEach(param => {
         const subPieces = param
             .split("=")
@@ -339,7 +367,7 @@ const queryToPrettyString = queryString => {
         params[subPieces[0]] = subPieces[1];
     });
 
-    let output = {};
+    let output: SavedQuery = {};
 
     if (params.MinDuration) {
         const min = indexToDuration(Number(params.MinDuration)) / 60.0;
@@ -364,7 +392,7 @@ const queryToPrettyString = queryString => {
         delete params.Search;
     }
     if (params.Sorting) {
-        let subPieces = params.Sorting.split("+");
+        const subPieces = params.Sorting.split("+");
         if (subPieces.length > 1) {
             if (subPieces[1] === "asc") subPieces[1] = "Ascending";
             else if (subPieces[1] === "desc") subPieces[1] = "Descending";
@@ -378,13 +406,13 @@ const queryToPrettyString = queryString => {
     return output;
 };
 
-const getScriptDifferences = (oldScript, newScript) => {
+const getScriptDifferences = (oldScript: Script, newScript: Script): any => {
     console.warn("Diffing data");
-    let output = {};
+    const output: any = {};
 
     //merge keys to get full list of properties on both objects
-    let keys = Object.keys(oldScript);
-    let newKeys = Object.keys(newScript);
+    const keys = Object.keys(oldScript);
+    const newKeys = Object.keys(newScript);
     newKeys.forEach(key => {
         if (keys.findIndex(k => k === key) === -1) keys.push(key);
     });
@@ -412,7 +440,7 @@ const getScriptDifferences = (oldScript, newScript) => {
     return output;
 };
 
-const tryFormatError = error => {
+const tryFormatError = (error: string): string => {
     const searchString = "user_facing_error: Some(KnownError { message: ";
 
     try {
@@ -421,7 +449,7 @@ const tryFormatError = error => {
             console.log("Failed to find starting string, returning original error", error);
             return error;
         }
-        let output = error.substr(startIndex + searchString.length + 1);
+        const output = error.substr(startIndex + searchString.length + 1);
         const endIndex = output.indexOf('"');
         if (endIndex === -1) {
             console.log("Failed to find end quotation, returning original error", error);
@@ -430,11 +458,12 @@ const tryFormatError = error => {
         return output.substr(0, endIndex);
     } catch (e) {
         //console.log("Failed to format error", error, e);
+        return "Unknown error";
     }
 };
 
 //used to generate JS object code for pasting into TestData.js as a backup
-const getScriptObjectCode = data => {
+const getScriptObjectCode = (data: Script): string => {
     const lines = [];
     lines.push("{");
     lines.push(`    name:           "${data.name}",`);
@@ -478,7 +507,7 @@ const getScriptObjectCode = data => {
 };
 
 const longAcronyms = ["MILF", "DILF", "GILF", "CFNM", "BDSM"];
-const formatTag = tag => {
+const formatTag = (tag: string): string => {
     const foundAcronym = longAcronyms.find(a => a === tag.toUpperCase());
     if (foundAcronym) return foundAcronym;
 
@@ -503,8 +532,8 @@ const ScriptUtils = {
     getSiteName,
     filtersEqual,
     queryToString,
-    objectToQuery,
-    queryToObject,
+    objectToQuery: queryToUrlQuery,
+    queryToObject: stringObjectToQuery,
     queryToPrettyString,
     getScriptDifferences,
     tryFormatError,
@@ -512,5 +541,5 @@ const ScriptUtils = {
     formatTag,
 };
 
-module.exports = ScriptUtils;
-//export default ScriptUtils;
+//module.exports = ScriptUtils;
+export default ScriptUtils;

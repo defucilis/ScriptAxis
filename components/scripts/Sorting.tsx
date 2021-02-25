@@ -1,6 +1,12 @@
-import style from "./Sorting.module.css";
+import { Sorting } from "lib/types";
+import style from "./Sorting.module.scss";
 
-const sortOptions = [
+export interface SortOption {
+    label: string;
+    sorting: Sorting[];
+}
+
+const sortOptions: SortOption[] = [
     {
         label: "Newest",
         sorting: [
@@ -51,8 +57,8 @@ const sortOptions = [
     },
 ];
 
-const Sorting = ({ onSort }) => {
-    const handleSortChange = e => {
+const SortingElement = ({ onSort }: {onSort: (mode: Sorting[]) => void}): JSX.Element => {
+    const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         onSort(sortOptions[e.target.value].sorting);
     };
 
@@ -71,4 +77,4 @@ const Sorting = ({ onSort }) => {
     );
 };
 
-export default Sorting;
+export default SortingElement;
