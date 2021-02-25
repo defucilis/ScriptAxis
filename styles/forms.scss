@@ -1,0 +1,23 @@
+input {
+    padding: 0.25em 0.5em;
+    margin-bottom: 1em;
+    width: 100%;
+
+    font-size: 1.2em;
+    border-radius: 5px;
+
+    background-color: var(--color-neutral-300);
+    color: var(--color-text);
+}
+
+input[type="submit"] {
+    margin-top: 1em;
+}
+
+.error {
+    color: var(--color-red-700);
+}
+
+label {
+    display: block;
+}

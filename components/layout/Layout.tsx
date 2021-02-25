@@ -1,9 +1,9 @@
 import Head from "next/head";
-import Header from "./Header";
+import Header, {HeaderPage} from "./Header";
 import TopBar from "./TopBar";
 import Footer from "./Footer";
 
-const Layout = ({ children, page }) => {
+const Layout = ({ children, page }: {children?: JSX.Element[], page?: HeaderPage}): JSX.Element => {
     return (
         <div>
             <Head>

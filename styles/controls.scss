@@ -1,0 +1,11 @@
+input[type="submit"],
+button,
+.button {
+    padding: 0.5em 1em;
+    font-size: 1.2em;
+    border-radius: 5px;
+    background-color: var(--color-blue-400);
+    font-weight: bold;
+    display: grid;
+    place-items: center;
+}

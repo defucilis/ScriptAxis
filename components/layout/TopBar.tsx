@@ -1,8 +1,8 @@
 import Link from "next/link";
 
-import style from "./TopBar.module.css";
+import style from "./TopBar.module.scss";
 
-const TopBar = () => {
+const TopBar = (): JSX.Element => {
     return (
         <div className={style.topbar}>
             <div className="container">

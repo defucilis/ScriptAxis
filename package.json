@@ -39,6 +39,7 @@
         "react-query": "^2.26.4",
         "react-slider": "^1.1.2",
         "react-table": "^7.6.2",
+        "sass": "^1.32.8",
         "slugify": "^1.4.6",
         "yup": "^0.32.6"
     },

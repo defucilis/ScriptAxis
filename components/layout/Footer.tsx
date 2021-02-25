@@ -1,7 +1,7 @@
 import packageJson from "package.json";
-import style from "./Footer.module.css";
+import style from "./Footer.module.scss";
 
-const Footer = () => {
+const Footer = (): JSX.Element => {
     return (
         <div className={style.footer}>
             <div className="container">

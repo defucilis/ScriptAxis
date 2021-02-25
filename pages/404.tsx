@@ -2,7 +2,7 @@ import Head from "next/head";
 
 import Layout from "../components/layout/Layout";
 
-const NotFound = () => {
+const NotFound = (): JSX.Element => {
     return (
         <Layout>
             <Head>

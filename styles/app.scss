@@ -1,0 +1,263 @@
+@import "./vars.scss";
+
+* {
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-width: 991px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+a,
+span,
+label {
+    color: #fff;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+}
+
+h1 {
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+}
+
+*:focus {
+    outline: none;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+html {
+    background-color: #000;
+}
+
+/* I have no idea why my body is getting an explicit 8px bottom margin applied... */
+body {
+    position: relative;
+    top: 8px;
+    margin-top: -8px;
+}
+
+.container {
+    min-width: 991px;
+    max-width: 1323px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+.content {
+    min-height: calc(100vh - 230px);
+    padding-bottom: 50px;
+}
+
+::-webkit-input-placeholder {
+    /* Edge */
+    font-style: italic;
+}
+
+:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    font-style: italic;
+}
+
+::placeholder {
+    font-style: italic;
+}
+
+input,
+textarea {
+    background-color: #363636;
+    color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+}
+
+.tagify__tag-text {
+    color: #000;
+}
+
+/* This could be improved a lot... */
+.loader {
+    position: fixed;
+    left: 0px;
+    width: 100vw;
+    background-color: #e8739c;
+    z-index: 999;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='36' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M0 6l8 12 8-12z'/><path d='M0 5h36v36H5z' fill='none'/></svg>");
+    display: grid;
+    place-items: top;
+    overflow: hidden;
+    height: 25px;
+}
+
+.top {
+    border-top: 2px solid black;
+    animation: scrollBackground 10s infinite;
+    -moz-animation: scrollBackground 10s infinite;
+    -webkit-animation: scrollBackground 10s infinite;
+    -o-animation: scrollBackground 10s infinite;
+}
+.bottom {
+    border-bottom: 2px solid black;
+    animation: scrollBackground 10s 3.235s infinite;
+    -moz-animation: scrollBackground 10s 3.235s infinite;
+    -webkit-animation: scrollBackground 10s 3.235s infinite;
+    -o-animation: scrollBackground 10s 3.235s infinite;
+}
+
+.grey {
+    color: #777;
+}
+
+.loader > p {
+    font-weight: bold;
+    color: #fff;
+    font-size: 2em;
+    margin: 0;
+    width: 100%;
+    text-align: center;
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+}
+
+.loadingtop {
+    bottom: 0px;
+    transition: bottom 2s;
+}
+
+.notloadingtop {
+    bottom: -25px;
+    transition: bottom 0.2s;
+}
+
+.loadingbottom {
+    top: 0px;
+    transition: top 2s;
+}
+
+.notloadingbottom {
+    top: -25px;
+    transition: top 0.2s;
+}
+
+pre {
+    color: #fff;
+}
+
+/* Animation Keyframes*/
+@keyframes scrollBackground {
+    0% {
+        background-position-x: 0%;
+        background-position-y: 1000%;
+        background-size: 1%;
+    }
+    50% {
+        background-position-x: 100%;
+        background-position-y: 0%;
+        background-size: 5%;
+    }
+    100% {
+        background-position-x: 0%;
+        background-position-y: 1000%;
+        background-size: 1%;
+    }
+}
+
+@-moz-keyframes scrollBackground {
+    0% {
+        background-position-x: 0%;
+        background-position-y: 1000%;
+        background-size: 1%;
+    }
+    50% {
+        background-position-x: 100%;
+        background-position-y: 0%;
+        background-size: 5%;
+    }
+    100% {
+        background-position-x: 0%;
+        background-position-y: 1000%;
+        background-size: 1%;
+    }
+}
+
+@-webkit-keyframes scrollBackground {
+    0% {
+        background-position-x: 0%;
+        background-position-y: 1000%;
+        background-size: 1%;
+    }
+    50% {
+        background-position-x: 100%;
+        background-position-y: 0%;
+        background-size: 5%;
+    }
+    100% {
+        background-position-x: 0%;
+        background-position-y: 1000%;
+        background-size: 1%;
+    }
+}
+
+@-o-keyframes scrollBackground {
+    0% {
+        background-position-x: 0%;
+        background-position-y: 1000%;
+        background-size: 1%;
+    }
+    50% {
+        background-position-x: 100%;
+        background-position-y: 0%;
+        background-size: 5%;
+    }
+    100% {
+        background-position-x: 0%;
+        background-position-y: 1000%;
+        background-size: 1%;
+    }
+}
+
+/* Style NProgress */
+#nprogress .bar {
+    background: #e8739c !important;
+}
+
+#nprogress .peg {
+    box-shadow: 0 0 10px #e8739c, 0 0 5px #e8739c !important;
+}
+
+#nprogress .spinner-icon {
+    border-top-color: #e8739c !important;
+    border-left-color: #e8739c !important;
+}
+
+
+// @import "./controls.scss";
+// @import "./forms.scss";

@@ -1,3 +1,5 @@
+const path = require("path");
+
 module.exports = {
     env: {
         NEXT_PUBLIC_FIREBASE_PUBLIC_API_KEY: process.env.NEXT_PUBLIC_FIREBASE_PUBLIC_API_KEY,
@@ -11,5 +13,8 @@ module.exports = {
         DATABASE_URL: process.env.DATABASE_URL,
         NEXT_PUBLIC_DISCOURSE_API_KEY: process.env.NEXT_PUBLIC_DISCOURSE_API_KEY,
         NEXT_PUBLIC_DISCOURSE_USER: process.env.NEXT_PUBLIC_DISCOURSE_USER,
+    },
+    sassOptions: {
+        includePaths: [path.join(__dirname, "styles")],
     },
 };

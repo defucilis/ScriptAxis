@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Router from "next/router";
 import Image from "next/image";
@@ -10,15 +10,21 @@ import axios from "axios";
 import ScriptUtils from "../../utilities/ScriptUtils";
 import useUser from "../../utilities/auth/useUser";
 
-import styles from "./Header.module.css";
+import styles from "./Header.module.scss";
 
-const Header = ({ page }) => {
+export type HeaderPage = "home" 
+                        | "scripts" 
+                        | "categories" 
+                        | "tags" 
+                        | "creators" ;
+
+const Header = ({ page }: {page?: HeaderPage}): JSX.Element => {
     const { user, loading } = useUser();
     const [scriptCount, setScriptCount] = useState(0);
     const [categoryCounts, setCategoryCounts] = useState([]);
     const [tagCounts, setTagCounts] = useState([]);
-    const categoriesRef = useRef();
-    const tagsRef = useRef();
+    const categoriesRef = useRef<HTMLDivElement>();
+    const tagsRef = useRef<HTMLDivElement>();
     useEffect(() => {
         const loadScriptCount = async () => {
             try {
@@ -39,12 +45,12 @@ const Header = ({ page }) => {
                 window.localStorage.setItem("storedCategoryCounts", JSON.stringify(categories));
                 window.localStorage.setItem("storedTalent", JSON.stringify(talent));
                 window.localStorage.setItem("storedStudios", JSON.stringify(studios));
-                window.localStorage.setItem("lastListFetchTime", new Date().valueOf());
+                window.localStorage.setItem("lastListFetchTime", new Date().valueOf().toString());
             } catch (error) {
                 console.error(error);
             }
         };
-        const storedScriptCount = window.localStorage.getItem("scriptCount");
+        const storedScriptCount = Number(window.localStorage.getItem("scriptCount"));
         const storedTagCounts = window.localStorage.getItem("storedTagCounts");
         const storedCategoryCounts = window.localStorage.getItem("storedCategoryCounts");
         const lastListFetchTime = window.localStorage.getItem("lastListFetchTime");
@@ -54,7 +60,7 @@ const Header = ({ page }) => {
 
         if (
             !lastListFetchTime ||
-            new Date(Number(lastListFetchTime)) < new Date() - 1000 * 60 * 60
+            new Date(lastListFetchTime) < new Date(new Date().valueOf() - 1000 * 60 * 60)
         ) {
             loadScriptCount();
         }
@@ -67,10 +73,10 @@ const Header = ({ page }) => {
         Router.push(`/scripts?search=${e.target.search.value}`);
     };
 
-    const handleMouse = (item, enter) => {
+    const handleMouse = (item: "categories" | "tags", enter: boolean) => {
         if (item === "categories") {
-            categoriesRef.current.style.setProperty("display", enter ? "block" : "none");
             tagsRef.current.style.setProperty("display", "none");
+            categoriesRef.current.style.setProperty("display", enter ? "block" : "none");
         } else if (item === "tags") {
             tagsRef.current.style.setProperty("display", enter ? "block" : "none");
             categoriesRef.current.style.setProperty("display", "none");
@@ -144,15 +150,15 @@ const Header = ({ page }) => {
                         </li>
                         <li
                             className={page === "categories" ? styles.currentnav : null}
-                            onMouseEnter={e => handleMouse("categories", true)}
-                            onMouseLeave={e => handleMouse("categories", false)}
+                            onMouseEnter={() => handleMouse("categories", true)}
+                            onMouseLeave={() => handleMouse("categories", false)}
                         >
                             <a>CATEGORIES</a>
                         </li>
                         <li
                             className={page === "tags" ? styles.currentnav : null}
-                            onMouseEnter={e => handleMouse("tags", true)}
-                            onMouseLeave={e => handleMouse("tags", false)}
+                            onMouseEnter={() => handleMouse("tags", true)}
+                            onMouseLeave={() => handleMouse("tags", false)}
                         >
                             <a>TAGS</a>
                         </li>
@@ -165,8 +171,8 @@ const Header = ({ page }) => {
             <div
                 className={styles.categories}
                 ref={categoriesRef}
-                onMouseEnter={e => handleMouse("categories", true)}
-                onMouseLeave={e => handleMouse("categories", false)}
+                onMouseEnter={() => handleMouse("categories", true)}
+                onMouseLeave={() => handleMouse("categories", false)}
             >
                 <div className="container">
                     <ul>
@@ -191,8 +197,8 @@ const Header = ({ page }) => {
             <div
                 className={styles.tags}
                 ref={tagsRef}
-                onMouseEnter={e => handleMouse("tags", true)}
-                onMouseLeave={e => handleMouse("tags", false)}
+                onMouseEnter={() => handleMouse("tags", true)}
+                onMouseLeave={() => handleMouse("tags", false)}
             >
                 <div className="container">
                     <ul>
