@@ -24,7 +24,7 @@ ol,
 a,
 span,
 label {
-    color: #fff;
+    color: var(--color-text);
 }
 
 h1,
@@ -56,7 +56,7 @@ a {
 }
 
 html {
-    background-color: #000;
+    background-color: var(--color-bg);
 }
 
 /* I have no idea why my body is getting an explicit 8px bottom margin applied... */
@@ -94,14 +94,14 @@ body {
 
 input,
 textarea {
-    background-color: #363636;
-    color: #fff;
-    border: 1px solid #aaa;
+    background-color: var(--color-neutral-400);
+    color: var(--color-text);
+    border: 1px solid var(--color-neutral-800);
     border-radius: 5px;
 }
 
 .tagify__tag-text {
-    color: #000;
+    color: var(--color-bg);
 }
 
 /* This could be improved a lot... */
@@ -109,7 +109,7 @@ textarea {
     position: fixed;
     left: 0px;
     width: 100vw;
-    background-color: #e8739c;
+    background-color: var(--color-theme-500);
     z-index: 999;
     background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='36' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M0 6l8 12 8-12z'/><path d='M0 5h36v36H5z' fill='none'/></svg>");
     display: grid;
@@ -134,12 +134,12 @@ textarea {
 }
 
 .grey {
-    color: #777;
+    color: var(--color-neutral-600);
 }
 
 .loader > p {
     font-weight: bold;
-    color: #fff;
+    color: var(--color-text);
     font-size: 2em;
     margin: 0;
     width: 100%;
@@ -168,7 +168,7 @@ textarea {
 }
 
 pre {
-    color: #fff;
+    color: var(--color-text);
 }
 
 /* Animation Keyframes*/
@@ -246,16 +246,16 @@ pre {
 
 /* Style NProgress */
 #nprogress .bar {
-    background: #e8739c !important;
+    background: var(--color-theme-500) !important;
 }
 
 #nprogress .peg {
-    box-shadow: 0 0 10px #e8739c, 0 0 5px #e8739c !important;
+    box-shadow: 0 0 10px var(--color-theme-500), 0 0 5px var(--color-theme-500) !important;
 }
 
 #nprogress .spinner-icon {
-    border-top-color: #e8739c !important;
-    border-left-color: #e8739c !important;
+    border-top-color: var(--color-theme-500) !important;
+    border-left-color: var(--color-theme-500) !important;
 }
 
 

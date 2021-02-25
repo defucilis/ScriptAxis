@@ -1,6 +1,6 @@
 .footer {
     height: 60px;
-    background-color: #1b1b1b;
+    background-color: var(--color-neutral-300);
 
     >div {
         display: flex;
@@ -11,6 +11,6 @@
     
     p {
         margin: 0;
-        color: #777;
+        color: var(--color-neutral-600);
     }
 }

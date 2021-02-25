@@ -7,7 +7,7 @@
 .imagewrapper {
     width: 50%;
     height: 380px;
-    background-color: #000;
+    background-color: var(--color-bg);
     display: grid;
     place-items: center left;
 }
@@ -34,13 +34,13 @@
 }
 
 .creator a:hover {
-    color: #e8739c;
+    color: var(--color-theme-500);
     cursor: pointer;
 }
 
 .created {
     font-size: 1.2em;
-    color: #777;
+    color: var(--color-neutral-700);
     margin-top: 0.5em;
 }
 
@@ -50,7 +50,7 @@
 }
 
 .category a:hover {
-    color: #e8739c;
+    color: var(--color-theme-500);
 }
 
 .tags > li {
@@ -59,13 +59,13 @@
 }
 
 .tags > li > a {
-    background-color: #1b1b1b;
+    background-color: var(--color-neutral-300);
     border-radius: 5px;
     padding: 0.25em 0.5em;
 }
 
 .tags > li > a:hover {
-    color: #e8739c;
+    color: var(--color-theme-500);
 }
 
 .duration > p {
@@ -79,13 +79,13 @@
 }
 
 .source {
-    background-color: #e8739c;
+    background-color: var(--color-theme-500);
     display: block;
     width: 270px;
     font-size: 1.4em;
     padding: 0.25em 0.5em;
     border-radius: 5px;
-    color: #000;
+    color: var(--color-bg);
     text-align: center;
     display: grid;
     place-items: center;
@@ -100,7 +100,7 @@
 
 .stats {
     font-size: 1.5em;
-    color: #777;
+    color: var(--color-neutral-700);
 }
 
 .stats li {
@@ -108,7 +108,7 @@
 }
 
 .stats span {
-    color: #777;
+    color: var(--color-neutral-700);
 }
 
 .stats svg {
@@ -120,7 +120,7 @@
 }
 
 .isLiked {
-    color: #eb576b;
+    color: var(--color-theme-300);
 }
 
 .studiotalent {
@@ -128,7 +128,7 @@
 }
 
 .studiotalent a:hover {
-    color: #e8739c;
+    color: var(--color-theme-500);
 }
 
 .description {

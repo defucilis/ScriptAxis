@@ -3,7 +3,7 @@
 }
 
 .form > label {
-    color: #fff;
+    color: var(--color-text);
     display: block;
     margin-bottom: 0.25em;
     font-size: 1.1em;
@@ -38,7 +38,7 @@
     margin-left: 1em;
 }
 .descriptionwrapper > div:last-child a {
-    color: #e8739c;
+    color: var(--color-theme-500);
     text-decoration: underline;
 }
 
@@ -53,9 +53,9 @@
 }
 
 .form > select {
-    background-color: #363636;
-    color: #fff;
-    border: 1px solid #aaa;
+    background-color: var(--color-neutral-400);
+    color: var(--color-text);
+    border: 1px solid var(--color-neutral-800);
     margin-bottom: 1em;
     width: 60%;
     font-size: 1.2em;
@@ -68,18 +68,18 @@
 
 .dropzone {
     min-height: 100px;
-    border: 2px dashed #aaa;
+    border: 2px dashed var(--color-theme-700);
     width: 60%;
     display: grid;
     place-items: center;
-    background-color: #050505;
+    background-color: var(--color-neutral-100);
     transition: all 0.3s;
     padding: 1em;
 }
 
 .dropzoneon {
-    border: 2px solid #e8739c;
-    background-color: #963658;
+    border: 2px solid var(--color-theme-500);
+    background-color: var(--color-theme-100);
     transition: all 0.3s;
 }
 
@@ -90,18 +90,18 @@
 
 .tags {
     width: 60%;
-    background-color: #363636;
-    color: #fff;
-    border: 1px solid #aaa;
+    background-color: var(--color-neutral-400);
+    color: var(--color-text);
+    border: 1px solid var(--color-neutral-800);
     border-radius: 5px;
-    --tag-bg: #e8739c;
-    --tag-hover: #c9577f;
-    --tag-remove-bg: #963658;
-    --tag-text-color: #000;
+    --tag-bg: var(--color-neutral-500);
+    --tag-hover: var(--color-theme-500);
+    --tag-remove-bg: var(--color-theme-300);
+    --tag-text-color: var(--color-bg);
 }
 
 .form label {
-    color: #fff;
+    color: var(--color-text);
     font-size: 1.2em;
     display: block;
     margin-bottom: 0.25em;
@@ -114,8 +114,8 @@
     width: 60%;
     font-size: 1.2em;
     padding: 0.25em 0.5em;
-    background-color: #363636;
-    color: #fff;
+    background-color: var(--color-neutral-400);
+    color: var(--color-text);
     border-radius: 5px;
 }
 
@@ -128,8 +128,8 @@
 }
 
 .form > form > button {
-    background-color: #202020;
-    color: #fff;
+    background-color: var(--color-neutral-300);
+    color: var(--color-text);
     border: 0;
     padding: 0.5em 2em;
     margin-top: 2em;
@@ -140,7 +140,7 @@
 }
 
 .form aside {
-    color: #eb576b;
+    color: var(--color-theme-300);
     margin-top: 0.25em;
 }
 
@@ -150,7 +150,7 @@
 
 .datepickercalendar button {
     background-color: transparent;
-    color: #fff;
+    color: var(--color-text);
     width: 0;
     width: 10px;
     padding: 0;

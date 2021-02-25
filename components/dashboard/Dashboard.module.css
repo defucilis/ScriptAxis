@@ -12,8 +12,8 @@
 
 .quickfunctions button,
 .quickfunctions a {
-    background-color: #e8739c;
-    color: #000;
+    background-color: var(--color-theme-500);
+    color: var(--color-bg);
     width: 8em;
     padding: 0.5em 1em;
     border-radius: 5px;
@@ -42,7 +42,7 @@
 }
 
 .savedSearches li a:hover {
-    border: 1px solid #e8739c;
+    border: 1px solid var(--color-theme-500);
 }
 
 .savedSearches li a > p {
@@ -52,11 +52,11 @@
 .savedSearches li a > p > span {
     width: 5rem;
     margin-right: 0.5em;
-    color: #a0a0a0;
+    color: var(--color-neutral-800);
 }
 
 .savedSearches a:hover {
-    color: #e8739c;
+    color: var(--color-theme-500);
 }
 
 .savedSearches li > div {
@@ -68,10 +68,10 @@
 .savedSearches button {
     height: 2em;
     font-size: 1.2rem;
-    background-color: #202020;
+    background-color: var(--color-neutral-300);
     border: 0;
     border-radius: 5px;
     margin-left: 1em;
-    color: #fff;
+    color: var(--color-text);
     cursor: pointer;
 }

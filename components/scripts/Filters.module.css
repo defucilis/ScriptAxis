@@ -4,9 +4,9 @@
 }
 
 .filtersmain {
-    background-color: #101010;
-    border-left: 1px solid #202020;
-    border-right: 1px solid #202020;
+    background-color: var(--color-neutral-100);
+    border-left: 1px solid var(--color-neutral-300);
+    border-right: 1px solid var(--color-neutral-300);
 }
 
 .filters h3 {
@@ -14,12 +14,12 @@
 }
 
 .filters label {
-    color: #fff;
+    color: var(--color-text);
     display: block;
     font-size: 1.2em;
     text-align: center;
     padding: 0.5em 0;
-    background-color: #202020;
+    background-color: var(--color-neutral-300);
 }
 
 .field {
@@ -51,23 +51,23 @@
 }
 
 .categories li a:hover {
-    background-color: #202020;
+    background-color: var(--color-neutral-300);
 }
 
 .selectedcategory {
-    color: #e8739c;
+    color: var(--color-theme-500);
 }
 
 .tags {
-    background-color: #363636;
-    color: #fff;
-    border: 1px solid #aaa;
+    background-color: var(--color-neutral-400);
+    color: var(--color-text);
+    border: 1px solid var(--color-neutral-800);
     border-radius: 5px;
-    --tag-bg: #e8739c;
-    --tag-hover: #c9577f;
-    --tag-remove-bg: #963658;
-    --tag-text-color: #000;
-    --tag-text-color--edit: #000;
+    --tag-bg: var(--color-theme-500);
+    --tag-hover: var(--color-theme-300);
+    --tag-remove-bg: var(--color-theme-100);
+    --tag-text-color: var(--color-bg);
+    --tag-text-color--edit: var(--color-bg);
 }
 
 .slidercontainer {
@@ -83,7 +83,7 @@
 .sliderthumb {
     height: 20px;
     width: 20px;
-    background-color: #fff;
+    background-color: var(--color-text);
     border-radius: 50%;
     cursor: grab;
     position: relative;
@@ -91,7 +91,7 @@
 }
 
 .slidertrack {
-    background-color: #e8739c;
+    background-color: var(--color-theme-500);
     top: 0;
     bottom: 0;
     position: relative;
@@ -99,11 +99,11 @@
 }
 .slidertrack:first-child {
     border-radius: 999px 0 0 999px;
-    background-color: #777;
+    background-color: var(--color-neutral-600);
 }
 .slidertrack:nth-child(3) {
     border-radius: 0 999px 999px 0;
-    background-color: #777;
+    background-color: var(--color-neutral-600);
 }
 
 .slidermark {
@@ -127,17 +127,17 @@
 }
 
 .checkbox > div {
-    background-color: #363636;
+    background-color: var(--color-neutral-400);
     width: 40px;
     height: 40px;
     display: grid;
     place-items: center;
     border-radius: 5px;
-    border: 1px solid #aaa;
+    border: 1px solid var(--color-neutral-800);
 }
 
 .checkbox > div > svg {
-    color: #fff;
+    color: var(--color-text);
     width: 60%;
     height: 60%;
 }
@@ -149,7 +149,7 @@
 
 .button button {
     border: 0;
-    background-color: #e8739c;
+    background-color: var(--color-theme-500);
     font-size: 1.2em;
     padding: 0.5em;
     border-radius: 5px;

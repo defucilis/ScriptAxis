@@ -1,6 +1,6 @@
 .signin label {
     font-size: 1.2em;
-    color: #fff;
+    color: var(--color-text);
     display: block;
 }
 
@@ -13,8 +13,8 @@
 }
 
 .signin input[type="submit"] {
-    background-color: #e8739c;
-    color: #000;
+    background-color: var(--color-theme-500);
+    color: var(--color-bg);
     border: 0;
     width: 30%;
 }
@@ -26,5 +26,5 @@
 }
 
 .forgot:hover {
-    color: #e8739c;
+    color: var(--color-theme-500);
 }

@@ -19,7 +19,7 @@
 }
 
 .clipboardWritten {
-    color: #e8739c;
+    color: var(--color-theme-500);
 }
 
 @-moz-keyframes spin {

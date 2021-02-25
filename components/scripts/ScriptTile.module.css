@@ -5,10 +5,10 @@
 .thumbnail {
     display: block;
     position: relative;
-    background-color: #000;
+    background-color: var(--color-bg);
 }
 .thumbnail:hover {
-    box-shadow: 0px 0px 0px 2px #e8739c;
+    box-shadow: 0px 0px 0px 2px var(--color-theme-500);
 }
 .imagewrapper {
     display: grid;
@@ -83,7 +83,7 @@
     overflow-y: hidden;
 }
 .scriptname > a:hover {
-    color: #e8739c;
+    color: var(--color-theme-500);
 }
 
 .scriptcreator {
@@ -91,21 +91,21 @@
 }
 .scriptcreator > a,
 .scriptcreator > p {
-    color: #777;
+    color: var(--color-neutral-700);
     margin: 0;
 }
 .scriptcreator > a:hover {
-    color: #e8739c;
+    color: var(--color-theme-500);
 }
 
 .bottomrow {
     display: flex;
     justify-content: flex-start;
-    color: #777;
+    color: var(--color-neutral-700);
     margin-top: 0.5em;
 }
 .bottomrow p {
-    color: #777;
+    color: var(--color-neutral-700);
     margin: 0;
 }
 .bottomrow svg {

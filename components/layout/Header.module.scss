@@ -11,8 +11,8 @@
 }
 
 .searchbar {
-    background-color: #1b1b1b;
-    border-bottom: 1px solid #aaa;
+    background-color: var(--color-neutral-200);
+    border-bottom: 1px solid var(--color-neutral-800);
 
     >div {
         display: flex;
@@ -24,7 +24,7 @@
     }
     
     h1 {
-        color: #e8739c;
+        color: var(--color-theme-500);
     }
 
     form {
@@ -45,15 +45,15 @@
         transition: border 0.3s;
     }
     input[type="text"]:focus {
-        border: 1px solid #e8739c;
+        border: 1px solid var(--color-theme-500);
     }
     
     button {
         width: 4em;
         height: 30px;
         font-size: 1.2em;
-        background-color: #e8739c;
-        border: 1px solid #e8739c;
+        background-color: var(--color-theme-500);
+        border: 1px solid var(--color-theme-500);
         border-radius: 0px 5px 5px 0px;
         position: relative;
         cursor: pointer;
@@ -61,12 +61,12 @@
         >svg {
             position: relative;
             top: 2px;
-            color: #000;
+            color: var(--color-bg);
             transition: color 0.2s;
         }
 
         &hover > svg {
-            color: #fff;
+            color: var(--color-text);
         }
     }
 }
@@ -74,7 +74,7 @@
 
 
 .addscript {
-    background-color: #303030;
+    background-color: var(--color-neutral-400);
     height: 30px;
     display: inline-grid;
     place-items: center;
@@ -89,7 +89,7 @@
 }
 
 .navbar {
-    background-color: #1b1b1b;
+    background-color: var(--color-neutral-300);
     height: 45px;
 
     >div {
@@ -124,14 +124,14 @@
 }
 
 .currentnav {
-    border-bottom: 2px solid #e8739c;
+    border-bottom: 2px solid var(--color-theme-500);
 }
 
 .categories,
 .tags {
     position: absolute;
     width: 100%;
-    background-color: #202020;
+    background-color: var(--color-neutral-300);
     z-index: 2;
     padding: 2em 0;
     display: none;
@@ -144,7 +144,7 @@
 
     li {
         height: 80px;
-        background-color: #1b1b1b;
+        background-color: var(--color-neutral-200);
 
         a {
             height: 100%;
@@ -153,7 +153,7 @@
             align-items: center;
 
             &hover {
-                box-shadow: 0px 0px 0px 2px #fff;
+                box-shadow: 0px 0px 0px 2px var(--color-text);
             }
         }
     }
@@ -166,7 +166,7 @@
 }
 
 .loadinguser svg {
-    color: #fff;
+    color: var(--color-text);
     -webkit-animation: spin 4s linear infinite;
     -moz-animation: spin 4s linear infinite;
     animation: spin 4s linear infinite;

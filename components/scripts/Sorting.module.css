@@ -1,6 +1,6 @@
 .sorting select {
     background: none;
-    color: #fff;
+    color: var(--color-text);
     border: 0;
     -webkit-appearance: none;
     padding: 0.5em 1.5em 0.5em 0.5em;

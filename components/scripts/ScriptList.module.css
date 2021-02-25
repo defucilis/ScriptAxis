@@ -29,7 +29,7 @@
 }
 
 .scriptlist a:hover {
-    color: #e8739c;
+    color: var(--color-theme-500);
 }
 
 .overview {
@@ -39,16 +39,16 @@
 }
 
 .overview a:last-child {
-    color: #777;
+    color: var(--color-neutral-600);
 }
 
 .overview a:last-child:hover {
-    color: #e8739c;
+    color: var(--color-theme-500);
 }
 
 .scriptlist button {
-    background-color: #202020;
-    color: #fff;
+    background-color: var(--color-neutral-300);
+    color: var(--color-text);
     font-size: 1.2em;
     border: 0;
     border-radius: 5px;

@@ -5,5 +5,5 @@
 }
 
 .scriptgrid pre {
-    color: #fff;
+    color: var(--color-text);
 }
