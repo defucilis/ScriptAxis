@@ -10,21 +10,21 @@
     padding: 0.25em 0.5em;
     display: block;
     width: 60%;
-}
 
-.signin input[type="submit"] {
-    background-color: var(--color-theme-500);
-    color: var(--color-bg);
-    border: 0;
-    width: 30%;
+    &[type="submit"] {
+        background-color: var(--color-theme-500);
+        color: var(--color-bg);
+        border: 0;
+        width: 30%;
+    }
 }
 
 .forgot {
     margin-bottom: 2em;
     margin-top: -1em;
     display: block;
-}
 
-.forgot:hover {
-    color: var(--color-theme-500);
+    &hover {
+        color: var(--color-theme-500);
+    }
 }

@@ -1,6 +1,4 @@
-import { useEffect } from "react";
 import Head from "next/head";
-import Router from "next/router";
 
 import firebase from "../lib/initFirebase";
 
@@ -11,14 +9,15 @@ import useUser from "../lib/auth/useUser";
 import { FetchLists } from "./api/loadlists";
 import ScriptUtils from "../lib/ScriptUtils";
 
-const Add = ({ tags, categories, talent, studios, creators }) => {
+const Add = ({ tags, categories, talent, studios, creators }: {
+    tags: string,
+    categories: string,
+    talent: string,
+    studios: string,
+    creators: string
+}): JSX.Element => {
     //page is blocked if user is not signed in
     const { user } = useUser({ redirectTo: "/" });
-
-    const signOut = () => {
-        firebase.auth().signOut();
-        Router.push("/");
-    };
 
     const resend = async () => {
         try {
@@ -53,20 +52,20 @@ const Add = ({ tags, categories, talent, studios, creators }) => {
     );
 };
 
-export async function getServerSideProps() {
+export async function getServerSideProps(): Promise<{props: any}> {
     let data = {};
     try {
         data = await FetchLists();
         data = ScriptUtils.parseDatabaseLists(data);
     } catch (error) {
         console.log("Failed to get scripts", error);
-    } finally {
-        return {
-            props: {
-                ...data,
-            },
-        };
     }
+    
+    return {
+        props: {
+            ...data,
+        },
+    };
 }
 
 export default Add;

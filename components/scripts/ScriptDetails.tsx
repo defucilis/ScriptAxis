@@ -12,7 +12,7 @@ import ScriptUtils from "../../lib/ScriptUtils";
 import useUser from "../../lib/auth/useUser";
 
 import style from "./ScriptDetails.module.scss";
-import { Script } from "lib/types";
+import { FullScript } from "lib/types";
 
 const getEmbed = (url: string) => {
     let iframeLink = "";
@@ -76,7 +76,7 @@ const getEmbed = (url: string) => {
     return iframeLink;
 };
 
-const ScriptDetails = ({ script }: {script: Script}): JSX.Element => {
+const ScriptDetails = ({ script }: {script: FullScript}): JSX.Element => {
     const { user, refreshUserDbValues } = useUser();
     const [isLiked, setIsLiked] = useState(false);
     const [scriptLikes, setScriptLikes] = useState(0);

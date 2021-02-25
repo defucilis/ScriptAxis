@@ -6,9 +6,10 @@ import AdminPanel from "../components/dashboard/AdminPanel";
 import { FetchSlugs } from "./api/scripts/allslugs";
 
 import useUser from "../lib/auth/useUser";
+import { ScriptStub } from "lib/types";
 
-const Admin = ({ existingScripts }) => {
-    const { user } = useUser({ redirectIfNotAdmin: "/" });
+const Admin = ({ existingScripts }: {existingScripts: ScriptStub[]}): JSX.Element => {
+    useUser({ redirectIfNotAdmin: "/" });
 
     return (
         <Layout>
@@ -16,24 +17,23 @@ const Admin = ({ existingScripts }) => {
                 <title>ScriptAxis | Admin Functions</title>
             </Head>
             <h1>Admin Functions</h1>
-            <AdminPanel user={user} existingScripts={existingScripts} />
+            <AdminPanel existingScripts={existingScripts} />
         </Layout>
     );
 };
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps(): Promise<{props: {existingScripts: ScriptStub[]}}> {
     let scripts = [];
     try {
         scripts = await FetchSlugs();
     } catch (error) {
         console.log("Failed to load scripts", error);
-    } finally {
-        return {
-            props: {
-                existingScripts: scripts,
-            },
-        };
     }
+    return {
+        props: {
+            existingScripts: scripts,
+        },
+    };
 }
 
 export default Admin;

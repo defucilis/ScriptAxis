@@ -1,6 +1,6 @@
 export interface Category {
     name: string;
-    scripts: Script[];
+    scripts: FullScript[];
     count: number;
 }
 
@@ -8,7 +8,7 @@ export interface Creator {
     name: string;
     user?: User;
     thumbnail: string;
-    scripts: Script[]
+    scripts: FullScript[]
     totalViews: number;
     totalLikes: number;
     created: Date;
@@ -16,7 +16,7 @@ export interface Creator {
 }
 
 // Everything required to store a funscript - this will change in the future!
-export interface ScriptBase {
+export interface Script {
     id: number;
     name: string;
     category: Category;
@@ -35,23 +35,26 @@ export interface ScriptBase {
     thumbsUp: number;
     thumbsDown: number;
     views: number;
+    created: Date;
+    modified: Date;
 }
-export interface Script extends ScriptBase {
+export interface FullScript extends Script {
     creator: Creator
     owner: User;
     
     likedBy: User[];
-
-    created: Date;
-    modified: Date;
 }
 
-export interface ScriptStub extends ScriptBase {
-    creator: string;
-    owner: string;
-    
-    created: number | null;
-    modified: number | null;
+export interface UnlinkedScript extends Script {
+    creatorName: string;
+    ownerName: string;
+}
+
+export interface ScriptStub {
+    id: number;
+    slug: string;
+    name: string;
+    sourceUrl: string
 }
 
 export interface User {
@@ -61,8 +64,8 @@ export interface User {
     emailVerified: boolean;
     creator?: Creator;
     isAdmin: boolean;
-    ownedScripts: Script[];
-    likedScripts: Script[];
+    ownedScripts: FullScript[];
+    likedScripts: FullScript[];
     savedFilters: string[];
     created: Date;
     modified: Date;

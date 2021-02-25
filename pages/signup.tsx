@@ -9,15 +9,17 @@ import Layout from "../components/layout/Layout";
 
 import useUser from "../lib/auth/useUser";
 
-import style from "./signin.module.css";
+import style from "./signin.module.scss";
+import ScriptUtils from "lib/ScriptUtils";
 
-const SignUp = () => {
+const SignUp = (): JSX.Element => {
     const [error, setError] = useState("");
     const [signingUp, setSigningUp] = useState(false);
     const { login } = useUser();
+    const [data, setData] = useState({email: "", username: "", password: "", confirm: ""})
 
-    const signUp = e => {
-        const doSignUp = async (email, username, password, callback) => {
+    const signUp = (e: React.FormEvent) => {
+        const doSignUp = async (email: string, username: string, password: string, callback: (data: {success: boolean, error?: string}) => void) => {
             setError("");
             try {
                 setSigningUp(true);
@@ -34,18 +36,18 @@ const SignUp = () => {
                 firebase.auth().signOut();
                 console.error(error.message);
                 setSigningUp(false);
-                callback({ success: false, error: { message: error.message } });
+                callback({ success: false, error: error.message });
             }
         };
 
         e.preventDefault();
 
-        if (e.target.password.value !== e.target.confirm.value) {
+        if (data.password !== data.confirm) {
             setError("Passwords don't match!");
             return;
         }
 
-        doSignUp(e.target.email.value, e.target.username.value, e.target.password.value, result => {
+        doSignUp(data.email, data.username, data.password, result => {
             if (result.success) {
                 Router.push("/");
             } else {
@@ -61,8 +63,8 @@ const SignUp = () => {
             </Head>
             <h1>Sign Up</h1>
             <p>
-                I've disabled this page for now, sorry! The site isn't ready for people to create
-                accounts and start adding scripts yet!
+                {`I've disabled this page for now, sorry! The site isn't ready for people to create
+                accounts and start adding scripts yet!`}
             </p>
             <p>
                 You can follow my progress{" "}
@@ -79,13 +81,31 @@ const SignUp = () => {
             <h1>Sign In</h1>
             <form onSubmit={signUp} className={style.signin}>
                 <label htmlFor="email">Email (not displayed publicly)</label>
-                <input id="email" />
+                <input 
+                    id="email" 
+                    value={data.email} 
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData({...data, [e.target.id]: e.target.value})}
+                />
                 <label htmlFor="username">Username</label>
-                <input id="username" />
+                <input 
+                    id="username" 
+                    value={data.username} 
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData({...data, [e.target.id]: e.target.value})}
+                />
                 <label htmlFor="password">Password</label>
-                <input type="password" id="password" />
+                <input 
+                    type="password"
+                    id="password" 
+                    value={data.password} 
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData({...data, [e.target.id]: e.target.value})}
+                />
                 <label htmlFor="confirm">Confirm Password</label>
-                <input type="password" id="confirm" />
+                <input 
+                    type="password"
+                    id="confirm" 
+                    value={data.confirm} 
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData({...data, [e.target.id]: e.target.value})}
+                />
                 {signingUp ? <p>Please wait...</p> : <input type="submit" value="Sign Up" />}
                 <p style={{ color: "red" }}>{error}</p>
             </form>

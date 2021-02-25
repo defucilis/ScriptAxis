@@ -3,8 +3,7 @@ import Router from "next/router";
 import "@yaireo/tagify/dist/tagify.css";
 import "react-datepicker/dist/react-datepicker.css";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import initFirebase from "../lib/initFirebase";
+import {initFirebase} from "../lib/initFirebase";
 
 import { AuthProvider } from "../lib/auth/useUser";
 
@@ -19,6 +18,7 @@ Router.events.on("routeChangeError", () => NProgress.done());
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const App = ({ Component, pageProps }) => {
+    initFirebase();
     return (
         <AuthProvider>
             <Component {...pageProps} />

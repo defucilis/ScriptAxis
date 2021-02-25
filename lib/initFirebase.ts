@@ -4,7 +4,7 @@ import "firebase/firestore";
 import "firebase/auth";
 import "firebase/storage";
 
-const initFirebase = () => {
+export const initFirebase = (): void => {
     const firebaseConfig = {
         apiKey: process.env.NEXT_PUBLIC_FIREBASE_PUBLIC_API_KEY,
         authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -23,4 +23,4 @@ const initFirebase = () => {
     }
 };
 
-export default initFirebase();
+export default firebase;

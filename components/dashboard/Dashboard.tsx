@@ -10,16 +10,18 @@ import SavedSearch from "./SavedSearch";
 import useUser from "../../lib/auth/useUser";
 import ScriptUtils from "../../lib/ScriptUtils";
 
-import style from "./Dashboard.module.css";
+import style from "./Dashboard.module.scss";
 
-const Dashboard = () => {
+type LoadingState = "initial" | true | false;
+
+const Dashboard = (): JSX.Element => {
     const { user, refreshUserDbValues, logoutAndRedirect } = useUser();
 
     const signOut = () => {
         logoutAndRedirect("/");
     };
 
-    const [loading, setLoading] = useState("initial");
+    const [loading, setLoading] = useState<LoadingState>("initial");
     const [likedScripts, setLikedScripts] = useState(null);
     const [savedSearches, setSavedSearches] = useState(null);
     const [ownedScripts, setOwnedScripts] = useState(null);
@@ -161,7 +163,8 @@ const Dashboard = () => {
                     <h3>Your Added Scripts</h3>
                     {ownedScripts.length === 0 ? (
                         <p>
-                            You haven't created any scripts yet!{" "}
+                            {`You haven't created any scripts yet!`}
+                            {" "}
                             <a href="/add">Create your first one now!</a>
                         </p>
                     ) : (

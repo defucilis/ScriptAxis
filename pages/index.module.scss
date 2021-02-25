@@ -2,18 +2,18 @@
     margin-top: 25%;
     text-align: center;
     font-size: 1.5em;
-}
 
-.indexLoading svg {
-    font-size: 3em;
-    -webkit-animation: spin 4s linear infinite;
-    -moz-animation: spin 4s linear infinite;
-    animation: spin 4s linear infinite;
-    color: var(--color-theme-500);
-}
+    svg {
+        font-size: 3em;
+        -webkit-animation: spin 4s linear infinite;
+        -moz-animation: spin 4s linear infinite;
+        animation: spin 4s linear infinite;
+        color: var(--color-theme-500);
+    }
 
-.indexLoading span {
-    display: block;
+    span {
+        display: block;
+    }
 }
 
 @-moz-keyframes spin {

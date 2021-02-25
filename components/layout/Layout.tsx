@@ -3,7 +3,7 @@ import Header, {HeaderPage} from "./Header";
 import TopBar from "./TopBar";
 import Footer from "./Footer";
 
-const Layout = ({ children, page }: {children?: JSX.Element[], page?: HeaderPage}): JSX.Element => {
+const Layout = ({ children, page }: {children?: JSX.Element[] | JSX.Element, page?: HeaderPage}): JSX.Element => {
     return (
         <div>
             <Head>

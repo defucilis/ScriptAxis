@@ -1,6 +1,7 @@
+import { SavedQuery } from "lib/types";
 import Link from "next/link";
 
-const SavedSearch = ({ query, onDeleteClicked }) => {
+const SavedSearch = ({ query, onDeleteClicked }: {query: SavedQuery, onDeleteClicked: (query: SavedQuery) => void}): JSX.Element => {
     return (
         <li>
             <Link href={query.queryString}>

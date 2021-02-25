@@ -297,7 +297,7 @@ const FiltersElement = ({ query, onFilter }: {query: Query, onFilter: (filters: 
 
         const saveQuery = { ...query };
         delete saveQuery.page;
-        const queryString = ScriptUtils.queryToString(ScriptUtils.objectToQuery(saveQuery));
+        const queryString = ScriptUtils.queryToString(ScriptUtils.queryToUrlQuery(saveQuery));
         if (queryString === "") {
             console.error("No queries applied");
             return;

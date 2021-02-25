@@ -7,15 +7,16 @@ import Layout from "../components/layout/Layout";
 
 import useUser from "../lib/auth/useUser";
 
-import style from "./signin.module.css";
+import style from "./signin.module.scss";
 
-const SignIn = () => {
+const SignIn = (): JSX.Element => {
     const [error, setError] = useState("");
     const { login } = useUser();
     const [waiting, setWaiting] = useState(false);
+    const [data, setData] = useState({email: "", password: ""});
 
-    const signIn = e => {
-        const doSignIn = async (email, password, callback) => {
+    const signIn = (e: React.FormEvent) => {
+        const doSignIn = async (email: string, password: string, callback: (data: {success: boolean, error?: string}) => void) => {
             setError("");
             try {
                 await login(email, password);
@@ -36,7 +37,7 @@ const SignIn = () => {
         e.preventDefault();
 
         setWaiting(true);
-        doSignIn(e.target.email.value, e.target.password.value, result => {
+        doSignIn(data.email, data.password, result => {
             if (result.success) {
                 Router.push("/");
             } else {
@@ -54,9 +55,13 @@ const SignIn = () => {
             <h1>Sign In</h1>
             <form onSubmit={signIn} className={style.signin}>
                 <label htmlFor="email">Email</label>
-                <input id="email" />
+                <input 
+                    id="email" 
+                    value={data.email} 
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData({...data, [e.target.id]: e.target.value})}
+                />
                 <label htmlFor="password">Password</label>
-                <input type="password" id="password" />
+                <input type="password" id="password" value={data.password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData({...data, [e.target.id]: e.target.value})}/>
                 <Link href="/forgotpassword">
                     <a className={style.forgot}>Forgot Password</a>
                 </Link>

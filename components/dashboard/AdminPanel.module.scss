@@ -3,35 +3,37 @@
     justify-content: flex-start;
     margin-bottom: 1em;
     height: 4rem;
+
+    button,
+    a {
+        font-size: 1.2em;
+        border: 0;
+        background-color: var(--color-theme-500);
+        color: var(--color-bg);
+        font-weight: bold;
+        border-radius: 5px;
+        margin-right: 1em;
+        padding: 0.25em 0.5em;
+        cursor: pointer;
+    }
+
+    button:last-child {
+        margin-right: 0;
+    }
+
+    input {
+        font-size: 1.2em;
+        margin-right: 1em;
+        height: 100%;
+
+        &[type="number"] {
+            width: 4em;
+            height: auto;
+        }
+    }
 }
 
-.buttons button,
-.buttons a {
-    font-size: 1.2em;
-    border: 0;
-    background-color: var(--color-theme-500);
-    color: var(--color-bg);
-    font-weight: bold;
-    border-radius: 5px;
-    margin-right: 1em;
-    padding: 0.25em 0.5em;
-    cursor: pointer;
-}
 
-.buttons button:last-child {
-    margin-right: 0;
-}
-
-.buttons input {
-    font-size: 1.2em;
-    margin-right: 1em;
-    height: 100%;
-}
-
-.buttons input[type="number"] {
-    width: 4em;
-    height: auto;
-}
 
 .hidden {
     visibility: hidden;
@@ -58,6 +60,11 @@
     transition: all 0.3s;
     padding: 0em 1em;
     margin-right: 1em;
+
+    p,
+    li {
+        font-size: 1.2em;
+    }
 }
 
 .dropzoneon {
@@ -66,10 +73,6 @@
     transition: all 0.3s;
 }
 
-.dropzone p,
-.dropzone li {
-    font-size: 1.2em;
-}
 
 .progressbg {
     width: 100%;
@@ -92,12 +95,19 @@
 .scrape {
     display: flex;
     align-items: center;
-}
 
-.scrape label {
-    margin-right: 0.5em;
-    display: block;
-    font-size: 1.2em;
+    label {
+        margin-right: 0.5em;
+        display: block;
+        font-size: 1.2em;
+    }
+
+    button {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        display: inline-block;
+    }
 }
 
 .checkbox {
@@ -110,16 +120,9 @@
     width: 4rem;
     margin: 0;
     margin-right: 1em;
-}
 
-.checkbox svg {
-    color: var(--color-theme-500);
-    font-size: 2rem;
-}
-
-.scrape button {
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
-    display: inline-block;
+    svg {
+        color: var(--color-theme-500);
+        font-size: 2rem;
+    }
 }

@@ -7,15 +7,16 @@ import * as imageConversion from "image-conversion";
 import dayjs from "dayjs";
 import { FaCheck } from "react-icons/fa";
 
-import GetTestData from "../../lib/TestData";
+import GetTestData, {TestDataScript} from "../../lib/TestData";
 import ScriptUtils from "../../lib/ScriptUtils";
 import FirebaseUtils from "../../lib/FirebaseUtils";
 import { Dropzone } from "../forms/FormUtils";
 import Checkbox from "../forms/Checkbox";
 
-import style from "./AdminPanel.module.css";
+import style from "./AdminPanel.module.scss";
+import { ScriptStub } from "lib/types";
 
-const ClearData = async (onSuccess, onFail) => {
+const ClearData = async (onSuccess: (data: any) => void, onFail: (error: string) => void) => {
     try {
         const response = await axios("/api/admin/clear");
         if (response.data.error) throw response.data.error;
@@ -27,7 +28,7 @@ const ClearData = async (onSuccess, onFail) => {
     }
 };
 
-const AddData = async (scripts, onMessage, onProgress, onSuccess, onFail) => {
+const AddData = async (scripts: TestDataScript[], onMessage: (message: string) => void, onProgress: (doneCount: number, totalCount: number) => void, onSuccess: (data: any) => void, onFail: (errorCount: number, totalCount: number) => void) => {
     let errorCount = 0;
 
     onMessage(`Adding ${scripts.length} scripts to the database`);
@@ -58,7 +59,7 @@ const AddData = async (scripts, onMessage, onProgress, onSuccess, onFail) => {
     else onFail(errorCount, scripts.length);
 };
 
-const Aggregate = async (onMessage, onSuccess, onFail) => {
+const Aggregate = async (onMessage: (message: string) => void, onSuccess: () => void, onFail: () => void) => {
     onMessage(`Running data aggregation`);
 
     try {
@@ -76,17 +77,17 @@ const Aggregate = async (onMessage, onSuccess, onFail) => {
     }
 };
 
-const UploadFile = async (file, name, onMessage, onSuccess, onFail) => {
+const UploadFile = async (file: File, name: string, onMessage: (message: string) => void, onSuccess: (url: string) => void, onFail: (error: string) => void) => {
     onMessage(`Uploading ${file.name} (${file.size} bytes)`);
     try {
         const compressedFile = await imageConversion.compressAccurately(file, {
             size: 100,
-            type: "image/jpeg",
+            type: imageConversion.EImageType.JPEG,
         });
         const url = await FirebaseUtils.uploadFile(
             compressedFile,
             "adminthumbnails/" + name,
-            () => {}
+            null
         );
         onSuccess(url);
     } catch (error) {
@@ -97,7 +98,7 @@ const UploadFile = async (file, name, onMessage, onSuccess, onFail) => {
     }
 };
 
-const GetJsonBackup = async (onMessage, onSuccess, onFail) => {
+const GetJsonBackup = async (onMessage: (message: string) => void, onSuccess: (url: string) => void, onError: (error: string) => void) => {
     onMessage("Fetching all scripts as JSON");
     try {
         const response = await axios({
@@ -110,11 +111,11 @@ const GetJsonBackup = async (onMessage, onSuccess, onFail) => {
         onSuccess(url);
     } catch (error) {
         console.error("error", error);
-        onFail();
+        onError(error);
     }
 };
 
-const RunScrape = async (scripts, cookie, subset, onMessage, onProgress, onComplete, onError) => {
+const RunScrape = async (scripts: ScriptStub[], subset: boolean, onMessage: (message: string) => void, onProgress: (doneCount: number, totalCount: number) => void, onComplete: () => void, onError: (error: string) => void) => {
     onMessage("Scraping all views and likes from EroScripts");
     onMessage("--Fetching all scripts from database");
     const response = await axios.post("/api/scripts", { take: 99999 });
@@ -159,11 +160,11 @@ const RunScrape = async (scripts, cookie, subset, onMessage, onProgress, onCompl
     onComplete();
 };
 
-const AdminPanel = ({ user, existingScripts }) => {
+const AdminPanel = ({ existingScripts }: {existingScripts: ScriptStub[]}): JSX.Element => {
     const [running, setRunning] = useState(false);
     const [messages, setMessages] = useState({ list: [] });
     const [count, setCount] = useState(41);
-    const [scripts, setScripts] = useState([]);
+    const [scripts, setScripts] = useState<ScriptStub[]>([]);
 
     useEffect(() => {
         setScripts(existingScripts);
@@ -184,7 +185,7 @@ const AdminPanel = ({ user, existingScripts }) => {
     }, [user])
     */
 
-    const addMessage = message => {
+    const addMessage = (message: string) => {
         setMessages(cur => ({ list: [...cur.list, message] }));
     };
 
@@ -195,7 +196,7 @@ const AdminPanel = ({ user, existingScripts }) => {
         addMessage("Wiping Database...");
 
         ClearData(
-            data => {
+            () => {
                 addMessage("Data cleared successfully");
                 addMessage("");
                 setRunning(false);
@@ -210,8 +211,8 @@ const AdminPanel = ({ user, existingScripts }) => {
         );
     };
 
-    const progressBarRef = useRef();
-    const progressBarParentRef = useRef();
+    const progressBarRef = useRef<HTMLDivElement>();
+    const progressBarParentRef = useRef<HTMLDivElement>();
     const StartAddData = () => {
         setRunning(true);
 
@@ -324,7 +325,6 @@ const AdminPanel = ({ user, existingScripts }) => {
         );
     };
 
-    const [scrapeCookie, setScrapeCookie] = useState("");
     const [scrapeSubset, setScrapeSubset] = useState(true);
     const StartScrape = () => {
         setRunning(true);
@@ -333,7 +333,6 @@ const AdminPanel = ({ user, existingScripts }) => {
 
         RunScrape(
             existingScripts,
-            scrapeCookie,
             scrapeSubset,
             addMessage,
             (count, total) => {
@@ -345,7 +344,7 @@ const AdminPanel = ({ user, existingScripts }) => {
             () => {
                 addMessage("Scrape completed successfully");
                 addMessage("");
-                setRunning("");
+                setRunning(false);
                 progressBarParentRef.current.style.setProperty("display", "none");
             },
             error => {
@@ -385,7 +384,7 @@ const AdminPanel = ({ user, existingScripts }) => {
                         pasteable: true,
                     }}
                     onChange={setThumbnailImage}
-                    onError={error => addMessage("Error: " + error)}
+                    onError={(error: string) => addMessage("Error: " + error)}
                     error={""}
                     value={thumbnailImage}
                 />
@@ -402,13 +401,6 @@ const AdminPanel = ({ user, existingScripts }) => {
                     </a>
                 </Link>
                 <div className={style.scrape}>
-                    <input
-                        id="scrapeCookie"
-                        type="text"
-                        value={scrapeCookie}
-                        onChange={e => setScrapeCookie(e.target.value)}
-                        placeholder="Scrape Cookie"
-                    />
                     <label>
                         {"Scrape"}
                         <br />
@@ -417,7 +409,7 @@ const AdminPanel = ({ user, existingScripts }) => {
                     <Checkbox
                         className={style.checkbox}
                         checked={scrapeSubset}
-                        onChange={e => setScrapeSubset(e.target.checked)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setScrapeSubset(e.target.checked)}
                     >
                         <FaCheck />
                     </Checkbox>

@@ -10,9 +10,9 @@ import ScriptGrid from "../components/scripts/ScriptGrid";
 
 import ScriptUtils from "../lib/ScriptUtils";
 
-import style from "./index.module.css";
+import style from "./index.module.scss";
 
-const Index = () => {
+const Index = (): JSX.Element => {
     const [loading, setLoading] = useState(0);
     const [error, setError] = useState(null);
     const [scripts, setScripts] = useState(null);
@@ -28,7 +28,7 @@ const Index = () => {
                 );
                 setScripts(parsedScripts);
                 window.localStorage.setItem("recentScripts", JSON.stringify(parsedScripts));
-                window.localStorage.setItem("recentScriptsTime", new Date().valueOf());
+                window.localStorage.setItem("recentScriptsTime", new Date().valueOf().toString());
                 setLoading(-1);
             } catch (error) {
                 console.error(error);
@@ -37,7 +37,7 @@ const Index = () => {
             }
         };
 
-        const recentScriptsTime = window.localStorage.getItem("recentScriptsTime");
+        const recentScriptsTime = Number(window.localStorage.getItem("recentScriptsTime"));
         if (recentScriptsTime) {
             const diff = new Date().valueOf() - recentScriptsTime;
             //update if it's been more than a day

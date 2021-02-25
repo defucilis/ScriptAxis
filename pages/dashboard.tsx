@@ -5,9 +5,9 @@ import Dashboard from "../components/dashboard/Dashboard";
 
 import useUser from "../lib/auth/useUser";
 
-const DashboardPage = () => {
+const DashboardPage = (): JSX.Element => {
     //page is blocked if user is not signed in
-    const { user } = useUser({ redirectTo: "/" });
+    useUser({ redirectTo: "/" });
 
     return (
         <Layout>
@@ -15,7 +15,7 @@ const DashboardPage = () => {
                 <title>ScriptAxis | Dashboard</title>
             </Head>
             <h1>Your Dashboard</h1>
-            <Dashboard user={user} />
+            <Dashboard />
         </Layout>
     );
 };

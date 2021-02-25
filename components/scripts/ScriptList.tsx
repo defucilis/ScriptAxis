@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 import style from "./ScriptList.module.scss";
-import { Script } from "lib/types";
+import { FullScript } from "lib/types";
 
 export interface ScriptListButton {
     text: string;
-    function: (script: Script) => void;
+    function: (script: FullScript) => void;
 }
 
-const ScriptList = ({ scripts, buttons }: {scripts: Script[], buttons?: ScriptListButton[]}): JSX.Element => {
+const ScriptList = ({ scripts, buttons }: {scripts: FullScript[], buttons?: ScriptListButton[]}): JSX.Element => {
     const [scriptDom, setScriptDom] = useState([]);
     useEffect(() => {
         if (!scripts) return;

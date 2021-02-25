@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
 import Head from "next/head";
 
 import Layout from "../components/layout/Layout";
 import CreatorGrid from "../components/creators/CreatorGrid";
 
 import { FetchCreators } from "./api/creators";
+import { Creator } from "lib/types";
 
-const Creators = ({ creators }) => {
+const Creators = ({ creators }: {creators: Creator[]}): JSX.Element => {
     return (
         <Layout page="creators">
             <Head>
@@ -18,24 +18,16 @@ const Creators = ({ creators }) => {
     );
 };
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps(): Promise<{props: {creators: Creator[]}}> {
     let creators = [];
     try {
         creators = await FetchCreators();
-        creators = creators.map(creator => {
-            return {
-                ...creator,
-                created: creator.created.valueOf(),
-                modified: creator.modified.valueOf(),
-            };
-        });
     } catch (error) {
         console.error(error);
-    } finally {
-        return {
-            props: { creators },
-        };
     }
+    return {
+        props: { creators },
+    };
 }
 
 export default Creators;

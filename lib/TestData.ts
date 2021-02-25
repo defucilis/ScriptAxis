@@ -9,7 +9,47 @@ Obviously, this only works while scripts are being added manually by me. Once th
 To add a script, copy the 'template script' first item (which is ignored when this file is processed) and update all fields.
 */
 
-const TestData = [
+interface TestDataScriptInput {
+    name: string;
+    creator: string;
+    sourceUrl: string;
+    streamingUrl?: string;
+    thumbnail?: string;
+    description?: string;
+    duration: string;
+    category: string;
+    tags: string[];
+    studio?: string;
+    talent?: string[];
+    likeCount: number;
+    views: number;
+    thumbsUp: number;
+    thumbsDown: number;
+    created: number;
+}
+
+export interface TestDataScript {
+    name: string;
+    creator: string;
+    sourceUrl: string;
+    streamingUrl?: string;
+    thumbnail: string;
+    description?: string;
+    duration: number;
+    category: string;
+    tags: string[];
+    studio?: string;
+    talent?: string[];
+    likeCount: number;
+    views: number;
+    thumbsUp: number;
+    thumbsDown: number;
+    created: number;
+    owner: string;
+    slug: string;
+}
+
+const TestData: TestDataScriptInput[] = [
     {
         name: "TemplateScript",
         creator: "CreatorName",
@@ -5091,16 +5131,18 @@ const TestData = [
     },
 ];
 
-const GetTestData = () => {
-    return TestData.filter(data => data.name !== "TemplateScript").map(data => {
-        return {
-            ...data,
-            slug: slugify(data.name).toLowerCase(),
-            thumbnail: data.thumbnail || "/img/placeholder-thumbnail.png",
-            duration: ScriptUtils.stringToDuration(data.duration),
-            owner: "9cf9dc87-a8cf-4c17-bb95-1f5c05b8d791",
-        };
-    });
+const GetTestData = (): TestDataScript[] => {
+    return TestData
+        .filter(data => data.name !== "TemplateScript")
+        .map((data: TestDataScriptInput) => {
+            return {
+                ...data,
+                slug: slugify(data.name).toLowerCase(),
+                thumbnail: data.thumbnail || "/img/placeholder-thumbnail.png",
+                duration: ScriptUtils.stringToDuration(data.duration),
+                owner: "9cf9dc87-a8cf-4c17-bb95-1f5c05b8d791",
+            };
+        });
 };
 
 export default GetTestData;

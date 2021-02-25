@@ -1,4 +1,4 @@
-import { Filters, Query, SavedQuery, Script, ScriptStub, UrlQuery } from "./types";
+import { Filters, Query, SavedQuery, FullScript, UnlinkedScript, UrlQuery } from "./types";
 
 const indexToDuration = (index: number): number => {
     switch (index) {
@@ -31,11 +31,11 @@ const arraysIdentical = (a: any[], b: any[]) => {
     return true;
 };
 
-const parseScriptDocument = (script: Script): ScriptStub => {
+const parseScriptDocument = (script: FullScript): UnlinkedScript => {
     const creator = script.creator ? script.creator.name : script.creator.name || "Creator";
     const owner = script.owner ? script.owner.username : script.owner.username || "Owner";
 
-    const output: ScriptStub = {
+    const output: UnlinkedScript = {
         id: script.id,
         name: script.name,
         slug: script.slug,
@@ -406,7 +406,7 @@ const queryToPrettyString = (queryString: string): SavedQuery => {
     return output;
 };
 
-const getScriptDifferences = (oldScript: Script, newScript: Script): any => {
+const getScriptDifferences = (oldScript: FullScript, newScript: FullScript): any => {
     console.warn("Diffing data");
     const output: any = {};
 
@@ -463,7 +463,7 @@ const tryFormatError = (error: string): string => {
 };
 
 //used to generate JS object code for pasting into TestData.js as a backup
-const getScriptObjectCode = (data: Script): string => {
+const getScriptObjectCode = (data: FullScript): string => {
     const lines = [];
     lines.push("{");
     lines.push(`    name:           "${data.name}",`);
@@ -532,8 +532,8 @@ const ScriptUtils = {
     getSiteName,
     filtersEqual,
     queryToString,
-    objectToQuery: queryToUrlQuery,
-    queryToObject: stringObjectToQuery,
+    queryToUrlQuery,
+    stringObjectToQuery,
     queryToPrettyString,
     getScriptDifferences,
     tryFormatError,

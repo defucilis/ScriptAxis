@@ -10,16 +10,16 @@ import Pagination from "./Pagination";
 import ScriptUtils from "../../lib/ScriptUtils";
 
 import style from "./BrowseScripts.module.scss";
-import { Filters, Query, Script, Sorting } from "lib/types";
+import { Filters, Query, UnlinkedScript, Sorting } from "lib/types";
 
 const BrowseScripts = ({ propScripts, scriptCount, query }: {
-    propScripts: Script[],
+    propScripts: UnlinkedScript[],
     scriptCount: number,
     tags: string[],
     categories: string[],
     query: Query
 }): JSX.Element => {
-    const [scripts, setScripts] = useState<Script[]>([]);
+    const [scripts, setScripts] = useState<UnlinkedScript[]>([]);
     const [cachedFilters, setCachedFilters] = useState<Filters>({ ...query.filters });
     const [cachedSorting, setCachedSorting] = useState<Sorting[]>([{ created: "desc" }]);
 
@@ -54,7 +54,7 @@ const BrowseScripts = ({ propScripts, scriptCount, query }: {
 
     const handleFilters = (filters: Filters) => {
         setCachedFilters(filters);
-        const params = ScriptUtils.objectToQuery({ filters, sorting: cachedSorting });
+        const params = ScriptUtils.queryToUrlQuery({ filters, sorting: cachedSorting });
         const newParamString = ScriptUtils.queryToString(params);
         if (newParamString && newParamString !== "") {
             console.log("BrowseScripts: New params, navigating", newParamString);
@@ -69,7 +69,7 @@ const BrowseScripts = ({ propScripts, scriptCount, query }: {
 
     const handleSort = (sorting: Sorting[]) => {
         setCachedSorting(sorting);
-        const params = ScriptUtils.objectToQuery({ filters: cachedFilters, sorting });
+        const params = ScriptUtils.queryToUrlQuery({ filters: cachedFilters, sorting });
         const newParamString = ScriptUtils.queryToString(params);
         if (newParamString && newParamString !== "") {
             console.log("BrowseScripts: New params, navigating", newParamString);
