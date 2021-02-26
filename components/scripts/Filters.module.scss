@@ -1,0 +1,156 @@
+.filters {
+    margin-right: 1em;
+    padding-top: 2.5em;
+}
+
+.filtersmain {
+    background-color: var(--color-neutral-100);
+    border-left: 1px solid var(--color-neutral-300);
+    border-right: 1px solid var(--color-neutral-300);
+}
+
+.filters h3 {
+    margin-bottom: 1em;
+}
+
+.filters label {
+    color: var(--color-text);
+    display: block;
+    font-size: 1.2em;
+    text-align: center;
+    padding: 0.5em 0;
+    background-color: var(--color-neutral-300);
+}
+
+.field {
+    padding: 2em 1em;
+}
+
+.filters select {
+    font-size: 1.2em;
+    padding: 0.25em 0.5em;
+    width: 100%;
+}
+
+.search {
+    width: 100%;
+    font-size: 1.2em;
+    padding: 0.25em 0.5em;
+}
+
+.categories li {
+    width: 100%;
+}
+
+.categories li a {
+    display: block;
+    width: 100%;
+    padding: 0.25em 0;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+.categories li a:hover {
+    background-color: var(--color-neutral-300);
+}
+
+.selectedcategory {
+    color: var(--color-theme-500);
+}
+
+.tags {
+    background-color: var(--color-neutral-400);
+    color: var(--color-text);
+    border: 1px solid var(--color-neutral-800);
+    border-radius: 5px;
+    --tag-bg: var(--color-theme-500);
+    --tag-hover: var(--color-theme-300);
+    --tag-remove-bg: var(--color-theme-100);
+    --tag-text-color: var(--color-bg);
+    --tag-text-color--edit: var(--color-bg);
+}
+
+.slidercontainer {
+    width: 94%;
+    margin-left: 3%;
+}
+
+.slider {
+    height: 5px;
+    width: 100%;
+}
+
+.sliderthumb {
+    height: 20px;
+    width: 20px;
+    background-color: var(--color-text);
+    border-radius: 50%;
+    cursor: grab;
+    position: relative;
+    top: -7.5px;
+}
+
+.slidertrack {
+    background-color: var(--color-theme-500);
+    top: 0;
+    bottom: 0;
+    position: relative;
+    left: 5px;
+}
+.slidertrack:first-child {
+    border-radius: 999px 0 0 999px;
+    background-color: var(--color-neutral-600);
+}
+.slidertrack:nth-child(3) {
+    border-radius: 0 999px 999px 0;
+    background-color: var(--color-neutral-600);
+}
+
+.slidermark {
+    display: none;
+}
+
+.slidermarks ul {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    margin-top: 0.5em;
+}
+
+.slidermarks ul li {
+    text-align: center;
+}
+
+.checkbox {
+    display: grid;
+    place-items: center;
+}
+
+.checkbox > div {
+    background-color: var(--color-neutral-400);
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 5px;
+    border: 1px solid var(--color-neutral-800);
+}
+
+.checkbox > div > svg {
+    color: var(--color-text);
+    width: 60%;
+    height: 60%;
+}
+
+.button {
+    display: grid;
+    place-items: center;
+}
+
+.button button {
+    border: 0;
+    background-color: var(--color-theme-500);
+    font-size: 1.2em;
+    padding: 0.5em;
+    border-radius: 5px;
+}

@@ -1,0 +1,16 @@
+.footer {
+    height: 60px;
+    background-color: var(--color-neutral-300);
+
+    > div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+    }
+
+    p {
+        margin: 0;
+        color: var(--color-neutral-600);
+    }
+}

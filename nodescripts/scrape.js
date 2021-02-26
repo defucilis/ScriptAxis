@@ -1,6 +1,6 @@
-const fs = require('fs');
-const axios = require('axios');
-const ScriptUtils = require("../utilities/ScriptUtils");
+const fs = require("fs");
+const axios = require("axios");
+const ScriptUtils = require("../lib/ScriptUtils");
 
 const cookie = process.env.npm_config_cookie;
 const page = process.env.npm_config_page || 0;
@@ -14,8 +14,8 @@ const url = "https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top/all.
     - separate out the ones that are missing tags, categories, durations or thumbnails to be processed manually
 */
 const getTopics = async (page, perPage) => {
-    if(!page) page = 0;
-    if(!perPage) perPage = 50;
+    if (!page) page = 0;
+    if (!perPage) perPage = 50;
     const finalUrl = `${url}?ascending=false&page=${page}&per_page=${perPage}`;
     try {
         const response = await axios({
@@ -24,12 +24,12 @@ const getTopics = async (page, perPage) => {
             headers: {
                 "Discourse-Logged-In": "true",
                 "Discourse-Present": "true",
-                "Cookie": cookie
-            }
+                Cookie: cookie,
+            },
         });
         const topics = response.data.topic_list.topics.map(topic => {
             let category = topic.tags[0];
-            if(!category) category = "Miscellaneous";
+            if (!category) category = "Miscellaneous";
             const output = {
                 name: topic.title,
                 creator: response.data.users.find(u => u.id === topic.posters[0].user_id).username,
@@ -39,21 +39,21 @@ const getTopics = async (page, perPage) => {
                 tags: topic.tags.slice(1).map(tag => ScriptUtils.formatTag(tag)),
                 likeCount: topic.like_count,
                 views: topic.views,
-                created: new Date(topic.created_at)
-            }
-            if(!output.thumbnail) delete(output.thumbnail);
+                created: new Date(topic.created_at),
+            };
+            if (!output.thumbnail) delete output.thumbnail;
             return output;
         });
         fs.writeFile("./nodescripts/scrape.json", JSON.stringify(topics, null, 2), err => {
-            if(err) {
+            if (err) {
                 throw err;
             } else {
                 console.log("JSON written successfully");
             }
-        })
-    } catch(err) {
+        });
+    } catch (err) {
         console.error("Failed to scrape data:", err);
     }
-}
+};
 
 getTopics(page, perPage);
