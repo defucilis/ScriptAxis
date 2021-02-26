@@ -9,7 +9,7 @@ import * as imageConversion from "image-conversion";
 import FirebaseUtils from "../../lib/FirebaseUtils";
 import ScriptUtils from "../../lib/ScriptUtils";
 import ScriptForm, { EditScriptFormData, ScriptFormDataOutput } from "./ScriptForm";
-import style from "./AddScript.module.css";
+import style from "./AddScript.module.scss";
 import { Script, StringLists } from "lib/types";
 
 const EditScript = ({
@@ -64,14 +64,14 @@ const EditScript = ({
                 console.log("Script updated successfully", response);
                 //ensure the homepage reloads properly
                 window.localStorage.removeItem("recentScriptsTime");
-                if (Router.pathname.includes("/edit")) Router.push(`/script/${response[0].slug}`);
+                if (Router.pathname.includes("/edit")) Router.push(`/script/${response.slug}`);
                 else {
                     if (
                         confirm(
                             "Your script has finished processing. Click OK to go to its page, or Cancel to stay where you are.\nIn the future I'll make this a little less annoying!"
                         )
                     ) {
-                        Router.push(`/script/${response[0].slug}`);
+                        Router.push(`/script/${response.slug}`);
                     }
                 }
             },
@@ -131,7 +131,7 @@ const updateScript = async (
 
     //upload the thumbnail and add it to the database
     try {
-        if (newData.thumbnail.length > 0) {
+        if (newPostData.thumbnail.length > 0) {
             try {
                 await FirebaseUtils.deleteFile(`thumbnails/${oldData.slug}`);
             } catch (err) {

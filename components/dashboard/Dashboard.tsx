@@ -7,7 +7,7 @@ import axios from "axios";
 import ScriptList from "../scripts/ScriptList";
 import SavedSearch from "./SavedSearch";
 
-import useUser from "../../lib/auth/useUser";
+import useAuth from "../../lib/auth/useAuth";
 import ScriptUtils from "../../lib/ScriptUtils";
 
 import style from "./Dashboard.module.scss";
@@ -15,7 +15,7 @@ import style from "./Dashboard.module.scss";
 type LoadingState = "initial" | true | false;
 
 const Dashboard = (): JSX.Element => {
-    const { user, refreshUserDbValues, logoutAndRedirect } = useUser();
+    const { user, refreshUserDbValues, logoutAndRedirect } = useAuth();
 
     const signOut = () => {
         logoutAndRedirect("/");
@@ -29,17 +29,14 @@ const Dashboard = (): JSX.Element => {
         const loadAllUserData = async email => {
             console.warn("Loading user data", user.email, loading);
             setLoading(true);
-            const response = await axios.post("/api/users/email", { email, lean: false });
+            const response = await axios.get(`/api/users/${email}`);
             const userData = response.data;
 
             console.log(userData);
 
             if (!userData) return;
 
-            if (userData.likedScripts)
-                setLikedScripts(
-                    userData.likedScripts.map(script => ScriptUtils.parseScriptDocument(script))
-                );
+            if (userData.likedScripts) setLikedScripts(userData.likedScripts);
             else setLikedScripts([]);
 
             if (userData.savedFilters)
@@ -48,10 +45,7 @@ const Dashboard = (): JSX.Element => {
                 );
             else setSavedSearches([]);
 
-            if (userData.ownedScripts)
-                setOwnedScripts(
-                    userData.ownedScripts.map(script => ScriptUtils.parseScriptDocument(script))
-                );
+            if (userData.ownedScripts) setOwnedScripts(userData.ownedScripts);
             else setOwnedScripts([]);
 
             setLoading(false);

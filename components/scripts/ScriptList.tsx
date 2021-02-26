@@ -22,7 +22,6 @@ const ScriptList = ({
 
         setScriptDom(
             scripts.map(script => {
-                console.log(script);
                 return (
                     <li key={script.slug}>
                         <div>

@@ -48,9 +48,9 @@ const ChangeLike = async (
         );
 
         transaction.push();
-        await prisma.$transaction(transaction);
+        const results: any[] = await prisma.$transaction(transaction);
         await prisma.$disconnect();
-        return;
+        return results[1].likeCount;
     } catch (error) {
         await prisma.$disconnect();
         throw error;
@@ -61,14 +61,14 @@ export { ChangeLike };
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
-        const script = await ChangeLike(
+        const newLikeCount = await ChangeLike(
             req.body.slug,
             req.body.uid,
             req.body.creator,
             req.body.isLiked
         );
         res.status(200);
-        res.json(script);
+        res.json({ newLikeCount });
     } catch (error) {
         console.error("error fetching script - " + error);
         res.json({

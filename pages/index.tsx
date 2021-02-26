@@ -8,8 +8,6 @@ import { FaCog } from "react-icons/fa";
 import Layout from "../components/layout/Layout";
 import ScriptGrid from "../components/scripts/ScriptGrid";
 
-import ScriptUtils from "../lib/ScriptUtils";
-
 import style from "./index.module.scss";
 
 const Index = (): JSX.Element => {
@@ -23,11 +21,8 @@ const Index = (): JSX.Element => {
                 const response = await axios.get("/api/scripts");
                 console.log(response.data);
                 if (response.data.error) throw response.data.error;
-                const parsedScripts = response.data.map(script =>
-                    ScriptUtils.parseScriptDocument(script)
-                );
-                setScripts(parsedScripts);
-                window.localStorage.setItem("recentScripts", JSON.stringify(parsedScripts));
+                setScripts(response.data);
+                window.localStorage.setItem("recentScripts", JSON.stringify(response.data));
                 window.localStorage.setItem("recentScriptsTime", new Date().valueOf().toString());
                 setLoading(-1);
             } catch (error) {
@@ -103,7 +98,7 @@ const Index = (): JSX.Element => {
 //     } finally {
 //         return {
 //             props: {
-//                 scripts : scripts.map(script => ScriptUtils.parseScriptDocument(script))
+//                 scripts
 //             }
 //         }
 //     }

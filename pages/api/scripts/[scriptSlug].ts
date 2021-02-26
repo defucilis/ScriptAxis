@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const FetchScript = async (slug: string, noview: boolean): Promise<Script> => {
+const FetchScript = async (slug: string, noview = false): Promise<Script> => {
     const prisma = new PrismaClient();
     try {
         console.log("Fetching script", { slug, noview });
@@ -37,7 +37,13 @@ export { FetchScript };
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
-        const script = await FetchScript(req.body.slug, req.body.noview);
+        const slug = String(req.query.scriptSlug);
+        const noview = req.query.noview
+            ? String(req.query.noview) === "true"
+                ? true
+                : false
+            : false;
+        const script = await FetchScript(slug, noview);
         res.status(200);
         res.json(script);
     } catch (error) {

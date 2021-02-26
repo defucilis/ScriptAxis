@@ -5,28 +5,37 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import axios from "axios";
 
+import { AuthContextValues, FbUser } from "./authTypes";
+
 import { removeUserCookie, setUserCookie, getUserFromCookie } from "./userCookies";
 import { mapUserData } from "./mapUserData";
+import { User } from "lib/types";
 
-const authContext = createContext();
+const authContext = createContext<AuthContextValues>(null);
 
 const useProvideAuth = () => {
-    const [user, setUser] = useState();
+    const [user, setUser] = useState<User>();
     const [loading, setLoading] = useState(true);
-    const [fbUser, setFbUser] = useState();
+    const [fbUser, setFbUser] = useState<FbUser>();
     const [updatingFromDb, setUpdatingFromDb] = useState(false);
     const router = useRouter();
 
     //Promise-style login method
-    const login = async (email, password) => {
-        return new Promise(async (resolve, reject) => {
+    const login = async (email: string, password: string) => {
+        return new Promise<User>((resolve, reject) => {
             try {
                 console.log("Trying to login with credentials", email, password);
-                const user = await firebase.auth().signInWithEmailAndPassword(email, password);
-                let userData = await mapUserData(user.user);
-                userData = await addDbUserToCookie(userData);
-                console.log("Login success!", userData);
-                resolve(userData);
+                firebase
+                    .auth()
+                    .signInWithEmailAndPassword(email, password)
+                    .then(user => {
+                        mapUserData(user.user).then(userData => {
+                            addDbUserToCookie(userData).then(finalUser => {
+                                console.log("Login success!", userData);
+                                resolve(finalUser);
+                            });
+                        });
+                    });
             } catch (error) {
                 reject(error);
             }
@@ -34,7 +43,7 @@ const useProvideAuth = () => {
     };
 
     //Logs user in, then automatically redirects to the chosen page
-    const loginAndRedirect = async (email, password, redirectTo) => {
+    const loginAndRedirect = async (email: string, password: string, redirectTo: string) => {
         try {
             await login(email, password);
             router.push(redirectTo);
@@ -46,7 +55,7 @@ const useProvideAuth = () => {
     //Explicitly updates an existing user value with updated information from the database
     //Userful if we've just changed somethjing like the user's display name, liked / owner scripts, etc
     const refreshUserDbValues = () => {
-        return new Promise(async (resolve, reject) => {
+        return new Promise<User>((resolve, reject) => {
             if (updatingFromDb) {
                 reject("Already running DB refresh");
                 return;
@@ -55,9 +64,10 @@ const useProvideAuth = () => {
             try {
                 if (!fbUser) throw "User is not logged in!";
 
-                const newUserData = await addDbUserToCookie(fbUser);
-                setUpdatingFromDb(false);
-                resolve(newUserData);
+                addDbUserToCookie(fbUser).then(newUserData => {
+                    setUpdatingFromDb(false);
+                    resolve(newUserData);
+                });
             } catch (error) {
                 setUpdatingFromDb(false);
                 reject(error);
@@ -67,10 +77,9 @@ const useProvideAuth = () => {
 
     //Promise-style logout method
     const logout = async () => {
-        return new Promise(async (resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
             try {
-                const result = await firebase.auth().signOut();
-                resolve(result);
+                firebase.auth().signOut().then(resolve);
             } catch (error) {
                 reject(error);
             }
@@ -78,7 +87,7 @@ const useProvideAuth = () => {
     };
 
     //Logs user out, then automatically redirects to the chosen page
-    const logoutAndRedirect = async redirectTo => {
+    const logoutAndRedirect = async (redirectTo: string) => {
         console.log("Logging out");
         return firebase
             .auth()
@@ -94,26 +103,55 @@ const useProvideAuth = () => {
     };
 
     //internal method that fetches user info from database and attaches it to the firebase auth user object
-    const addDbUserToCookie = user => {
-        return new Promise(async (resolve, reject) => {
+    const addDbUserToCookie = (user: FbUser) => {
+        return new Promise<User>((resolve, reject) => {
             try {
                 console.log("Updating user from DB table...");
-                const response = await axios.post("/api/users/email", {
-                    email: user.email,
-                    lean: true,
+                //does this still work with .then?
+                axios.get(`/api/users/${user.email}?lean=true`).then(response => {
+                    if (response.data.error) throw response.data.error;
+                    const dbUser = response.data;
+                    setUserCookie(dbUser);
+                    setUser(dbUser);
+                    setLoading(false);
+                    resolve(dbUser);
                 });
-                let userData = { ...user, ...response.data };
-                const userFromCookie = getUserFromCookie();
-                if (userFromCookie) userData = { ...userFromCookie, ...userData };
-                setUserCookie(userData);
-                setUser(userData);
-                setLoading(false);
-                console.log("Set loading false");
-                resolve(userData);
             } catch (error) {
                 reject(error);
             }
         });
+    };
+
+    const signUp = (username: string, email: string, password: string) => {
+        return new Promise<User>((resolve, reject) => {
+            try {
+                firebase
+                    .auth()
+                    .createUserWithEmailAndPassword(email, password)
+                    .then(fbUser => {
+                        console.log("Created Firebase user:", fbUser);
+                        axios.post("/api/users/create", { email, username }).then(response => {
+                            if (response.data.error) throw response.data.error;
+                            const dbUser = response.data;
+                            console.log("Created DB user:", dbUser);
+                            login(email, password).then(resolve);
+                        });
+                    });
+            } catch (error) {
+                reject(error);
+            }
+        });
+    };
+
+    const signUpAndRedirect = async (
+        username: string,
+        email: string,
+        password: string,
+        redirectTo = "/"
+    ) => {
+        const response = await signUp(username, email, password);
+        router.push(redirectTo);
+        return response;
     };
 
     // Firebase updates the id token every hour, this
@@ -121,17 +159,16 @@ const useProvideAuth = () => {
     // both kept up to date
     useEffect(() => {
         console.log("Adding listener");
-        const cancelAuthListener = firebase.auth().onIdTokenChanged(async user => {
+        const cancelAuthListener = firebase.auth().onAuthStateChanged(async user => {
             if (user) {
                 console.log("ID token received for user ", user.email);
-                let userData = await mapUserData(user);
+                const userData = await mapUserData(user);
                 setFbUser(userData);
             } else {
                 console.log("ID token unset - removing cookie and user");
                 setFbUser(null);
                 setUser(null);
                 setLoading(false);
-                console.log("Set loading false");
                 removeUserCookie();
             }
         });
@@ -148,12 +185,10 @@ const useProvideAuth = () => {
             console.warn("No user cookie is present");
             setFbUser(null);
             setUser(null);
-            console.log("Set loading false");
             return;
         }
         setUser(userFromCookie);
         setLoading(false);
-        console.log("Set loading false");
     }, []);
 
     useEffect(() => {
@@ -171,15 +206,27 @@ const useProvideAuth = () => {
         logout,
         logoutAndRedirect,
         refreshUserDbValues,
+        signUp,
+        signUpAndRedirect,
     };
 };
 
-const AuthProvider = ({ children }) => {
+const AuthProvider = ({
+    children,
+}: {
+    children: JSX.Element[] | JSX.Element | null;
+}): JSX.Element => {
     const auth = useProvideAuth();
     return <authContext.Provider value={auth}>{children}</authContext.Provider>;
 };
 
-const useUser = props => {
+interface UseAuthProps {
+    redirectTo?: string;
+    redirectToIfNotAdmin?: string;
+}
+
+const useAuth = (props: UseAuthProps = {}): AuthContextValues => {
+    /* eslint-disable @typescript-eslint/no-unused-vars*/
     const {
         user,
         loading,
@@ -188,20 +235,33 @@ const useUser = props => {
         logout,
         logoutAndRedirect,
         refreshUserDbValues,
+        signUp,
+        signUpAndRedirect,
     } = useContext(authContext);
+    /* eslint-enable @typescript-eslint/no-unused-vars*/
     const router = useRouter();
     const [redirecting, setRedirecting] = useState(false);
 
     useEffect(() => {
         //user is null when explicitly unset i.e. signed out or no token
-        if (user === null && props && props.redirectTo && !redirecting) {
+        if (user === null && props && props.redirectTo && !redirecting && !loading) {
             setRedirecting(true);
             console.log("No user present, redirecting to", props.redirectTo);
             router.push(props.redirectTo);
-        } else if (user && !user.isAdmin && props && props.redirectIfNotAdmin && !redirecting) {
+        } else if (
+            user &&
+            props &&
+            props.redirectToIfNotAdmin &&
+            !redirecting &&
+            !loading &&
+            !user.isAdmin
+        ) {
             setRedirecting(true);
-            console.log("Logged in user isn't an admin, redirecting to", props.redirectIfNotAdmin);
-            router.push(props.redirectIfNotAdmin);
+            console.log(
+                "Logged in user isn't an admin, redirecting to",
+                props.redirectToIfNotAdmin
+            );
+            router.push(props.redirectToIfNotAdmin);
         }
     }, [props, user, redirecting]);
 
@@ -209,6 +269,6 @@ const useUser = props => {
 };
 
 export { AuthProvider };
-export default useUser;
+export default useAuth;
 
 //https://github.com/vercel/next.js/blob/canary/examples/with-firebase-authentication/components/FirebaseAuth.js

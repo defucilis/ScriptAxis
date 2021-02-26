@@ -2,14 +2,17 @@ import Head from "next/head";
 
 import Layout from "../components/layout/Layout";
 import AdminPanel from "../components/dashboard/AdminPanel";
+import LoadingSkeleton from "../components/layout/LoadingSkeleton";
 
 import { FetchSlugs } from "./api/scripts/allslugs";
 
-import useUser from "../lib/auth/useUser";
+import useAuth from "../lib/auth/useAuth";
 import { ScriptStub } from "lib/types";
 
 const Admin = ({ existingScripts }: { existingScripts: ScriptStub[] }): JSX.Element => {
-    useUser({ redirectIfNotAdmin: "/" });
+    const { loading } = useAuth({ redirectToIfNotAdmin: "/" });
+
+    if (loading) return <LoadingSkeleton />;
 
     return (
         <Layout>

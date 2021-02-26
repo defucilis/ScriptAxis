@@ -6,23 +6,18 @@ import { NextApiRequest, NextApiResponse } from "next";
 const FetchLists = async (): Promise<StringListsWithCount> => {
     const prisma = new PrismaClient();
     try {
-        console.log("Fetching all data lists...");
-        console.log("\tFething tags");
         let tags = await prisma.tag.findMany();
         tags = tags.sort((a, b) => b.count - a.count);
-        console.log("\tFetching categories");
         let categories = await prisma.category.findMany();
         categories = categories.sort((a, b) => b.count - a.count);
-        console.log("\tFetching talent");
         const talent = await prisma.talent.findMany();
-        console.log("\tFetching studios");
         const studios = await prisma.studio.findMany();
-        console.log("\tFetching creators");
         const creators = await prisma.creator.findMany({
             select: {
                 name: true,
             },
         });
+        console.log(talent);
         await prisma.$disconnect();
         return ScriptUtils.parseDatabaseListsWithCount({
             tags,

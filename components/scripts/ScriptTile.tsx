@@ -26,8 +26,8 @@ const ScriptTile = ({ script }: { script: Script }): JSX.Element => {
                 </Link>
             </div>
             <div className={style.scriptcreator}>
-                <Link href={`/creator/${script.creator}`}>
-                    <a>{script.creator}</a>
+                <Link href={`/creator/${script.creatorName}`}>
+                    <a>{script.creatorName}</a>
                 </Link>
             </div>
             <div className={style.bottomrow}>

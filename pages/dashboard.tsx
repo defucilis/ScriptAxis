@@ -2,12 +2,15 @@ import Head from "next/head";
 
 import Layout from "../components/layout/Layout";
 import Dashboard from "../components/dashboard/Dashboard";
+import LoadingSkeleton from "../components/layout/LoadingSkeleton";
 
-import useUser from "../lib/auth/useUser";
+import useAuth from "../lib/auth/useAuth";
 
 const DashboardPage = (): JSX.Element => {
     //page is blocked if user is not signed in
-    useUser({ redirectTo: "/" });
+    const { loading } = useAuth({ redirectTo: "/" });
+
+    if (loading) return <LoadingSkeleton />;
 
     return (
         <Layout>

@@ -38,10 +38,7 @@ export async function getServerSideProps(
 
     return {
         props: {
-            propScripts:
-                !scripts || scripts.length === 0
-                    ? []
-                    : scripts.map(script => ScriptUtils.parseScriptDocument(script)),
+            propScripts: scripts || [],
             matchCount: count,
             query: dbQuery,
         },

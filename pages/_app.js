@@ -5,7 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import { initFirebase } from "../lib/initFirebase";
 
-import { AuthProvider } from "../lib/auth/useUser";
+import { AuthProvider } from "../lib/auth/useAuth";
 
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";

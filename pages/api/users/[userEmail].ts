@@ -9,11 +9,6 @@ const FetchLeanUser = async (email: string): Promise<LeanUser> => {
 
         //if lean, we only want the slugs of the liked and owned scripts
         //even that might be too much for the 4096kB user cookie
-        const scriptSelect = {
-            select: {
-                slug: true,
-            },
-        };
 
         const users = await prisma.user.findFirst({
             where: {
@@ -21,8 +16,8 @@ const FetchLeanUser = async (email: string): Promise<LeanUser> => {
             },
             include: {
                 creator: { select: { name: true } },
-                likedScripts: scriptSelect,
-                ownedScripts: scriptSelect,
+                likedScripts: { select: { slug: true } },
+                ownedScripts: { select: { id: true } },
             },
         });
         delete users.savedFilters;
@@ -71,13 +66,13 @@ export { FetchUser };
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
-        const script = req.body.lean
-            ? await FetchLeanUser(req.body.email)
-            : await FetchUser(req.body.email);
+        const email = String(req.query.userEmail);
+        const lean = req.query.lean ? (req.query.lean === "true" ? true : false) : false;
+        const script = lean ? await FetchLeanUser(email) : await FetchUser(email);
         res.status(200);
         res.json(script);
     } catch (error) {
-        console.error("error fetching script - " + error);
+        console.error("error fetching user - " + error);
         res.json({
             error: { message: error.message },
         });

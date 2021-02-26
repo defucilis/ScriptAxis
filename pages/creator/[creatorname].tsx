@@ -4,7 +4,7 @@ import Head from "next/head";
 import Layout from "../../components/layout/Layout";
 import CreatorDetail from "../../components/creators/CreatorDetail";
 
-import { FetchCreator } from "../api/creator/name";
+import { FetchCreator } from "../api/creator/[creatorName]";
 import { UiCreator } from "lib/types";
 import { GetServerSidePropsContext } from "next";
 
@@ -33,9 +33,7 @@ export async function getServerSideProps(
     }
 
     if (creator.scripts && creator.scripts.length > 0) {
-        creator.scripts = creator.scripts
-            //.map(doc => ScriptUtils.parseScriptDocument(doc))
-            .sort((a, b) => b.created.valueOf() - a.created.valueOf());
+        creator.scripts = creator.scripts.sort((a, b) => b.created.valueOf() - a.created.valueOf());
     }
     return {
         props: { creator },

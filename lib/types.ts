@@ -1,6 +1,6 @@
 export interface Category {
     name: string;
-    scripts: FullScript[];
+    scripts: Script[];
     count: number;
 }
 
@@ -47,13 +47,6 @@ export interface Script {
     userId: string;
     categoryName: string;
 }
-export interface FullScript extends Script {
-    category: Category;
-    creator: Creator;
-    owner: User;
-
-    likedBy: User[];
-}
 
 export interface ScriptStub {
     id: number;
@@ -96,14 +89,9 @@ export interface UiUser extends User {
     }[];
 }
 
-export interface FullUser extends User {
-    ownedScripts: FullScript[];
-    likedScripts: FullScript[];
-}
-
 export interface LeanUser extends User {
     creator?: { name: string };
-    ownedScripts: { slug: string }[];
+    ownedScripts: { id: number }[];
     likedScripts: { slug: string }[];
 }
 

@@ -40,14 +40,14 @@ const AddScript = ({ tags, categories, talent, studios, creators }: StringLists)
                 console.log("Script created successfully", response);
                 //ensure the homepage reloads properly
                 window.localStorage.removeItem("recentScriptsTime");
-                if (Router.pathname === "/add") Router.push(`/script/${response[0].slug}`);
+                if (Router.pathname === "/add") Router.push(`/script/${response.slug}`);
                 else {
                     if (
                         confirm(
                             "Your script has finished processing. Click OK to go to its page, or Cancel to stay where you are.\nIn the future I'll make this a little less annoying!"
                         )
                     ) {
-                        Router.push(`/script/${response[0].slug}`);
+                        Router.push(`/script/${response.slug}`);
                     }
                 }
             },
@@ -101,7 +101,7 @@ const createScript = async (
 
     data.slug = slugify(data.name, { lower: true, strict: true });
 
-    if (data.thumbnail.length > 0) {
+    if (postData.thumbnail.length > 0) {
         //upload the thumbnail and add it to the database
         try {
             const compressedFile = await imageConversion.compressAccurately(postData.thumbnail[0], {

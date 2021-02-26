@@ -9,7 +9,7 @@ import { FaRegEye } from "react-icons/fa";
 import ReactMarkdown from "react-markdown";
 
 import ScriptUtils from "../../lib/ScriptUtils";
-import useUser from "../../lib/auth/useUser";
+import useAuth from "../../lib/auth/useAuth";
 
 import style from "./ScriptDetails.module.scss";
 import { Script } from "lib/types";
@@ -77,7 +77,7 @@ const getEmbed = (url: string) => {
 };
 
 const ScriptDetails = ({ script }: { script: Script }): JSX.Element => {
-    const { user, refreshUserDbValues } = useUser();
+    const { user, refreshUserDbValues } = useAuth();
     const [isLiked, setIsLiked] = useState(false);
     const [scriptLikes, setScriptLikes] = useState(0);
     const iFrameRef = useRef();

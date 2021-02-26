@@ -26,9 +26,9 @@ export { FetchCreator };
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
-        const script = await FetchCreator(req.body.name);
+        const creator = await FetchCreator(String(req.query.creatorName));
         res.status(200);
-        res.json(script);
+        res.json(creator);
     } catch (error) {
         console.error("error fetching script - " + error);
         res.json({

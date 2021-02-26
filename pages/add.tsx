@@ -5,14 +5,15 @@ import firebase from "../lib/initFirebase";
 import Layout from "../components/layout/Layout";
 import AddScript from "../components/forms/AddScript";
 
-import useUser from "../lib/auth/useUser";
+import useAuth from "../lib/auth/useAuth";
 import { FetchLists } from "./api/loadlists";
 import ScriptUtils from "../lib/ScriptUtils";
 import { StringLists } from "lib/types";
+import LoadingSkeleton from "components/layout/LoadingSkeleton";
 
 const Add = ({ tags, categories, talent, studios, creators }: StringLists): JSX.Element => {
     //page is blocked if user is not signed in
-    const { user } = useUser({ redirectTo: "/" });
+    const { user, loading } = useAuth({ redirectTo: "/" });
 
     const resend = async () => {
         try {
@@ -22,6 +23,8 @@ const Add = ({ tags, categories, talent, studios, creators }: StringLists): JSX.
             alert("Failed to send verificationemail\n" + ScriptUtils.tryFormatError(error.message));
         }
     };
+
+    if (loading) return <LoadingSkeleton />;
 
     return (
         <Layout>
@@ -50,8 +53,7 @@ const Add = ({ tags, categories, talent, studios, creators }: StringLists): JSX.
 export async function getServerSideProps(): Promise<{ props: any }> {
     let data = {};
     try {
-        data = await FetchLists();
-        data = ScriptUtils.parseDatabaseLists(data);
+        data = ScriptUtils.removeCountFromLists(await FetchLists());
     } catch (error) {
         console.log("Failed to get scripts", error);
     }

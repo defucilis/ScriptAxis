@@ -21,7 +21,6 @@ const ScriptGrid = ({
             })
         );
     }, [scripts]);
-
     return (
         <div className={style.scriptgrid} style={customStyle}>
             {tiles}

@@ -7,7 +7,7 @@ import firebase from "../lib/initFirebase";
 
 import Layout from "../components/layout/Layout";
 
-import useUser from "../lib/auth/useUser";
+import useAuth from "../lib/auth/useAuth";
 
 import style from "./signin.module.scss";
 import ScriptUtils from "lib/ScriptUtils";
@@ -15,7 +15,7 @@ import ScriptUtils from "lib/ScriptUtils";
 const SignUp = (): JSX.Element => {
     const [error, setError] = useState("");
     const [signingUp, setSigningUp] = useState(false);
-    const { login } = useUser();
+    const { login } = useAuth();
     const [data, setData] = useState({ email: "", username: "", password: "", confirm: "" });
 
     const signUp = (e: React.FormEvent) => {

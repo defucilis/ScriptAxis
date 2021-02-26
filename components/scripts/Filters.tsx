@@ -10,7 +10,7 @@ import axios from "axios";
 import Checkbox from "../forms/Checkbox";
 
 import ScriptUtils from "../../lib/ScriptUtils";
-import useUser from "../../lib/auth/useUser";
+import useAuth from "../../lib/auth/useAuth";
 
 import style from "./Filters.module.scss";
 import { Filters, Query } from "lib/types";
@@ -149,7 +149,7 @@ const FiltersElement = ({
     const [sourceUrl, setSourceUrl] = useState(false);
     const [streamingUrl, setStreamingUrl] = useState(false);
     const [saved, setSaved] = useState(false);
-    const { user } = useUser();
+    const { user } = useAuth();
     useEffect(() => {
         window.setTimeout(() => {
             const storedTagCounts = window.localStorage.getItem("storedTagCounts");

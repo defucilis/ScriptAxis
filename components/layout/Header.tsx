@@ -8,14 +8,14 @@ import { FaSync } from "react-icons/fa";
 import axios from "axios";
 
 import ScriptUtils from "../../lib/ScriptUtils";
-import useUser from "../../lib/auth/useUser";
+import useAuth from "../../lib/auth/useAuth";
 
 import styles from "./Header.module.scss";
 
 export type HeaderPage = "home" | "scripts" | "categories" | "tags" | "creators";
 
 const Header = ({ page }: { page?: HeaderPage }): JSX.Element => {
-    const { user, loading } = useUser();
+    const { user, loading } = useAuth();
     const [scriptCount, setScriptCount] = useState(0);
     const [categoryCounts, setCategoryCounts] = useState([]);
     const [tagCounts, setTagCounts] = useState([]);

@@ -99,6 +99,7 @@ const Autocomplete = props => {
                                     value: JSON.parse(e.target.value)[0].value,
                                 },
                             });
+                        // eslint-disable-next-line no-empty
                     } catch {}
                 }}
                 onBlur={e => {

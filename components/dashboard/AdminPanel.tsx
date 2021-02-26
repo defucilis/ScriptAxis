@@ -67,23 +67,48 @@ const AddData = async (
 
 const Aggregate = async (
     onMessage: (message: string) => void,
-    onSuccess: () => void,
-    onFail: () => void
+    onSuccess: (totalCount: number) => void,
+    onProgress: (doneCount: number, totalCount: number) => void,
+    onFail: (errorCount: number, totalCount: number) => void
 ) => {
     onMessage(`Running data aggregation`);
-
+    onMessage(`--Fetching creators`);
     try {
-        const response = await axios.get("/api/admin/aggregate");
+        const response = await axios.get("/api/creator/names");
         if (response.data.error) throw response.data.error;
-        console.log("data", response.data);
-        onMessage(`Finished aggregating creator data: ${JSON.stringify(response.data, null, 2)}`);
-        onMessage("");
-        onSuccess();
+        const names: string[] = [...response.data];
+        onMessage(`----Done - found ${names.length} creators`);
+
+        let errorCount = 0;
+        for (let i = 0; i < names.length; i++) {
+            try {
+                onMessage(`--Updating creator ${names[i]}`);
+
+                const response = await axios.get(`/api/admin/aggregate/${names[i]}`);
+                if (response.data.error) throw response.data.error;
+                console.log("data", response.data);
+
+                onProgress(i + 1, names.length);
+                onMessage(
+                    `----${names[i]} sucessfully updated with ${
+                        response.data.totalViews
+                    } views and ${response.data.totalLikes} likes (${i + 1}/${names.length})`
+                );
+            } catch (error) {
+                console.error("error", error);
+                onProgress(i + 1, names.length);
+                onMessage("Error: " + ScriptUtils.tryFormatError(error.message));
+                onMessage("");
+                errorCount++;
+            }
+        }
+        if (errorCount === 0) onSuccess(names.length);
+        else onFail(errorCount, names.length);
     } catch (error) {
         console.error("error", error);
         onMessage("Error: " + ScriptUtils.tryFormatError(error.message));
         onMessage("");
-        onFail();
+        onFail(0, 0);
     }
 };
 
@@ -276,16 +301,28 @@ const AdminPanel = ({ existingScripts }: { existingScripts: ScriptStub[] }): JSX
     const StartAggregation = () => {
         setRunning(true);
 
+        progressBarParentRef.current.style.setProperty("display", "block");
+        progressBarRef.current.style.setProperty("width", "0%");
+
         Aggregate(
             addMessage,
-            () => {
-                addMessage("Finished aggregating data");
+            addedCount => {
+                addMessage(`Successfully aggregated ${addedCount} creators`);
                 addMessage("");
+                progressBarParentRef.current.style.setProperty("display", "none");
                 setRunning(false);
             },
-            () => {
-                addMessage("Error: Failed aggregating data");
+            (count, total) => {
+                progressBarRef.current.style.setProperty(
+                    "width",
+                    `${Math.round((count * 100) / total)}%`
+                );
+            },
+            (failCount, total) => {
+                addMessage("Finished aggregating creators");
+                addMessage(`Error: failed ${failCount} out of ${total}`);
                 addMessage("");
+                progressBarParentRef.current.style.setProperty("display", "none");
                 setRunning(false);
             }
         );

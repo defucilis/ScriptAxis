@@ -1,14 +1,5 @@
 import { ScriptFormDataOutput } from "components/forms/ScriptForm";
-import {
-    Filters,
-    Query,
-    SavedQuery,
-    FullScript,
-    Script,
-    UrlQuery,
-    StringLists,
-    StringListsWithCount,
-} from "./types";
+import { Filters, Query, SavedQuery, UrlQuery, StringLists, StringListsWithCount } from "./types";
 
 const indexToDuration = (index: number): number => {
     switch (index) {
@@ -41,46 +32,44 @@ const arraysIdentical = (a: any[], b: any[]) => {
     return true;
 };
 
-const parseScriptDocument = (script: FullScript): Script => {
-    console.log(script);
-    const creator = script.creator ? script.creator.name : "Creator";
-    const owner = script.owner ? script.owner.id : "Owner";
+// const parseScriptDocument = (script: Script): Script => {
+//     console.log(script);
 
-    const output: Script = {
-        id: script.id,
-        name: script.name,
-        slug: script.slug,
-        creatorName: creator,
-        userId: owner,
-        categoryName: script.category.name,
-        tags: !script.tags ? [] : script.tags,
-        description: script.description,
-        duration: script.duration,
-        thumbnail: script.thumbnail || "/img/placeholder-thumbnail.png",
-        sourceUrl: script.sourceUrl,
-        streamingUrl: script.streamingUrl,
-        studio: script.studio || "",
-        talent: script.talent || [],
-        active: script.active,
-        created: script.created,
-        modified: script.modified,
-        likeCount: script.likeCount,
-        thumbsUp: script.thumbsUp,
-        thumbsDown: script.thumbsDown,
-        views: script.views,
-        funscripts: [],
+//     const output: Script = {
+//         id: script.id,
+//         name: script.name,
+//         slug: script.slug,
+//         creatorName: script.creatorName,
+//         userId: script.userId,
+//         categoryName: script.categoryName,
+//         tags: !script.tags ? [] : script.tags,
+//         description: script.description,
+//         duration: script.duration,
+//         thumbnail: script.thumbnail || "/img/placeholder-thumbnail.png",
+//         sourceUrl: script.sourceUrl,
+//         streamingUrl: script.streamingUrl,
+//         studio: script.studio || "",
+//         talent: script.talent || [],
+//         active: script.active,
+//         created: script.created,
+//         modified: script.modified,
+//         likeCount: script.likeCount,
+//         thumbsUp: script.thumbsUp,
+//         thumbsDown: script.thumbsDown,
+//         views: script.views,
+//         funscripts: [],
 
-        //SFW Overrides
-        // name: !script.name ? "Script" : script.name.split("").reverse().join(""),
-        //thumbnail: "/img/placeholder-thumbnail.png",
-        // studio: !script.studio ? null : script.studio.split("").reverse().join(""),
-        // category: !script.categoryName ? "Category" : script.categoryName.split("").reverse().join(""),
-        // tags: !script.tags ? [] : script.tags.map(tag => tag.split("").reverse().join("")),
-        // streamingUrl: "https://www.google.com",
-        // sourceurl: "https://www.google.com"
-    };
-    return output;
-};
+//         //SFW Overrides
+//         // name: !script.name ? "Script" : script.name.split("").reverse().join(""),
+//         //thumbnail: "/img/placeholder-thumbnail.png",
+//         // studio: !script.studio ? null : script.studio.split("").reverse().join(""),
+//         // category: !script.categoryName ? "Category" : script.categoryName.split("").reverse().join(""),
+//         // tags: !script.tags ? [] : script.tags.map(tag => tag.split("").reverse().join("")),
+//         // streamingUrl: "https://www.google.com",
+//         // sourceurl: "https://www.google.com"
+//     };
+//     return output;
+// };
 
 type namedItem = { name: string };
 type namedItemWithCount = { name: string; count: number };
@@ -91,7 +80,6 @@ const parseDatabaseLists = (data: {
     studios?: namedItem[];
     creators?: namedItem[];
 }): StringLists => {
-    console.log("Parsing Data", data);
     return {
         tags: !data.tags ? [] : data.tags.map(t => t.name),
         categories: !data.categories ? [] : data.categories.map(c => c.name),
@@ -538,7 +526,7 @@ const formatTag = (tag: string): string => {
 };
 
 const ScriptUtils = {
-    parseScriptDocument,
+    //parseScriptDocument,
     indexToDuration,
     parseDatabaseLists,
     parseDatabaseListsWithCount,

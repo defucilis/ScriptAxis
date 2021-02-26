@@ -5,13 +5,13 @@ import Router from "next/router";
 
 import Layout from "../components/layout/Layout";
 
-import useUser from "../lib/auth/useUser";
+import useAuth from "../lib/auth/useAuth";
 
 import style from "./signin.module.scss";
 
 const SignIn = (): JSX.Element => {
     const [error, setError] = useState("");
-    const { login } = useUser();
+    const { login } = useAuth();
     const [waiting, setWaiting] = useState(false);
     const [data, setData] = useState({ email: "", password: "" });
 

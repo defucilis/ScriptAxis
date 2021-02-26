@@ -15,7 +15,7 @@ import {
 } from "./FormUtils";
 import NavigationPrompt from "../functional/NavigationPrompt";
 import ScriptUtils from "../../lib/ScriptUtils";
-import useUser from "../../lib/auth/useUser";
+import useAuth from "../../lib/auth/useAuth";
 
 import style from "./ScriptForm.module.scss";
 import { StringLists } from "lib/types";
@@ -108,7 +108,7 @@ const ScriptForm = ({
     submitLabel: string;
     busy: boolean;
 }): JSX.Element => {
-    const { user } = useUser();
+    const { user } = useAuth();
 
     const [formData, setFormData] = useState<ScriptFormData>({});
 

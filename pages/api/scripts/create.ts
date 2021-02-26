@@ -1,7 +1,8 @@
 import { PrismaClient } from "@prisma/client";
+import { Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const CreateScript = async (rawData: any): Promise<void> => {
+const CreateScript = async (rawData: any): Promise<Script> => {
     //console.log(req.body);
     const prisma = new PrismaClient();
 
@@ -121,8 +122,8 @@ const CreateScript = async (rawData: any): Promise<void> => {
             );
         }
 
-        await prisma.$transaction(transaction);
-        return;
+        const results: any[] = await prisma.$transaction(transaction);
+        return results[0];
     } catch (error) {
         await prisma.$disconnect();
         throw error;
