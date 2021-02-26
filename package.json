@@ -1,6 +1,6 @@
 {
     "name": "scriptaxis",
-    "version": "0.0.28",
+    "version": "0.1.0",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -12,7 +12,7 @@
         "format": "prettier --write .",
         "lint": "eslint . --ext ts --ext tsx --ext js"
     },
-    "author": "",
+    "author": "Defucilis",
     "license": "ISC",
     "dependencies": {
         "@prisma/client": "^2.17.0",
