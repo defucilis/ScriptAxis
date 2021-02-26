@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 
 import axios from "axios";
+import { NextApiRequest, NextApiResponse } from "next";
 
-const Scrape = async (scriptSlug, scriptUrl) => {
+const Scrape = async (scriptSlug: string, scriptUrl: string) => {
     if (!scriptUrl.includes("discuss.eroscripts.com"))
         throw { message: "can only scrape scripts from EroScripts" };
 
@@ -68,9 +69,9 @@ const Scrape = async (scriptSlug, scriptUrl) => {
     }
 };
 
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
-        const scripts = await Scrape(req.body.slug, req.body.url, req.body.cookie);
+        const scripts = await Scrape(req.body.slug, req.body.url);
         res.status(200);
         res.json(scripts);
     } catch (error) {

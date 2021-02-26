@@ -1,4 +1,5 @@
-import { Filters, Query, SavedQuery, FullScript, UnlinkedScript, UrlQuery } from "./types";
+import { ScriptFormDataOutput } from "components/forms/ScriptForm";
+import { Filters, Query, SavedQuery, FullScript, Script, UrlQuery, StringLists, StringListsWithCount } from "./types";
 
 const indexToDuration = (index: number): number => {
     switch (index) {
@@ -31,17 +32,18 @@ const arraysIdentical = (a: any[], b: any[]) => {
     return true;
 };
 
-const parseScriptDocument = (script: FullScript): UnlinkedScript => {
-    const creator = script.creator ? script.creator.name : script.creator.name || "Creator";
-    const owner = script.owner ? script.owner.username : script.owner.username || "Owner";
+const parseScriptDocument = (script: FullScript): Script => {
+    console.log(script);
+    const creator = script.creator ? script.creator.name : "Creator";
+    const owner = script.owner ? script.owner.id : "Owner";
 
-    const output: UnlinkedScript = {
+    const output: Script = {
         id: script.id,
         name: script.name,
         slug: script.slug,
-        creator,
-        owner,
-        category: script.category,
+        creatorName: creator,
+        userId: owner,
+        categoryName: script.category.name,
         tags: !script.tags ? [] : script.tags,
         description: script.description,
         duration: script.duration,
@@ -51,8 +53,8 @@ const parseScriptDocument = (script: FullScript): UnlinkedScript => {
         studio: script.studio || "",
         talent: script.talent || [],
         active: script.active,
-        created: script.created ? script.created.valueOf() : null,
-        modified: script.modified ? script.modified.valueOf() : null,
+        created: script.created,
+        modified: script.modified,
         likeCount: script.likeCount,
         thumbsUp: script.thumbsUp,
         thumbsDown: script.thumbsDown,
@@ -79,13 +81,7 @@ const parseDatabaseLists = (data: {
         talent?: namedItem[],
         studios?: namedItem[],
         creators?: namedItem[],
-    }): {
-        tags?: string[], 
-        categories?: string[],
-        talent?: string[],
-        studios?: string[],
-        creators?: string[],
-    } => {
+    }): StringLists => {
     console.log("Parsing Data", data);
     return {
         tags: !data.tags ? [] : data.tags.map(t => t.name),
@@ -97,17 +93,17 @@ const parseDatabaseLists = (data: {
 };
 
 const parseDatabaseListsWithCount = (data: {
-    tags?: namedItemWithCount[], 
-    categories?: namedItemWithCount[],
-    talent?: namedItem[],
-    studios?: namedItem[],
-    creators?: namedItem[],
+    tags: namedItemWithCount[], 
+    categories: namedItemWithCount[],
+    talent: namedItem[],
+    studios: namedItem[],
+    creators: namedItem[],
 }): {
-    tags?: namedItemWithCount[], 
-    categories?: namedItemWithCount[],
-    talent?: string[],
-    studios?: string[],
-    creators?: string[],
+    tags: namedItemWithCount[], 
+    categories: namedItemWithCount[],
+    talent: string[],
+    studios: string[],
+    creators: string[],
 } => {
     return {
         tags: !data.tags ? [] : data.tags.map(t => ({ name: t.name, count: t.count })),
@@ -119,6 +115,16 @@ const parseDatabaseListsWithCount = (data: {
         creators: !data.creators ? [] : data.creators.map(c => c.name),
     };
 };
+
+const removeCountFromLists = (data: StringListsWithCount): StringLists => {
+    return {
+        tags: !data.tags ? [] : data.tags.map(t => t.name),
+        categories: !data.categories ? [] : data.categories.map(c => c.name),
+        talent: data.talent || [],
+        studios: data.studios || [],
+        creators: data.creators || [],
+    }
+}
 
 const durationToString = (duration: number): string => {
     let output = "";
@@ -406,7 +412,7 @@ const queryToPrettyString = (queryString: string): SavedQuery => {
     return output;
 };
 
-const getScriptDifferences = (oldScript: FullScript, newScript: FullScript): any => {
+const getScriptDifferences = (oldScript: ScriptFormDataOutput, newScript: ScriptFormDataOutput): any => {
     console.warn("Diffing data");
     const output: any = {};
 
@@ -463,7 +469,7 @@ const tryFormatError = (error: string): string => {
 };
 
 //used to generate JS object code for pasting into TestData.js as a backup
-const getScriptObjectCode = (data: FullScript): string => {
+const getScriptObjectCode = (data: ScriptFormDataOutput): string => {
     const lines = [];
     lines.push("{");
     lines.push(`    name:           "${data.name}",`);
@@ -524,6 +530,7 @@ const ScriptUtils = {
     indexToDuration,
     parseDatabaseLists,
     parseDatabaseListsWithCount,
+    removeCountFromLists,
     durationToString,
     stringToDuration,
     stringIsValidDuration,

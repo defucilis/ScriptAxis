@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+
 import { useRef, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import dynamic from "next/dynamic";

@@ -1,16 +1,14 @@
 import {GetServerSidePropsContext} from 'next'
-import { Query, UnlinkedScript } from "lib/types";
+import { Query, Script } from "lib/types";
 import Layout from "../components/layout/Layout";
 import BrowseScripts from "../components/scripts/BrowseScripts";
 
 import ScriptUtils from "../lib/ScriptUtils";
 import { QueryScripts } from "./api/scripts/query";
 
-const Scripts = ({ propScripts, matchCount, tags, categories, query }: {
-    propScripts: UnlinkedScript[],
+const Scripts = ({ propScripts, matchCount, query }: {
+    propScripts: Script[],
     matchCount: number,
-    tags: string[],
-    categories: string[],
     query: Query
 }): JSX.Element => {
     return (
@@ -18,15 +16,13 @@ const Scripts = ({ propScripts, matchCount, tags, categories, query }: {
             <BrowseScripts
                 propScripts={propScripts}
                 scriptCount={matchCount}
-                tags={tags}
-                categories={categories}
                 query={query}
             />
         </Layout>
     );
 };
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext): Promise<{props: {propScripts: UnlinkedScript[], matchCount: number, query: Query}}> {
+export async function getServerSideProps(ctx: GetServerSidePropsContext): Promise<{props: {propScripts: Script[], matchCount: number, query: Query}}> {
     let scripts = [];
     let count = 0;
     const dbQuery = ScriptUtils.stringObjectToQuery(ctx.query);

@@ -1,20 +1,21 @@
 import { PrismaClient } from "@prisma/client";
+import { NextApiRequest, NextApiResponse } from "next";
 
-const UpdateScript = async (req, res) => {
+const UpdateScript = async (rawData: any) => {
     //console.log(req.body);
     const prisma = new PrismaClient();
 
     try {
-        console.log("Updating script with data", req.body);
+        console.log("Updating script with data", rawData);
 
-        let transaction = [];
+        const transaction = [];
 
-        const id = req.body.id;
-        const set = req.body.set || {};
-        const remove = req.body.remove || {};
-        const add = req.body.add || {};
+        const id = rawData.id;
+        const set = rawData.set || {};
+        const remove = rawData.remove || {};
+        const add = rawData.add || {};
 
-        let updateData = { ...set };
+        const updateData = { ...set };
         if (add.creator) {
             updateData.creator = {
                 connectOrCreate: {
@@ -118,18 +119,23 @@ const UpdateScript = async (req, res) => {
             );
         }
 
-        const results = await prisma.$transaction(transaction);
-
-        res.status(201);
-        res.json(results);
+        await prisma.$transaction(transaction);
+        return;
     } catch (error) {
-        console.log("Failed to create script", error.message);
-        res.json({
-            error: { message: error.message },
-        });
-    } finally {
         await prisma.$disconnect();
+        throw error;
     }
 };
 
-export default UpdateScript;
+export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+    try {
+        const script = await UpdateScript({...req.body});
+        res.status(200);
+        res.json(script);
+    } catch (error) {
+        console.error("error fetching script - " + error);
+        res.json({
+            error: { message: error.message },
+        });
+    }
+};

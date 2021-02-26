@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import * as yup from "yup";
 import ReactMarkdown from "react-markdown";
@@ -17,7 +17,76 @@ import NavigationPrompt from "../functional/NavigationPrompt";
 import ScriptUtils from "../../lib/ScriptUtils";
 import useUser from "../../lib/auth/useUser";
 
-import style from "./ScriptForm.module.css";
+import style from "./ScriptForm.module.scss";
+import { StringLists } from "lib/types";
+
+export interface ScriptFormData {
+    name?: string;
+    creator?: string;
+    owner?: string;
+    category?: string;
+    tags?: string[];
+    thumbnail?: File[];
+    description?: string;
+    duration?: string;
+    sourceUrl?: string;
+    streamingUrl?: string;
+    studio?: string;
+    talent?: string[];
+    created?: Date;
+}
+
+export interface EditScriptFormData {
+    id?: number;
+    slug?: string;
+    name?: string;
+    creator?: string;
+    owner?: string;
+    category?: string;
+    tags?: string[];
+    thumbnail?: File[];
+    description?: string;
+    duration?: string;
+    sourceUrl?: string;
+    streamingUrl?: string;
+    studio?: string;
+    talent?: string[];
+    created?: Date;
+}
+
+export interface ScriptFormDataOutput {
+    id?: number;
+    slug?: string;
+    name?: string;
+    creator?: string;
+    owner?: string;
+    category?: string;
+    tags?: string[];
+    thumbnail?: string;
+    description?: string;
+    duration?: number;
+    sourceUrl?: string;
+    streamingUrl?: string;
+    studio?: string;
+    talent?: string[];
+    created?: Date;
+}
+
+export interface ScriptErrorData {
+    name?: string;
+    creator?: string;
+    owner?: string;
+    category?: string;
+    tags?: string;
+    thumbnail?: string;
+    description?: string;
+    duration?: string;
+    sourceUrl?: string;
+    streamingUrl?: string;
+    studio?: string;
+    talent?: string;
+    created?: string;
+}
 
 const ScriptForm = ({
     tags,
@@ -30,13 +99,21 @@ const ScriptForm = ({
     options,
     submitLabel,
     busy,
-}) => {
+}: StringLists & {
+    onValidationPassed: (data: ScriptFormData) => void,
+    defaultFormData?: ScriptFormData,
+    options?: {
+        thumbnailOptional?: boolean
+    },
+    submitLabel: string,
+    busy: boolean
+}): JSX.Element => {
     const { user } = useUser();
 
-    const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState<ScriptFormData>({});
 
-    const tagsRef = useRef();
-    const talentRef = useRef();
+    const tagsRef = useRef<any>();
+    const talentRef = useRef<any>();
     useEffect(() => {
         //console.log("Setting form data", defaultFormData);
         const newData = { ...defaultFormData };
@@ -53,29 +130,29 @@ const ScriptForm = ({
         }, 100);
     }, [defaultFormData, tagsRef, talentRef]);
 
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState<ScriptFormData>({});
     const [dirty, setDirty] = useState(false);
-    const handleChange = e => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         //console.log(`Form: Setting ${e.target.id} to`, e.target.value)
         setFormData(cur => ({ ...cur, [e.target.id]: e.target.value }));
         if (errors[e.target.id]) {
             setErrors(cur => {
-                let newVal = { ...cur };
+                const newVal = { ...cur };
                 delete newVal[e.target.id];
                 return newVal;
             });
         }
         setDirty(true);
     };
-    const setError = e => {
+    const setError = (e: {target: {id: string, error: string}}) => {
         setErrors(cur => ({
             ...cur,
             [e.target.id]: [e.target.error],
         }));
     };
 
-    const handleSubmit = e => {
-        const doValidation = async (data, onPass, onFail) => {
+    const handleSubmit = (e: React.FormEvent) => {
+        const doValidation = async (data: ScriptFormData, onPass: any, onFail: any) => {
             try {
                 const validation = await getSchema().validate(data, { abortEarly: false });
                 if (!ScriptUtils.stringIsValidDuration(data.duration)) {
@@ -90,7 +167,7 @@ const ScriptForm = ({
                 }
                 onPass(validation);
             } catch (err) {
-                let mappedErrors = {};
+                const mappedErrors: any = {};
                 //console.error(err);
                 err.inner.forEach(error => {
                     mappedErrors[error.path] = error.errors[0];
@@ -125,9 +202,7 @@ const ScriptForm = ({
                     created: formData.created,
                 });
             },
-            errors => {
-                //console.log("Validation Failed", errors);
-            }
+            null
         );
     };
 
@@ -137,7 +212,7 @@ const ScriptForm = ({
             creator: yup.string().required("A creator is required"),
             category: yup.string().required("A category is required"),
             tags: yup.array().notRequired(),
-            description: yup.string().nullable().notRequired(""),
+            description: yup.string().nullable().notRequired(),
             duration: yup.string().required("A duration is required"),
             thumbnail:
                 options && options.thumbnailOptional
@@ -245,7 +320,7 @@ const ScriptForm = ({
                     label="Tags"
                     tagProps={{
                         settings: {
-                            validate: tag => {
+                            validate: (tag: {value: string}) => {
                                 const transformedTag = tag.value.trim().toLowerCase();
                                 const match = transformedTag.match("[a-z ]+");
                                 const success =

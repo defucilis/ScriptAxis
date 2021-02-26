@@ -8,14 +8,9 @@ import AddScript from "../components/forms/AddScript";
 import useUser from "../lib/auth/useUser";
 import { FetchLists } from "./api/loadlists";
 import ScriptUtils from "../lib/ScriptUtils";
+import { StringLists } from "lib/types";
 
-const Add = ({ tags, categories, talent, studios, creators }: {
-    tags: string,
-    categories: string,
-    talent: string,
-    studios: string,
-    creators: string
-}): JSX.Element => {
+const Add = ({ tags, categories, talent, studios, creators }: StringLists): JSX.Element => {
     //page is blocked if user is not signed in
     const { user } = useUser({ redirectTo: "/" });
 

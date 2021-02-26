@@ -1,12 +1,13 @@
 import { PrismaClient } from "@prisma/client";
+import { NextApiRequest, NextApiResponse } from "next";
 
-const ClearData = async (req, res) => {
+const ClearData = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     const prisma = new PrismaClient();
 
     try {
         console.log("Wiping database...");
 
-        let transaction = [];
+        const transaction = [];
 
         console.log("\tClearing Category table");
         transaction.push(

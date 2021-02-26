@@ -9,7 +9,7 @@ Obviously, this only works while scripts are being added manually by me. Once th
 To add a script, copy the 'template script' first item (which is ignored when this file is processed) and update all fields.
 */
 
-interface TestDataScriptInput {
+export interface TestDataScriptInput {
     name: string;
     creator: string;
     sourceUrl: string;

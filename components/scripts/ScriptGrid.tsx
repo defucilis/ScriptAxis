@@ -3,9 +3,9 @@ import { useState, useEffect, CSSProperties } from "react";
 import ScriptTile from "./ScriptTile";
 
 import style from "./ScriptGrid.module.scss";
-import { UnlinkedScript } from "lib/types";
+import { Script } from "lib/types";
 
-const ScriptGrid = ({ scripts, customStyle }: {scripts: UnlinkedScript[], customStyle?: CSSProperties}): JSX.Element => {
+const ScriptGrid = ({ scripts, customStyle }: {scripts: Script[], customStyle?: CSSProperties}): JSX.Element => {
     const [tiles, setTiles] = useState([]);
     useEffect(() => {
         if (!scripts) return;

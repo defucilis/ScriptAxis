@@ -6,20 +6,26 @@ export interface Category {
 
 export interface Creator {
     name: string;
-    user?: User;
+    userId: string;
     thumbnail: string;
-    scripts: FullScript[]
     totalViews: number;
     totalLikes: number;
     created: Date;
     modified: Date;
 }
 
+export interface FullCreator extends UiCreator {
+    user?: User;
+}
+
+export interface UiCreator extends Creator {
+    scripts?: Script[];
+}
+
 // Everything required to store a funscript - this will change in the future!
 export interface Script {
     id: number;
     name: string;
-    category: Category;
     slug: string;
     tags: string[];
     description?: string;
@@ -37,17 +43,16 @@ export interface Script {
     views: number;
     created: Date;
     modified: Date;
+    creatorName: string;
+    userId: string;
+    categoryName: string;
 }
 export interface FullScript extends Script {
+    category: Category;
     creator: Creator
     owner: User;
     
     likedBy: User[];
-}
-
-export interface UnlinkedScript extends Script {
-    creatorName: string;
-    ownerName: string;
 }
 
 export interface ScriptStub {
@@ -57,18 +62,49 @@ export interface ScriptStub {
     sourceUrl: string
 }
 
+export interface ScriptVisualStub {
+    name: string;
+    creatorName: string;
+    slug: string;
+    thumbnail: string;
+}
+
 export interface User {
     id: string;
     username: string;
     email: string;
     emailVerified: boolean;
-    creator?: Creator;
     isAdmin: boolean;
-    ownedScripts: FullScript[];
-    likedScripts: FullScript[];
     savedFilters: string[];
     created: Date;
     modified: Date;
+}
+
+export interface UiUser extends User {
+    creator?: {name: string};
+    ownedScripts: {
+        slug: string,
+        name: string,
+        thumbnail: string,
+        creator: { name: string },
+    }[],
+    likedScripts: {
+        slug: string,
+        name: string,
+        thumbnail: string,
+        creator: { name: string },
+    }[]
+}
+
+export interface FullUser extends User {
+    ownedScripts: FullScript[];
+    likedScripts: FullScript[];
+}
+
+export interface LeanUser extends User {
+    creator?: {name: string};
+    ownedScripts: {slug: string}[];
+    likedScripts: {slug: string}[];
 }
 
 export interface Query {
@@ -131,4 +167,23 @@ export interface SavedQuery {
     params?: Record<string, string>;
     sorting?: string;
     queryString?: string;
+}
+
+export interface TagCategoryLists {
+    tags: string[];
+    categories: string[];
+}
+
+export interface StringLists extends TagCategoryLists {
+    talent: string[];
+    studios: string[];
+    creators: string[];
+}
+
+export interface StringListsWithCount {
+    tags: {name: string, count: number}[];
+    categories: {name: string, count: number}[];
+    talent: string[];
+    studios: string[];
+    creators: string[];
 }

@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client";
+import { Script } from "lib/types";
+import { NextApiRequest, NextApiResponse } from "next";
 
-const FetchCreatorScripts = name => {
-    return new Promise(async (resolve, reject) => {
-        const prisma = new PrismaClient();
+const FetchCreatorScripts = async (name: string): Promise<Script[]> => {
+    const prisma = new PrismaClient();
         try {
             console.log("Fetching scripts belonging to creator", name);
             const scripts = await prisma.creator
@@ -18,19 +19,18 @@ const FetchCreatorScripts = name => {
                     },
                 });
             await prisma.$disconnect();
-            resolve(scripts);
+            return scripts;
         } catch (error) {
             await prisma.$disconnect();
-            reject(error);
+            throw error;
         }
-    });
 };
 
 export { FetchCreatorScripts };
 
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
-        const script = await FetchCreatorScripts();
+        const script = await FetchCreatorScripts(req.body.name);
         res.status(200);
         res.json(script);
     } catch (error) {

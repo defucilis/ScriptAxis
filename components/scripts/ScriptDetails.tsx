@@ -12,7 +12,7 @@ import ScriptUtils from "../../lib/ScriptUtils";
 import useUser from "../../lib/auth/useUser";
 
 import style from "./ScriptDetails.module.scss";
-import { FullScript } from "lib/types";
+import { Script } from "lib/types";
 
 const getEmbed = (url: string) => {
     let iframeLink = "";
@@ -76,7 +76,7 @@ const getEmbed = (url: string) => {
     return iframeLink;
 };
 
-const ScriptDetails = ({ script }: {script: FullScript}): JSX.Element => {
+const ScriptDetails = ({ script }: {script: Script}): JSX.Element => {
     const { user, refreshUserDbValues } = useUser();
     const [isLiked, setIsLiked] = useState(false);
     const [scriptLikes, setScriptLikes] = useState(0);
@@ -110,7 +110,7 @@ const ScriptDetails = ({ script }: {script: FullScript}): JSX.Element => {
             const response = await axios.post("/api/scripts/changelike", {
                 slug: script.slug,
                 uid: user.id,
-                creator: script.creator,
+                creator: script.creatorName,
                 isLiked: newValue,
             });
             if (response.data.error) throw response.data.error;
@@ -137,7 +137,7 @@ const ScriptDetails = ({ script }: {script: FullScript}): JSX.Element => {
     return (
         <div className={style.script}>
             <h1 className={style.name}>{script.name}</h1>
-            {user && user.username === script.owner ? (
+            {user && user.id === script.userId ? (
                 <div>
                     <Link href={`/edit/${script.slug}`}>
                         <a style={{ fontSize: "2em", display: "block", textAlign: "right" }}>
@@ -147,9 +147,9 @@ const ScriptDetails = ({ script }: {script: FullScript}): JSX.Element => {
                 </div>
             ) : null}
             <div className={style.creator}>
-                <Link href={`/creator/${script.creator.name}`}>
+                <Link href={`/creator/${script.creatorName}`}>
                     <span>
-                        By <a>{script.creator}</a>
+                        By <a>{script.creatorName}</a>
                     </span>
                 </Link>
             </div>
@@ -175,11 +175,11 @@ const ScriptDetails = ({ script }: {script: FullScript}): JSX.Element => {
                 </div>
                 <div className={style.details}>
                     <p className={style.category}>
-                        {!script.category ? (
+                        {!script.categoryName ? (
                             "No Category"
                         ) : (
-                            <Link href={`/scripts?category=${script.category.name}`}>
-                                <a>{script.category}</a>
+                            <Link href={`/scripts?category=${script.categoryName}`}>
+                                <a>{script.categoryName}</a>
                             </Link>
                         )}
                     </p>
@@ -187,7 +187,7 @@ const ScriptDetails = ({ script }: {script: FullScript}): JSX.Element => {
                         {!script.tags
                             ? null
                             : script.tags
-                                  .filter(t => t !== script.category.name)
+                                  .filter(t => t !== script.categoryName)
                                   .map(tag => {
                                       return (
                                           <li key={tag}>
@@ -214,7 +214,7 @@ const ScriptDetails = ({ script }: {script: FullScript}): JSX.Element => {
                         {!script.streamingUrl ? null : (
                             <Link href={script.streamingUrl}>
                                 <a className={style.source} target="_blank">
-                                    {script.category.name === "Audio Only" ? "Listen on" : "Watch on"}
+                                    {script.categoryName === "Audio Only" ? "Listen on" : "Watch on"}
                                     <br />
                                     {ScriptUtils.getSiteName(script.streamingUrl)}
                                 </a>

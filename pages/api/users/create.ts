@@ -1,9 +1,10 @@
 import { PrismaClient } from "@prisma/client";
+import { NextApiRequest, NextApiResponse } from "next";
 
 //todo - there should be some way of making the new user automatically a creator
 //       note that this is separate from *linking* a user to a pre-existing creator,
 //       which should have a different endpoint
-const CreateUser = async (req, res) => {
+const CreateUser = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     console.log(req.body);
     const prisma = new PrismaClient();
 

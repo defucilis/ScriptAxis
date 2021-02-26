@@ -10,16 +10,14 @@ import Pagination from "./Pagination";
 import ScriptUtils from "../../lib/ScriptUtils";
 
 import style from "./BrowseScripts.module.scss";
-import { Filters, Query, UnlinkedScript, Sorting } from "lib/types";
+import { Filters, Query, Script, Sorting } from "lib/types";
 
 const BrowseScripts = ({ propScripts, scriptCount, query }: {
-    propScripts: UnlinkedScript[],
+    propScripts: Script[],
     scriptCount: number,
-    tags: string[],
-    categories: string[],
     query: Query
 }): JSX.Element => {
-    const [scripts, setScripts] = useState<UnlinkedScript[]>([]);
+    const [scripts, setScripts] = useState<Script[]>([]);
     const [cachedFilters, setCachedFilters] = useState<Filters>({ ...query.filters });
     const [cachedSorting, setCachedSorting] = useState<Sorting[]>([{ created: "desc" }]);
 

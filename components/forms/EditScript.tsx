@@ -8,27 +8,30 @@ import * as imageConversion from "image-conversion";
 
 import FirebaseUtils from "../../lib/FirebaseUtils";
 import ScriptUtils from "../../lib/ScriptUtils";
-import ScriptForm from "./ScriptForm";
+import ScriptForm, { EditScriptFormData, ScriptFormDataOutput } from "./ScriptForm";
 import style from "./AddScript.module.css";
+import { Script, StringLists } from "lib/types";
 
-const EditScript = ({ script, tags, categories, talent, studios, creators }) => {
+const EditScript = ({ script, tags, categories, talent, studios, creators }: StringLists & {
+    script: Script
+}): JSX.Element => {
     const [submitting, setSubmitting] = useState(false);
-    const [formData, setFormData] = useState({});
-    const [oldFormData, setOldFormData] = useState({});
+    const [formData, setFormData] = useState<EditScriptFormData>({});
+    const [oldFormData, setOldFormData] = useState<EditScriptFormData>({});
     const [formError, setFormError] = useState("");
     useEffect(() => {
         console.warn("Script changed");
 
         //don't show the category in the tag list
         let trimmedTags = script.tags || [];
-        trimmedTags = trimmedTags.filter(t => t !== script.category);
+        trimmedTags = trimmedTags.filter(t => t !== script.categoryName);
 
         const data = {
             name: script.name || "",
             slug: script.slug,
-            owner: script.owner.id,
-            creator: script.creator || "",
-            category: script.category || "",
+            owner: script.userId,
+            creator: script.creatorName || "",
+            category: script.categoryName || "",
             tags: trimmedTags,
             description: script.description || "",
             duration: ScriptUtils.durationToString(script.duration),
@@ -80,10 +83,10 @@ const EditScript = ({ script, tags, categories, talent, studios, creators }) => 
                 <span>
                     <FaCog />
                 </span>
-                <span>Your script is processing - this may take up to a minute or two.</span>
+                <span>{`Your script is processing - this may take up to a minute or two.`}</span>
                 <span>
-                    Please don't leave this page - once your script has been updated you will be
-                    automatically redirected.
+                    {`Please don't leave this page - once your script has been updated you will be
+                    automatically redirected.`}
                 </span>
             </p>
         </div>
@@ -108,9 +111,9 @@ const EditScript = ({ script, tags, categories, talent, studios, creators }) => 
     );
 };
 
-const updateScript = async (newPostData, oldPostData, onSuccess, onFail) => {
-    let oldData = { ...oldPostData };
-    let newData = { ...newPostData };
+const updateScript = async (newPostData: EditScriptFormData, oldPostData: EditScriptFormData, onSuccess: (response: any) => void, onFail: (error: {message: string}) => void) => {
+    const oldData: ScriptFormDataOutput = { ...oldPostData, thumbnail: "", duration: 0 };
+    const newData: ScriptFormDataOutput = { ...newPostData, thumbnail: "", duration: 0 };
 
     console.log({ oldData, newData });
 
@@ -124,14 +127,14 @@ const updateScript = async (newPostData, oldPostData, onSuccess, onFail) => {
                     `Failed to delete file at thumbnails/${oldData.slug}, continuing with upload`
                 );
             }
-            const compressedFile = await imageConversion.compressAccurately(newData.thumbnail[0], {
+            const compressedFile = await imageConversion.compressAccurately(newPostData.thumbnail[0], {
                 size: 100,
-                type: "image/jpeg",
+                type: imageConversion.EImageType.JPEG,
             });
             const fileUrl = await FirebaseUtils.uploadFile(
                 compressedFile,
                 `thumbnails/${newData.slug}`,
-                progress => console.log("Thumbnail File uploading", progress * 100)
+                (progress: number) => console.log("Thumbnail File uploading", progress * 100)
             );
             newData.thumbnail = fileUrl;
         }
@@ -143,21 +146,18 @@ const updateScript = async (newPostData, oldPostData, onSuccess, onFail) => {
     newData.slug = slugify(newData.name, { lower: true, strict: true });
     oldData.slug = slugify(oldData.name, { lower: true, strict: true });
 
-    newData.duration = ScriptUtils.stringToDuration(newData.duration);
-    oldData.duration = ScriptUtils.stringToDuration(oldData.duration);
-
-    newData.created = newData.created.valueOf();
-    oldData.created = oldData.created.valueOf();
+    newData.duration = ScriptUtils.stringToDuration(newPostData.duration);
+    oldData.duration = ScriptUtils.stringToDuration(oldPostData.duration);
 
     //remove any duplicate data
     const diffData = ScriptUtils.getScriptDifferences(oldData, newData);
 
     if (Object.keys(diffData).length === 0) {
-        onFail("You didn't make any changes!");
+        onFail({message: "You didn't make any changes!"});
         return;
     }
 
-    let finalUpdateData = {
+    const finalUpdateData: any = {
         id: newPostData.id,
         set: {},
         remove: {},

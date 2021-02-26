@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
+import { NextApiRequest, NextApiResponse } from "next";
 
-const CreateCategory = async (req, res) => {
+const CreateCategory = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     const prisma = new PrismaClient();
 
     try {

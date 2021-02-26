@@ -8,11 +8,12 @@ import * as imageConversion from "image-conversion";
 
 import FirebaseUtils from "../../lib/FirebaseUtils";
 import ScriptUtils from "../../lib/ScriptUtils";
-import ScriptForm from "./ScriptForm";
+import ScriptForm, { ScriptFormData, ScriptFormDataOutput } from "./ScriptForm";
 
-import style from "./AddScript.module.css";
+import style from "./AddScript.module.scss";
+import { StringLists } from "lib/types";
 
-const defaultFormData = {
+const defaultFormData: ScriptFormData = {
     name: "",
     creator: "",
     category: "",
@@ -27,7 +28,7 @@ const defaultFormData = {
     created: new Date(),
 };
 
-const AddScript = ({ tags, categories, talent, studios, creators }) => {
+const AddScript = ({ tags, categories, talent, studios, creators }: StringLists): JSX.Element => {
     const [submitting, setSubmitting] = useState(false);
     const [clipboardWritten, setClipboardWritten] = useState(false);
 
@@ -68,8 +69,8 @@ const AddScript = ({ tags, categories, talent, studios, creators }) => {
                 </span>
                 <span>Your script is processing - this may take up to a minute or two.</span>
                 <span>
-                    Please don't leave this page - once your script has finished processing you will
-                    be automatically redirected.
+                    {`Please don't leave this page - once your script has finished processing you will
+                    be automatically redirected.`}
                 </span>
             </p>
         </div>
@@ -88,8 +89,8 @@ const AddScript = ({ tags, categories, talent, studios, creators }) => {
     );
 };
 
-const createScript = async (postData, onSuccess, onClipboardWrite, onFail) => {
-    const data = { ...postData };
+const createScript = async (postData: ScriptFormData, onSuccess: (data: any) => void, onClipboardWrite: () => void, onFail: (error: {message: string}) => void) => {
+    const data: ScriptFormDataOutput = { ...postData, duration: -1, thumbnail: "" };
 
     console.log(data);
 
@@ -98,14 +99,14 @@ const createScript = async (postData, onSuccess, onClipboardWrite, onFail) => {
     if (data.thumbnail.length > 0) {
         //upload the thumbnail and add it to the database
         try {
-            const compressedFile = await imageConversion.compressAccurately(data.thumbnail[0], {
+            const compressedFile = await imageConversion.compressAccurately(postData.thumbnail[0], {
                 size: 100,
-                type: "image/jpeg",
+                type: imageConversion.EImageType.JPEG,
             });
             const fileUrl = await FirebaseUtils.uploadFile(
                 compressedFile,
                 `thumbnails/${data.slug}`,
-                progress => console.log("Thumbnail File uploading", progress * 100)
+                (progress: number) => console.log("Thumbnail File uploading", progress * 100)
             );
             data.thumbnail = fileUrl;
         } catch (error) {
@@ -126,7 +127,7 @@ const createScript = async (postData, onSuccess, onClipboardWrite, onFail) => {
     }
 
     //modify the form data into something useful for the database
-    data.duration = ScriptUtils.stringToDuration(data.duration);
+    data.duration = ScriptUtils.stringToDuration(postData.duration);
 
     try {
         const response = await axios.post("/api/scripts/create", data);

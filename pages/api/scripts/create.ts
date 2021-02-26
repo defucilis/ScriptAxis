@@ -1,20 +1,18 @@
 import { PrismaClient } from "@prisma/client";
+import { NextApiRequest, NextApiResponse } from "next";
 
-const CreateScript = async (req, res) => {
+const CreateScript = async (rawData: any): Promise<void> => {
     //console.log(req.body);
     const prisma = new PrismaClient();
 
     try {
-        console.log("Creating script with data", req.body);
+        console.log("Creating script with data", rawData);
 
-        let transaction = [];
-
-        //Create the script object
-        const rawData = req.body;
+        const transaction = [];
 
         //Make sure that the category is included in the tags!
         const tags = [rawData.category, ...rawData.tags];
-        let data = {
+        const data: any = {
             name: rawData.name,
             slug: rawData.slug,
             //Todo - if we're inserting a new Creator here, we should check to see if it should
@@ -101,7 +99,7 @@ const CreateScript = async (req, res) => {
 
         //If talents were included, add them to the talent table
         if (rawData.talent) {
-            rawData.talent.forEach(talent => {
+            rawData.talent.forEach((talent: string) => {
                 transaction.push(
                     prisma.talent.upsert({
                         where: { name: talent },
@@ -123,18 +121,23 @@ const CreateScript = async (req, res) => {
             );
         }
 
-        const results = await prisma.$transaction(transaction);
-
-        res.status(201);
-        res.json(results);
+        await prisma.$transaction(transaction);
+        return;
     } catch (error) {
-        console.log("Failed to create script", error.message);
-        res.json({
-            error: { message: error.message },
-        });
-    } finally {
         await prisma.$disconnect();
+        throw error;
     }
 };
 
-export default CreateScript;
+export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+    try {
+        const script = await CreateScript({...req.body});
+        res.status(201);
+        res.json(script);
+    } catch (error) {
+        console.error("error fetching script - " + error);
+        res.json({
+            error: { message: error.message },
+        });
+    }
+};
