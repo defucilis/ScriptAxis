@@ -17,12 +17,12 @@ const FetchScript = async (slug: string, noview: boolean): Promise<Script> => {
         const promise = noview
             ? prisma.script.findFirst({ where, include })
             : prisma.script.update({
-                    where: { slug },
-                    include,
-                    data: {
-                        views: { increment: 1 },
-                    },
-                });
+                  where: { slug },
+                  include,
+                  data: {
+                      views: { increment: 1 },
+                  },
+              });
 
         const scripts = await promise;
         await prisma.$disconnect();

@@ -12,7 +12,14 @@ import { FetchLists } from "../api/loadlists";
 import { Script, StringLists } from "lib/types";
 import { GetServerSidePropsContext } from "next";
 
-const Script = ({ script, tags, categories, talent, studios, creators }: StringLists & {script: Script}): JSX.Element => {
+const Script = ({
+    script,
+    tags,
+    categories,
+    talent,
+    studios,
+    creators,
+}: StringLists & { script: Script }): JSX.Element => {
     //page is blocked if user is not signed in
     const { user } = useUser({ redirectTo: "/" });
     useEffect(() => {
@@ -40,7 +47,9 @@ const Script = ({ script, tags, categories, talent, studios, creators }: StringL
     );
 };
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext): Promise<{props: StringLists & { script: Script }}> {
+export async function getServerSideProps(
+    ctx: GetServerSidePropsContext
+): Promise<{ props: StringLists & { script: Script } }> {
     let script = null;
     let data: StringLists = null;
     try {

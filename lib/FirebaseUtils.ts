@@ -2,7 +2,11 @@ import firebase from "firebase";
 import "firebase/storage";
 
 const FirebaseUtils = {
-    uploadFile: (file: File | Blob, path: string, handleProgress: (progress: number) => void): Promise<string> => {
+    uploadFile: (
+        file: File | Blob,
+        path: string,
+        handleProgress: (progress: number) => void
+    ): Promise<string> => {
         return new Promise((resolve, reject) => {
             console.log("Uploading file", typeof file, file);
             const storage = firebase.storage();
@@ -30,8 +34,7 @@ const FirebaseUtils = {
             console.log("Deleting file", path);
             const storage = firebase.storage();
             const ref = storage.ref().child(path);
-            ref
-                .delete()
+            ref.delete()
                 .then(() => {
                     resolve();
                 })

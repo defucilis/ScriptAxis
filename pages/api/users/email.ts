@@ -32,7 +32,7 @@ const FetchLeanUser = async (email: string): Promise<LeanUser> => {
         await prisma.$disconnect();
         throw error;
     }
-}
+};
 const FetchUser = async (email: string): Promise<UiUser> => {
     const prisma = new PrismaClient();
     try {
@@ -71,8 +71,8 @@ export { FetchUser };
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
-        const script = req.body.lean 
-            ? await FetchLeanUser(req.body.email) 
+        const script = req.body.lean
+            ? await FetchLeanUser(req.body.email)
             : await FetchUser(req.body.email);
         res.status(200);
         res.json(script);

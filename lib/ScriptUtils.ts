@@ -1,5 +1,14 @@
 import { ScriptFormDataOutput } from "components/forms/ScriptForm";
-import { Filters, Query, SavedQuery, FullScript, Script, UrlQuery, StringLists, StringListsWithCount } from "./types";
+import {
+    Filters,
+    Query,
+    SavedQuery,
+    FullScript,
+    Script,
+    UrlQuery,
+    StringLists,
+    StringListsWithCount,
+} from "./types";
 
 const indexToDuration = (index: number): number => {
     switch (index) {
@@ -73,15 +82,15 @@ const parseScriptDocument = (script: FullScript): Script => {
     return output;
 };
 
-type namedItem = {name: string};
-type namedItemWithCount = {name: string, count: number};
+type namedItem = { name: string };
+type namedItemWithCount = { name: string; count: number };
 const parseDatabaseLists = (data: {
-        tags?: namedItem[], 
-        categories?: namedItem[],
-        talent?: namedItem[],
-        studios?: namedItem[],
-        creators?: namedItem[],
-    }): StringLists => {
+    tags?: namedItem[];
+    categories?: namedItem[];
+    talent?: namedItem[];
+    studios?: namedItem[];
+    creators?: namedItem[];
+}): StringLists => {
     console.log("Parsing Data", data);
     return {
         tags: !data.tags ? [] : data.tags.map(t => t.name),
@@ -93,17 +102,17 @@ const parseDatabaseLists = (data: {
 };
 
 const parseDatabaseListsWithCount = (data: {
-    tags: namedItemWithCount[], 
-    categories: namedItemWithCount[],
-    talent: namedItem[],
-    studios: namedItem[],
-    creators: namedItem[],
+    tags: namedItemWithCount[];
+    categories: namedItemWithCount[];
+    talent: namedItem[];
+    studios: namedItem[];
+    creators: namedItem[];
 }): {
-    tags: namedItemWithCount[], 
-    categories: namedItemWithCount[],
-    talent: string[],
-    studios: string[],
-    creators: string[],
+    tags: namedItemWithCount[];
+    categories: namedItemWithCount[];
+    talent: string[];
+    studios: string[];
+    creators: string[];
 } => {
     return {
         tags: !data.tags ? [] : data.tags.map(t => ({ name: t.name, count: t.count })),
@@ -123,8 +132,8 @@ const removeCountFromLists = (data: StringListsWithCount): StringLists => {
         talent: data.talent || [],
         studios: data.studios || [],
         creators: data.creators || [],
-    }
-}
+    };
+};
 
 const durationToString = (duration: number): string => {
     let output = "";
@@ -327,7 +336,7 @@ const queryToUrlQuery = (input: Query): UrlQuery => {
 //goes from a query object parsed from a URL string and turns it into a filter object to be applied to the database
 //Note that this takes place on the *server* from the next.js `query` input into getServerSideProps
 const stringObjectToQuery = (query: UrlQuery): Query => {
-    const output: Query = { filters: {}, sorting: [{ created: "desc" }], page: 1};
+    const output: Query = { filters: {}, sorting: [{ created: "desc" }], page: 1 };
 
     if (query.search) output.filters.name = { contains: query.search, mode: "insensitive" };
     if (query.category) output.filters.category = { name: { equals: query.category } };
@@ -347,7 +356,7 @@ const stringObjectToQuery = (query: UrlQuery): Query => {
         output.page = query.page;
     }
 
-    if(output.filters === {}) delete(output.filters);
+    if (output.filters === {}) delete output.filters;
 
     return output;
 };
@@ -412,7 +421,10 @@ const queryToPrettyString = (queryString: string): SavedQuery => {
     return output;
 };
 
-const getScriptDifferences = (oldScript: ScriptFormDataOutput, newScript: ScriptFormDataOutput): any => {
+const getScriptDifferences = (
+    oldScript: ScriptFormDataOutput,
+    newScript: ScriptFormDataOutput
+): any => {
     console.warn("Diffing data");
     const output: any = {};
 

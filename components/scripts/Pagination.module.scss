@@ -4,10 +4,10 @@
     place-items: center;
     margin-top: 1em;
 
-    >ul {
+    > ul {
         display: flex;
 
-        >li {
+        > li {
             display: block;
             background-color: var(--color-neutral-300);
             border-radius: 5px;
@@ -15,8 +15,9 @@
             cursor: pointer;
             width: 2.5rem;
             text-align: center;
-            
-            a, button {
+
+            a,
+            button {
                 width: 100%;
                 padding: 0.5em;
                 display: block;
@@ -29,23 +30,21 @@
                 background-color: transparent;
                 height: 100%;
             }
-            
+
             &:last-child {
                 margin-right: 0;
             }
         }
 
-        >li.nolink {
+        > li.nolink {
             padding: 0.5em;
             cursor: default;
         }
 
-        >li.currentpage {
+        > li.currentpage {
             background-color: var(--color-theme-500);
             color: var(--color-bg);
             font-weight: bold;
         }
     }
 }
-
-

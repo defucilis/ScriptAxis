@@ -57,7 +57,7 @@ const sortOptions: SortOption[] = [
     },
 ];
 
-const SortingElement = ({ onSort }: {onSort: (mode: Sorting[]) => void}): JSX.Element => {
+const SortingElement = ({ onSort }: { onSort: (mode: Sorting[]) => void }): JSX.Element => {
     const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         onSort(sortOptions[e.target.value].sorting);
     };

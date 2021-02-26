@@ -129,7 +129,7 @@ const UpdateScript = async (rawData: any) => {
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
-        const script = await UpdateScript({...req.body});
+        const script = await UpdateScript({ ...req.body });
         res.status(200);
         res.json(script);
     } catch (error) {

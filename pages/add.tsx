@@ -47,7 +47,7 @@ const Add = ({ tags, categories, talent, studios, creators }: StringLists): JSX.
     );
 };
 
-export async function getServerSideProps(): Promise<{props: any}> {
+export async function getServerSideProps(): Promise<{ props: any }> {
     let data = {};
     try {
         data = await FetchLists();
@@ -55,7 +55,7 @@ export async function getServerSideProps(): Promise<{props: any}> {
     } catch (error) {
         console.log("Failed to get scripts", error);
     }
-    
+
     return {
         props: {
             ...data,

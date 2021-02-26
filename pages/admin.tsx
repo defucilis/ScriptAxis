@@ -8,7 +8,7 @@ import { FetchSlugs } from "./api/scripts/allslugs";
 import useUser from "../lib/auth/useUser";
 import { ScriptStub } from "lib/types";
 
-const Admin = ({ existingScripts }: {existingScripts: ScriptStub[]}): JSX.Element => {
+const Admin = ({ existingScripts }: { existingScripts: ScriptStub[] }): JSX.Element => {
     useUser({ redirectIfNotAdmin: "/" });
 
     return (
@@ -22,7 +22,7 @@ const Admin = ({ existingScripts }: {existingScripts: ScriptStub[]}): JSX.Elemen
     );
 };
 
-export async function getServerSideProps(): Promise<{props: {existingScripts: ScriptStub[]}}> {
+export async function getServerSideProps(): Promise<{ props: { existingScripts: ScriptStub[] } }> {
     let scripts = [];
     try {
         scripts = await FetchSlugs();

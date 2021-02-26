@@ -5,7 +5,13 @@ import ScriptTile from "./ScriptTile";
 import style from "./ScriptGrid.module.scss";
 import { Script } from "lib/types";
 
-const ScriptGrid = ({ scripts, customStyle }: {scripts: Script[], customStyle?: CSSProperties}): JSX.Element => {
+const ScriptGrid = ({
+    scripts,
+    customStyle,
+}: {
+    scripts: Script[];
+    customStyle?: CSSProperties;
+}): JSX.Element => {
     const [tiles, setTiles] = useState([]);
     useEffect(() => {
         if (!scripts) return;

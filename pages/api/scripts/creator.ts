@@ -4,26 +4,26 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 const FetchCreatorScripts = async (name: string): Promise<Script[]> => {
     const prisma = new PrismaClient();
-        try {
-            console.log("Fetching scripts belonging to creator", name);
-            const scripts = await prisma.creator
-                .findUnique({
-                    where: {
-                        name: name,
-                    },
-                })
-                .scripts({
-                    include: {
-                        creator: { select: { name: true } },
-                        owner: { select: { username: true } },
-                    },
-                });
-            await prisma.$disconnect();
-            return scripts;
-        } catch (error) {
-            await prisma.$disconnect();
-            throw error;
-        }
+    try {
+        console.log("Fetching scripts belonging to creator", name);
+        const scripts = await prisma.creator
+            .findUnique({
+                where: {
+                    name: name,
+                },
+            })
+            .scripts({
+                include: {
+                    creator: { select: { name: true } },
+                    owner: { select: { username: true } },
+                },
+            });
+        await prisma.$disconnect();
+        return scripts;
+    } catch (error) {
+        await prisma.$disconnect();
+        throw error;
+    }
 };
 
 export { FetchCreatorScripts };

@@ -69,26 +69,24 @@ const TestData: TestDataScriptInput[] = [
         created: new Date(2021, 0, 5).valueOf(),
     },
     {
-        name:           "Hot Amateur Teen Gets a Massive Creampie",
-        creator:        "xtom",
-        sourceUrl:      "https://discuss.eroscripts.com/t/emma-modric-hot-amateur-teen-gets-a-massive-creampie/17340",
-        streamingUrl:   "https://www.pornhub.com/view_video.php?viewkey=ph5fc25ccd75ce3",
-        thumbnail:      "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumbnails%2Fhot-amateur-teen-gets-a-massive-creampie?alt=media&token=1755a605-b33c-460e-b89d-618f4fa10afd",
-        description:    "A mostly low intensity video and script. Also my first script 😃, feel free to add any improvements. Enjoy!",
-        duration:       "6:37",
-        category:       "Vaginal",
-        tags: [
-            "HD",
-            "Creampie",
-        ],
-        talent: [
-            "Emma Modric",
-        ],
-        likeCount:      0,
-        views:          0,
-        thumbsUp:       1,
-        thumbsDown:     0,
-        created:        new Date(2021, 1, 27).valueOf(),
+        name: "Hot Amateur Teen Gets a Massive Creampie",
+        creator: "xtom",
+        sourceUrl:
+            "https://discuss.eroscripts.com/t/emma-modric-hot-amateur-teen-gets-a-massive-creampie/17340",
+        streamingUrl: "https://www.pornhub.com/view_video.php?viewkey=ph5fc25ccd75ce3",
+        thumbnail:
+            "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumbnails%2Fhot-amateur-teen-gets-a-massive-creampie?alt=media&token=1755a605-b33c-460e-b89d-618f4fa10afd",
+        description:
+            "A mostly low intensity video and script. Also my first script 😃, feel free to add any improvements. Enjoy!",
+        duration: "6:37",
+        category: "Vaginal",
+        tags: ["HD", "Creampie"],
+        talent: ["Emma Modric"],
+        likeCount: 0,
+        views: 0,
+        thumbsUp: 1,
+        thumbsDown: 0,
+        created: new Date(2021, 1, 27).valueOf(),
     },
     {
         name: "Sensitive Gentle and Deep Blowjob Cumshot in Mouth and Face",
@@ -5154,9 +5152,8 @@ const TestData: TestDataScriptInput[] = [
 ];
 
 const GetTestData = (): TestDataScript[] => {
-    return TestData
-        .filter(data => data.name !== "TemplateScript")
-        .map((data: TestDataScriptInput) => {
+    return TestData.filter(data => data.name !== "TemplateScript").map(
+        (data: TestDataScriptInput) => {
             return {
                 ...data,
                 slug: slugify(data.name).toLowerCase(),
@@ -5164,7 +5161,8 @@ const GetTestData = (): TestDataScript[] => {
                 duration: ScriptUtils.stringToDuration(data.duration),
                 owner: "9cf9dc87-a8cf-4c17-bb95-1f5c05b8d791",
             };
-        });
+        }
+    );
 };
 
 export default GetTestData;

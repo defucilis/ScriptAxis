@@ -163,8 +163,7 @@ const Dashboard = (): JSX.Element => {
                     <h3>Your Added Scripts</h3>
                     {ownedScripts.length === 0 ? (
                         <p>
-                            {`You haven't created any scripts yet!`}
-                            {" "}
+                            {`You haven't created any scripts yet!`}{" "}
                             <a href="/add">Create your first one now!</a>
                         </p>
                     ) : (

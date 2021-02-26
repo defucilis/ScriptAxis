@@ -8,19 +8,19 @@
         align-items: center;
         margin-bottom: 1em;
 
-        >div {
+        > div {
             display: flex;
             height: 100%;
         }
     }
-    
+
     img {
         height: 100%;
         width: auto;
         margin-right: 1em;
         border-radius: 5px;
     }
-    
+
     a {
         display: flex;
         align-items: center;
@@ -51,12 +51,8 @@
     a:last-child {
         color: var(--color-neutral-600);
     }
-    
+
     a:last-child:hover {
         color: var(--color-theme-500);
     }
 }
-
-
-
-

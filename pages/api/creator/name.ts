@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { Creator, Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const FetchCreator = async (name: string): Promise<Creator & {scripts: Script[]}> => {
+const FetchCreator = async (name: string): Promise<Creator & { scripts: Script[] }> => {
     const prisma = new PrismaClient();
     try {
         console.log("Fetching creator with data", name);

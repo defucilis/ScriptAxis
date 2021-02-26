@@ -7,7 +7,7 @@ import * as imageConversion from "image-conversion";
 import dayjs from "dayjs";
 import { FaCheck } from "react-icons/fa";
 
-import GetTestData, {TestDataScript} from "../../lib/TestData";
+import GetTestData, { TestDataScript } from "../../lib/TestData";
 import ScriptUtils from "../../lib/ScriptUtils";
 import FirebaseUtils from "../../lib/FirebaseUtils";
 import { Dropzone } from "../forms/FormUtils";
@@ -28,7 +28,13 @@ const ClearData = async (onSuccess: (data: any) => void, onFail: (error: string)
     }
 };
 
-const AddData = async (scripts: TestDataScript[], onMessage: (message: string) => void, onProgress: (doneCount: number, totalCount: number) => void, onSuccess: (data: any) => void, onFail: (errorCount: number, totalCount: number) => void) => {
+const AddData = async (
+    scripts: TestDataScript[],
+    onMessage: (message: string) => void,
+    onProgress: (doneCount: number, totalCount: number) => void,
+    onSuccess: (data: any) => void,
+    onFail: (errorCount: number, totalCount: number) => void
+) => {
     let errorCount = 0;
 
     onMessage(`Adding ${scripts.length} scripts to the database`);
@@ -59,7 +65,11 @@ const AddData = async (scripts: TestDataScript[], onMessage: (message: string) =
     else onFail(errorCount, scripts.length);
 };
 
-const Aggregate = async (onMessage: (message: string) => void, onSuccess: () => void, onFail: () => void) => {
+const Aggregate = async (
+    onMessage: (message: string) => void,
+    onSuccess: () => void,
+    onFail: () => void
+) => {
     onMessage(`Running data aggregation`);
 
     try {
@@ -77,18 +87,20 @@ const Aggregate = async (onMessage: (message: string) => void, onSuccess: () => 
     }
 };
 
-const UploadFile = async (file: File, name: string, onMessage: (message: string) => void, onSuccess: (url: string) => void, onFail: (error: string) => void) => {
+const UploadFile = async (
+    file: File,
+    name: string,
+    onMessage: (message: string) => void,
+    onSuccess: (url: string) => void,
+    onFail: (error: string) => void
+) => {
     onMessage(`Uploading ${file.name} (${file.size} bytes)`);
     try {
         const compressedFile = await imageConversion.compressAccurately(file, {
             size: 100,
             type: imageConversion.EImageType.JPEG,
         });
-        const url = await FirebaseUtils.uploadFile(
-            compressedFile,
-            "adminthumbnails/" + name,
-            null
-        );
+        const url = await FirebaseUtils.uploadFile(compressedFile, "adminthumbnails/" + name, null);
         onSuccess(url);
     } catch (error) {
         console.error("error", error);
@@ -98,7 +110,11 @@ const UploadFile = async (file: File, name: string, onMessage: (message: string)
     }
 };
 
-const GetJsonBackup = async (onMessage: (message: string) => void, onSuccess: (url: string) => void, onError: (error: string) => void) => {
+const GetJsonBackup = async (
+    onMessage: (message: string) => void,
+    onSuccess: (url: string) => void,
+    onError: (error: string) => void
+) => {
     onMessage("Fetching all scripts as JSON");
     try {
         const response = await axios({
@@ -115,7 +131,14 @@ const GetJsonBackup = async (onMessage: (message: string) => void, onSuccess: (u
     }
 };
 
-const RunScrape = async (scripts: ScriptStub[], subset: boolean, onMessage: (message: string) => void, onProgress: (doneCount: number, totalCount: number) => void, onComplete: () => void, onError: (error: string) => void) => {
+const RunScrape = async (
+    scripts: ScriptStub[],
+    subset: boolean,
+    onMessage: (message: string) => void,
+    onProgress: (doneCount: number, totalCount: number) => void,
+    onComplete: () => void,
+    onError: (error: string) => void
+) => {
     onMessage("Scraping all views and likes from EroScripts");
     onMessage("--Fetching all scripts from database");
     const response = await axios.post("/api/scripts", { take: 99999 });
@@ -160,7 +183,7 @@ const RunScrape = async (scripts: ScriptStub[], subset: boolean, onMessage: (mes
     onComplete();
 };
 
-const AdminPanel = ({ existingScripts }: {existingScripts: ScriptStub[]}): JSX.Element => {
+const AdminPanel = ({ existingScripts }: { existingScripts: ScriptStub[] }): JSX.Element => {
     const [running, setRunning] = useState(false);
     const [messages, setMessages] = useState({ list: [] });
     const [count, setCount] = useState(41);
@@ -409,7 +432,9 @@ const AdminPanel = ({ existingScripts }: {existingScripts: ScriptStub[]}): JSX.E
                     <Checkbox
                         className={style.checkbox}
                         checked={scrapeSubset}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setScrapeSubset(e.target.checked)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            setScrapeSubset(e.target.checked)
+                        }
                     >
                         <FaCheck />
                     </Checkbox>

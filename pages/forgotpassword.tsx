@@ -11,10 +11,13 @@ import ScriptUtils from "lib/ScriptUtils";
 
 const SignIn = (): JSX.Element => {
     const [error, setError] = useState("");
-    const [email, setEmail] = useState("")
+    const [email, setEmail] = useState("");
 
     const reset = (e: React.FormEvent) => {
-        const doReset = async (email: string, callback: (data: {success: boolean, error?: string}) => void) => {
+        const doReset = async (
+            email: string,
+            callback: (data: { success: boolean; error?: string }) => void
+        ) => {
             setError("");
             try {
                 await firebase.auth().sendPasswordResetEmail(email);
@@ -52,7 +55,11 @@ const SignIn = (): JSX.Element => {
             </p>
             <form onSubmit={reset} className={style.signin}>
                 <label htmlFor="email">Email</label>
-                <input id="email" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}/>
+                <input
+                    id="email"
+                    value={email}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                />
                 <input type="submit" value="Send Verification" />
                 <p style={{ color: "red" }}>{error}</p>
             </form>

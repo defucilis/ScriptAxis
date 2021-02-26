@@ -1,4 +1,4 @@
-import {GetServerSidePropsContext} from 'next'
+import { GetServerSidePropsContext } from "next";
 import { Query, Script } from "lib/types";
 import Layout from "../components/layout/Layout";
 import BrowseScripts from "../components/scripts/BrowseScripts";
@@ -6,23 +6,25 @@ import BrowseScripts from "../components/scripts/BrowseScripts";
 import ScriptUtils from "../lib/ScriptUtils";
 import { QueryScripts } from "./api/scripts/query";
 
-const Scripts = ({ propScripts, matchCount, query }: {
-    propScripts: Script[],
-    matchCount: number,
-    query: Query
+const Scripts = ({
+    propScripts,
+    matchCount,
+    query,
+}: {
+    propScripts: Script[];
+    matchCount: number;
+    query: Query;
 }): JSX.Element => {
     return (
         <Layout page="scripts">
-            <BrowseScripts
-                propScripts={propScripts}
-                scriptCount={matchCount}
-                query={query}
-            />
+            <BrowseScripts propScripts={propScripts} scriptCount={matchCount} query={query} />
         </Layout>
     );
 };
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext): Promise<{props: {propScripts: Script[], matchCount: number, query: Query}}> {
+export async function getServerSideProps(
+    ctx: GetServerSidePropsContext
+): Promise<{ props: { propScripts: Script[]; matchCount: number; query: Query } }> {
     let scripts = [];
     let count = 0;
     const dbQuery = ScriptUtils.stringObjectToQuery(ctx.query);

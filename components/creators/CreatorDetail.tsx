@@ -9,7 +9,7 @@ import ScriptUtils from "../../lib/ScriptUtils";
 import style from "./CreatorDetail.module.scss";
 import { Creator } from "lib/types";
 
-const CreatorDetail = ({ creator }: {creator: Creator}): JSX.Element => {
+const CreatorDetail = ({ creator }: { creator: Creator }): JSX.Element => {
     console.log(creator);
     return (
         <div className={style.creator}>

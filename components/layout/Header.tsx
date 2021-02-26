@@ -12,13 +12,9 @@ import useUser from "../../lib/auth/useUser";
 
 import styles from "./Header.module.scss";
 
-export type HeaderPage = "home" 
-                        | "scripts" 
-                        | "categories" 
-                        | "tags" 
-                        | "creators" ;
+export type HeaderPage = "home" | "scripts" | "categories" | "tags" | "creators";
 
-const Header = ({ page }: {page?: HeaderPage}): JSX.Element => {
+const Header = ({ page }: { page?: HeaderPage }): JSX.Element => {
     const { user, loading } = useUser();
     const [scriptCount, setScriptCount] = useState(0);
     const [categoryCounts, setCategoryCounts] = useState([]);

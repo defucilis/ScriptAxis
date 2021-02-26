@@ -20,7 +20,7 @@ const SaveSearch = async (uid: string, searchString: string): Promise<any> => {
         const exists = currentSavedFilters.findIndex(f => f === searchString) !== -1;
         if (exists) {
             await prisma.$disconnect();
-            return currentSavedFilters
+            return currentSavedFilters;
             return;
         }
 

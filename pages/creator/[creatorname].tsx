@@ -8,7 +8,7 @@ import { FetchCreator } from "../api/creator/name";
 import { UiCreator } from "lib/types";
 import { GetServerSidePropsContext } from "next";
 
-const Creator = ({ creator }: {creator: UiCreator}): JSX.Element => {
+const Creator = ({ creator }: { creator: UiCreator }): JSX.Element => {
     const router = useRouter();
     const { creatorname } = router.query;
 
@@ -22,7 +22,9 @@ const Creator = ({ creator }: {creator: UiCreator}): JSX.Element => {
     );
 };
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext): Promise<{props: {creator: UiCreator}}> {
+export async function getServerSideProps(
+    ctx: GetServerSidePropsContext
+): Promise<{ props: { creator: UiCreator } }> {
     let creator: UiCreator = null;
     try {
         creator = await FetchCreator(String(ctx.query.creatorname));

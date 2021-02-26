@@ -3,7 +3,11 @@ import { Query, Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 import ScriptUtils from "../../../lib/ScriptUtils";
 
-const QueryScripts = async ({ filters, sorting, page }: Query): Promise<{count: number, scripts: Script[]}> => {
+const QueryScripts = async ({
+    filters,
+    sorting,
+    page,
+}: Query): Promise<{ count: number; scripts: Script[] }> => {
     const prisma = new PrismaClient();
     try {
         console.log("Querying scripts", { page, sorting, filters });
@@ -59,7 +63,7 @@ const QueryScripts = async ({ filters, sorting, page }: Query): Promise<{count: 
         });
 
         await prisma.$disconnect();
-        return({ count, scripts });
+        return { count, scripts };
     } catch (error) {
         await prisma.$disconnect();
         throw error;

@@ -16,9 +16,7 @@ const Aggregate = async (): Promise<Creator[]> => {
         });
 
         const thumbnail =
-            allScripts.length > 0
-                ? allScripts.sort((a, b) => b.views - a.views)[0].thumbnail
-                : "";
+            allScripts.length > 0 ? allScripts.sort((a, b) => b.views - a.views)[0].thumbnail : "";
 
         const aggregations = await prisma.script.aggregate({
             where: {

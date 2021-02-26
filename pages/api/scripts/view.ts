@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 const ViewScript = async (scriptSlug: string): Promise<void> => {
     const prisma = new PrismaClient();
-        try {
+    try {
         console.log("Registering script view for", scriptSlug);
         await prisma.script.update({
             where: { slug: scriptSlug },

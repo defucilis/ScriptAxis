@@ -100,13 +100,13 @@ const ScriptForm = ({
     submitLabel,
     busy,
 }: StringLists & {
-    onValidationPassed: (data: ScriptFormData) => void,
-    defaultFormData?: ScriptFormData,
+    onValidationPassed: (data: ScriptFormData) => void;
+    defaultFormData?: ScriptFormData;
     options?: {
-        thumbnailOptional?: boolean
-    },
-    submitLabel: string,
-    busy: boolean
+        thumbnailOptional?: boolean;
+    };
+    submitLabel: string;
+    busy: boolean;
 }): JSX.Element => {
     const { user } = useUser();
 
@@ -144,7 +144,7 @@ const ScriptForm = ({
         }
         setDirty(true);
     };
-    const setError = (e: {target: {id: string, error: string}}) => {
+    const setError = (e: { target: { id: string; error: string } }) => {
         setErrors(cur => ({
             ...cur,
             [e.target.id]: [e.target.error],
@@ -320,7 +320,7 @@ const ScriptForm = ({
                     label="Tags"
                     tagProps={{
                         settings: {
-                            validate: (tag: {value: string}) => {
+                            validate: (tag: { value: string }) => {
                                 const transformedTag = tag.value.trim().toLowerCase();
                                 const match = transformedTag.match("[a-z ]+");
                                 const success =

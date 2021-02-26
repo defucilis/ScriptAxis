@@ -128,7 +128,13 @@ const reduceFilters = (currentFilters: Filters, action: FilterActions) => {
     return newFilters;
 };
 
-const FiltersElement = ({ query, onFilter }: {query: Query, onFilter: (filters: Filters) => void}): JSX.Element => {
+const FiltersElement = ({
+    query,
+    onFilter,
+}: {
+    query: Query;
+    onFilter: (filters: Filters) => void;
+}): JSX.Element => {
     const [filters, setFilters] = useReducer(reduceFilters, query.filters);
     const [initialIncludeTags, setInitialIncludeTags] = useState<string[]>([]);
     const [initialExcludeTags, setInitialExcludeTags] = useState<string[]>([]);
@@ -270,9 +276,9 @@ const FiltersElement = ({ query, onFilter }: {query: Query, onFilter: (filters: 
     };
 
     const handleSearchKey = (e: React.KeyboardEvent) => {
-        if(e.key !== "Enter") return;
+        if (e.key !== "Enter") return;
         handleSearch();
-    }
+    };
 
     const handleSourceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSourceUrl(e.target.checked);
@@ -413,7 +419,7 @@ const FiltersElement = ({ query, onFilter }: {query: Query, onFilter: (filters: 
                         }}
                         value={initialExcludeTags}
                         whitelist={tags}
-                        onAdd={(e) => {
+                        onAdd={e => {
                             console.log("tag added ", e.detail.data);
                             setFilters({
                                 exclude: {
@@ -422,7 +428,7 @@ const FiltersElement = ({ query, onFilter }: {query: Query, onFilter: (filters: 
                                 },
                             });
                         }}
-                        onRemove={(e) => {
+                        onRemove={e => {
                             setFilters({
                                 exclude: {
                                     operation: "remove",

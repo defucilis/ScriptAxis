@@ -1,7 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const ChangeLike = async (scriptSlug: string, userId: string, creatorName: string, isLiked: boolean): Promise<void> => {
+const ChangeLike = async (
+    scriptSlug: string,
+    userId: string,
+    creatorName: string,
+    isLiked: boolean
+): Promise<void> => {
     const prisma = new PrismaClient();
     try {
         console.log("Setting scriptLiked to " + isLiked, { scriptSlug, userId, creatorName });
@@ -25,11 +30,11 @@ const ChangeLike = async (scriptSlug: string, userId: string, creatorName: strin
                 where: { slug: scriptSlug },
                 data: isLiked
                     ? {
-                            likeCount: { increment: 1 },
-                        }
+                          likeCount: { increment: 1 },
+                      }
                     : {
-                            likeCount: { decrement: 1 },
-                        },
+                          likeCount: { decrement: 1 },
+                      },
             })
         );
 

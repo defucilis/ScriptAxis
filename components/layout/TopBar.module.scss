@@ -1,16 +1,16 @@
 .topbar {
     height: 30px;
 
-    >div {
+    > div {
         display: grid;
         place-items: center;
         height: 100%;
     }
-    
+
     p {
         margin: 0;
     }
-    
+
     a {
         color: var(--color-theme-500);
     }

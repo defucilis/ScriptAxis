@@ -12,8 +12,15 @@ import ScriptForm, { EditScriptFormData, ScriptFormDataOutput } from "./ScriptFo
 import style from "./AddScript.module.css";
 import { Script, StringLists } from "lib/types";
 
-const EditScript = ({ script, tags, categories, talent, studios, creators }: StringLists & {
-    script: Script
+const EditScript = ({
+    script,
+    tags,
+    categories,
+    talent,
+    studios,
+    creators,
+}: StringLists & {
+    script: Script;
 }): JSX.Element => {
     const [submitting, setSubmitting] = useState(false);
     const [formData, setFormData] = useState<EditScriptFormData>({});
@@ -111,7 +118,12 @@ const EditScript = ({ script, tags, categories, talent, studios, creators }: Str
     );
 };
 
-const updateScript = async (newPostData: EditScriptFormData, oldPostData: EditScriptFormData, onSuccess: (response: any) => void, onFail: (error: {message: string}) => void) => {
+const updateScript = async (
+    newPostData: EditScriptFormData,
+    oldPostData: EditScriptFormData,
+    onSuccess: (response: any) => void,
+    onFail: (error: { message: string }) => void
+) => {
     const oldData: ScriptFormDataOutput = { ...oldPostData, thumbnail: "", duration: 0 };
     const newData: ScriptFormDataOutput = { ...newPostData, thumbnail: "", duration: 0 };
 
@@ -127,10 +139,13 @@ const updateScript = async (newPostData: EditScriptFormData, oldPostData: EditSc
                     `Failed to delete file at thumbnails/${oldData.slug}, continuing with upload`
                 );
             }
-            const compressedFile = await imageConversion.compressAccurately(newPostData.thumbnail[0], {
-                size: 100,
-                type: imageConversion.EImageType.JPEG,
-            });
+            const compressedFile = await imageConversion.compressAccurately(
+                newPostData.thumbnail[0],
+                {
+                    size: 100,
+                    type: imageConversion.EImageType.JPEG,
+                }
+            );
             const fileUrl = await FirebaseUtils.uploadFile(
                 compressedFile,
                 `thumbnails/${newData.slug}`,
@@ -153,7 +168,7 @@ const updateScript = async (newPostData: EditScriptFormData, oldPostData: EditSc
     const diffData = ScriptUtils.getScriptDifferences(oldData, newData);
 
     if (Object.keys(diffData).length === 0) {
-        onFail({message: "You didn't make any changes!"});
+        onFail({ message: "You didn't make any changes!" });
         return;
     }
 

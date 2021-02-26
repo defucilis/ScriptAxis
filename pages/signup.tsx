@@ -16,10 +16,15 @@ const SignUp = (): JSX.Element => {
     const [error, setError] = useState("");
     const [signingUp, setSigningUp] = useState(false);
     const { login } = useUser();
-    const [data, setData] = useState({email: "", username: "", password: "", confirm: ""})
+    const [data, setData] = useState({ email: "", username: "", password: "", confirm: "" });
 
     const signUp = (e: React.FormEvent) => {
-        const doSignUp = async (email: string, username: string, password: string, callback: (data: {success: boolean, error?: string}) => void) => {
+        const doSignUp = async (
+            email: string,
+            username: string,
+            password: string,
+            callback: (data: { success: boolean; error?: string }) => void
+        ) => {
             setError("");
             try {
                 setSigningUp(true);
@@ -81,30 +86,38 @@ const SignUp = (): JSX.Element => {
             <h1>Sign In</h1>
             <form onSubmit={signUp} className={style.signin}>
                 <label htmlFor="email">Email (not displayed publicly)</label>
-                <input 
-                    id="email" 
-                    value={data.email} 
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData({...data, [e.target.id]: e.target.value})}
+                <input
+                    id="email"
+                    value={data.email}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setData({ ...data, [e.target.id]: e.target.value })
+                    }
                 />
                 <label htmlFor="username">Username</label>
-                <input 
-                    id="username" 
-                    value={data.username} 
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData({...data, [e.target.id]: e.target.value})}
+                <input
+                    id="username"
+                    value={data.username}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setData({ ...data, [e.target.id]: e.target.value })
+                    }
                 />
                 <label htmlFor="password">Password</label>
-                <input 
+                <input
                     type="password"
-                    id="password" 
-                    value={data.password} 
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData({...data, [e.target.id]: e.target.value})}
+                    id="password"
+                    value={data.password}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setData({ ...data, [e.target.id]: e.target.value })
+                    }
                 />
                 <label htmlFor="confirm">Confirm Password</label>
-                <input 
+                <input
                     type="password"
-                    id="confirm" 
-                    value={data.confirm} 
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData({...data, [e.target.id]: e.target.value})}
+                    id="confirm"
+                    value={data.confirm}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setData({ ...data, [e.target.id]: e.target.value })
+                    }
                 />
                 {signingUp ? <p>Please wait...</p> : <input type="submit" value="Sign Up" />}
                 <p style={{ color: "red" }}>{error}</p>

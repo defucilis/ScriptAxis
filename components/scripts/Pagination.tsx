@@ -2,7 +2,15 @@ import ScriptUtils from "../../lib/ScriptUtils";
 
 import style from "./Pagination.module.scss";
 
-const Pagination = ({ curPage, totalPages, query }: {curPage: number, totalPages: number, query: any}): JSX.Element => {
+const Pagination = ({
+    curPage,
+    totalPages,
+    query,
+}: {
+    curPage: number;
+    totalPages: number;
+    query: any;
+}): JSX.Element => {
     const getLinkTarget = (query, page) => {
         const newQuery = { ...query };
         newQuery.page = page;
@@ -33,7 +41,11 @@ const Pagination = ({ curPage, totalPages, query }: {curPage: number, totalPages
                         <a href={getLinkTarget(query, curPage + 1)}>{curPage + 1}</a>
                     </li>
                 )}
-                {curPage >= totalPages - 2 ? null : <li className={style.nolink}><span>...</span></li>}
+                {curPage >= totalPages - 2 ? null : (
+                    <li className={style.nolink}>
+                        <span>...</span>
+                    </li>
+                )}
                 {curPage === totalPages ? null : (
                     <li>
                         <a href={getLinkTarget(query, totalPages)}>{totalPages}</a>

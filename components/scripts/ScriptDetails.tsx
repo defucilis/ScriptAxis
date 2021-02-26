@@ -76,7 +76,7 @@ const getEmbed = (url: string) => {
     return iframeLink;
 };
 
-const ScriptDetails = ({ script }: {script: Script}): JSX.Element => {
+const ScriptDetails = ({ script }: { script: Script }): JSX.Element => {
     const { user, refreshUserDbValues } = useUser();
     const [isLiked, setIsLiked] = useState(false);
     const [scriptLikes, setScriptLikes] = useState(0);
@@ -214,7 +214,9 @@ const ScriptDetails = ({ script }: {script: Script}): JSX.Element => {
                         {!script.streamingUrl ? null : (
                             <Link href={script.streamingUrl}>
                                 <a className={style.source} target="_blank">
-                                    {script.categoryName === "Audio Only" ? "Listen on" : "Watch on"}
+                                    {script.categoryName === "Audio Only"
+                                        ? "Listen on"
+                                        : "Watch on"}
                                     <br />
                                     {ScriptUtils.getSiteName(script.streamingUrl)}
                                 </a>

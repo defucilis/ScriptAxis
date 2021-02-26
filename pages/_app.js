@@ -3,7 +3,7 @@ import Router from "next/router";
 import "@yaireo/tagify/dist/tagify.css";
 import "react-datepicker/dist/react-datepicker.css";
 
-import {initFirebase} from "../lib/initFirebase";
+import { initFirebase } from "../lib/initFirebase";
 
 import { AuthProvider } from "../lib/auth/useUser";
 

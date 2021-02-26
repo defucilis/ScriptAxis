@@ -9,7 +9,13 @@ export interface ScriptListButton {
     function: (script: ScriptVisualStub) => void;
 }
 
-const ScriptList = ({ scripts, buttons }: {scripts: ScriptVisualStub[], buttons?: ScriptListButton[]}): JSX.Element => {
+const ScriptList = ({
+    scripts,
+    buttons,
+}: {
+    scripts: ScriptVisualStub[];
+    buttons?: ScriptListButton[];
+}): JSX.Element => {
     const [scriptDom, setScriptDom] = useState([]);
     useEffect(() => {
         if (!scripts) return;

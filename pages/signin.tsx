@@ -13,10 +13,14 @@ const SignIn = (): JSX.Element => {
     const [error, setError] = useState("");
     const { login } = useUser();
     const [waiting, setWaiting] = useState(false);
-    const [data, setData] = useState({email: "", password: ""});
+    const [data, setData] = useState({ email: "", password: "" });
 
     const signIn = (e: React.FormEvent) => {
-        const doSignIn = async (email: string, password: string, callback: (data: {success: boolean, error?: string}) => void) => {
+        const doSignIn = async (
+            email: string,
+            password: string,
+            callback: (data: { success: boolean; error?: string }) => void
+        ) => {
             setError("");
             try {
                 await login(email, password);
@@ -55,13 +59,22 @@ const SignIn = (): JSX.Element => {
             <h1>Sign In</h1>
             <form onSubmit={signIn} className={style.signin}>
                 <label htmlFor="email">Email</label>
-                <input 
-                    id="email" 
-                    value={data.email} 
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData({...data, [e.target.id]: e.target.value})}
+                <input
+                    id="email"
+                    value={data.email}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setData({ ...data, [e.target.id]: e.target.value })
+                    }
                 />
                 <label htmlFor="password">Password</label>
-                <input type="password" id="password" value={data.password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData({...data, [e.target.id]: e.target.value})}/>
+                <input
+                    type="password"
+                    id="password"
+                    value={data.password}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setData({ ...data, [e.target.id]: e.target.value })
+                    }
+                />
                 <Link href="/forgotpassword">
                     <a className={style.forgot}>Forgot Password</a>
                 </Link>

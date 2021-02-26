@@ -8,7 +8,7 @@ import ScriptUtils from "../../lib/ScriptUtils";
 
 import style from "./ScriptTile.module.scss";
 
-const ScriptTile = ({ script }: {script: Script}): JSX.Element => {
+const ScriptTile = ({ script }: { script: Script }): JSX.Element => {
     return (
         <div className={style.scripttile}>
             <Link href={`/script/${script.slug}`}>

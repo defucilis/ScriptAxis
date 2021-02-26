@@ -8,7 +8,7 @@ import ScriptUtils from "../../lib/ScriptUtils";
 
 import style from "../scripts/ScriptTile.module.scss";
 
-const CreatorTile = ({ creator }: {creator: Creator}): JSX.Element => {
+const CreatorTile = ({ creator }: { creator: Creator }): JSX.Element => {
     return (
         <div className={style.scripttile}>
             <Link href={`/creator/${creator.name}`}>

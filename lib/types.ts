@@ -29,7 +29,7 @@ export interface Script {
     slug: string;
     tags: string[];
     description?: string;
-    duration: number
+    duration: number;
     thumbnail: string;
     funscripts: string[];
     sourceUrl?: string;
@@ -49,9 +49,9 @@ export interface Script {
 }
 export interface FullScript extends Script {
     category: Category;
-    creator: Creator
+    creator: Creator;
     owner: User;
-    
+
     likedBy: User[];
 }
 
@@ -59,7 +59,7 @@ export interface ScriptStub {
     id: number;
     slug: string;
     name: string;
-    sourceUrl: string
+    sourceUrl: string;
 }
 
 export interface ScriptVisualStub {
@@ -81,19 +81,19 @@ export interface User {
 }
 
 export interface UiUser extends User {
-    creator?: {name: string};
+    creator?: { name: string };
     ownedScripts: {
-        slug: string,
-        name: string,
-        thumbnail: string,
-        creator: { name: string },
-    }[],
+        slug: string;
+        name: string;
+        thumbnail: string;
+        creator: { name: string };
+    }[];
     likedScripts: {
-        slug: string,
-        name: string,
-        thumbnail: string,
-        creator: { name: string },
-    }[]
+        slug: string;
+        name: string;
+        thumbnail: string;
+        creator: { name: string };
+    }[];
 }
 
 export interface FullUser extends User {
@@ -102,9 +102,9 @@ export interface FullUser extends User {
 }
 
 export interface LeanUser extends User {
-    creator?: {name: string};
-    ownedScripts: {slug: string}[];
-    likedScripts: {slug: string}[];
+    creator?: { name: string };
+    ownedScripts: { slug: string }[];
+    likedScripts: { slug: string }[];
 }
 
 export interface Query {
@@ -136,7 +136,7 @@ export interface Filters {
     category?: {
         name: {
             equals: string;
-        }
+        };
     };
     include?: string[];
     exclude?: string[];
@@ -181,8 +181,8 @@ export interface StringLists extends TagCategoryLists {
 }
 
 export interface StringListsWithCount {
-    tags: {name: string, count: number}[];
-    categories: {name: string, count: number}[];
+    tags: { name: string; count: number }[];
+    categories: { name: string; count: number }[];
     talent: string[];
     studios: string[];
     creators: string[];

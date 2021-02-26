@@ -89,7 +89,12 @@ const AddScript = ({ tags, categories, talent, studios, creators }: StringLists)
     );
 };
 
-const createScript = async (postData: ScriptFormData, onSuccess: (data: any) => void, onClipboardWrite: () => void, onFail: (error: {message: string}) => void) => {
+const createScript = async (
+    postData: ScriptFormData,
+    onSuccess: (data: any) => void,
+    onClipboardWrite: () => void,
+    onFail: (error: { message: string }) => void
+) => {
     const data: ScriptFormDataOutput = { ...postData, duration: -1, thumbnail: "" };
 
     console.log(data);

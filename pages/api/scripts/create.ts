@@ -131,7 +131,7 @@ const CreateScript = async (rawData: any): Promise<void> => {
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
-        const script = await CreateScript({...req.body});
+        const script = await CreateScript({ ...req.body });
         res.status(201);
         res.json(script);
     } catch (error) {

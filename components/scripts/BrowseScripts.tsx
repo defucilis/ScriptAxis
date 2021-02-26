@@ -12,10 +12,14 @@ import ScriptUtils from "../../lib/ScriptUtils";
 import style from "./BrowseScripts.module.scss";
 import { Filters, Query, Script, Sorting } from "lib/types";
 
-const BrowseScripts = ({ propScripts, scriptCount, query }: {
-    propScripts: Script[],
-    scriptCount: number,
-    query: Query
+const BrowseScripts = ({
+    propScripts,
+    scriptCount,
+    query,
+}: {
+    propScripts: Script[];
+    scriptCount: number;
+    query: Query;
 }): JSX.Element => {
     const [scripts, setScripts] = useState<Script[]>([]);
     const [cachedFilters, setCachedFilters] = useState<Filters>({ ...query.filters });
@@ -86,10 +90,7 @@ const BrowseScripts = ({ propScripts, scriptCount, query }: {
                 <title>ScriptAxis | {getHeadTitle(query)}</title>
             </Head>
             <div className={style.browsescripts}>
-                <FiltersElement
-                    onFilter={handleFilters}
-                    query={query}
-                />
+                <FiltersElement onFilter={handleFilters} query={query} />
                 <div>
                     <div className={style.tileheader}>
                         <h1>{getBodyTitle(query)}</h1>
