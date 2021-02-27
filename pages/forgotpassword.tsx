@@ -6,7 +6,7 @@ import Layout from "../components/layout/Layout";
 
 import firebase from "../lib/initFirebase";
 
-import style from "./signin.module.css";
+import style from "./signin.module.scss";
 import ScriptUtils from "lib/ScriptUtils";
 
 const SignIn = (): JSX.Element => {
