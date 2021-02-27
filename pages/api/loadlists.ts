@@ -17,7 +17,6 @@ const FetchLists = async (): Promise<StringListsWithCount> => {
                 name: true,
             },
         });
-        console.log(talent);
         await prisma.$disconnect();
         return ScriptUtils.parseDatabaseListsWithCount({
             tags,
