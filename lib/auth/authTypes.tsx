@@ -1,4 +1,4 @@
-import { User } from "lib/types";
+import { UiUser } from "lib/types";
 
 export interface FbUser {
     uid: string;
@@ -7,18 +7,18 @@ export interface FbUser {
 }
 
 export interface AuthContextValues {
-    user: User;
+    user: UiUser;
     loading: boolean;
-    login: (email: string, password: string) => Promise<User>;
+    login: (email: string, password: string) => Promise<UiUser>;
     loginAndRedirect: (email: string, password: string, redirectTo: string) => Promise<void>;
     logout: () => Promise<void>;
     logoutAndRedirect: (redirectTo: string) => Promise<void>;
-    refreshUserDbValues: () => Promise<User>;
-    signUp: (username: string, email: string, password: string) => Promise<User>;
+    refreshUserDbValues: () => Promise<UiUser>;
+    signUp: (username: string, email: string, password: string) => Promise<UiUser>;
     signUpAndRedirect: (
         username: string,
         email: string,
         password: string,
         redirectTo?: string
-    ) => Promise<User>;
+    ) => Promise<UiUser>;
 }

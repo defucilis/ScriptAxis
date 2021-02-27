@@ -9,12 +9,12 @@ import { AuthContextValues, FbUser } from "./authTypes";
 
 import { removeUserCookie, setUserCookie, getUserFromCookie } from "./userCookies";
 import { mapUserData } from "./mapUserData";
-import { User } from "lib/types";
+import { UiUser } from "lib/types";
 
 const authContext = createContext<AuthContextValues>(null);
 
 const useProvideAuth = () => {
-    const [user, setUser] = useState<User>();
+    const [user, setUser] = useState<UiUser>();
     const [loading, setLoading] = useState(true);
     const [fbUser, setFbUser] = useState<FbUser>();
     const [updatingFromDb, setUpdatingFromDb] = useState(false);
@@ -22,7 +22,7 @@ const useProvideAuth = () => {
 
     //Promise-style login method
     const login = async (email: string, password: string) => {
-        return new Promise<User>((resolve, reject) => {
+        return new Promise<UiUser>((resolve, reject) => {
             try {
                 console.log("Trying to login with credentials", email, password);
                 firebase
@@ -55,7 +55,7 @@ const useProvideAuth = () => {
     //Explicitly updates an existing user value with updated information from the database
     //Userful if we've just changed somethjing like the user's display name, liked / owner scripts, etc
     const refreshUserDbValues = () => {
-        return new Promise<User>((resolve, reject) => {
+        return new Promise<UiUser>((resolve, reject) => {
             if (updatingFromDb) {
                 reject("Already running DB refresh");
                 return;
@@ -104,11 +104,11 @@ const useProvideAuth = () => {
 
     //internal method that fetches user info from database and attaches it to the firebase auth user object
     const addDbUserToCookie = (user: FbUser) => {
-        return new Promise<User>((resolve, reject) => {
+        return new Promise<UiUser>((resolve, reject) => {
             try {
                 console.log("Updating user from DB table...");
                 //does this still work with .then?
-                axios.get(`/api/users/${user.email}?lean=true`).then(response => {
+                axios.get(`/api/users/${user.email}`).then(response => {
                     if (response.data.error) throw response.data.error;
                     const dbUser = response.data;
                     setUserCookie(dbUser);
@@ -123,7 +123,7 @@ const useProvideAuth = () => {
     };
 
     const signUp = (username: string, email: string, password: string) => {
-        return new Promise<User>((resolve, reject) => {
+        return new Promise<UiUser>((resolve, reject) => {
             try {
                 firebase
                     .auth()

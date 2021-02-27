@@ -1,4 +1,4 @@
-import { Creator } from "lib/types";
+import { UiCreator } from "lib/types";
 import Link from "next/link";
 
 import { FaHeart } from "react-icons/fa";
@@ -8,7 +8,7 @@ import ScriptUtils from "../../lib/ScriptUtils";
 
 import style from "../scripts/ScriptTile.module.scss";
 
-const CreatorTile = ({ creator }: { creator: Creator }): JSX.Element => {
+const CreatorTile = ({ creator }: { creator: UiCreator }): JSX.Element => {
     return (
         <div className={style.scripttile}>
             <Link href={`/creator/${creator.name}`}>

@@ -1309,11 +1309,11 @@ const TestData: TestDataScriptInput[] = [
         sourceUrl: "https://discuss.eroscripts.com/t/peta-jensen-shower-seduction/1553",
         studio: "Passion HD",
         talent: ["Peta Jensen"],
-        likes: 0,
+        likeCount: 0,
         thumbsUp: 1,
         thumbsDown: 0,
         views: 1,
-        created: new Date(2020, 7, 20),
+        created: new Date(2020, 7, 20).valueOf(),
     },
     {
         name: "Worth Every Penny",
@@ -2018,7 +2018,7 @@ const TestData: TestDataScriptInput[] = [
         views: 1,
         thumbsUp: 1,
         thumbsDown: 0,
-        created: new Date(2021, 0, 23),
+        created: new Date(2021, 0, 23).valueOf(),
     },
     {
         name: "Oral Fixations",

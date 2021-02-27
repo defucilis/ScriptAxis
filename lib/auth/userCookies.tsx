@@ -1,13 +1,13 @@
 import cookies from "js-cookie";
-import { User } from "../../lib/types";
+import { UiUser } from "../../lib/types";
 
-export const getUserFromCookie = (): User => {
+export const getUserFromCookie = (): UiUser => {
     const cookie = cookies.get("auth");
     if (!cookie) {
         return null;
     }
     const parsedCookie = JSON.parse(cookie);
-    const output: User = {
+    const output: UiUser = {
         id: parsedCookie.id,
         username: parsedCookie.username,
         emailVerified: parsedCookie.emailVerified,
@@ -16,11 +16,13 @@ export const getUserFromCookie = (): User => {
         email: parsedCookie.email,
         created: parsedCookie.created,
         modified: parsedCookie.modified,
+        ownedScripts: parsedCookie.ownedScripts,
+        likedScripts: parsedCookie.likedScripts,
     };
     return output;
 };
 
-export const setUserCookie = (user: User): void => {
+export const setUserCookie = (user: UiUser): void => {
     cookies.set("auth", user, {
         // firebase id tokens expire in one hour
         // set cookie expiry to match

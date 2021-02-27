@@ -7,9 +7,9 @@ import ScriptGrid from "../scripts/ScriptGrid";
 import ScriptUtils from "../../lib/ScriptUtils";
 
 import style from "./CreatorDetail.module.scss";
-import { Creator } from "lib/types";
+import { UiCreator } from "lib/types";
 
-const CreatorDetail = ({ creator }: { creator: Creator }): JSX.Element => {
+const CreatorDetail = ({ creator }: { creator: UiCreator }): JSX.Element => {
     console.log(creator);
     return (
         <div className={style.creator}>
