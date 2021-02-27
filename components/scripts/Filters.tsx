@@ -1,7 +1,4 @@
 import { useState, useEffect, useReducer } from "react";
-//import dynamic from "next/dynamic";
-
-//const Tags = dynamic(() => import("@yaireo/tagify/dist/react.tagify"), { ssr: false });
 import Tags from "@yaireo/tagify/dist/react.tagify";
 import { FaCheck } from "react-icons/fa";
 import ReactSlider from "react-slider";
