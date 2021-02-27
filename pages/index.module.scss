@@ -1,18 +1,21 @@
-.indexLoading {
+svg.indexLoading {
+    -webkit-animation: spin 4s linear infinite;
+    -moz-animation: spin 4s linear infinite;
+    animation: spin 4s linear infinite;
+}
+
+.indexCenter {
     margin-top: 25%;
     text-align: center;
     font-size: 1.5em;
 
-    svg {
-        font-size: 3em;
-        -webkit-animation: spin 4s linear infinite;
-        -moz-animation: spin 4s linear infinite;
-        animation: spin 4s linear infinite;
-        color: var(--color-theme-500);
-    }
-
     span {
         display: block;
+    }
+
+    svg {
+        font-size: 3em;
+        color: var(--color-theme-500);
     }
 }
 

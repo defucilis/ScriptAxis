@@ -69,10 +69,10 @@ const Index = (): JSX.Element => {
                 <title>ScriptAxis | The Funscript Library (Work in Progress!)</title>
             </Head>
             {loading === 1 ? (
-                <div className={style.indexLoading}>
+                <div className={style.indexCenter}>
                     <p>
                         <span>
-                            <FaCog />
+                            <FaCog className={style.indexLoading}/>
                         </span>
                         <span>Loading the latest scripts just for you...</span>
                     </p>

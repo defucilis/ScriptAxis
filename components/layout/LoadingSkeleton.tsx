@@ -9,10 +9,10 @@ const LoadingSkeleton = (): JSX.Element => {
             <Head>
                 <title>ScriptAxis | Loading</title>
             </Head>
-            <div className={style.indexLoading}>
+            <div className={style.indexCenter}>
                 <p>
                     <span>
-                        <FaCog />
+                        <FaCog className={style.indexLoading} />
                     </span>
                     <span>{`Making sure you're logged in...`}</span>
                 </p>
