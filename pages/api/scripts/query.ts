@@ -51,7 +51,7 @@ const QueryScripts = async ({
             where: finalWhere,
         });
 
-        const scripts = await prisma.script.findMany({
+        let scripts = await prisma.script.findMany({
             skip: page && page > 1 ? 18 * (page - 1) : 0,
             take: 18,
             where: finalWhere,
@@ -62,6 +62,9 @@ const QueryScripts = async ({
             },
         });
 
+        if (process.env.NEXT_PUBLIC_SFW_MODE === "true") {
+            scripts = scripts.map(script => ScriptUtils.makeScriptSfw(script));
+        }
         await prisma.$disconnect();
         return { count, scripts };
     } catch (error) {

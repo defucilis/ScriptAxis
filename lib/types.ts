@@ -79,13 +79,13 @@ export interface UiUser extends User {
         slug: string;
         name: string;
         thumbnail: string;
-        creator: { name: string };
+        creatorName: string;
     }[];
     likedScripts: {
         slug: string;
         name: string;
         thumbnail: string;
-        creator: { name: string };
+        creatorName: string;
     }[];
 }
 

@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import ScriptUtils from "lib/ScriptUtils";
 import { Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -6,7 +7,7 @@ const FetchCreatorScripts = async (name: string): Promise<Script[]> => {
     const prisma = new PrismaClient();
     try {
         console.log("Fetching scripts belonging to creator", name);
-        const scripts = await prisma.creator
+        let scripts = await prisma.creator
             .findUnique({
                 where: {
                     name: name,
@@ -18,6 +19,9 @@ const FetchCreatorScripts = async (name: string): Promise<Script[]> => {
                     owner: { select: { username: true } },
                 },
             });
+        if (process.env.NEXT_PUBLIC_SFW_MODE === "true") {
+            scripts = scripts.map(script => ScriptUtils.makeScriptSfw(script));
+        }
         await prisma.$disconnect();
         return scripts;
     } catch (error) {

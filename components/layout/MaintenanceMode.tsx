@@ -1,6 +1,5 @@
 import Head from "next/head";
-import Image from 'next/image';
-import { FaTools } from "react-icons/fa";
+import Image from "next/image";
 import style from "pages/index.module.scss";
 
 const LoadingSkeleton = (): JSX.Element => {
@@ -17,7 +16,9 @@ const LoadingSkeleton = (): JSX.Element => {
                         width="360"
                         height="90"
                     />
-                    <span style={{width: "30%", marginLeft: "35%"}}>{`I'm doing some work on the database right now, check back tomorrow!`}</span>
+                    <span
+                        style={{ width: "30%", marginLeft: "35%" }}
+                    >{`I'm doing some work on the database right now, check back tomorrow!`}</span>
                 </p>
             </div>
         </div>

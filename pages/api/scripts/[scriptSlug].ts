@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import ScriptUtils from "lib/ScriptUtils";
 import { Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -10,23 +11,21 @@ const FetchScript = async (slug: string, noview = false): Promise<Script> => {
             slug: slug,
             active: true,
         };
-        const include = {
-            creator: { select: { name: true } },
-            owner: { select: { username: true, id: true } },
-        };
         const promise = noview
-            ? prisma.script.findFirst({ where, include })
+            ? prisma.script.findFirst({ where })
             : prisma.script.update({
                   where: { slug },
-                  include,
                   data: {
                       views: { increment: 1 },
                   },
               });
 
-        const scripts = await promise;
+        let script = await promise;
+        if (process.env.NEXT_PUBLIC_SFW_MODE === "true") {
+            script = ScriptUtils.makeScriptSfw(script);
+        }
         await prisma.$disconnect();
-        return scripts;
+        return script;
     } catch (error) {
         await prisma.$disconnect();
         throw error;

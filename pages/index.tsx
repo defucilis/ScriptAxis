@@ -32,7 +32,8 @@ const Index = (): JSX.Element => {
             }
         };
 
-        const recentScriptsTime = Number(window.localStorage.getItem("recentScriptsTime"));
+        let recentScriptsTime = Number(window.localStorage.getItem("recentScriptsTime"));
+        if(process.env.NEXT_PUBLIC_SFW_MODE) recentScriptsTime = 0;
         if (recentScriptsTime) {
             const diff = new Date().valueOf() - recentScriptsTime;
             //update if it's been more than a day
@@ -72,7 +73,7 @@ const Index = (): JSX.Element => {
                 <div className={style.indexCenter}>
                     <p>
                         <span>
-                            <FaCog className={style.indexLoading}/>
+                            <FaCog className={style.indexLoading} />
                         </span>
                         <span>Loading the latest scripts just for you...</span>
                     </p>

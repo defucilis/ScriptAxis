@@ -1,5 +1,14 @@
 import { ScriptFormDataOutput } from "components/forms/ScriptForm";
-import { Filters, Query, SavedQuery, UrlQuery, StringLists, StringListsWithCount } from "./types";
+import {
+    Filters,
+    Query,
+    SavedQuery,
+    UrlQuery,
+    StringLists,
+    StringListsWithCount,
+    Script,
+    ScriptVisualStub,
+} from "./types";
 
 const indexToDuration = (index: number): number => {
     switch (index) {
@@ -525,6 +534,45 @@ const formatTag = (tag: string): string => {
         .join(" ");
 };
 
+const makeScriptSfw = (script: Script): any => {
+    return {
+        ...script,
+        name: makeStringSfw(script.name),
+        tags: !script.tags ? [] : script.tags.map((tag: string) => makeStringSfw(tag)),
+        description: !script.description ? "" : makeStringSfw(script.description),
+        thumbnail: "/img/placeholder-thumbnail.png",
+        sourceUrl: "https://www.google.com",
+        streamingUrl: "https://www.youtube.com",
+        studio: !script.studio ? "" : makeStringSfw(script.studio),
+        talent: !script.talent ? [] : script.talent.map((talent: string) => makeStringSfw(talent)),
+        creatorName: makeStringSfw(script.creatorName),
+        categoryName: makeStringSfw(script.categoryName),
+    };
+};
+
+const makeScriptStubSfw = (script: ScriptVisualStub): any => {
+    return {
+        ...script,
+        name: makeStringSfw(script.name),
+        thumbnail: "/img/placeholder-thumbnail.png",
+        creatorName: makeStringSfw(script.creatorName),
+    };
+};
+
+const makeStringSfw = (str: string): string => {
+    if(!str) return "";
+    const reversed = str.split("").reverse().join("").toLowerCase();
+    return reversed[0].toUpperCase() + reversed.slice(1);
+};
+
+const makeTagCategorySfw = (item: {
+    name: string;
+    count: number;
+}): { name: string; count: number } => {
+    if(!item || !item.name) return {name: "", count: 0};
+    return { ...item, name: makeStringSfw(item.name) };
+};
+
 const ScriptUtils = {
     //parseScriptDocument,
     indexToDuration,
@@ -546,6 +594,10 @@ const ScriptUtils = {
     tryFormatError,
     getScriptObjectCode,
     formatTag,
+    makeScriptSfw,
+    makeStringSfw,
+    makeTagCategorySfw,
+    makeScriptStubSfw,
 };
 
 //module.exports = ScriptUtils;

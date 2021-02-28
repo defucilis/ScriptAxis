@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import ScriptUtils from "lib/ScriptUtils";
 import { UiUser, LeanUser } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -40,11 +41,11 @@ const FetchUser = async (email: string): Promise<UiUser> => {
                 slug: true,
                 name: true,
                 thumbnail: true,
-                creator: { select: { name: true } },
+                creatorName: true,
             },
         };
 
-        const users = await prisma.user.findFirst({
+        const user = await prisma.user.findFirst({
             where: {
                 email: email,
             },
@@ -54,8 +55,13 @@ const FetchUser = async (email: string): Promise<UiUser> => {
                 ownedScripts: scriptSelect,
             },
         });
+        if (process.env.NEXT_PUBLIC_SFW_MODE === "true") {
+            user.likedScripts = user.likedScripts.map(script =>
+                ScriptUtils.makeScriptStubSfw(script)
+            );
+        }
         await prisma.$disconnect();
-        return users;
+        return user;
     } catch (error) {
         await prisma.$disconnect();
         throw error;

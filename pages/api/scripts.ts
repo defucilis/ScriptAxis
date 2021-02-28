@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import ScriptUtils from "lib/ScriptUtils";
 import { Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -6,7 +7,7 @@ const FetchScripts = async (amount: number): Promise<Script[]> => {
     const prisma = new PrismaClient();
     try {
         console.log("Fetching all scripts");
-        const scripts = await prisma.script.findMany({
+        let scripts = await prisma.script.findMany({
             where: {
                 active: true,
             },
@@ -19,6 +20,9 @@ const FetchScripts = async (amount: number): Promise<Script[]> => {
                 owner: { select: { username: true } },
             },
         });
+        if (process.env.NEXT_PUBLIC_SFW_MODE === "true") {
+            scripts = scripts.map(script => ScriptUtils.makeScriptSfw(script));
+        }
         await prisma.$disconnect();
         return scripts;
     } catch (error) {

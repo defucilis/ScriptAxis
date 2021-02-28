@@ -17,14 +17,25 @@ const FetchLists = async (): Promise<StringListsWithCount> => {
                 name: true,
             },
         });
+
         await prisma.$disconnect();
-        return ScriptUtils.parseDatabaseListsWithCount({
+        const output = ScriptUtils.parseDatabaseListsWithCount({
             tags,
             categories,
             talent,
             studios,
             creators,
         });
+        if (process.env.NEXT_PUBLIC_SFW_MODE === "true") {
+            output.tags = output.tags.map(tag => ScriptUtils.makeTagCategorySfw(tag));
+            output.categories = output.categories.map(category =>
+                ScriptUtils.makeTagCategorySfw(category)
+            );
+            output.talent = output.talent.map(t => ScriptUtils.makeStringSfw(t));
+            output.studios = output.studios.map(s => ScriptUtils.makeStringSfw(s));
+            output.creators = output.creators.map(c => ScriptUtils.makeStringSfw(c));
+        }
+        return output;
     } catch (error) {
         await prisma.$disconnect();
         throw error;

@@ -9,7 +9,7 @@ import "nprogress/nprogress.css";
 import { initFirebase } from "../lib/initFirebase";
 import { AuthProvider } from "../lib/auth/useAuth";
 
-import MaintenanceMode from '../components/layout/MaintenanceMode'
+import MaintenanceMode from "../components/layout/MaintenanceMode";
 
 import "../styles/app.scss";
 
@@ -19,12 +19,9 @@ Router.events.on("routeChangeError", () => NProgress.done());
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const App = ({ Component, pageProps }) => {
-
     console.log(process.env.NEXT_PUBLIC_MAINTENANCE_MODE);
-    if(process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true") {
-        return (
-            <MaintenanceMode />
-        )
+    if (process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true") {
+        return <MaintenanceMode />;
     }
 
     initFirebase();

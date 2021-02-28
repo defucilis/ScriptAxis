@@ -7,7 +7,6 @@ import { FaSearch } from "react-icons/fa";
 import { FaSync } from "react-icons/fa";
 import axios from "axios";
 
-import ScriptUtils from "../../lib/ScriptUtils";
 import useAuth from "../../lib/auth/useAuth";
 
 import styles from "./Header.module.scss";
@@ -31,7 +30,7 @@ const Header = ({ page }: { page?: HeaderPage }): JSX.Element => {
                     categories,
                     talent,
                     studios,
-                } = ScriptUtils.parseDatabaseListsWithCount(response.data);
+                } = response.data;
                 const scriptCount = categories.reduce((acc, category) => acc + category.count, 0);
                 setCategoryCounts(categories);
                 setTagCounts(tags);
@@ -49,7 +48,10 @@ const Header = ({ page }: { page?: HeaderPage }): JSX.Element => {
         const storedScriptCount = Number(window.localStorage.getItem("scriptCount"));
         const storedTagCounts = window.localStorage.getItem("storedTagCounts");
         const storedCategoryCounts = window.localStorage.getItem("storedCategoryCounts");
-        const lastListFetchTime = window.localStorage.getItem("lastListFetchTime");
+        let lastListFetchTime = Number(window.localStorage.getItem("lastListFetchTime"));
+        if(process.env.NEXT_PUBLIC_SFW_MODE) {
+            lastListFetchTime = 0;
+        }
         if (storedScriptCount) setScriptCount(storedScriptCount);
         if (storedTagCounts) setTagCounts(JSON.parse(storedTagCounts));
         if (storedCategoryCounts) setCategoryCounts(JSON.parse(storedCategoryCounts));
