@@ -383,20 +383,18 @@ const FiltersElement = ({
                         value={initialIncludeTags}
                         whitelist={tags}
                         onAdd={e => {
-                            console.log("tag added ", e.detail.data);
                             setFilters({
                                 include: {
                                     operation: "add",
-                                    item: e.detail.data.value,
+                                    item: ScriptUtils.formatTag(e.detail.data.value),
                                 },
                             });
                         }}
                         onRemove={e => {
-                            console.log("tag removed", e.detail.data);
                             setFilters({
                                 include: {
                                     operation: "remove",
-                                    item: e.detail.data.value,
+                                    item: ScriptUtils.formatTag(e.detail.data.value),
                                 },
                             });
                         }}
@@ -417,11 +415,10 @@ const FiltersElement = ({
                         value={initialExcludeTags}
                         whitelist={tags}
                         onAdd={e => {
-                            console.log("tag added ", e.detail.data);
                             setFilters({
                                 exclude: {
                                     operation: "add",
-                                    item: e.detail.data.value,
+                                    item: ScriptUtils.formatTag(e.detail.data.value),
                                 },
                             });
                         }}
@@ -429,7 +426,7 @@ const FiltersElement = ({
                             setFilters({
                                 exclude: {
                                     operation: "remove",
-                                    item: e.detail.data.value,
+                                    item: ScriptUtils.formatTag(e.detail.data.value),
                                 },
                             });
                         }}
@@ -484,7 +481,7 @@ const FiltersElement = ({
                             console.log("talent added ", e.detail.data);
                             setFilters({
                                 talent: {
-                                    stringValue: e.detail.data.value,
+                                    stringValue: ScriptUtils.formatTag(e.detail.data.value),
                                 },
                             });
                         }}

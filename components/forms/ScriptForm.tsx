@@ -275,6 +275,10 @@ const ScriptForm = ({
         setCreatorOptions(creators);
     }, [creators]);
 
+    const validateTags = (tags: any) => {
+        return tags.map((tag: string) => ScriptUtils.formatTag(tag));
+    }
+
     return (
         <div className={style.form}>
             <NavigationPrompt
@@ -337,6 +341,7 @@ const ScriptForm = ({
                     onChange={handleChange}
                     error={errors.tags}
                     value={formData.tags}
+                    validateTags={validateTags}
                 />
 
                 <div className={style.descriptionwrapper}>
@@ -424,6 +429,7 @@ const ScriptForm = ({
                     onChange={handleChange}
                     error={errors.talent}
                     value={formData.talent}
+                    validateTags={validateTags}
                 />
                 <Datepicker
                     name="created"
