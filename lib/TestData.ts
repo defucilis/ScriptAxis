@@ -91,7 +91,7 @@ const TestData: TestDataScriptInput[] = [
         sourceUrl: "https://discuss.eroscripts.com/t/l-h-arabelle-raphael-stepbro-bj/720",
         streamingUrl: "https://www.pornhub.com/view_video.php?viewkey=ph58f4f6d21e850",
         thumbnail:
-            "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumbnails%2Fundefined?alt=media&token=7767cc6a-bea7-4554-9f5d-d1d1f79fe57a",
+            "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumbnails%2Farabelle-sucks-peeping-step-brothers-cock?alt=media&token=dae332a8-9e85-4687-bee1-88246e18dc22",
         duration: "11:35",
         category: "Blowjob",
         tags: ["POV", "Deepthroat", "HD"],
@@ -876,7 +876,7 @@ const TestData: TestDataScriptInput[] = [
         creator: "jaysencue",
         sourceUrl: "https://discuss.eroscripts.com/t/pov-dildo-blowjob-cumshot/16014",
         thumbnail:
-            "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumbnails%2Fundefined?alt=media&token=346083b5-1cc8-41b5-a98b-69fe3a7c2962",
+            "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumbnails%2Fpov-dildo-blowjob?alt=media&token=474534f4-9302-44b5-9b68-31a7901c8e53",
         description:
             "First time script. Originally made this to be accurate but found it wasn’t that good, too much stop and go. Edited the video and adjusted the script to be more on the pleasure side thus sacrificing some accuracy. Video is free to DL enjoy and drop your comments.\n\nHandy Stroker",
         duration: "6:00",

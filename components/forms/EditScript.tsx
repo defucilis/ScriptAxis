@@ -129,6 +129,9 @@ const updateScript = async (
 
     console.log({ oldData, newData });
 
+    //Modify the form data to match what shoud be in the database
+    newData.slug = slugify(newData.name, { lower: true, strict: true });
+
     //upload the thumbnail and add it to the database
     try {
         if (newPostData.thumbnail.length > 0) {
@@ -156,10 +159,6 @@ const updateScript = async (
     } catch (error) {
         onFail(error);
     }
-
-    //Modify the form data to match what shoud be in the database
-    newData.slug = slugify(newData.name, { lower: true, strict: true });
-    oldData.slug = slugify(oldData.name, { lower: true, strict: true });
 
     newData.duration = ScriptUtils.stringToDuration(newPostData.duration);
     oldData.duration = ScriptUtils.stringToDuration(oldPostData.duration);
