@@ -277,7 +277,7 @@ const ScriptForm = ({
 
     const validateTags = (tags: any) => {
         return tags.map((tag: string) => ScriptUtils.formatTag(tag));
-    }
+    };
 
     return (
         <div className={style.form}>

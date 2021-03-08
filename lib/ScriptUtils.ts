@@ -560,7 +560,7 @@ const makeScriptStubSfw = (script: ScriptVisualStub): any => {
 };
 
 const makeStringSfw = (str: string): string => {
-    if(!str) return "";
+    if (!str) return "";
     const reversed = str.split("").reverse().join("").toLowerCase();
     return reversed[0].toUpperCase() + reversed.slice(1);
 };
@@ -569,7 +569,7 @@ const makeTagCategorySfw = (item: {
     name: string;
     count: number;
 }): { name: string; count: number } => {
-    if(!item || !item.name) return {name: "", count: 0};
+    if (!item || !item.name) return { name: "", count: 0 };
     return { ...item, name: makeStringSfw(item.name) };
 };
 

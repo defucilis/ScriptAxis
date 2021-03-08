@@ -33,7 +33,7 @@ const Index = (): JSX.Element => {
         };
 
         let recentScriptsTime = Number(window.localStorage.getItem("recentScriptsTime"));
-        if(process.env.NEXT_PUBLIC_SFW_MODE) recentScriptsTime = 0;
+        if (process.env.NEXT_PUBLIC_SFW_MODE) recentScriptsTime = 0;
         if (recentScriptsTime) {
             const diff = new Date().valueOf() - recentScriptsTime;
             //update if it's been more than a day

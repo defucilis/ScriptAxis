@@ -135,7 +135,7 @@ const Tags = props => {
                 newVal = JSON.parse(newVal);
                 if (newVal.length > 0 && newVal[0].value) {
                     newVal = newVal.map(val => val.value);
-                    if(props.validateTags) {
+                    if (props.validateTags) {
                         newVal = props.validateTags(newVal);
                     }
                 }
