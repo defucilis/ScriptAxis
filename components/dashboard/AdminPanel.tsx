@@ -406,6 +406,7 @@ const AdminPanel = ({ existingScripts }: { existingScripts: ScriptStub[] }): JSX
                 addMessage("");
                 setRunning(false);
                 progressBarParentRef.current.style.setProperty("display", "none");
+                window.localStorage.removeItem("recentScriptsTime");
             },
             error => {
                 addMessage("Error: " + error);
