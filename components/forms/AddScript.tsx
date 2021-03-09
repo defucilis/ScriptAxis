@@ -122,6 +122,9 @@ const createScript = async (
         data.thumbnail = "/img/placeholder-thumbnail.png";
     }
 
+    //modify the form data into something useful for the database
+    data.duration = ScriptUtils.stringToDuration(postData.duration);
+
     const testDataString = ScriptUtils.getScriptObjectCode(data);
     try {
         await navigator.clipboard.writeText(testDataString);
@@ -130,9 +133,6 @@ const createScript = async (
     } catch (error) {
         console.error("Failed to write test data to clipboard", error);
     }
-
-    //modify the form data into something useful for the database
-    data.duration = ScriptUtils.stringToDuration(postData.duration);
 
     try {
         const response = await axios.post("/api/scripts/create", data);

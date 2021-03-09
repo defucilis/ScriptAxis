@@ -69,6 +69,63 @@ const TestData: TestDataScriptInput[] = [
         created: new Date(2021, 0, 5).valueOf(),
     },
     {
+        name: "The Girl Don Quixote Dreamt About",
+        creator: "bobxx",
+        sourceUrl:
+            "https://discuss.eroscripts.com/t/dulcinea-the-girl-don-quixote-dreamt-about-14-37/18231",
+        streamingUrl:
+            "https://www.theyarehuge.com/v/521494081220-dulcinea-the-girl-don-quixote-dreamt-about.big-boobs/",
+        thumbnail:
+            "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumbnails%2Fthe-girl-don-quixote-dreamt-about?alt=media&token=3cda0de0-e4a8-4db3-a474-b97ef852ccb3",
+        description:
+            "This is my first script, in a niche section.    \nI tryed to play with the interaction, love some (pro) feedback.    \nThis was made frame by frame…    \nIt is more than blunt penetration it starts with teasing and playing.    \n\nTested on KEON.\n\n (this video is +3 seconds off got no better link. Porntrex is removed…)",
+        duration: "14:33",
+        category: "Solo Female",
+        tags: ["BBW", "POV", "Dildo"],
+        studio: "Scoreland",
+        talent: ["Dulcinea"],
+        likeCount: 0,
+        views: 0,
+        thumbsUp: 1,
+        thumbsDown: 0,
+        created: new Date(2021, 2, 9).valueOf(),
+    },
+    {
+        name: "Latina back at it again with Amazing Tittyfuck with Sports Bra",
+        creator: "jmraynor",
+        sourceUrl: "https://discuss.eroscripts.com/t/latina-titfuck/18247",
+        streamingUrl: "https://pornhub.com/view_video.php?viewkey=ph5c2c1bdbad3da",
+        thumbnail:
+            "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumbnails%2Flatina-back-at-it-again-with-amazing-tittyfuck-with-sports-bra?alt=media&token=c6fc79e6-c5f7-4d38-a390-c74aaadf7fa1",
+        duration: "4:35",
+        category: "Titfuck",
+        tags: ["Blowjob", "POV"],
+        likeCount: 0,
+        views: 0,
+        thumbsUp: 1,
+        thumbsDown: 0,
+        created: new Date(2021, 2, 9).valueOf(),
+    },
+    {
+        name: "Big Tits MILF Lisa Ann at the Glory Hole",
+        creator: "Lester_Bangs13",
+        sourceUrl:
+            "https://discuss.eroscripts.com/t/lisa-ann-gloryhole-scene-with-the-legendary-lisa-ann/18215",
+        thumbnail:
+            "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumbnails%2Fbig-tits-milf-lisa-ann-at-the-glory-hole?alt=media&token=bd5779d8-be38-4073-a53e-e71ed8e71575",
+        description:
+            "So I’ve been thinking of making more scripts recently and always been fascinated by Gloryhole scenes, specifically those with a legendary pornstars on the other side of the wall. So I’m trying a concept here where I have scripted a Gloryhole scene but there is a twist…you don’t know when it’s your turn. I’ve scripted one cocks experience so it is as though you’re the budding amateur in this one and you’ll just have to wait and see when Lisa gets to you. Thinking of doing more of these in future.\n\nI would suggest that you put the Handy on and just edge yourself until its your turn, like you would if you were waiting for your turn in the scene. I’ve started the script at your base so you should be able to work yourself before she gets to you or if you’re using a closed sleeve you’ll have to pop it on when the script kicks in.",
+        duration: "24:09",
+        category: "Full Scene",
+        tags: ["Blowjob", "MILF", "Cum On Tits", "Handjob", "Vaginal"],
+        talent: ["Lisa Ann"],
+        likeCount: 0,
+        views: 0,
+        thumbsUp: 1,
+        thumbsDown: 0,
+        created: new Date(2021, 2, 9).valueOf(),
+    },
+    {
         name: "Your Stepsister Makes You Jerk off in Front of Her",
         creator: "kattsand",
         sourceUrl:
@@ -78,7 +135,7 @@ const TestData: TestDataScriptInput[] = [
             "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumbnails%2Fyour-stepsister-makes-you-jerk-off-in-front-of-her?alt=media&token=1832aaba-429f-4784-8519-4f44353d08a0",
         description:
             "Hello everybody!\n\nFeedback is welcome, this is my first script.    \nThis is a basic JOI, that starts of easy and gradually intensifies towards the end ba dam tss.\n\nI also added some slow moments at the beginning of the video, as i prefer to have something happening in the talking bits.\n\nHappy fapping.\n\nThis was made with OpenFunscripter and tested with The Handy.",
-        duration: "-1",
+        duration: "6:39",
         category: "JOI",
         tags: ["Dirty Talk", "POV", "HD", "Incest"],
         talent: ["Chloe Cherry"],
@@ -96,7 +153,7 @@ const TestData: TestDataScriptInput[] = [
             "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumbnails%2Fcock-hero-trip-2-goa?alt=media&token=944f190b-aa31-4206-810c-2da370f48e18",
         description:
             "This is by far my number one Cock Hero video of all time so it was just about time to create my own script version for it. I hope you will like it 😊\n\nWhen I finished this version and played the script the first time I had focused only on the beats which did not work well since the action was off sync most of the time so I invested another two days to sync the strokes frame by frame to the action, removed some of my patterns and replaced them with new ones that felt better.\n\nI have reduced the stroking range when the action is faster than Handy’s limits so the patterns are not disturbed. I recommend to use a hands free mount, an open ended sleeve without lube to increase the intensity. With lube it does not play as good because of the used patterns.\n\nI have tested this a few times and can say that I am always getting realy exited when it gets closer to the end since I realy love the last pattern which is going to milk you dry. Don’t play this script if you have played another script before. It won’t be the same!\n\n---\n\nAriana and her friends are testing your stamina in this fast paced Cock Hero video.    \nPrepare to cum if you take up this challenge!\n\nScripted at full speed with OFS.    \nBuild and tested with Handy.",
-        duration: "-1",
+        duration: "11:35",
         category: "Cock Hero",
         tags: ["Blowjob", "Vaginal", "Anal", "Creampie", "POV", "HD"],
         studio: "kharon",
@@ -116,7 +173,7 @@ const TestData: TestDataScriptInput[] = [
             "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumbnails%2Fteach-schoolgirl-in-short-skirt-anal-creampie?alt=media&token=50477750-285b-4dc0-95d3-792a2b01a160",
         description:
             "Hello everybody!\n\nEpisode 4 is here, earlier than I expected.\n\nSo, what do we have? It’s DickForLily - again. This time not a pure blowjob video. Instead we have some variety. You get a blowjob / handjob in the beginning, but then she rides you reversed cowgirl - anal. Later on you get to do her pov doggystyle - anal again. After that the camera angle changes a bit. You get to see her face, while you do her from behind. It all ends with an anal creampie.\n\nThe script itself is pretty intense. Fast paced, intense action all the time with very small breaks. There are some sections, where she really pounds him and later where he really pounds her. This shows in slower upstrokes, followed by fast and hard down strokes.\nI really wanted to make it show in the script and hope it turned out good.\n\nIt’s a bit different from what I usually script. You will mostly find videos I scripted, where the male is passive and the girl is doing the action. There are some older videos I scripted, where the action also comes from the male. But my recent ones don’t involve any action from the male. I wanted to change it a bit and would like to see, how well this one gets received.\n\nSo any feedback is welcome, especially on this one. Depending on how you like the script, I will decide what video I am doing for episode 5.\n\nEnjoy the script 🙂\n\nSlibowitz\n\nStarts in male pov with a blowjob / handjob, followed by reversed cowgirl anal, followed by doggystyle pov anal, followed by doggystyle anal with view on her face, ends with an anal creampie.",
-        duration: "-1",
+        duration: "12:00",
         category: "Anal",
         tags: ["POV", "Blowjob", "Anal Creampie", "HD"],
         talent: ["Dickforlily"],
@@ -133,7 +190,7 @@ const TestData: TestDataScriptInput[] = [
         thumbnail:
             "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumbnails%2Fcum-three-times-joi?alt=media&token=6dadc2bd-5872-411a-a6c6-a40fab123864",
         description: "Requested by Miryo89\n\nEnjoy 😉",
-        duration: "-1",
+        duration: "15:41",
         category: "JOI",
         tags: ["Dildo", "Dirty Talk", "POV", "Solo Female"],
         talent: ["Bryci"],
@@ -153,7 +210,7 @@ const TestData: TestDataScriptInput[] = [
         thumbnail: "/img/placeholder-thumbnail.png",
         description:
             "This is the first script I’ve ever made. I love these audio based scripts because the lack of visuals gives me a good sense suspense of not knowing what will be coming and lets my imagination go wild. I spent a while working on this since I kept revising parts over and over again so there may be inconsistencies in machine movement between sequences due to that. However I didn’t want to keep working on it forever so I decided to publish what I’ve got and move on to something new. I went very mild on this script since I felt like it would be more fun to enjoy a nice slow milking instead of getting my dick jackhammered. Try to last the whole audio or really torture yourself getting milked three times.\n\n[/r/gonewildaudio link](https://www.reddit.com/r/gonewildaudio/comments/bkah8w/f4m_the_milking_machine_fdom_script_fill_rape/)",
-        duration: "-1",
+        duration: "20:04",
         category: "Audio Only",
         tags: ["Femdom", "Handjob"],
         talent: ["Hannahslamma"],
@@ -173,7 +230,7 @@ const TestData: TestDataScriptInput[] = [
             "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumbnails%2Fyoung-school-girl-gags-on-teachers-cock?alt=media&token=d98dfd51-8e69-4801-a719-77b167a5f20d",
         description:
             "Loving these videos right moew!    \nPlease note, I use a mounted handy with fleshlight quickshot. So you may need to adjust your height or the script may feel off.\n\nMade with FunJoy\n\nTested with Scriptplayer",
-        duration: "-1",
+        duration: "5:20",
         category: "Blowjob",
         tags: ["Deepthroat", "POV", "HD", "Facial"],
         talent: ["Violet Moreau"],
@@ -194,7 +251,7 @@ const TestData: TestDataScriptInput[] = [
             "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumbnails%2Fthe-long-distance-call?alt=media&token=fcc97ff6-cad2-4fc4-94e9-fa482cd63df8",
         description:
             "Family Therapy presents Kenzie Reeves doing 1on1 b/g taboo scene while she’s talking with her boyfriend on her cellphone.    \nThe video includes: oral; pussy fingering; pussy-fucking until he cums in her mouth and pretty face.\n\nThis is my first script created with JFS and frame by frame method.\nTested on OSR2",
-        duration: "-1",
+        duration: "14:17",
         category: "Full Scene",
         tags: ["Handjob", "Blowjob", "Fingering", "Vaginal", "POV", "Facial"],
         studio: "Family Therapy",
@@ -215,7 +272,7 @@ const TestData: TestDataScriptInput[] = [
             "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumbnails%2Fhot-deep-blowjob-in-the-bathroom?alt=media&token=59a68553-4445-4e4d-80c7-807823008e7b",
         description:
             "Adding one more from my completed collection. This is one of SladkiSlivki doing some insanely wonderful things with her mouth and throat. This is only four and a half minutes long, but it is short, sweet, and sloppy. I can make more of her longer videos if people enjoy her.\n\nAgain feedback is welcome as always.\n\nPlease enjoy.",
-        duration: "-1",
+        duration: "4:26",
         category: "Blowjob",
         tags: ["POV", "HD", "Incomplete"],
         likeCount: 0,
@@ -234,7 +291,7 @@ const TestData: TestDataScriptInput[] = [
             "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumbnails%2Femma-hix-wants-the-milk-no-cookies?alt=media&token=c3eca5a5-a80d-4201-966d-2a2e7e0467d4",
         description:
             "First Script that I ever worked on featuring one of my favorite beauts giving a wonderfully sloppy POV blowjob. I have been sitting on this one for a while and finally got around to uploading it. I hope y’all enjoy, and any feedback is always appreciated and welcome.",
-        duration: "-1",
+        duration: "16:01",
         category: "Blowjob",
         tags: ["Deepthroat", "Handjob", "Cum In Mouth"],
         studio: "Swallow Salon",
@@ -254,7 +311,7 @@ const TestData: TestDataScriptInput[] = [
             "https://firebasestorage.googleapis.com/v0/b/scriptlibrary-8f879.appspot.com/o/thumbnails%2Fbutt-braces-bjs?alt=media&token=3e54f603-a214-4ae3-9224-a40d7270b64d",
         description:
             "Big **Blank** Scripts areas ,    \n3:57 - 5:23,    \n10:02 - 10:38\n\nTested with handy, this is my 1st script and I did this for fun\n\n**I randomly did a fast up and down at some part where i saw fit.I did this because i like it.**    \nEx: 80% 100%",
-        duration: "-1",
+        duration: "19:08",
         category: "Full Scene",
         tags: ["Blowjob", "Handjob", "Vaginal", "POV", "HD", "Cum In Mouth", "Anal"],
         talent: ["Cherry Crush"],
