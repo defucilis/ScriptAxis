@@ -489,7 +489,7 @@ const getScriptObjectCode = (data: ScriptFormDataOutput): string => {
     lines.push(`    thumbnail:      "${data.thumbnail}",`);
     if (data.description && data.description !== "")
         lines.push(`    description:    "${data.description.replace(/\r?\n|\r/g, "\\n")}",`);
-    lines.push(`    duration:       "${data.duration}",`);
+    lines.push(`    duration:       "${durationToString(data.duration)}",`);
     lines.push(`    category:       "${data.category}",`);
     lines.push("    tags: [");
     if (data.tags && data.tags.length > 0) {
