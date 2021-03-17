@@ -38,7 +38,7 @@ const BrowseScripts = ({
         if (query.filters.category)
             return `Category: ${query.filters.category.name.equals} (${scriptCount} total)`;
         if (query.filters.include) return `Tag: ${query.filters.include[0]} (${scriptCount} total)`;
-        return "Filtered Scripts (${scriptCount} total)";
+        return `Filtered Scripts (${scriptCount} total)`;
     };
 
     const getBodyTitle = (query: Query) => {
