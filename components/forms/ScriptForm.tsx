@@ -326,7 +326,7 @@ const ScriptForm = ({
                         settings: {
                             validate: (tag: { value: string }) => {
                                 const transformedTag = tag.value.trim().toLowerCase();
-                                const match = transformedTag.match("[a-z ]+");
+                                const match = transformedTag.match("[a-z 0-9]+");
                                 const success =
                                     match &&
                                     match.length === 1 &&
