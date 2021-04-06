@@ -124,6 +124,11 @@ const Header = ({ page }: { page?: HeaderPage }): JSX.Element => {
                             <Link href="/dashboard">
                                 <a className={styles.addscript}>Dashboard</a>
                             </Link>
+                            {user.isAdmin ? (
+                                <Link href="/admin">
+                                    <a className={styles.addscript}>Admin</a>
+                                </Link>
+                            ) : null}
                         </div>
                     )}
                 </div>
