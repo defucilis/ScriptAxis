@@ -15,27 +15,29 @@ const Aggregate = async (): Promise<Creator[]> => {
             },
         });
 
-        const thumbnail =
-            allScripts.length > 0 ? allScripts.sort((a, b) => b.views - a.views)[0].thumbnail : "";
-
-        const aggregations = await prisma.script.aggregate({
-            where: {
-                creator: {
-                    name: creator.name,
-                },
-            },
-            sum: {
-                views: true,
-                likeCount: true,
-            },
+        //Remove duplicates
+        const uniqueScripts = [];
+        let totalViews = 0;
+        let totalLikes = 0;
+        allScripts.forEach(script => {
+            if (uniqueScripts.findIndex(s => s.sourceUrl === script.sourceUrl)) return;
+            uniqueScripts.push(script);
+            totalViews += script.views;
+            totalLikes += script.likeCount;
         });
+
+        const thumbnail =
+            uniqueScripts.length > 0
+                ? uniqueScripts.sort((a, b) => b.views - a.views)[0].thumbnail
+                : "";
+
         const updatedCreator = await prisma.creator.update({
             where: {
                 name: creator.name,
             },
             data: {
-                totalViews: aggregations.sum.views,
-                totalLikes: aggregations.sum.likeCount,
+                totalViews,
+                totalLikes,
                 thumbnail,
             },
         });
