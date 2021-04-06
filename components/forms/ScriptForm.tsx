@@ -429,7 +429,6 @@ const ScriptForm = ({
                     onChange={handleChange}
                     error={errors.talent}
                     value={formData.talent}
-                    validateTags={validateTags}
                 />
                 <Datepicker
                     name="created"
