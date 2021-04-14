@@ -40,6 +40,7 @@ const AddScript = ({ tags, categories, talent, studios, creators }: StringLists)
                 console.log("Script created successfully", response);
                 //ensure the homepage reloads properly
                 window.localStorage.removeItem("recentScriptsTime");
+                window.localStorage.removeItem("topScriptsTime");
                 if (Router.pathname === "/add") Router.push(`/script/${response.slug}`);
                 else {
                     if (

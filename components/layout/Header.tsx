@@ -44,7 +44,7 @@ const Header = ({ page }: { page?: HeaderPage }): JSX.Element => {
         const storedTagCounts = window.localStorage.getItem("storedTagCounts");
         const storedCategoryCounts = window.localStorage.getItem("storedCategoryCounts");
         let lastListFetchTime = Number(window.localStorage.getItem("lastListFetchTime"));
-        if (process.env.NEXT_PUBLIC_SFW_MODE) {
+        if (process.env.NEXT_PUBLIC_SFW_MODE === "true") {
             lastListFetchTime = 0;
         }
         if (storedScriptCount) setScriptCount(storedScriptCount);
