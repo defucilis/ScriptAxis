@@ -1,25 +1,30 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import ScriptUtils from "lib/ScriptUtils";
 import { Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const FetchScripts = async (amount: number): Promise<Script[]> => {
+const FetchScripts = async (
+    amount?: number,
+    orderBy?: Prisma.Enumerable<Prisma.ScriptOrderByInput>,
+    minDate?: Date
+): Promise<Script[]> => {
     const prisma = new PrismaClient();
     try {
         console.log("Fetching all scripts");
-        let scripts = await prisma.script.findMany({
+        const findParams: any = {
             where: {
                 active: true,
-            },
-            take: amount,
-            orderBy: {
-                created: "desc",
             },
             include: {
                 creator: { select: { name: true } },
                 owner: { select: { username: true } },
             },
-        });
+        };
+        if (amount) findParams.take = amount;
+        if (orderBy) findParams.orderBy = orderBy;
+        if (minDate) findParams.where.created = { gte: minDate };
+
+        let scripts = await prisma.script.findMany(findParams);
         if (process.env.NEXT_PUBLIC_SFW_MODE === "true") {
             scripts = scripts.map(script => ScriptUtils.makeScriptSfw(script));
         }
@@ -35,8 +40,10 @@ export { FetchScripts };
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
-        const amount = req.body && req.body.take ? Number(req.body.take) : 16;
-        const scripts = await FetchScripts(amount);
+        const amount = req.body && req.body.take ? Number(req.body.take) : undefined;
+        const orderBy = req.body && req.body.orderBy ? req.body.orderBy : { created: "desc" };
+        const minDate = req.body && req.body.minDate ? new Date(req.body.minDate) : undefined;
+        const scripts = await FetchScripts(amount, orderBy, minDate);
         res.status(200);
         res.json(scripts);
     } catch (error) {

@@ -166,7 +166,7 @@ const RunScrape = async (
 ) => {
     onMessage("Scraping all views and likes from EroScripts");
     onMessage("--Fetching all scripts from database");
-    const response = await axios.post("/api/scripts", { take: 99999 });
+    const response = await axios.post("/api/scripts");
     if (response.data.error) {
         onError(response.data.error);
         onComplete();
@@ -407,6 +407,7 @@ const AdminPanel = ({ existingScripts }: { existingScripts: ScriptStub[] }): JSX
                 setRunning(false);
                 progressBarParentRef.current.style.setProperty("display", "none");
                 window.localStorage.removeItem("recentScriptsTime");
+                window.localStorage.removeItem("topScriptsTime");
             },
             error => {
                 addMessage("Error: " + error);

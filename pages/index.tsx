@@ -9,21 +9,33 @@ import Layout from "../components/layout/Layout";
 import ScriptGrid from "../components/scripts/ScriptGrid";
 
 import style from "./index.module.scss";
+import TopScriptsGrid from "components/scripts/TopScriptsGrid";
+import { Script } from "lib/types";
 
 const Index = (): JSX.Element => {
     const [loading, setLoading] = useState(0);
     const [error, setError] = useState(null);
-    const [scripts, setScripts] = useState(null);
+    const [scripts, setScripts] = useState<Script[]>([]);
+    const [topScripts, setTopScripts] = useState<Script[]>([]);
     useEffect(() => {
         const fetchScripts = async () => {
             try {
                 setLoading(1);
-                const response = await axios.get("/api/scripts");
+                const response = await axios.post("/api/indexScripts");
                 console.log(response.data);
                 if (response.data.error) throw response.data.error;
-                setScripts(response.data);
-                window.localStorage.setItem("recentScripts", JSON.stringify(response.data));
+                setScripts(response.data.recentScripts);
+                window.localStorage.setItem(
+                    "recentScripts",
+                    JSON.stringify(response.data.recentScripts)
+                );
                 window.localStorage.setItem("recentScriptsTime", new Date().valueOf().toString());
+
+                if (response.data.error) throw response.data.error;
+                setTopScripts(response.data.topScripts);
+                window.localStorage.setItem("topScripts", JSON.stringify(response.data.topScripts));
+                window.localStorage.setItem("topScriptsTime", new Date().valueOf().toString());
+
                 setLoading(-1);
             } catch (error) {
                 console.error(error);
@@ -33,7 +45,7 @@ const Index = (): JSX.Element => {
         };
 
         let recentScriptsTime = Number(window.localStorage.getItem("recentScriptsTime"));
-        if (process.env.NEXT_PUBLIC_SFW_MODE) recentScriptsTime = 0;
+        if (process.env.NEXT_PUBLIC_SFW_MODE === "true") recentScriptsTime = 0;
         if (recentScriptsTime) {
             const diff = new Date().valueOf() - recentScriptsTime;
             //update if it's been more than a day
@@ -41,6 +53,9 @@ const Index = (): JSX.Element => {
             else {
                 const cachedScripts = JSON.parse(window.localStorage.getItem("recentScripts"));
                 setScripts(cachedScripts);
+
+                const cachedTopScripts = JSON.parse(window.localStorage.getItem("topScripts"));
+                setTopScripts(cachedTopScripts);
                 setLoading(-1);
             }
         } else fetchScripts();
@@ -84,6 +99,7 @@ const Index = (): JSX.Element => {
                 <>
                     <h1>Recently added scripts</h1>
                     <ScriptGrid scripts={scripts} />
+                    <TopScriptsGrid initialScripts={topScripts} />
                 </> //
             )}
         </Layout>

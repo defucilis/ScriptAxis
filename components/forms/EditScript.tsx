@@ -64,6 +64,7 @@ const EditScript = ({
                 console.log("Script updated successfully", response);
                 //ensure the homepage reloads properly
                 window.localStorage.removeItem("recentScriptsTime");
+                window.localStorage.removeItem("topScriptsTime");
                 if (Router.pathname.includes("/edit")) Router.push(`/script/${response.slug}`);
                 else {
                     if (
