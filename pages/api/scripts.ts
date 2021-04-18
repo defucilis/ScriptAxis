@@ -2,6 +2,25 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import ScriptUtils from "lib/ScriptUtils";
 import { Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
+import Cors from "cors";
+
+const initMiddleware = middleware => {
+    return (req, res) =>
+        new Promise((resolve, reject) => {
+            middleware(req, res, result => {
+                if (result instanceof Error) {
+                    return reject(result);
+                }
+                return resolve(result);
+            });
+        });
+};
+
+const cors = initMiddleware(
+    Cors({
+        methods: ["POST"],
+    })
+);
 
 const FetchScripts = async (
     amount?: number,
@@ -39,6 +58,7 @@ const FetchScripts = async (
 export { FetchScripts };
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+    await cors(req, res);
     try {
         const amount = req.body && req.body.take ? Number(req.body.take) : undefined;
         const orderBy = req.body && req.body.orderBy ? req.body.orderBy : { created: "desc" };
