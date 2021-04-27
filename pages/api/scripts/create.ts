@@ -123,6 +123,7 @@ const CreateScript = async (rawData: any): Promise<Script> => {
         }
 
         const results: any[] = await prisma.$transaction(transaction);
+        await prisma.$disconnect();
         return results[0];
     } catch (error) {
         await prisma.$disconnect();

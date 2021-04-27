@@ -7206,17 +7206,21 @@ const TestData: TestDataScriptInput[] = [
 ];
 
 const GetTestData = (): TestDataScript[] => {
-    return TestData.filter(data => data.name !== "TemplateScript").map(
+    return PrepareTestData(TestData);
+};
+
+export const PrepareTestData = (scripts: any[]): TestDataScript[] => {
+    return scripts.filter(data => data.name !== "TemplateScript").map(
         (data: TestDataScriptInput) => {
             return {
                 ...data,
                 slug: slugify(data.name).toLowerCase(),
                 thumbnail: data.thumbnail || "/img/placeholder-thumbnail.png",
                 duration: ScriptUtils.stringToDuration(data.duration),
-                owner: "9cf9dc87-a8cf-4c17-bb95-1f5c05b8d791",
+                owner: "487e9807-627a-4f9a-8520-1f61603fa23c",
             };
         }
     );
-};
+}
 
 export default GetTestData;

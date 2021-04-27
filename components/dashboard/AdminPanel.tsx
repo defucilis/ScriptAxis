@@ -7,7 +7,7 @@ import * as imageConversion from "image-conversion";
 import dayjs from "dayjs";
 import { FaCheck } from "react-icons/fa";
 
-import GetTestData, { TestDataScript } from "../../lib/TestData";
+import GetTestData, { PrepareTestData, TestDataScript } from "../../lib/TestData";
 import ScriptUtils from "../../lib/ScriptUtils";
 import FirebaseUtils from "../../lib/FirebaseUtils";
 import { Dropzone } from "../forms/FormUtils";
@@ -369,6 +369,69 @@ const AdminPanel = ({ existingScripts }: { existingScripts: ScriptStub[] }): JSX
         );
     };
 
+    const readFile = async(file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            try {
+                const reader = new FileReader();
+                reader.onloadend = (e: ProgressEvent<FileReader>) => {
+                    resolve(String(e.target.result));
+                };
+                reader.readAsText(file);
+            } catch(error) {
+                reject(error);
+            }
+        });
+    }
+
+    const [jsonBackup, setJsonBackup] = useState(null);
+    const StartJsonRestore = async () => {
+        if(!jsonBackup) {
+            alert("Add a JSON backup file first");
+            return;
+        }
+        console.log(jsonBackup);
+        const extension = jsonBackup.name.split(".").slice(-1)[0];
+        if(extension !== "json") {
+            alert("JSON files only!");
+            return;
+        }
+
+        setRunning(true);
+
+        progressBarParentRef.current.style.setProperty("display", "block");
+        progressBarRef.current.style.setProperty("width", "0%");
+
+        const jsonString = await readFile(jsonBackup);
+        const scriptsToAdd = PrepareTestData(JSON.parse(jsonString)).filter(script => {
+            return scripts.findIndex(s => s.name === script.name) === -1;
+        });
+
+        AddData(
+            scriptsToAdd,
+            addMessage,
+            (count, total) => {
+                progressBarRef.current.style.setProperty(
+                    "width",
+                    `${Math.round((count * 100) / total)}%`
+                );
+            },
+            addedCount => {
+                addMessage(`Successfully added ${addedCount} scripts to database`);
+                addMessage("");
+                progressBarParentRef.current.style.setProperty("display", "none");
+                setRunning(false);
+            },
+            (failCount, scriptCount) => {
+                addMessage("Finished adding scripts");
+                addMessage(`Error: failed ${failCount} out of ${scriptCount}`);
+                addMessage("");
+                progressBarParentRef.current.style.setProperty("display", "none");
+                setRunning(false);
+            }
+        );
+    }
+
+
     const [preparedDownload, setPreparedDownload] = useState("");
     const StartGetJsonBackup = () => {
         setPreparedDownload("");
@@ -479,6 +542,27 @@ const AdminPanel = ({ existingScripts }: { existingScripts: ScriptStub[] }): JSX
                     </Checkbox>
                     <button onClick={StartScrape}>Scrape Views and Likes</button>
                 </div>
+                <Dropzone
+                    id="backup"
+                    name="backup"
+                    label=""
+                    className={style.dropzone}
+                    hoveringClassName={style.dropzoneon}
+                    instruction="Drag + Drop JSON backup to restore"
+                    options={{
+                        accept: [".json"],
+                        //maxSize: 2000000, //2MB
+                        multiple: false,
+                        noKeyboard: true,
+                        preventDropOnDocument: true,
+                        pasteable: true,
+                    }}
+                    onChange={(e) => setJsonBackup(e.target.value[0])}
+                    onError={(error: string) => addMessage("Error: " + error)}
+                    error={""}
+                    value={jsonBackup}
+                />
+                <button onClick={StartJsonRestore}>Restore from JSON Backup</button>
             </div>
             <div className={style.progressbg} ref={progressBarParentRef}>
                 <div className={style.progressbar} ref={progressBarRef}></div>
