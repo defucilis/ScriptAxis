@@ -1,0 +1,55 @@
+{
+    "version": "0.3.14-fixed",
+    "steps": [
+        {
+            "tag": "CreateModel",
+            "model": "Talent"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Talent",
+            "field": "name",
+            "type": "String",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Talent",
+                    "field": "name"
+                },
+                "directive": "id"
+            }
+        },
+        {
+            "tag": "CreateModel",
+            "model": "Studio"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Studio",
+            "field": "name",
+            "type": "String",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Studio",
+                    "field": "name"
+                },
+                "directive": "id"
+            }
+        },
+        {
+            "tag": "UpdateField",
+            "model": "Script",
+            "field": "talent",
+            "type": "Talent"
+        }
+    ]
+}

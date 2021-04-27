@@ -1,0 +1,1009 @@
+{
+    "version": "0.3.14-fixed",
+    "steps": [
+        {
+            "tag": "CreateSource",
+            "source": "db"
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Source",
+                "source": "db"
+            },
+            "argument": "provider",
+            "value": "\"postgresql\""
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Source",
+                "source": "db"
+            },
+            "argument": "url",
+            "value": "\"***\""
+        },
+        {
+            "tag": "CreateModel",
+            "model": "Script"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "id",
+            "type": "Int",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "id"
+                },
+                "directive": "default"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "id"
+                },
+                "directive": "default"
+            },
+            "argument": "",
+            "value": "autoincrement()"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "id"
+                },
+                "directive": "id"
+            }
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "name",
+            "type": "String",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "slug",
+            "type": "String",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "slug"
+                },
+                "directive": "unique"
+            }
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "creator",
+            "type": "Creator",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "owner",
+            "type": "User",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "owner"
+                },
+                "directive": "relation"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "owner"
+                },
+                "directive": "relation"
+            },
+            "argument": "",
+            "value": "\"ScriptOwner\""
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "category",
+            "type": "Category",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "tags",
+            "type": "Tag",
+            "arity": "List"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "description",
+            "type": "String",
+            "arity": "Optional"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "duration",
+            "type": "Int",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "thumbnail",
+            "type": "String",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "sourceUrl",
+            "type": "String",
+            "arity": "Optional"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "active",
+            "type": "Boolean",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "active"
+                },
+                "directive": "default"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "active"
+                },
+                "directive": "default"
+            },
+            "argument": "",
+            "value": "true"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "likedBy",
+            "type": "User",
+            "arity": "List"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "likedBy"
+                },
+                "directive": "relation"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "likedBy"
+                },
+                "directive": "relation"
+            },
+            "argument": "",
+            "value": "\"ScriptLiker\""
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "likeCount",
+            "type": "Int",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "likeCount"
+                },
+                "directive": "default"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "likeCount"
+                },
+                "directive": "default"
+            },
+            "argument": "",
+            "value": "0"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "thumbsUp",
+            "type": "Int",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "thumbsUp"
+                },
+                "directive": "default"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "thumbsUp"
+                },
+                "directive": "default"
+            },
+            "argument": "",
+            "value": "1"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "thumbsDown",
+            "type": "Int",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "thumbsDown"
+                },
+                "directive": "default"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "thumbsDown"
+                },
+                "directive": "default"
+            },
+            "argument": "",
+            "value": "0"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "views",
+            "type": "Int",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "views"
+                },
+                "directive": "default"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "views"
+                },
+                "directive": "default"
+            },
+            "argument": "",
+            "value": "0"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "created",
+            "type": "DateTime",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "created"
+                },
+                "directive": "default"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "created"
+                },
+                "directive": "default"
+            },
+            "argument": "",
+            "value": "now()"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "modified",
+            "type": "DateTime",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Script",
+                    "field": "modified"
+                },
+                "directive": "updatedAt"
+            }
+        },
+        {
+            "tag": "CreateModel",
+            "model": "Creator"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Creator",
+            "field": "name",
+            "type": "String",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Creator",
+                    "field": "name"
+                },
+                "directive": "id"
+            }
+        },
+        {
+            "tag": "CreateField",
+            "model": "Creator",
+            "field": "user",
+            "type": "User",
+            "arity": "Optional"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Creator",
+            "field": "scripts",
+            "type": "Script",
+            "arity": "List"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Creator",
+            "field": "totalViews",
+            "type": "Int",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Creator",
+                    "field": "totalViews"
+                },
+                "directive": "default"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "Creator",
+                    "field": "totalViews"
+                },
+                "directive": "default"
+            },
+            "argument": "",
+            "value": "0"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Creator",
+            "field": "totalLikes",
+            "type": "Int",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Creator",
+                    "field": "totalLikes"
+                },
+                "directive": "default"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "Creator",
+                    "field": "totalLikes"
+                },
+                "directive": "default"
+            },
+            "argument": "",
+            "value": "0"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Creator",
+            "field": "created",
+            "type": "DateTime",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Creator",
+                    "field": "created"
+                },
+                "directive": "default"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "Creator",
+                    "field": "created"
+                },
+                "directive": "default"
+            },
+            "argument": "",
+            "value": "now()"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Creator",
+            "field": "modified",
+            "type": "DateTime",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Creator",
+                    "field": "modified"
+                },
+                "directive": "updatedAt"
+            }
+        },
+        {
+            "tag": "CreateModel",
+            "model": "Category"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Category",
+            "field": "name",
+            "type": "String",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Category",
+                    "field": "name"
+                },
+                "directive": "id"
+            }
+        },
+        {
+            "tag": "CreateField",
+            "model": "Category",
+            "field": "scripts",
+            "type": "Script",
+            "arity": "List"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Category",
+            "field": "count",
+            "type": "Int",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Category",
+                    "field": "count"
+                },
+                "directive": "default"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "Category",
+                    "field": "count"
+                },
+                "directive": "default"
+            },
+            "argument": "",
+            "value": "0"
+        },
+        {
+            "tag": "CreateModel",
+            "model": "Tag"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Tag",
+            "field": "name",
+            "type": "String",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Tag",
+                    "field": "name"
+                },
+                "directive": "id"
+            }
+        },
+        {
+            "tag": "CreateField",
+            "model": "Tag",
+            "field": "count",
+            "type": "Int",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "Tag",
+                    "field": "count"
+                },
+                "directive": "default"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "Tag",
+                    "field": "count"
+                },
+                "directive": "default"
+            },
+            "argument": "",
+            "value": "0"
+        },
+        {
+            "tag": "CreateModel",
+            "model": "User"
+        },
+        {
+            "tag": "CreateField",
+            "model": "User",
+            "field": "id",
+            "type": "String",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "User",
+                    "field": "id"
+                },
+                "directive": "default"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "User",
+                    "field": "id"
+                },
+                "directive": "default"
+            },
+            "argument": "",
+            "value": "uuid()"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "User",
+                    "field": "id"
+                },
+                "directive": "id"
+            }
+        },
+        {
+            "tag": "CreateField",
+            "model": "User",
+            "field": "username",
+            "type": "String",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "User",
+                    "field": "username"
+                },
+                "directive": "unique"
+            }
+        },
+        {
+            "tag": "CreateField",
+            "model": "User",
+            "field": "email",
+            "type": "String",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "User",
+                    "field": "email"
+                },
+                "directive": "unique"
+            }
+        },
+        {
+            "tag": "CreateField",
+            "model": "User",
+            "field": "creator",
+            "type": "Creator",
+            "arity": "Optional"
+        },
+        {
+            "tag": "CreateField",
+            "model": "User",
+            "field": "ownedScripts",
+            "type": "Script",
+            "arity": "List"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "User",
+                    "field": "ownedScripts"
+                },
+                "directive": "relation"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "User",
+                    "field": "ownedScripts"
+                },
+                "directive": "relation"
+            },
+            "argument": "",
+            "value": "\"ScriptOwner\""
+        },
+        {
+            "tag": "CreateField",
+            "model": "User",
+            "field": "likedScripts",
+            "type": "Script",
+            "arity": "List"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "User",
+                    "field": "likedScripts"
+                },
+                "directive": "relation"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "User",
+                    "field": "likedScripts"
+                },
+                "directive": "relation"
+            },
+            "argument": "",
+            "value": "\"ScriptLiker\""
+        },
+        {
+            "tag": "CreateField",
+            "model": "User",
+            "field": "created",
+            "type": "DateTime",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "User",
+                    "field": "created"
+                },
+                "directive": "default"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "User",
+                    "field": "created"
+                },
+                "directive": "default"
+            },
+            "argument": "",
+            "value": "now()"
+        },
+        {
+            "tag": "CreateField",
+            "model": "User",
+            "field": "modified",
+            "type": "DateTime",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "User",
+                    "field": "modified"
+                },
+                "directive": "updatedAt"
+            }
+        },
+        {
+            "tag": "CreateModel",
+            "model": "VerificationRequest"
+        },
+        {
+            "tag": "CreateField",
+            "model": "VerificationRequest",
+            "field": "id",
+            "type": "Int",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "VerificationRequest",
+                    "field": "id"
+                },
+                "directive": "id"
+            }
+        },
+        {
+            "tag": "CreateField",
+            "model": "VerificationRequest",
+            "field": "user",
+            "type": "User",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateField",
+            "model": "VerificationRequest",
+            "field": "status",
+            "type": "Int",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "VerificationRequest",
+                    "field": "status"
+                },
+                "directive": "default"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "VerificationRequest",
+                    "field": "status"
+                },
+                "directive": "default"
+            },
+            "argument": "",
+            "value": "0"
+        },
+        {
+            "tag": "CreateField",
+            "model": "VerificationRequest",
+            "field": "script",
+            "type": "Script",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateField",
+            "model": "VerificationRequest",
+            "field": "created",
+            "type": "DateTime",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "VerificationRequest",
+                    "field": "created"
+                },
+                "directive": "default"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "VerificationRequest",
+                    "field": "created"
+                },
+                "directive": "default"
+            },
+            "argument": "",
+            "value": "now()"
+        },
+        {
+            "tag": "CreateField",
+            "model": "VerificationRequest",
+            "field": "modified",
+            "type": "DateTime",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "VerificationRequest",
+                    "field": "modified"
+                },
+                "directive": "updatedAt"
+            }
+        }
+    ]
+}

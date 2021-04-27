@@ -38,6 +38,7 @@ const FetchScripts = async (): Promise<TestDataScriptInput[]> => {
             };
             if (script.sourceUrl) output.sourceUrl = script.sourceUrl;
             if (script.streamingUrl) output.streamingUrl = script.streamingUrl;
+            if (script.description) output.description = script.description;
             output.thumbnail = script.thumbnail;
             output.duration = ScriptUtils.durationToString(script.duration);
             output.category = script.category.name;

@@ -6,6 +6,8 @@
 
     button,
     a {
+        display: grid;
+        place-items: center;
         font-size: 1.2em;
         border: 0;
         background-color: var(--color-theme-500);

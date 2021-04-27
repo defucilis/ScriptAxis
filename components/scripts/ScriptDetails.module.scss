@@ -141,3 +141,32 @@
         margin: 0.5em 0;
     }
 }
+
+.funscriptInfo {
+    height: 100px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.heatmapContainer {
+    width: 50%;
+    height: 50px;
+}
+
+.funscriptMetadata {
+    width: 50%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    place-items: center;
+    gap: 2rem;
+
+    p {
+        margin: 0;
+        font-size: 1.2rem;
+
+        span {
+            color: var(--color-neutral-800);
+            margin-right: 0.5rem;
+        }
+    }
+}

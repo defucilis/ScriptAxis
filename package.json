@@ -15,7 +15,7 @@
     "author": "Defucilis",
     "license": "ISC",
     "dependencies": {
-        "@prisma/client": "^2.17.0",
+        "@prisma/client": "^2.21.2",
         "@yaireo/tagify": "^3.23.0",
         "axios": "^0.21.1",
         "babel-plugin-superjson-next": "^0.2.3",
@@ -23,6 +23,7 @@
         "dayjs": "^1.9.7",
         "firebase": "^8.1.2",
         "formik": "^2.2.5",
+        "funscript-utils": "^1.1.1",
         "fuse.js": "^6.4.3",
         "image-conversion": "^2.1.1",
         "isomorphic-unfetch": "^3.1.0",
@@ -47,7 +48,6 @@
         "yup": "^0.32.6"
     },
     "devDependencies": {
-        "@prisma/cli": "^2.17.0",
         "@types/cors": "^2.8.10",
         "@types/node": "^14.14.31",
         "@types/react": "^17.0.2",
