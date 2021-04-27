@@ -1,0 +1,65 @@
+{
+    "version": "0.3.14-fixed",
+    "steps": [
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "funscripts",
+            "type": "String",
+            "arity": "List"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "streamingUrl",
+            "type": "String",
+            "arity": "Optional"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "studio",
+            "type": "String",
+            "arity": "Optional"
+        },
+        {
+            "tag": "CreateField",
+            "model": "Script",
+            "field": "talent",
+            "type": "String",
+            "arity": "List"
+        },
+        {
+            "tag": "CreateField",
+            "model": "User",
+            "field": "isAdmin",
+            "type": "Boolean",
+            "arity": "Required"
+        },
+        {
+            "tag": "CreateDirective",
+            "location": {
+                "path": {
+                    "tag": "Field",
+                    "model": "User",
+                    "field": "isAdmin"
+                },
+                "directive": "default"
+            }
+        },
+        {
+            "tag": "CreateArgument",
+            "location": {
+                "tag": "Directive",
+                "path": {
+                    "tag": "Field",
+                    "model": "User",
+                    "field": "isAdmin"
+                },
+                "directive": "default"
+            },
+            "argument": "",
+            "value": "false"
+        }
+    ]
+}
