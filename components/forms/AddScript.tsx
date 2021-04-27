@@ -26,6 +26,7 @@ const defaultFormData: ScriptFormData = {
     studio: "",
     talent: [],
     created: new Date(),
+    funscript: [],
 };
 
 const AddScript = ({ tags, categories, talent, studios, creators }: StringLists): JSX.Element => {
@@ -96,7 +97,7 @@ const createScript = async (
     onClipboardWrite: () => void,
     onFail: (error: { message: string }) => void
 ) => {
-    const data: ScriptFormDataOutput = { ...postData, duration: -1, thumbnail: "" };
+    const data: ScriptFormDataOutput = { ...postData, duration: -1, thumbnail: "", funscript: "" };
 
     console.log(data);
 
@@ -121,6 +122,23 @@ const createScript = async (
         }
     } else {
         data.thumbnail = "/img/placeholder-thumbnail.png";
+    }
+
+    if (postData.funscript.length > 0) {
+        //upload the thumbnail and add it to the database
+        try {
+            const fileUrl = await FirebaseUtils.uploadFile(
+                postData.funscript[0],
+                `funscripts/${data.slug}`,
+                (progress: number) => console.log("Funscript File uploading", progress * 100)
+            );
+            data.funscript = fileUrl;
+        } catch (error) {
+            onFail(error);
+            return;
+        }
+    } else {
+        data.funscript = null;
     }
 
     //modify the form data into something useful for the database

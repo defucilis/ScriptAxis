@@ -48,6 +48,7 @@ const EditScript = ({
             studio: script.studio || "",
             talent: script.talent || [],
             created: new Date(script.created),
+            funscript: [],
         };
         setFormData({ ...data });
         setOldFormData({ ...data });
@@ -125,8 +126,18 @@ const updateScript = async (
     onSuccess: (response: any) => void,
     onFail: (error: { message: string }) => void
 ) => {
-    const oldData: ScriptFormDataOutput = { ...oldPostData, thumbnail: "", duration: 0 };
-    const newData: ScriptFormDataOutput = { ...newPostData, thumbnail: "", duration: 0 };
+    const oldData: ScriptFormDataOutput = {
+        ...oldPostData,
+        thumbnail: "",
+        funscript: "",
+        duration: 0,
+    };
+    const newData: ScriptFormDataOutput = {
+        ...newPostData,
+        thumbnail: "",
+        funscript: "",
+        duration: 0,
+    };
 
     console.log({ oldData, newData });
 
@@ -161,6 +172,26 @@ const updateScript = async (
         onFail(error);
     }
 
+    try {
+        if (newPostData.funscript.length > 0) {
+            try {
+                await FirebaseUtils.deleteFile(`funscripts/${oldData.slug}`);
+            } catch (err) {
+                console.warn(
+                    `Failed to delete file at funscripts/${oldData.slug}, continuing with upload`
+                );
+            }
+            const fileUrl = await FirebaseUtils.uploadFile(
+                newPostData.funscript[0],
+                `funscripts/${newData.slug}`,
+                (progress: number) => console.log("Funscript File uploading", progress * 100)
+            );
+            newData.funscript = fileUrl;
+        }
+    } catch (error) {
+        onFail(error);
+    }
+
     newData.duration = ScriptUtils.stringToDuration(newPostData.duration);
     oldData.duration = ScriptUtils.stringToDuration(oldPostData.duration);
 
@@ -185,6 +216,7 @@ const updateScript = async (
     if (diffData.description !== undefined) finalUpdateData.set.description = diffData.description;
     if (diffData.duration !== undefined) finalUpdateData.set.duration = diffData.duration;
     if (diffData.thumbnail !== undefined) finalUpdateData.set.thumbnail = diffData.thumbnail;
+    if (diffData.funscript !== undefined) finalUpdateData.set.funscript = diffData.funscript;
     if (diffData.sourceUrl !== undefined) finalUpdateData.set.sourceUrl = diffData.sourceUrl;
     if (diffData.streamingUrl !== undefined)
         finalUpdateData.set.streamingUrl = diffData.streamingUrl;

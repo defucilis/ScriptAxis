@@ -34,6 +34,7 @@ export interface ScriptFormData {
     studio?: string;
     talent?: string[];
     created?: Date;
+    funscript?: File[];
 }
 
 export interface EditScriptFormData {
@@ -52,6 +53,7 @@ export interface EditScriptFormData {
     studio?: string;
     talent?: string[];
     created?: Date;
+    funscript?: File[];
 }
 
 export interface ScriptFormDataOutput {
@@ -70,6 +72,7 @@ export interface ScriptFormDataOutput {
     studio?: string;
     talent?: string[];
     created?: Date;
+    funscript?: string;
 }
 
 export interface ScriptErrorData {
@@ -86,6 +89,7 @@ export interface ScriptErrorData {
     studio?: string;
     talent?: string;
     created?: string;
+    funscript?: string;
 }
 
 const ScriptForm = ({
@@ -200,6 +204,7 @@ const ScriptForm = ({
                     studio: formData.studio,
                     talent: formData.talent,
                     created: formData.created,
+                    funscript: formData.funscript,
                 });
             },
             null
@@ -233,6 +238,7 @@ const ScriptForm = ({
             studio: yup.string().nullable().notRequired(),
             talent: yup.array().notRequired(),
             created: yup.date().notRequired().max(new Date(), "Cannot set a future date!"),
+            funscript: yup.array().notRequired(),
         });
     };
 
@@ -368,7 +374,6 @@ const ScriptForm = ({
                     error={errors.duration}
                     value={formData.duration}
                 />
-
                 <Dropzone
                     id="thumbnail"
                     name="thumbnail"
@@ -440,9 +445,29 @@ const ScriptForm = ({
                     error={errors.created}
                     value={formData.created}
                 />
-
+                <Dropzone
+                    id="funscript"
+                    name="funscript"
+                    label="Main Funscript File"
+                    className={style.dropzone}
+                    hoveringClassName={style.dropzoneon}
+                    instruction="Drag + drop a .funscript, or click to select one"
+                    options={{
+                        accept: [".funscript"],
+                        maxSize: 10000000, //10MB
+                        multiple: false,
+                        noKeyboard: true,
+                        preventDropOnDocument: true,
+                        pasteable: true,
+                    }}
+                    onChange={handleChange}
+                    onError={setError}
+                    error={errors.funscript}
+                    value={formData.funscript}
+                />
                 {busy ? <p>Please wait...</p> : <button type="submit">{submitLabel}</button>}
             </form>
+            <pre>{JSON.stringify(formData, null, 2)}</pre>
         </div>
     );
 };

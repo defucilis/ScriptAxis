@@ -369,7 +369,7 @@ const AdminPanel = ({ existingScripts }: { existingScripts: ScriptStub[] }): JSX
         );
     };
 
-    const readFile = async(file: File): Promise<string> => {
+    const readFile = async (file: File): Promise<string> => {
         return new Promise((resolve, reject) => {
             try {
                 const reader = new FileReader();
@@ -377,21 +377,21 @@ const AdminPanel = ({ existingScripts }: { existingScripts: ScriptStub[] }): JSX
                     resolve(String(e.target.result));
                 };
                 reader.readAsText(file);
-            } catch(error) {
+            } catch (error) {
                 reject(error);
             }
         });
-    }
+    };
 
     const [jsonBackup, setJsonBackup] = useState(null);
     const StartJsonRestore = async () => {
-        if(!jsonBackup) {
+        if (!jsonBackup) {
             alert("Add a JSON backup file first");
             return;
         }
         console.log(jsonBackup);
         const extension = jsonBackup.name.split(".").slice(-1)[0];
-        if(extension !== "json") {
+        if (extension !== "json") {
             alert("JSON files only!");
             return;
         }
@@ -429,8 +429,7 @@ const AdminPanel = ({ existingScripts }: { existingScripts: ScriptStub[] }): JSX
                 setRunning(false);
             }
         );
-    }
-
+    };
 
     const [preparedDownload, setPreparedDownload] = useState("");
     const StartGetJsonBackup = () => {
@@ -557,7 +556,7 @@ const AdminPanel = ({ existingScripts }: { existingScripts: ScriptStub[] }): JSX
                         preventDropOnDocument: true,
                         pasteable: true,
                     }}
-                    onChange={(e) => setJsonBackup(e.target.value[0])}
+                    onChange={e => setJsonBackup(e.target.value[0])}
                     onError={(error: string) => addMessage("Error: " + error)}
                     error={""}
                     value={jsonBackup}

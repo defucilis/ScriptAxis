@@ -31,7 +31,8 @@ export interface Script {
     description?: string;
     duration: number;
     thumbnail: string;
-    funscripts: string[];
+    funscript?: string;
+    otherFiles: string[];
     sourceUrl?: string;
     streamingUrl?: string;
     studio?: string;

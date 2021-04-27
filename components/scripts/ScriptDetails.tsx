@@ -13,6 +13,9 @@ import useAuth from "../../lib/auth/useAuth";
 
 import style from "./ScriptDetails.module.scss";
 import { Script } from "lib/types";
+import { Funscript } from "funscript-utils/lib/types";
+import { addFunscriptMetadata } from "funscript-utils/lib/funConverter";
+import FunscriptHeatmap from "components/funscript/FunscriptHeatmap";
 
 const getEmbed = (url: string) => {
     let iframeLink = "";
@@ -82,6 +85,23 @@ const ScriptDetails = ({ script }: { script: Script }): JSX.Element => {
     const [scriptLikes, setScriptLikes] = useState(0);
     const iFrameRef = useRef();
     const [iFrameLoading, setIFrameLoading] = useState(true);
+    const heatmapContainerRef = useRef<HTMLDivElement>();
+    const [funscript, setFunscript] = useState<Funscript>(null);
+
+    useEffect(() => {
+        const loadFunscript = async (url: string) => {
+            const response = await axios.get(url);
+            setFunscript(addFunscriptMetadata(response.data));
+        };
+
+        if (!script.funscript) {
+            setFunscript(null);
+            return;
+        }
+
+        loadFunscript(script.funscript);
+    }, [script]);
+
     useEffect(() => {
         if (!user || !script) return;
         if (!user.likedScripts) {
@@ -288,6 +308,34 @@ const ScriptDetails = ({ script }: { script: Script }): JSX.Element => {
                     </div>
                 </div>
             </div>
+            {script.funscript ? (
+                <div className={style.funscriptInfo}>
+                    <div className={style.heatmapContainer} ref={heatmapContainerRef}>
+                        {funscript ? (
+                            <FunscriptHeatmap
+                                funscript={funscript}
+                                width={heatmapContainerRef.current.offsetWidth}
+                                height={heatmapContainerRef.current.offsetHeight}
+                            />
+                        ) : null}
+                    </div>
+
+                    {funscript ? (
+                        <div className={style.funscriptMetadata}>
+                            <p>
+                                <span>Actions:</span>
+                                {funscript.actions.length}
+                            </p>
+                            <p>
+                                <span>Average Speed:</span>
+                                {Math.round(funscript.metadata.average_speed)}
+                            </p>
+                        </div>
+                    ) : (
+                        <div></div>
+                    )}
+                </div>
+            ) : null}
             <div className={style.description}>
                 <ReactMarkdown source={script.description} />
             </div>

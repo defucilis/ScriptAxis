@@ -7210,8 +7210,9 @@ const GetTestData = (): TestDataScript[] => {
 };
 
 export const PrepareTestData = (scripts: any[]): TestDataScript[] => {
-    return scripts.filter(data => data.name !== "TemplateScript").map(
-        (data: TestDataScriptInput) => {
+    return scripts
+        .filter(data => data.name !== "TemplateScript")
+        .map((data: TestDataScriptInput) => {
             return {
                 ...data,
                 slug: slugify(data.name).toLowerCase(),
@@ -7219,8 +7220,7 @@ export const PrepareTestData = (scripts: any[]): TestDataScript[] => {
                 duration: ScriptUtils.stringToDuration(data.duration),
                 owner: "487e9807-627a-4f9a-8520-1f61603fa23c",
             };
-        }
-    );
-}
+        });
+};
 
 export default GetTestData;

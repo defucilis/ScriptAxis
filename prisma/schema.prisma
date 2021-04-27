@@ -13,87 +13,96 @@ generator client {
 
 // Everything required to store a funscript - this will change in the future!
 model Script {
-  id                Int         @default(autoincrement()) @id
-  name              String
-  slug              String      @unique
-  creator           Creator
-  owner             User        @relation("ScriptOwner")
-  category          Category
-  tags              String[]
-  description       String?
-  duration          Int
-  thumbnail         String
-  funscripts        String[]
-  sourceUrl         String?
-  streamingUrl      String?
-  studio            String?
-  talent            String[]
-  active            Boolean     @default(true)
-  likedBy           User[]      @relation("ScriptLiker")
-  likeCount         Int         @default(0)
-  thumbsUp          Int         @default(1)
-  thumbsDown        Int         @default(0)
-  views             Int         @default(0)
-  created           DateTime    @default(now())
-  modified          DateTime    @updatedAt
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  slug                String                @unique
+  creator             Creator               @relation(fields: [creatorName], references: [name])
+  owner               User                  @relation("ScriptOwner", fields: [userId], references: [id])
+  category            Category              @relation(fields: [categoryName], references: [name])
+  tags                String[]
+  description         String?
+  duration            Int
+  thumbnail           String
+  funscript           String?
+  otherFiles          String[]
+  sourceUrl           String?
+  streamingUrl        String?
+  studio              String?
+  talent              String[]
+  active              Boolean               @default(true)
+  likedBy             User[]                @relation("ScriptLiker")
+  likeCount           Int                   @default(0)
+  thumbsUp            Int                   @default(1)
+  thumbsDown          Int                   @default(0)
+  views               Int                   @default(0)
+  created             DateTime              @default(now())
+  modified            DateTime              @updatedAt
+  VerificationRequest VerificationRequest[]
+  creatorName         String
+  userId              String
+  categoryName        String
 }
 
 // Creators of scripts - may or may not be connected to a user account
 model Creator {
-  name              String      @id
-  user              User?
-  thumbnail         String      @default("")
-  scripts           Script[]
-  totalViews        Int         @default(0)
-  totalLikes        Int         @default(0)
-  created           DateTime    @default(now())
-  modified          DateTime    @updatedAt
+  name       String   @id
+  user       User?    @relation(fields: [userId], references: [id])
+  thumbnail  String   @default("")
+  scripts    Script[]
+  totalViews Int      @default(0)
+  totalLikes Int      @default(0)
+  created    DateTime @default(now())
+  modified   DateTime @updatedAt
+  userId     String?
 }
 
 // Top-level categories for scripts - each script has only one
 model Category {
-  name              String      @id
-  scripts           Script[]
-  count             Int         @default(0)
+  name    String   @id
+  scripts Script[]
+  count   Int      @default(0)
 }
 
 // Tags for scripts - each script can have more than one
 model Tag {
-  name              String      @id
-  count             Int         @default(0)
+  name  String @id
+  count Int    @default(0)
 }
 
 //Talent for scripts - each script can have more than one
 model Talent {
-  name              String      @id
+  name String @id
 }
 
 //Studio for scripts - each script can only have one
 model Studio {
-  name              String     @id
+  name String @id
 }
 
 // User accounts - not in use yet
 model User {
-  id                String      @default(uuid()) @id
-  username          String      @unique
-  email             String      @unique
-  emailVerified     Boolean     @default(false)
-  creator           Creator?
-  isAdmin           Boolean     @default(false)
-  ownedScripts      Script[]    @relation("ScriptOwner")
-  likedScripts      Script[]    @relation("ScriptLiker")
-  savedFilters      String[]
-  created           DateTime    @default(now())
-  modified          DateTime    @updatedAt
+  id                  String                @id @default(uuid())
+  username            String                @unique
+  email               String                @unique
+  emailVerified       Boolean               @default(false)
+  creator             Creator?
+  isAdmin             Boolean               @default(false)
+  ownedScripts        Script[]              @relation("ScriptOwner")
+  likedScripts        Script[]              @relation("ScriptLiker")
+  savedFilters        String[]
+  created             DateTime              @default(now())
+  modified            DateTime              @updatedAt
+  VerificationRequest VerificationRequest[]
 }
 
 // The verification queue for moderators to consider - not in use yet
 model VerificationRequest {
-  id                Int         @id
-  user              User
-  status            Int         @default(0)
-  script            Script
-  created           DateTime    @default(now())
-  modified          DateTime    @updatedAt
+  id       Int      @id
+  user     User     @relation(fields: [userId], references: [id])
+  status   Int      @default(0)
+  script   Script   @relation(fields: [scriptId], references: [id])
+  created  DateTime @default(now())
+  modified DateTime @updatedAt
+  userId   String
+  scriptId Int
 }
