@@ -8,7 +8,7 @@ import * as imageConversion from "image-conversion";
 
 import FirebaseUtils from "../../lib/FirebaseUtils";
 import ScriptUtils from "../../lib/ScriptUtils";
-import ScriptForm, { EditScriptFormData, ScriptFormDataOutput } from "./ScriptForm";
+import ScriptForm, { EditScriptFormData, ScriptFormData, ScriptFormDataOutput } from "./ScriptForm";
 import style from "./AddScript.module.scss";
 import { Script, StringLists } from "lib/types";
 
@@ -49,12 +49,13 @@ const EditScript = ({
             talent: script.talent || [],
             created: new Date(script.created),
             funscript: [],
+            averageSpeed: script.averageSpeed || undefined,
         };
         setFormData({ ...data });
         setOldFormData({ ...data });
     }, [script]);
 
-    const handleValidationPassed = data => {
+    const handleValidationPassed = (data: ScriptFormData) => {
         console.log("Validation passed for data", data);
 
         setSubmitting(true);
@@ -217,6 +218,8 @@ const updateScript = async (
     if (diffData.duration !== undefined) finalUpdateData.set.duration = diffData.duration;
     if (diffData.thumbnail !== undefined) finalUpdateData.set.thumbnail = diffData.thumbnail;
     if (diffData.funscript !== undefined) finalUpdateData.set.funscript = diffData.funscript;
+    if (diffData.averageSpeed !== undefined)
+        finalUpdateData.set.averageSpeed = diffData.averageSpeed;
     if (diffData.sourceUrl !== undefined) finalUpdateData.set.sourceUrl = diffData.sourceUrl;
     if (diffData.streamingUrl !== undefined)
         finalUpdateData.set.streamingUrl = diffData.streamingUrl;

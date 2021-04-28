@@ -32,6 +32,7 @@ export interface Script {
     duration: number;
     thumbnail: string;
     funscript?: string;
+    averageSpeed?: number;
     otherFiles: string[];
     sourceUrl?: string;
     streamingUrl?: string;

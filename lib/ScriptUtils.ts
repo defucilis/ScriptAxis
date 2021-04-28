@@ -491,6 +491,7 @@ const getScriptObjectCode = (data: ScriptFormDataOutput): string => {
         lines.push(`    description:    "${data.description.replace(/\r?\n|\r/g, "\\n")}",`);
     if (data.funscript && data.funscript !== "")
         lines.push(`    funscript:    "${data.funscript}",`);
+    if (data.averageSpeed) lines.push(`    averageSpeed:    "${data.averageSpeed}",`);
     lines.push(`    duration:       "${durationToString(data.duration)}",`);
     lines.push(`    category:       "${data.category}",`);
     lines.push("    tags: [");
@@ -575,6 +576,20 @@ const makeTagCategorySfw = (item: {
     return { ...item, name: makeStringSfw(item.name) };
 };
 
+const readFile = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        try {
+            const reader = new FileReader();
+            reader.onloadend = (e: ProgressEvent<FileReader>) => {
+                resolve(String(e.target.result));
+            };
+            reader.readAsText(file);
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 const ScriptUtils = {
     //parseScriptDocument,
     indexToDuration,
@@ -600,6 +615,7 @@ const ScriptUtils = {
     makeStringSfw,
     makeTagCategorySfw,
     makeScriptStubSfw,
+    readFile,
 };
 
 //module.exports = ScriptUtils;
