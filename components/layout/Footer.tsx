@@ -5,7 +5,7 @@ const Footer = (): JSX.Element => {
     return (
         <div className={style.footer}>
             <div className="container">
-                <p>&copy; ScriptAxis 2020</p>
+                <p>&copy; ScriptAxis 2021</p>
                 <p>v{packageJson.version}</p>
             </div>
         </div>
