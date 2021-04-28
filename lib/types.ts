@@ -110,6 +110,8 @@ export interface UrlQuery {
     exclude?: string;
     minDuration?: number;
     maxDuration?: number;
+    minSpeed?: number;
+    maxSpeed?: number;
     talent?: string;
     studio?: string;
     sourceUrl?: "true" | "false";
@@ -132,6 +134,8 @@ export interface Filters {
     exclude?: string[];
     minDuration?: number;
     maxDuration?: number;
+    minSpeed?: number;
+    maxSpeed?: number;
     talent?: string;
     studio?: {
         contains: string;
