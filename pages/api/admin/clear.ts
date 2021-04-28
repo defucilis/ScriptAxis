@@ -47,6 +47,7 @@ const ClearData = async (req: NextApiRequest, res: NextApiResponse): Promise<voi
         );
 
         const results = await prisma.$transaction(transaction);
+        await prisma.$disconnect();
 
         res.status(201);
         res.json(results);
