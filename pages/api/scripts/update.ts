@@ -121,6 +121,7 @@ const UpdateScript = async (rawData: any): Promise<Script> => {
         }
 
         const results: any[] = await prisma.$transaction(transaction);
+        await prisma.$disconnect();
         console.log("Results: ", results[0]);
         return results[0];
     } catch (error) {

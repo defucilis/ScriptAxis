@@ -26,6 +26,8 @@ export interface TestDataScriptInput {
     thumbsUp: number;
     thumbsDown: number;
     created: number;
+    funscript?: string;
+    averageSpeed?: number;
 }
 
 export interface TestDataScript {
@@ -47,6 +49,8 @@ export interface TestDataScript {
     created: number;
     owner: string;
     slug: string;
+    funscript?: string;
+    averageSpeed?: number;
 }
 
 const TestData: TestDataScriptInput[] = [

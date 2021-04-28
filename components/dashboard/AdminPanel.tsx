@@ -548,6 +548,9 @@ const AdminPanel = ({ existingScripts }: { existingScripts: ScriptStub[] }): JSX
                     value={jsonBackup}
                 />
                 <button onClick={StartJsonRestore}>Restore from JSON Backup</button>
+                <Link href="/funscriptupload">
+                    <a>Funscript Upload</a>
+                </Link>
             </div>
             <div className={style.progressbg} ref={progressBarParentRef}>
                 <div className={style.progressbar} ref={progressBarRef}></div>

@@ -1,0 +1,38 @@
+.scriptneedingfunscript {
+    display: grid;
+    grid-template-columns: 5fr 1fr 5fr 1fr;
+    margin-bottom: 1rem;
+    align-items: center;
+    gap: 1rem;
+
+    button {
+        border: 0;
+        background-color: var(--color-theme-500);
+        color: black;
+        border-radius: 5px;
+        font-size: 1.2rem;
+        height: 100%;
+    }
+}
+
+.dropzone {
+    border: 2px dashed var(--color-theme-700);
+    flex-grow: 1;
+    display: grid;
+    place-items: center;
+    background-color: var(--color-neutral-100);
+    transition: all 0.3s;
+    padding: 1em;
+}
+
+.dropzoneon {
+    border: 2px solid var(--color-theme-500);
+    background-color: var(--color-theme-100);
+    transition: all 0.3s;
+}
+
+.dropzone p,
+.dropzone li {
+    font-size: 1.2em;
+    margin: 0;
+}
