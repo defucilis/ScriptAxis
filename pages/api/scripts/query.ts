@@ -38,6 +38,15 @@ const QueryScripts = async ({
                 duration: { lte: ScriptUtils.indexToDuration(Number(filters.maxDuration)) },
             });
 
+        if (filters.minSpeed)
+            finalWhere.AND.push({
+                averageSpeed: { gte: ScriptUtils.indexToSpeed(Number(filters.minSpeed)) },
+            });
+        if (filters.maxSpeed)
+            finalWhere.AND.push({
+                averageSpeed: { lte: ScriptUtils.indexToSpeed(Number(filters.maxSpeed)) },
+            });
+
         if (filters.studio) finalWhere.AND.push({ studio: filters.studio });
 
         if (filters.sourceUrl) finalWhere.AND.push({ sourceUrl: filters.sourceUrl });

@@ -117,6 +117,17 @@
     margin-top: 0.5em;
 }
 
+.speedslidermarks ul {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    margin-top: 0.5em;
+}
+
+.speedslidermarks ul li {
+    text-align: center;
+}
+
 .slidermarks ul li {
     text-align: center;
 }

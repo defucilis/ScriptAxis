@@ -23,6 +23,8 @@ interface FilterActions {
     studio?: FilterAction;
     sourceUrl?: FilterAction;
     streamingUrl?: FilterAction;
+    minSpeed?: FilterAction;
+    maxSpeed?: FilterAction;
 }
 interface FilterAction {
     operation?: "clear" | "set" | "toggle";
@@ -104,6 +106,14 @@ const reduceFilters = (currentFilters: Filters, action: FilterActions) => {
         if (action.maxDuration.operation === "clear") delete newFilters.maxDuration;
         else newFilters.maxDuration = action.maxDuration.numberValue;
     }
+    if (action.minSpeed) {
+        if (action.minSpeed.operation === "clear") delete newFilters.minSpeed;
+        else newFilters.minSpeed = action.minSpeed.numberValue;
+    }
+    if (action.maxSpeed) {
+        if (action.maxSpeed.operation === "clear") delete newFilters.maxSpeed;
+        else newFilters.maxSpeed = action.maxSpeed.numberValue;
+    }
     if (action.talent) {
         if (action.talent.operation === "clear") delete newFilters.talent;
         else newFilters.talent = action.talent.stringValue;
@@ -136,6 +146,7 @@ const FiltersElement = ({
     const [initialIncludeTags, setInitialIncludeTags] = useState<string[]>([]);
     const [initialExcludeTags, setInitialExcludeTags] = useState<string[]>([]);
     const [durationValues, setDurationValues] = useState([0, 7]);
+    const [speedValues, setSpeedValues] = useState([0, 5]);
     const [tags, setTags] = useState([]);
     const [categories, setCategories] = useState([]);
     const [search, setSearch] = useState("");
@@ -206,6 +217,18 @@ const FiltersElement = ({
                       numberValue: query.filters.maxDuration,
                   };
 
+            action.minSpeed = !query.filters.minSpeed
+                ? clearOp
+                : {
+                      numberValue: query.filters.minSpeed,
+                  };
+
+            action.maxSpeed = !query.filters.maxSpeed
+                ? clearOp
+                : {
+                      numberValue: query.filters.maxSpeed,
+                  };
+
             action.talent = !query.filters.talent
                 ? clearOp
                 : {
@@ -235,6 +258,10 @@ const FiltersElement = ({
                 query.filters.minDuration ? Number(query.filters.minDuration) : 0,
                 query.filters.maxDuration ? Number(query.filters.maxDuration) : 7,
             ]);
+            setSpeedValues([
+                query.filters.minSpeed ? Number(query.filters.minSpeed) : 0,
+                query.filters.maxSpeed ? Number(query.filters.maxSpeed) : 7,
+            ]);
             setSourceUrl(query.filters.sourceUrl ? true : false);
             setStreamingUrl(query.filters.streamingUrl ? true : false);
             setSaved(false);
@@ -251,7 +278,7 @@ const FiltersElement = ({
         onFilter(filters);
     }, [filters]);
 
-    const handleSliderChange = values => {
+    const handleDurationSliderChange = values => {
         const action: FilterActions = {};
         if (values[0] !== 0) action.minDuration = { numberValue: values[0] };
         else action.minDuration = { operation: "clear" };
@@ -260,8 +287,21 @@ const FiltersElement = ({
         if (Object.keys(action).length > 0) setFilters(action);
     };
 
-    const updateSlider = values => {
+    const handleSpeedSliderChange = values => {
+        const action: FilterActions = {};
+        if (values[0] !== 0) action.minSpeed = { numberValue: values[0] };
+        else action.minSpeed = { operation: "clear" };
+        if (values[1] !== 5) action.maxSpeed = { numberValue: values[1] };
+        else action.maxSpeed = { operation: "clear" };
+        if (Object.keys(action).length > 0) setFilters(action);
+    };
+
+    const updateDurationSlider = values => {
         setDurationValues(values);
+    };
+
+    const updateSpeedSlider = values => {
+        setSpeedValues(values);
     };
 
     const handleSearch = () => {
@@ -445,8 +485,8 @@ const FiltersElement = ({
                             marks={[0, 1, 2, 3, 4, 5, 6, 7]}
                             min={0}
                             max={7}
-                            onChange={updateSlider}
-                            onAfterChange={handleSliderChange}
+                            onChange={updateDurationSlider}
+                            onAfterChange={handleDurationSliderChange}
                         />
                     </div>
                     <div className={style.slidermarks}>
@@ -459,6 +499,34 @@ const FiltersElement = ({
                             <li>30</li>
                             <li>60</li>
                             <li>120+</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <label htmlFor="speed">Avg. Speed (strokes / min)</label>
+                <div className={style.field}>
+                    <div className={style.slidercontainer}>
+                        <ReactSlider
+                            className={style.slider}
+                            thumbClassName={style.sliderthumb}
+                            trackClassName={style.slidertrack}
+                            markClassName={style.slidermark}
+                            value={speedValues}
+                            marks={[0, 1, 2, 3, 4, 5]}
+                            min={0}
+                            max={5}
+                            onChange={updateSpeedSlider}
+                            onAfterChange={handleSpeedSliderChange}
+                        />
+                    </div>
+                    <div className={style.speedslidermarks}>
+                        <ul>
+                            <li>0</li>
+                            <li>75</li>
+                            <li>150</li>
+                            <li>225</li>
+                            <li>300</li>
+                            <li>375+</li>
                         </ul>
                     </div>
                 </div>

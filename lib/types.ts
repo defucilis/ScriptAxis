@@ -32,6 +32,7 @@ export interface Script {
     duration: number;
     thumbnail: string;
     funscript?: string;
+    averageSpeed?: number;
     otherFiles: string[];
     sourceUrl?: string;
     streamingUrl?: string;
@@ -109,6 +110,8 @@ export interface UrlQuery {
     exclude?: string;
     minDuration?: number;
     maxDuration?: number;
+    minSpeed?: number;
+    maxSpeed?: number;
     talent?: string;
     studio?: string;
     sourceUrl?: "true" | "false";
@@ -131,6 +134,8 @@ export interface Filters {
     exclude?: string[];
     minDuration?: number;
     maxDuration?: number;
+    minSpeed?: number;
+    maxSpeed?: number;
     talent?: string;
     studio?: {
         contains: string;

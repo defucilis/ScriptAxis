@@ -24,6 +24,7 @@ model Script {
   duration            Int
   thumbnail           String
   funscript           String?
+  averageSpeed        Int?
   otherFiles          String[]
   sourceUrl           String?
   streamingUrl        String?

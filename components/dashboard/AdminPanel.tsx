@@ -369,20 +369,6 @@ const AdminPanel = ({ existingScripts }: { existingScripts: ScriptStub[] }): JSX
         );
     };
 
-    const readFile = async (file: File): Promise<string> => {
-        return new Promise((resolve, reject) => {
-            try {
-                const reader = new FileReader();
-                reader.onloadend = (e: ProgressEvent<FileReader>) => {
-                    resolve(String(e.target.result));
-                };
-                reader.readAsText(file);
-            } catch (error) {
-                reject(error);
-            }
-        });
-    };
-
     const [jsonBackup, setJsonBackup] = useState(null);
     const StartJsonRestore = async () => {
         if (!jsonBackup) {
@@ -401,7 +387,7 @@ const AdminPanel = ({ existingScripts }: { existingScripts: ScriptStub[] }): JSX
         progressBarParentRef.current.style.setProperty("display", "block");
         progressBarRef.current.style.setProperty("width", "0%");
 
-        const jsonString = await readFile(jsonBackup);
+        const jsonString = await ScriptUtils.readFile(jsonBackup);
         const scriptsToAdd = PrepareTestData(JSON.parse(jsonString)).filter(script => {
             return scripts.findIndex(s => s.name === script.name) === -1;
         });

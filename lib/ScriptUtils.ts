@@ -31,6 +31,23 @@ const indexToDuration = (index: number): number => {
     }
 };
 
+const indexToSpeed = (index: number): number => {
+    switch (index) {
+        case 0:
+            return 0;
+        case 1:
+            return 75;
+        case 2:
+            return 150;
+        case 3:
+            return 225;
+        case 4:
+            return 300;
+        case 5:
+            return 375;
+    }
+};
+
 const arraysIdentical = (a: any[], b: any[]) => {
     if (!a && !b) return true;
     if ((!a && b) || (a && !b)) return false;
@@ -269,6 +286,18 @@ const filtersEqual = (filterA: Filters, filterB: Filters): boolean => {
         if (filterA.maxDuration !== filterB.maxDuration) return false;
     }
 
+    if (filterA.minSpeed || filterB.minSpeed) {
+        if ((filterA.minSpeed && !filterB.minSpeed) || (!filterA.minSpeed && filterB.minSpeed))
+            return false;
+        if (filterA.minSpeed !== filterB.minSpeed) return false;
+    }
+
+    if (filterA.maxSpeed || filterB.maxSpeed) {
+        if ((filterA.maxSpeed && !filterB.maxSpeed) || (!filterA.maxSpeed && filterB.maxSpeed))
+            return false;
+        if (filterA.maxSpeed !== filterB.maxSpeed) return false;
+    }
+
     if (filterA.talent || filterB.talent) {
         if ((filterA.talent && !filterB.talent) || (!filterA.talent && filterB.talent))
             return false;
@@ -316,6 +345,8 @@ const queryToUrlQuery = (input: Query): UrlQuery => {
     if (filters.exclude) output.exclude = filters.exclude.join("_");
     if (filters.minDuration) output.minDuration = filters.minDuration;
     if (filters.maxDuration) output.maxDuration = filters.maxDuration;
+    if (filters.minSpeed) output.minSpeed = filters.minSpeed;
+    if (filters.maxSpeed) output.maxSpeed = filters.maxSpeed;
     if (filters.talent) output.talent = filters.talent;
     if (filters.studio) output.studio = filters.studio.contains;
     if (filters.sourceUrl) output.sourceUrl = "true";
@@ -341,6 +372,8 @@ const stringObjectToQuery = (query: UrlQuery): Query => {
     if (query.exclude) output.filters.exclude = query.exclude.split("_");
     if (query.minDuration) output.filters.minDuration = query.minDuration;
     if (query.maxDuration) output.filters.maxDuration = query.maxDuration;
+    if (query.minSpeed) output.filters.minSpeed = query.minSpeed;
+    if (query.maxSpeed) output.filters.maxSpeed = query.maxSpeed;
     if (query.talent) output.filters.talent = query.talent;
     if (query.studio) output.filters.studio = { contains: query.studio, mode: "insensitive" };
     if (query.sourceUrl) output.filters.sourceUrl = { not: null };
@@ -491,6 +524,7 @@ const getScriptObjectCode = (data: ScriptFormDataOutput): string => {
         lines.push(`    description:    "${data.description.replace(/\r?\n|\r/g, "\\n")}",`);
     if (data.funscript && data.funscript !== "")
         lines.push(`    funscript:    "${data.funscript}",`);
+    if (data.averageSpeed) lines.push(`    averageSpeed:    "${data.averageSpeed}",`);
     lines.push(`    duration:       "${durationToString(data.duration)}",`);
     lines.push(`    category:       "${data.category}",`);
     lines.push("    tags: [");
@@ -575,9 +609,24 @@ const makeTagCategorySfw = (item: {
     return { ...item, name: makeStringSfw(item.name) };
 };
 
+const readFile = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        try {
+            const reader = new FileReader();
+            reader.onloadend = (e: ProgressEvent<FileReader>) => {
+                resolve(String(e.target.result));
+            };
+            reader.readAsText(file);
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 const ScriptUtils = {
     //parseScriptDocument,
     indexToDuration,
+    indexToSpeed,
     parseDatabaseLists,
     parseDatabaseListsWithCount,
     removeCountFromLists,
@@ -600,6 +649,7 @@ const ScriptUtils = {
     makeStringSfw,
     makeTagCategorySfw,
     makeScriptStubSfw,
+    readFile,
 };
 
 //module.exports = ScriptUtils;
