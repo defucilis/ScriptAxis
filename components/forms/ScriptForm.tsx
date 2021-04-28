@@ -492,7 +492,6 @@ const ScriptForm = ({
                 />
                 {busy ? <p>Please wait...</p> : <button type="submit">{submitLabel}</button>}
             </form>
-            <pre>{JSON.stringify(formData, null, 2)}</pre>
         </div>
     );
 };
