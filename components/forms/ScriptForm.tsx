@@ -140,14 +140,15 @@ const ScriptForm = ({
 
     const [errors, setErrors] = useState<ScriptFormData>({});
     const [dirty, setDirty] = useState(false);
+    const [cleanFunscript, setCleanFunscript] = useState<File>(null);
     const handleChange = (e: {
         target: {
             id: string;
             value: any;
         };
     }) => {
-        const setAverageSpeed = async (scriptFile: File) => {
-            const funscript = addFunscriptMetadata(
+        const mutateFile = async (scriptFile: File) => {
+            const funscript: any = addFunscriptMetadata(
                 JSON.parse(await ScriptUtils.readFile(scriptFile))
             );
             setFormData(cur => ({
@@ -157,6 +158,10 @@ const ScriptForm = ({
         };
 
         //console.log(`Form: Setting ${e.target.id} to`, e.target.value)
+        if (e.target.id === "funscript") {
+            mutateFile(e.target.value[0]);
+        }
+
         setFormData(cur => ({ ...cur, [e.target.id]: e.target.value }));
         if (errors[e.target.id]) {
             setErrors(cur => {
@@ -166,11 +171,26 @@ const ScriptForm = ({
             });
         }
         setDirty(true);
-
-        if (e.target.id === "funscript") {
-            setAverageSpeed(e.target.value[0]);
-        }
     };
+
+    useEffect(() => {
+        const createCleanFunscript = async (file: File) => {
+            const fileContents = await ScriptUtils.readFile(file);
+            const funscript: any = addFunscriptMetadata(JSON.parse(fileContents));
+            delete funscript.rawActions;
+            const newFile = new File([JSON.stringify(funscript)], file.name, {
+                type: "application/JSON",
+            });
+            setCleanFunscript(newFile);
+        };
+
+        if (!formData.funscript || formData.funscript.length === 0) {
+            setCleanFunscript(null);
+            return;
+        }
+
+        createCleanFunscript(formData.funscript[0]);
+    }, [formData.funscript]);
 
     const setError = (e: { target: { id: string; error: string } }) => {
         setErrors(cur => ({
@@ -228,7 +248,7 @@ const ScriptForm = ({
                     studio: formData.studio,
                     talent: formData.talent,
                     created: formData.created,
-                    funscript: formData.funscript,
+                    funscript: [cleanFunscript],
                     averageSpeed: formData.averageSpeed,
                 });
             },
@@ -479,7 +499,7 @@ const ScriptForm = ({
                     instruction="Drag + drop a .funscript, or click to select one"
                     options={{
                         accept: [".funscript"],
-                        maxSize: 1024000, //1MB
+                        maxSize: 10240000, //10MB
                         multiple: false,
                         noKeyboard: true,
                         preventDropOnDocument: true,
