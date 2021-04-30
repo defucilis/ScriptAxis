@@ -56,6 +56,18 @@ const QueryScripts = async ({
         if (filters.exclude) finalWhere.NOT = { tags: { hasSome: filters.exclude } };
         if (filters.talent) finalWhere.AND.push({ talent: { has: filters.talent } });
 
+        //if we're sorting by speed, we also therefore need to ensure that only scripts WITH a speed value are returned
+        if (
+            sorting.findIndex(s => !!s.averageSpeed) !== -1 &&
+            !(filters.maxSpeed || filters.minSpeed)
+        ) {
+            finalWhere.AND.push({
+                averageSpeed: {
+                    gte: 0,
+                },
+            });
+        }
+
         const count = await prisma.script.count({
             where: finalWhere,
         });

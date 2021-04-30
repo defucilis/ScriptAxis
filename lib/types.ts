@@ -154,6 +154,7 @@ export interface Sorting {
     views?: "desc" | "asc";
     likeCount?: "desc" | "asc";
     duration?: "desc" | "asc";
+    averageSpeed?: "desc" | "asc";
 }
 
 export interface SavedQuery {

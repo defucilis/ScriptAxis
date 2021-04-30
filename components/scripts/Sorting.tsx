@@ -55,6 +55,22 @@ const sortOptions: SortOption[] = [
             },
         ],
     },
+    {
+        label: "Fastest",
+        sorting: [
+            {
+                averageSpeed: "desc",
+            },
+        ],
+    },
+    {
+        label: "Slowest",
+        sorting: [
+            {
+                averageSpeed: "asc",
+            },
+        ],
+    },
 ];
 
 const SortingElement = ({ onSort }: { onSort: (mode: Sorting[]) => void }): JSX.Element => {

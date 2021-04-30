@@ -36,10 +36,14 @@
 
 .imageoverlay {
     position: absolute;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
     width: 100%;
     height: 100%;
     left: 0;
     top: 0;
+    padding: 10px;
     background: -moz-linear-gradient(
         top,
         rgba(0, 0, 0, 0) 0%,
@@ -78,6 +82,11 @@
         rgba(0, 0, 0, 0) 70%,
         rgba(0, 0, 0, 0.7) 100%
     ); /* W3C */
+
+    .averageSpeed {
+        border-radius: 5px;
+        padding: 2px 5px;
+    }
 }
 
 .scriptname {
