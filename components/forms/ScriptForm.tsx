@@ -483,7 +483,7 @@ const ScriptForm = ({
                         multiple: false,
                         noKeyboard: true,
                         preventDropOnDocument: true,
-                        pasteable: true,
+                        pasteable: false,
                     }}
                     onChange={handleChange}
                     onError={setError}
