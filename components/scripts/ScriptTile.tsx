@@ -1,3 +1,4 @@
+import { formatColor, getColor } from "funscript-utils/lib/funMapper";
 import { Script } from "lib/types";
 import Link from "next/link";
 
@@ -16,8 +17,24 @@ const ScriptTile = ({ script }: { script: Script }): JSX.Element => {
                     <div className={style.imagewrapper}>
                         <img src={script.thumbnail} />
                     </div>
-                    <div className={style.imageoverlay}></div>
-                    <span>{ScriptUtils.durationToString(script.duration)}</span>
+                    <div className={style.imageoverlay}>
+                        {!script.averageSpeed ? (
+                            <span></span>
+                        ) : (
+                            <span
+                                style={{
+                                    backgroundColor: formatColor(
+                                        getColor(script.averageSpeed),
+                                        0.5
+                                    ),
+                                }}
+                                className={style.averageSpeed}
+                            >
+                                {script.averageSpeed}
+                            </span>
+                        )}
+                        <span>{ScriptUtils.durationToString(script.duration)}</span>
+                    </div>
                 </a>
             </Link>
             <div className={style.scriptname}>
