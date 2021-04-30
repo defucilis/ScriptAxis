@@ -32,26 +32,26 @@ const BrowseScripts = ({
     console.log(query.filters);
 
     const getHeadTitle = (query: Query) => {
-        if (!query.filters) return `All Scripts (${scriptCount} total)`;
-        if (query.filters.name)
-            return `Results for '${query.filters.name.contains}' (${scriptCount} total)`;
-        if (query.filters.category)
-            return `Category: ${query.filters.category.name.equals} (${scriptCount} total)`;
-        if (query.filters.include) return `Tag: ${query.filters.include[0]} (${scriptCount} total)`;
-        return `Filtered Scripts (${scriptCount} total)`;
+        const filterCount = query.filters ? Object.keys(query.filters).length : 0;
+        if (filterCount === 0) return `All Scripts`;
+        if (query.filters.name) return `Results for '${query.filters.name.contains}'`;
+        if (query.filters.category) return `Category: ${query.filters.category.name.equals}`;
+        if (query.filters.include) return `Tag: ${query.filters.include[0]}`;
+        return `Filtered Scripts`;
     };
 
     const getBodyTitle = (query: Query) => {
-        if (!query.filters) return `All Scripts (${scriptCount} total)`;
+        const filterCount = query.filters ? Object.keys(query.filters).length : 0;
+        if (filterCount === 0) return `All Scripts (${scriptCount} total)`;
         if (query.filters.name)
             return `Scripts matching "${query.filters.name.contains}" (${scriptCount} total)`;
         if (query.filters.category)
             return `${query.filters.category.name.equals} Scripts (${scriptCount} total)`;
         if (query.filters.include)
             return `Scripts tagged with "${query.filters.include[0]}" (${scriptCount} total)`;
-        return `Filtered Scripts (${scriptCount} total after ${
-            Object.keys(query.filters).length
-        } filter${Object.keys(query.filters).length === 1 ? "" : "s"})`;
+        return `Filtered Scripts (${scriptCount} total after ${filterCount} filter${
+            filterCount === 1 ? "" : "s"
+        })`;
     };
 
     const handleFilters = (filters: Filters) => {
