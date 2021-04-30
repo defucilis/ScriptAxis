@@ -52,7 +52,7 @@ const TopScriptsGrid = ({ initialScripts }: { initialScripts?: Script[] }): JSX.
     const [error, setError] = useState("");
     const [scripts, setScripts] = useState<Script[]>(initialScripts || []);
     const [orderBy, setOrderBy] = useState<OrderByMethod>("likeCount");
-    const [timePeriod, setTimePeriod] = useState<TimePeriod>("month");
+    const [timePeriod, setTimePeriod] = useState<TimePeriod>("week");
     const [usingInitialScripts, setUsingInitialScripts] = useState(initialScripts ? true : false);
 
     useEffect(() => {
@@ -69,7 +69,7 @@ const TopScriptsGrid = ({ initialScripts }: { initialScripts?: Script[] }): JSX.
                 console.log(response.data);
                 if (response.data.error) throw response.data.error;
                 setScripts(response.data);
-                if (orderBy === "likeCount" && timePeriod === "month") {
+                if (orderBy === "likeCount" && timePeriod === "week") {
                     //this is just so the index page loads faster - we shouldn't overwrite if we change the ordering or filtering info!
                     window.localStorage.setItem("topScripts", JSON.stringify(response.data));
                     window.localStorage.setItem("topScriptsTime", new Date().valueOf().toString());
