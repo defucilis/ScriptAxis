@@ -26,7 +26,7 @@ const FetchScripts = async (): Promise<{ recentScripts: Script[]; topScripts: Sc
             where: {
                 active: true,
                 created: {
-                    gte: dayjs().subtract(1, "month").toDate(),
+                    gte: dayjs().subtract(1, "week").toDate(),
                 },
             },
             take: 8,
