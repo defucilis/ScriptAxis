@@ -4,12 +4,11 @@ import Layout from "../components/layout/Layout";
 import AdminPanel from "../components/dashboard/AdminPanel";
 import LoadingSkeleton from "../components/layout/LoadingSkeleton";
 
-import { FetchSlugs } from "./api/scripts/allslugs";
-
 import useAuth from "../lib/auth/useAuth";
-import { ScriptStub } from "lib/types";
+import { Script } from "lib/types";
+import { GetAllScripts } from "./api/admin/getScripts";
 
-const Admin = ({ existingScripts }: { existingScripts: ScriptStub[] }): JSX.Element => {
+const Admin = ({ existingScripts }: { existingScripts: Script[] }): JSX.Element => {
     const { loading } = useAuth({ redirectToIfNotAdmin: "/" });
 
     if (loading) return <LoadingSkeleton />;
@@ -25,10 +24,10 @@ const Admin = ({ existingScripts }: { existingScripts: ScriptStub[] }): JSX.Elem
     );
 };
 
-export async function getServerSideProps(): Promise<{ props: { existingScripts: ScriptStub[] } }> {
+export async function getServerSideProps(): Promise<{ props: { existingScripts: Script[] } }> {
     let scripts = [];
     try {
-        scripts = await FetchSlugs();
+        scripts = await GetAllScripts();
     } catch (error) {
         console.log("Failed to load scripts", error);
     }

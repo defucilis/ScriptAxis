@@ -77,6 +77,7 @@ export interface ScriptFormDataOutput {
     created?: Date;
     funscript?: string;
     averageSpeed?: number;
+    searchString?: string;
 }
 
 export interface ScriptErrorData {

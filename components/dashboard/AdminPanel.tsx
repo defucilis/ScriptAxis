@@ -14,7 +14,7 @@ import { Dropzone } from "../forms/FormUtils";
 import Checkbox from "../forms/Checkbox";
 
 import style from "./AdminPanel.module.scss";
-import { ScriptStub } from "lib/types";
+import { Script } from "lib/types";
 
 const ClearData = async (onSuccess: (data: any) => void, onFail: (error: string) => void) => {
     try {
@@ -157,7 +157,7 @@ const GetJsonBackup = async (
 };
 
 const RunScrape = async (
-    scripts: ScriptStub[],
+    scripts: Script[],
     subset: boolean,
     onMessage: (message: string) => void,
     onProgress: (doneCount: number, totalCount: number) => void,
@@ -208,11 +208,11 @@ const RunScrape = async (
     onComplete();
 };
 
-const AdminPanel = ({ existingScripts }: { existingScripts: ScriptStub[] }): JSX.Element => {
+const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Element => {
     const [running, setRunning] = useState(false);
     const [messages, setMessages] = useState({ list: [] });
     const [count, setCount] = useState(41);
-    const [scripts, setScripts] = useState<ScriptStub[]>([]);
+    const [scripts, setScripts] = useState<Script[]>([]);
 
     useEffect(() => {
         setScripts(existingScripts);

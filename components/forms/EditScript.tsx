@@ -144,6 +144,7 @@ const updateScript = async (
 
     //Modify the form data to match what shoud be in the database
     newData.slug = slugify(newData.name, { lower: true, strict: true });
+    newData.searchString = ScriptUtils.getSearchString(newData);
 
     //upload the thumbnail and add it to the database
     try {

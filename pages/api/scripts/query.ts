@@ -25,7 +25,7 @@ const QueryScripts = async ({
         console.log(filters);
 
         //these are set directly from UI
-        if (filters.name) finalWhere.AND.push({ name: filters.name });
+        if (filters.name) finalWhere.AND.push({ searchString: filters.name });
         if (filters.category) finalWhere.AND.push({ category: filters.category });
 
         //duration needs to be split into two checks for min and max

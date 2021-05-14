@@ -28,6 +28,7 @@ export interface TestDataScriptInput {
     created: number;
     funscript?: string;
     averageSpeed?: number;
+    searchString?: string;
 }
 
 export interface TestDataScript {
@@ -51,6 +52,7 @@ export interface TestDataScript {
     slug: string;
     funscript?: string;
     averageSpeed?: number;
+    searchString?: string;
 }
 
 const TestData: TestDataScriptInput[] = [
@@ -7223,6 +7225,7 @@ export const PrepareTestData = (scripts: any[]): TestDataScript[] => {
                 thumbnail: data.thumbnail || "/img/placeholder-thumbnail.png",
                 duration: ScriptUtils.stringToDuration(data.duration),
                 owner: "487e9807-627a-4f9a-8520-1f61603fa23c",
+                searchString: data.searchString || ScriptUtils.getSearchString(data),
             };
         });
 };

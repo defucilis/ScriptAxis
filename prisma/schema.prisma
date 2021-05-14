@@ -42,6 +42,7 @@ model Script {
   creatorName         String
   userId              String
   categoryName        String
+  searchString        String?
 }
 
 // Creators of scripts - may or may not be connected to a user account

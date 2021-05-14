@@ -48,6 +48,7 @@ export interface Script {
     creatorName: string;
     userId: string;
     categoryName: string;
+    searchString?: string;
 }
 
 export interface ScriptStub {
