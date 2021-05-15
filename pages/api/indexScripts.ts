@@ -38,6 +38,42 @@ const FetchScripts = async (): Promise<{ recentScripts: Script[]; topScripts: Sc
                 owner: { select: { username: true } },
             },
         });
+        if (topScripts.length === 0) {
+            topScripts = await prisma.script.findMany({
+                where: {
+                    active: true,
+                    created: {
+                        gte: dayjs().subtract(1, "month").toDate(),
+                    },
+                },
+                take: 8,
+                orderBy: {
+                    likeCount: "desc",
+                },
+                include: {
+                    creator: { select: { name: true } },
+                    owner: { select: { username: true } },
+                },
+            });
+        }
+        if (topScripts.length === 0) {
+            topScripts = await prisma.script.findMany({
+                where: {
+                    active: true,
+                    created: {
+                        gte: dayjs().subtract(1, "year").toDate(),
+                    },
+                },
+                take: 8,
+                orderBy: {
+                    likeCount: "desc",
+                },
+                include: {
+                    creator: { select: { name: true } },
+                    owner: { select: { username: true } },
+                },
+            });
+        }
         if (process.env.NEXT_PUBLIC_SFW_MODE === "true") {
             recentScripts = recentScripts.map(script => ScriptUtils.makeScriptSfw(script));
             topScripts = topScripts.map(script => ScriptUtils.makeScriptSfw(script));
