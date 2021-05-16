@@ -623,6 +623,25 @@ const readFile = async (file: File): Promise<string> => {
     });
 };
 
+const getSearchString = (data: {
+    name?: string;
+    talent?: string[];
+    tags?: string[];
+    studio?: string;
+}): string => {
+    let output: string = data.name || "";
+    if (data.talent && data.talent.length > 0) {
+        output += " " + data.talent.join(" ");
+    }
+    if (data.tags && data.tags.length > 0) {
+        output += " " + data.tags.join(" ");
+    }
+    if (data.studio) {
+        output += " " + data.studio;
+    }
+    return output.toLowerCase();
+};
+
 const ScriptUtils = {
     //parseScriptDocument,
     indexToDuration,
@@ -650,6 +669,7 @@ const ScriptUtils = {
     makeTagCategorySfw,
     makeScriptStubSfw,
     readFile,
+    getSearchString,
 };
 
 //module.exports = ScriptUtils;

@@ -102,6 +102,7 @@ const createScript = async (
     console.log(data);
 
     data.slug = slugify(data.name, { lower: true, strict: true });
+    data.searchString = ScriptUtils.getSearchString(data);
 
     if (postData.thumbnail.length > 0) {
         //upload the thumbnail and add it to the database

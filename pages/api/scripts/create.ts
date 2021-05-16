@@ -16,6 +16,7 @@ const CreateScript = async (rawData: any): Promise<Script> => {
         const data: any = {
             name: rawData.name,
             slug: rawData.slug,
+            searchString: rawData.searchString,
             //Todo - if we're inserting a new Creator here, we should check to see if it should
             //       be linked to the new user by default - some kind of flag or something...
             creator: {

@@ -55,6 +55,7 @@ const FetchScripts = async (): Promise<TestDataScriptInput[]> => {
                 thumbsUp: script.thumbsUp,
                 thumbsDown: script.thumbsDown,
                 created: script.created.valueOf(),
+                searchString: ScriptUtils.getSearchString(script),
             };
 
             return output;
