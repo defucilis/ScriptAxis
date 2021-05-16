@@ -235,7 +235,7 @@ const ScriptForm = ({
         doValidation(
             formData,
             () => {
-                onValidationPassed({
+                const finalData: ScriptFormData = {
                     name: formData.name,
                     creator: formData.creator,
                     owner: user.id,
@@ -249,9 +249,10 @@ const ScriptForm = ({
                     studio: formData.studio,
                     talent: formData.talent,
                     created: formData.created,
-                    funscript: [cleanFunscript],
                     averageSpeed: formData.averageSpeed,
-                });
+                    funscript: cleanFunscript ? [cleanFunscript] : [],
+                };
+                onValidationPassed(finalData);
             },
             null
         );
