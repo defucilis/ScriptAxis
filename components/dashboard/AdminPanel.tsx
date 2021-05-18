@@ -208,6 +208,40 @@ const RunScrape = async (
     onComplete();
 };
 
+const RunUpdateSearchString = async (
+    scripts: Script[],
+    onMessage: (message: string) => void,
+    onProgress: (doneCount: number, totalCount: number) => void,
+    onComplete: () => void,
+    onError: (error: string) => void
+) => {
+    onMessage("Updating all script search strings");
+    onMessage("--Fetching all scripts from database");
+    const response = await axios.post("/api/scripts");
+    if (response.data.error) {
+        onError(response.data.error);
+        onComplete();
+        return;
+    }
+    onMessage(`----Complete - found ${scripts.length} scripts`);
+    for (let i = 0; i < scripts.length; i++) {
+        const script = scripts[i];
+        try {
+            onMessage("--Updating search string for for " + script.slug);
+            console.log(process.env);
+            const response = await axios("/api/admin/updateSearchString?slug=" + script.slug);
+            console.log(response.data);
+            if (response.data.error) throw response.data.error.message;
+            onMessage(`----Success - search string is "${response.data.searchString}"`);
+        } catch (error) {
+            onError(error.message || error);
+        } finally {
+            onProgress(i + 1, scripts.length);
+        }
+    }
+    onComplete();
+};
+
 const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Element => {
     const [running, setRunning] = useState(false);
     const [messages, setMessages] = useState({ list: [] });
@@ -463,6 +497,32 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
         );
     };
 
+    const UpdateSearchStrings = () => {
+        setRunning(true);
+        progressBarParentRef.current.style.setProperty("display", "block");
+        progressBarRef.current.style.setProperty("width", "0%");
+
+        RunUpdateSearchString(
+            existingScripts,
+            addMessage,
+            (count, total) => {
+                progressBarRef.current.style.setProperty(
+                    "width",
+                    `${Math.round((count * 100) / total)}%`
+                );
+            },
+            () => {
+                addMessage("Search string update completed successfully");
+                addMessage("");
+                setRunning(false);
+                progressBarParentRef.current.style.setProperty("display", "none");
+            },
+            error => {
+                addMessage("Error: " + error);
+            }
+        );
+    };
+
     //if(user === null || user.waiting) return <div></div>
 
     return (
@@ -501,15 +561,7 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
                 <button onClick={StartUploadFile}>Upload Image</button>
             </div>
             <div className={`${style.buttons} ${running ? style.hidden : ""}`}>
-                <button onClick={StartGetJsonBackup}>Prepare JSON Backup</button>
-                <Link href={preparedDownload}>
-                    <a
-                        style={preparedDownload !== "" ? null : { display: "none" }}
-                        download={"ScriptAxisBackup.json"}
-                    >
-                        Download JSON Backup
-                    </a>
-                </Link>
+                <button onClick={UpdateSearchStrings}>Update Search Strings</button>
                 <div className={style.scrape}>
                     <label>
                         {"Scrape"}
@@ -527,6 +579,17 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
                     </Checkbox>
                     <button onClick={StartScrape}>Scrape Views and Likes</button>
                 </div>
+            </div>
+            <div className={`${style.buttons} ${running ? style.hidden : ""}`}>
+                <button onClick={StartGetJsonBackup}>Prepare JSON Backup</button>
+                <Link href={preparedDownload}>
+                    <a
+                        style={preparedDownload !== "" ? null : { display: "none" }}
+                        download={"ScriptAxisBackup.json"}
+                    >
+                        Download JSON Backup
+                    </a>
+                </Link>
                 <Dropzone
                     id="backup"
                     name="backup"
@@ -548,9 +611,6 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
                     value={jsonBackup}
                 />
                 <button onClick={StartJsonRestore}>Restore from JSON Backup</button>
-                <Link href="/funscriptupload">
-                    <a>Funscript Upload</a>
-                </Link>
             </div>
             <div className={style.progressbg} ref={progressBarParentRef}>
                 <div className={style.progressbar} ref={progressBarRef}></div>
