@@ -558,13 +558,17 @@ const getScriptObjectCode = (data: ScriptFormDataOutput): string => {
 };
 
 const longAcronyms = ["MILF", "DILF", "GILF", "CFNM", "BDSM"];
+const shortNonacronyms = ["Gay"];
 const formatTag = (tag: string): string => {
     const foundAcronym = longAcronyms.find(a => a === tag.toUpperCase());
     if (foundAcronym) return foundAcronym;
 
+    const foundNonacronym = shortNonacronyms.find(a => a.toLowerCase() === tag.toLowerCase());
+    if(foundNonacronym) return foundNonacronym;
+
     if (tag.length <= 3) return tag.toUpperCase();
 
-    const pieces = tag.replace("-", " ").split(" ");
+    const pieces = tag.replace(/-/g, " ").split(" ");
     return pieces
         .map(piece => piece.substr(0, 1).toUpperCase() + piece.substr(1).toLowerCase())
         .join(" ");
