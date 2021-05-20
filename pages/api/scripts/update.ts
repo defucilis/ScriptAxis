@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import getUser from "lib/getUser";
 import { Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -132,6 +133,12 @@ const UpdateScript = async (rawData: any): Promise<Script> => {
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
+        const user = await getUser(req);
+        if (!user || !user.isAdmin) {
+            res.status(401);
+            res.json({ error: { message: "You are not authorized to perform this action" } });
+            return;
+        }
         const script = await UpdateScript({ ...req.body });
         res.status(200);
         res.json(script);
