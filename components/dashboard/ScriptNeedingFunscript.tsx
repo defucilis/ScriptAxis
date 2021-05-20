@@ -98,7 +98,7 @@ const ScriptNeedingFunscript = ({
                 instruction="Drag + drop a .funscript, or click to select one"
                 options={{
                     accept: [".funscript"],
-                    maxSize: 1024000, //1MB
+                    maxSize: 10240000, //10MB
                     multiple: false,
                     noKeyboard: true,
                     preventDropOnDocument: true,
