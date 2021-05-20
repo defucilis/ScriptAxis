@@ -1,0 +1,48 @@
+.form {
+    width: 100%;
+    display: grid;
+    place-content: center;
+    margin-top: 6rem;
+
+    h1 {
+        text-align: center;
+        margin-bottom: 0;
+        font-size: 2rem;
+    }
+
+    p {
+        text-align: center;
+        color: var(--color-neutral-900);
+        font-style: italic;
+        margin-top: 0;
+    }
+
+    label {
+        font-size: 1.2rem;
+        width: 100%;
+        text-align: center;
+    }
+
+    input {
+        font-size: 1.2rem;
+        width: 24rem;
+        padding: 0.5rem 1rem;
+    }
+
+    button {
+        border: 0;
+        font-size: 1.2rem;
+        margin-top: 1rem;
+        background-color: var(--color-theme-500);
+        border-radius: 5px;
+        padding: 0.5rem;
+        width: 50%;
+        margin: 1rem auto;
+    }
+
+    form {
+        display: grid;
+        place-items: center;
+        margin-top: 2rem;
+    }
+}

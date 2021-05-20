@@ -41,6 +41,11 @@ const options: NextAuthOptions = {
         prisma,
     }),
     secret: process.env.AUTH_SECRET,
+
+    pages: {
+        signIn: "/signin",
+        verifyRequest: "/checkemail",
+    },
 };
 
 const authHandler: NextApiHandler = (req, res) => NextAuth(req, res, options);
