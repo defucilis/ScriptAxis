@@ -21,13 +21,19 @@ const ScriptNeedingFunscript = ({
     const [averageSpeed, setAverageSpeed] = useState(0);
     const [error, setError] = useState("");
 
-    const handleChange = (e: {
+    const handleChange = async (e: {
         target: {
             id: string;
             value: any;
         };
     }) => {
-        setFunscriptFile(e.target.value[0]);
+        const fileContents = await ScriptUtils.readFile(e.target.value[0]);
+        const funscript: any = addFunscriptMetadata(JSON.parse(fileContents));
+        delete funscript.rawActions;
+        const newFile = new File([JSON.stringify(funscript)], e.target.value[0].name, {
+            type: "application/JSON",
+        });
+        setFunscriptFile(newFile);
     };
 
     const handleError = (e: {
@@ -42,7 +48,8 @@ const ScriptNeedingFunscript = ({
     useEffect(() => {
         const loadSpeed = async (file: File) => {
             const fileData = await ScriptUtils.readFile(file);
-            const newFunscript = addFunscriptMetadata(JSON.parse(fileData));
+            const newFunscript: any = addFunscriptMetadata(JSON.parse(fileData));
+            delete newFunscript.rawActions;
             setAverageSpeed(Math.round(newFunscript.metadata.average_speed));
         };
 
