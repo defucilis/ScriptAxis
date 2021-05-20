@@ -1,15 +1,14 @@
-import { PrismaClient } from "@prisma/client";
 import dayjs from "dayjs";
+import Database from "lib/Database";
 import ScriptUtils from "lib/ScriptUtils";
 import { Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const FetchScripts = async (): Promise<{ recentScripts: Script[]; topScripts: Script[] }> => {
-    const prisma = new PrismaClient();
     try {
         console.log("Fetching all scripts");
 
-        let recentScripts = await prisma.script.findMany({
+        let recentScripts = await Database.Instance().script.findMany({
             where: {
                 active: true,
             },
@@ -22,7 +21,7 @@ const FetchScripts = async (): Promise<{ recentScripts: Script[]; topScripts: Sc
                 owner: { select: { name: true } },
             },
         });
-        let topScripts = await prisma.script.findMany({
+        let topScripts = await Database.Instance().script.findMany({
             where: {
                 active: true,
                 createdAt: {
@@ -39,7 +38,7 @@ const FetchScripts = async (): Promise<{ recentScripts: Script[]; topScripts: Sc
             },
         });
         if (topScripts.length === 0) {
-            topScripts = await prisma.script.findMany({
+            topScripts = await Database.Instance().script.findMany({
                 where: {
                     active: true,
                     createdAt: {
@@ -57,7 +56,7 @@ const FetchScripts = async (): Promise<{ recentScripts: Script[]; topScripts: Sc
             });
         }
         if (topScripts.length === 0) {
-            topScripts = await prisma.script.findMany({
+            topScripts = await Database.Instance().script.findMany({
                 where: {
                     active: true,
                     createdAt: {
@@ -78,10 +77,10 @@ const FetchScripts = async (): Promise<{ recentScripts: Script[]; topScripts: Sc
             recentScripts = recentScripts.map(script => ScriptUtils.makeScriptSfw(script));
             topScripts = topScripts.map(script => ScriptUtils.makeScriptSfw(script));
         }
-        await prisma.$disconnect();
+        await Database.disconnect();
         return { recentScripts, topScripts };
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };

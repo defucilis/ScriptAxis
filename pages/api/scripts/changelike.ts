@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const ChangeLike = async (
@@ -7,13 +7,12 @@ const ChangeLike = async (
     creatorName: string,
     isLiked: boolean
 ): Promise<void> => {
-    const prisma = new PrismaClient();
     try {
         console.log("Setting scriptLiked to " + isLiked, { scriptSlug, userId, creatorName });
         const transaction = [];
         //add or remove the script from the user's liked scripts
         transaction.push(
-            prisma.user.update({
+            Database.Instance().user.update({
                 where: { id: userId },
                 data: {
                     likedScripts: isLiked
@@ -26,7 +25,7 @@ const ChangeLike = async (
         //add or remove the user from the script's "liked by" list
         //and update its likeCount
         transaction.push(
-            prisma.script.update({
+            Database.Instance().script.update({
                 where: { slug: scriptSlug },
                 data: isLiked
                     ? {
@@ -39,7 +38,7 @@ const ChangeLike = async (
         );
 
         transaction.push(
-            prisma.creator.update({
+            Database.Instance().creator.update({
                 where: { name: creatorName },
                 data: {
                     totalLikes: isLiked ? { increment: 1 } : { decrement: 1 },
@@ -48,11 +47,11 @@ const ChangeLike = async (
         );
 
         transaction.push();
-        const results: any[] = await prisma.$transaction(transaction);
-        await prisma.$disconnect();
+        const results: any[] = await Database.Instance().$transaction(transaction);
+        await Database.disconnect();
         return results[1].likeCount;
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };

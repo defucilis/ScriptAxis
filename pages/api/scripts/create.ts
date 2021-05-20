@@ -1,12 +1,9 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import getUser from "lib/getUser";
 import { Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const CreateScript = async (rawData: any): Promise<Script> => {
-    //console.log(req.body);
-    const prisma = new PrismaClient();
-
     try {
         console.log("Creating script with data", rawData);
 
@@ -56,13 +53,13 @@ const CreateScript = async (rawData: any): Promise<Script> => {
         if (rawData.funscript) data.funscript = rawData.funscript;
         if (rawData.averageSpeed) data.averageSpeed = rawData.averageSpeed;
 
-        transaction.push(prisma.script.create({ data }));
+        transaction.push(Database.Instance().script.create({ data }));
 
         //Create or insert any necessary tags
         if (rawData.tags) {
             rawData.tags.forEach(tag => {
                 transaction.push(
-                    prisma.tag.upsert({
+                    Database.Instance().tag.upsert({
                         where: { name: tag },
                         create: { name: tag, count: 1 },
                         update: { count: { increment: 1 } },
@@ -73,7 +70,7 @@ const CreateScript = async (rawData: any): Promise<Script> => {
 
         //Add the script to its category
         transaction.push(
-            prisma.category.update({
+            Database.Instance().category.update({
                 where: { name: rawData.category },
                 data: {
                     scripts: { connect: { slug: rawData.slug } },
@@ -84,7 +81,7 @@ const CreateScript = async (rawData: any): Promise<Script> => {
 
         //Add the script to its creator
         transaction.push(
-            prisma.creator.update({
+            Database.Instance().creator.update({
                 where: { name: rawData.creator },
                 data: {
                     scripts: { connect: { slug: rawData.slug } },
@@ -94,7 +91,7 @@ const CreateScript = async (rawData: any): Promise<Script> => {
 
         //Add the script to its owner
         transaction.push(
-            prisma.user.update({
+            Database.Instance().user.update({
                 where: { id: rawData.owner },
                 data: {
                     ownedScripts: { connect: { slug: rawData.slug } },
@@ -106,7 +103,7 @@ const CreateScript = async (rawData: any): Promise<Script> => {
         if (rawData.talent) {
             rawData.talent.forEach((talent: string) => {
                 transaction.push(
-                    prisma.talent.upsert({
+                    Database.Instance().talent.upsert({
                         where: { name: talent },
                         create: { name: talent },
                         update: {},
@@ -118,7 +115,7 @@ const CreateScript = async (rawData: any): Promise<Script> => {
         //If a studio was included, add it to the studio table
         if (rawData.studio) {
             transaction.push(
-                prisma.studio.upsert({
+                Database.Instance().studio.upsert({
                     where: { name: rawData.studio },
                     create: { name: rawData.studio },
                     update: {},
@@ -126,11 +123,11 @@ const CreateScript = async (rawData: any): Promise<Script> => {
             );
         }
 
-        const results: any[] = await prisma.$transaction(transaction);
-        await prisma.$disconnect();
+        const results: any[] = await Database.Instance().$transaction(transaction);
+        await Database.disconnect();
         return results[0];
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };

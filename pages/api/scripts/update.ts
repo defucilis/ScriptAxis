@@ -1,12 +1,9 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import getUser from "lib/getUser";
 import { Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const UpdateScript = async (rawData: any): Promise<Script> => {
-    //console.log(req.body);
-    const prisma = new PrismaClient();
-
     try {
         console.log("Updating script with data", rawData);
 
@@ -37,7 +34,7 @@ const UpdateScript = async (rawData: any): Promise<Script> => {
 
         console.log("Updating script id " + id + " with data", updateData);
         transaction.push(
-            prisma.script.update({
+            Database.Instance().script.update({
                 where: { id: id },
                 data: updateData,
             })
@@ -47,7 +44,7 @@ const UpdateScript = async (rawData: any): Promise<Script> => {
         if (remove.category) {
             console.log("Removing from category", remove.category);
             transaction.push(
-                prisma.category.update({
+                Database.Instance().category.update({
                     where: { name: remove.category },
                     data: {
                         count: { decrement: 1 },
@@ -59,7 +56,7 @@ const UpdateScript = async (rawData: any): Promise<Script> => {
         if (add.category) {
             console.log("Adding to category", add.category);
             transaction.push(
-                prisma.category.update({
+                Database.Instance().category.update({
                     where: { name: add.category },
                     data: {
                         scripts: { connect: { id: id } },
@@ -74,7 +71,7 @@ const UpdateScript = async (rawData: any): Promise<Script> => {
             remove.tags.forEach(tag => {
                 console.log("Removing tag", tag);
                 transaction.push(
-                    prisma.tag.update({
+                    Database.Instance().tag.update({
                         where: { name: tag },
                         data: { count: { decrement: 1 } },
                     })
@@ -86,7 +83,7 @@ const UpdateScript = async (rawData: any): Promise<Script> => {
             add.tags.forEach(tag => {
                 console.log("Adding tag", tag);
                 transaction.push(
-                    prisma.tag.upsert({
+                    Database.Instance().tag.upsert({
                         where: { name: tag },
                         create: { name: tag, count: 1 },
                         update: { count: { increment: 1 } },
@@ -100,7 +97,7 @@ const UpdateScript = async (rawData: any): Promise<Script> => {
             add.talent.forEach(talent => {
                 console.log("Adding talent", talent);
                 transaction.push(
-                    prisma.talent.upsert({
+                    Database.Instance().talent.upsert({
                         where: { name: talent },
                         create: { name: talent },
                         update: {},
@@ -113,7 +110,7 @@ const UpdateScript = async (rawData: any): Promise<Script> => {
         if (add.studio) {
             console.log("Adding studio", add.studio);
             transaction.push(
-                prisma.studio.upsert({
+                Database.Instance().studio.upsert({
                     where: { name: add.studio },
                     create: { name: add.studio },
                     update: {},
@@ -121,12 +118,12 @@ const UpdateScript = async (rawData: any): Promise<Script> => {
             );
         }
 
-        const results: any[] = await prisma.$transaction(transaction);
-        await prisma.$disconnect();
+        const results: any[] = await Database.Instance().$transaction(transaction);
+        await Database.disconnect();
         console.log("Results: ", results[0]);
         return results[0];
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };

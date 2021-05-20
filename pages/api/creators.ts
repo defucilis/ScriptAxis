@@ -1,19 +1,18 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import ScriptUtils from "lib/ScriptUtils";
 import { Creator } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const FetchCreators = async (): Promise<Creator[]> => {
-    const prisma = new PrismaClient();
     try {
         console.log("Fetching all creators");
-        let creators = await prisma.creator.findMany({
+        let creators = await Database.Instance().creator.findMany({
             orderBy: {
                 totalViews: "desc",
             },
             include: { scripts: { select: { slug: true } } },
         });
-        await prisma.$disconnect();
+        await Database.disconnect();
         if (process.env.NEXT_PUBLIC_SFW_MODE === "true") {
             creators = creators.map(creator => ({
                 ...creator,
@@ -23,7 +22,7 @@ const FetchCreators = async (): Promise<Creator[]> => {
         }
         return creators;
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };

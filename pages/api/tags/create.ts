@@ -1,10 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import getUser from "lib/getUser";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const CreateTag = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-    const prisma = new PrismaClient();
-
     try {
         const user = await getUser(req);
         if (!user || !user.isAdmin) {
@@ -14,7 +12,7 @@ const CreateTag = async (req: NextApiRequest, res: NextApiResponse): Promise<voi
         }
         const data = req.body;
         console.log("Creating new tag", data);
-        const newTag = await prisma.tag.create({ data });
+        const newTag = await Database.Instance().tag.create({ data });
         res.status(201);
         res.json(newTag);
     } catch (error) {
@@ -23,7 +21,7 @@ const CreateTag = async (req: NextApiRequest, res: NextApiResponse): Promise<voi
             error: { message: error.message },
         });
     } finally {
-        await prisma.$disconnect();
+        await Database.disconnect();
     }
 };
 

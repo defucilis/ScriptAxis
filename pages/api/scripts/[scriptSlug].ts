@@ -1,10 +1,9 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import ScriptUtils from "lib/ScriptUtils";
 import { Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const FetchScript = async (slug: string, noview = false): Promise<Script> => {
-    const prisma = new PrismaClient();
     try {
         console.log("Fetching script", { slug, noview });
         const where = {
@@ -12,8 +11,8 @@ const FetchScript = async (slug: string, noview = false): Promise<Script> => {
             active: true,
         };
         const promise = noview
-            ? prisma.script.findFirst({ where })
-            : prisma.script.update({
+            ? Database.Instance().script.findFirst({ where })
+            : Database.Instance().script.update({
                   where: { slug },
                   data: {
                       views: { increment: 1 },
@@ -25,10 +24,10 @@ const FetchScript = async (slug: string, noview = false): Promise<Script> => {
         if (process.env.NEXT_PUBLIC_SFW_MODE === "true") {
             script = ScriptUtils.makeScriptSfw(script);
         }
-        await prisma.$disconnect();
+        await Database.disconnect();
         return script;
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };

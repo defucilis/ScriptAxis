@@ -1,10 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import getUser from "lib/getUser";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const CreateCategory = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-    const prisma = new PrismaClient();
-
     try {
         const user = await getUser(req);
         if (!user || !user.isAdmin) {
@@ -14,7 +12,7 @@ const CreateCategory = async (req: NextApiRequest, res: NextApiResponse): Promis
         }
         const data = req.body;
         console.log("Creating category with data", req.body);
-        const newCategory = await prisma.category.create({ data });
+        const newCategory = await Database.Instance().category.create({ data });
         res.status(201);
         res.json(newCategory);
     } catch (error) {
@@ -22,7 +20,7 @@ const CreateCategory = async (req: NextApiRequest, res: NextApiResponse): Promis
             error: { message: error.message },
         });
     } finally {
-        await prisma.$disconnect();
+        await Database.disconnect();
     }
 };
 

@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import getUser from "lib/getUser";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -10,8 +10,6 @@ const ClearData = async (req: NextApiRequest, res: NextApiResponse): Promise<voi
         return;
     }
 
-    const prisma = new PrismaClient();
-
     try {
         console.log("Wiping database...");
 
@@ -19,43 +17,55 @@ const ClearData = async (req: NextApiRequest, res: NextApiResponse): Promise<voi
 
         console.log("\tClearing Category table");
         transaction.push(
-            prisma.$queryRaw('TRUNCATE TABLE public."Category" CONTINUE IDENTITY CASCADE;')
+            Database.Instance().$queryRaw(
+                'TRUNCATE TABLE public."Category" CONTINUE IDENTITY CASCADE;'
+            )
         );
         console.log("\tClearing Creator table");
         transaction.push(
-            prisma.$queryRaw('TRUNCATE TABLE public."Creator" CONTINUE IDENTITY CASCADE;')
+            Database.Instance().$queryRaw(
+                'TRUNCATE TABLE public."Creator" CONTINUE IDENTITY CASCADE;'
+            )
         );
         console.log("\tClearing Script table");
         transaction.push(
-            prisma.$queryRaw('TRUNCATE TABLE public."Script" CONTINUE IDENTITY CASCADE;')
+            Database.Instance().$queryRaw(
+                'TRUNCATE TABLE public."Script" CONTINUE IDENTITY CASCADE;'
+            )
         );
         console.log("\tClearing Tag table");
         transaction.push(
-            prisma.$queryRaw('TRUNCATE TABLE public."Tag" CONTINUE IDENTITY CASCADE;')
+            Database.Instance().$queryRaw('TRUNCATE TABLE public."Tag" CONTINUE IDENTITY CASCADE;')
         );
         console.log("\tClearing Talent table");
         transaction.push(
-            prisma.$queryRaw('TRUNCATE TABLE public."Talent" CONTINUE IDENTITY CASCADE;')
+            Database.Instance().$queryRaw(
+                'TRUNCATE TABLE public."Talent" CONTINUE IDENTITY CASCADE;'
+            )
         );
         console.log("\tClearing Studio table");
         transaction.push(
-            prisma.$queryRaw('TRUNCATE TABLE public."Studio" CONTINUE IDENTITY CASCADE;')
+            Database.Instance().$queryRaw(
+                'TRUNCATE TABLE public."Studio" CONTINUE IDENTITY CASCADE;'
+            )
         );
         //console.log("\tClearing User table");
         //transaction.push(prisma.$queryRaw('TRUNCATE TABLE public."User" CONTINUE IDENTITY CASCADE;'))
         console.log("\tClearing VerificationRequest table");
         transaction.push(
-            prisma.$queryRaw(
+            Database.Instance().$queryRaw(
                 'TRUNCATE TABLE public."VerificationRequest" CONTINUE IDENTITY CASCADE;'
             )
         );
         console.log("\tClearing _ScriptLiker table");
         transaction.push(
-            prisma.$queryRaw('TRUNCATE TABLE public."_ScriptLiker" CONTINUE IDENTITY CASCADE;')
+            Database.Instance().$queryRaw(
+                'TRUNCATE TABLE public."_ScriptLiker" CONTINUE IDENTITY CASCADE;'
+            )
         );
 
-        const results = await prisma.$transaction(transaction);
-        await prisma.$disconnect();
+        const results = await Database.Instance().$transaction(transaction);
+        await Database.disconnect();
 
         res.status(201);
         res.json(results);
@@ -65,7 +75,7 @@ const ClearData = async (req: NextApiRequest, res: NextApiResponse): Promise<voi
             error: { message: error.message },
         });
     } finally {
-        await prisma.$disconnect();
+        await Database.disconnect();
     }
 };
 

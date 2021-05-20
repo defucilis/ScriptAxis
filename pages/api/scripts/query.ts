@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import { Query, Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 import ScriptUtils from "../../../lib/ScriptUtils";
@@ -8,7 +8,6 @@ const QueryScripts = async ({
     sorting,
     page,
 }: Query): Promise<{ count: number; scripts: Script[] }> => {
-    const prisma = new PrismaClient();
     try {
         console.log("Querying scripts", { page, sorting, filters });
 
@@ -68,11 +67,11 @@ const QueryScripts = async ({
             });
         }
 
-        const count = await prisma.script.count({
+        const count = await Database.Instance().script.count({
             where: finalWhere,
         });
 
-        let scripts = await prisma.script.findMany({
+        let scripts = await Database.Instance().script.findMany({
             skip: page && page > 1 ? 18 * (page - 1) : 0,
             take: 18,
             where: finalWhere,
@@ -86,10 +85,10 @@ const QueryScripts = async ({
         if (process.env.NEXT_PUBLIC_SFW_MODE === "true") {
             scripts = scripts.map(script => ScriptUtils.makeScriptSfw(script));
         }
-        await prisma.$disconnect();
+        await Database.disconnect();
         return { count, scripts };
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };

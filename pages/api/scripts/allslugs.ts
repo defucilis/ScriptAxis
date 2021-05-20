@@ -1,18 +1,17 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import { ScriptStub } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const FetchSlugs = async (): Promise<ScriptStub[]> => {
-    const prisma = new PrismaClient();
     try {
         console.log("Fetching all script slugs");
-        const scripts = await prisma.script.findMany({
+        const scripts = await Database.Instance().script.findMany({
             select: { id: true, slug: true, name: true, sourceUrl: true },
         });
-        await prisma.$disconnect();
+        await Database.disconnect();
         return scripts;
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };

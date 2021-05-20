@@ -1,13 +1,11 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const SaveSearch = async (uid: number, searchString: string): Promise<any> => {
-    const prisma = new PrismaClient();
-
     try {
         console.log("Saving search query for user " + uid, searchString);
         const currentSavedFilters = (
-            await prisma.user.findFirst({
+            await Database.Instance().user.findFirst({
                 where: {
                     id: uid,
                 },
@@ -19,12 +17,12 @@ const SaveSearch = async (uid: number, searchString: string): Promise<any> => {
 
         const exists = currentSavedFilters.findIndex(f => f === searchString) !== -1;
         if (exists) {
-            await prisma.$disconnect();
+            await Database.disconnect();
             return currentSavedFilters;
             return;
         }
 
-        const response = await prisma.user.update({
+        const response = await Database.Instance().user.update({
             where: {
                 id: uid,
             },
@@ -33,10 +31,10 @@ const SaveSearch = async (uid: number, searchString: string): Promise<any> => {
             },
         });
 
-        await prisma.$disconnect();
+        await Database.disconnect();
         return response;
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };

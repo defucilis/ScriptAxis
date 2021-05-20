@@ -1,24 +1,23 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import ScriptUtils from "lib/ScriptUtils";
 import { StringListsWithCount } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const FetchLists = async (): Promise<StringListsWithCount> => {
-    const prisma = new PrismaClient();
     try {
-        let tags = await prisma.tag.findMany();
+        let tags = await Database.Instance().tag.findMany();
         tags = tags.sort((a, b) => b.count - a.count);
-        let categories = await prisma.category.findMany();
+        let categories = await Database.Instance().category.findMany();
         categories = categories.sort((a, b) => b.count - a.count);
-        const talent = await prisma.talent.findMany();
-        const studios = await prisma.studio.findMany();
-        const creators = await prisma.creator.findMany({
+        const talent = await Database.Instance().talent.findMany();
+        const studios = await Database.Instance().studio.findMany();
+        const creators = await Database.Instance().creator.findMany({
             select: {
                 name: true,
             },
         });
 
-        await prisma.$disconnect();
+        await Database.disconnect();
         const output = ScriptUtils.parseDatabaseListsWithCount({
             tags,
             categories,
@@ -37,7 +36,7 @@ const FetchLists = async (): Promise<StringListsWithCount> => {
         }
         return output;
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };

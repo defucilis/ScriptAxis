@@ -1,13 +1,12 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import getUser from "lib/getUser";
 
 import ScriptUtils from "lib/ScriptUtils";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const UpdateSearchString = async (scriptSlug: string) => {
-    const prisma = new PrismaClient();
     try {
-        const script = await prisma.script.findUnique({
+        const script = await Database.Instance().script.findUnique({
             where: {
                 slug: scriptSlug,
             },
@@ -16,7 +15,7 @@ const UpdateSearchString = async (scriptSlug: string) => {
 
         const searchString = ScriptUtils.getSearchString(script);
 
-        const output = await prisma.script.update({
+        const output = await Database.Instance().script.update({
             where: {
                 slug: scriptSlug,
             },
@@ -24,10 +23,10 @@ const UpdateSearchString = async (scriptSlug: string) => {
                 searchString,
             },
         });
-        await prisma.$disconnect();
+        await Database.disconnect();
         return output;
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };

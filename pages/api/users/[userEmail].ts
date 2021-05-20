@@ -1,17 +1,16 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import ScriptUtils from "lib/ScriptUtils";
 import { UiUser, LeanUser } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const FetchLeanUser = async (email: string): Promise<LeanUser> => {
-    const prisma = new PrismaClient();
     try {
         console.log("Fetching lean user with email", { email });
 
         //if lean, we only want the slugs of the liked and owned scripts
         //even that might be too much for the 4096kB user cookie
 
-        const users = await prisma.user.findFirst({
+        const users = await Database.Instance().user.findFirst({
             where: {
                 email: email,
             },
@@ -22,15 +21,14 @@ const FetchLeanUser = async (email: string): Promise<LeanUser> => {
             },
         });
         delete users.savedFilters;
-        await prisma.$disconnect();
+        await Database.disconnect();
         return users;
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };
 const FetchUser = async (email: string): Promise<UiUser> => {
-    const prisma = new PrismaClient();
     try {
         console.log("Fetching user with email", { email });
 
@@ -45,7 +43,7 @@ const FetchUser = async (email: string): Promise<UiUser> => {
             },
         };
 
-        const user = await prisma.user.findFirst({
+        const user = await Database.Instance().user.findFirst({
             where: {
                 email: email,
             },
@@ -60,10 +58,10 @@ const FetchUser = async (email: string): Promise<UiUser> => {
                 ScriptUtils.makeScriptStubSfw(script)
             );
         }
-        await prisma.$disconnect();
+        await Database.disconnect();
         return user;
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };

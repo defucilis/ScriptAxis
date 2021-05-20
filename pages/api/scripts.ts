@@ -1,8 +1,9 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import ScriptUtils from "lib/ScriptUtils";
 import { Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 import Cors from "cors";
+import Database from "lib/Database";
 
 const initMiddleware = middleware => {
     return (req, res) =>
@@ -27,7 +28,6 @@ const FetchScripts = async (
     orderBy?: Prisma.Enumerable<Prisma.ScriptOrderByInput>,
     minDate?: Date
 ): Promise<Script[]> => {
-    const prisma = new PrismaClient();
     try {
         console.log("Fetching all scripts");
         const findParams: any = {
@@ -43,14 +43,14 @@ const FetchScripts = async (
         if (orderBy) findParams.orderBy = orderBy;
         if (minDate) findParams.where.createdAt = { gte: minDate };
 
-        let scripts = await prisma.script.findMany(findParams);
+        let scripts = await Database.Instance().script.findMany(findParams);
         if (process.env.NEXT_PUBLIC_SFW_MODE === "true") {
             scripts = scripts.map(script => ScriptUtils.makeScriptSfw(script));
         }
-        await prisma.$disconnect();
+        await Database.disconnect();
         return scripts;
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };

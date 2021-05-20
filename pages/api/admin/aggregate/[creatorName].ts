@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import getUser from "lib/getUser";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -10,10 +10,8 @@ interface UpdateCreatorOutput {
 }
 
 const UpdateCreator = async (creatorName: string): Promise<UpdateCreatorOutput> => {
-    const prisma = new PrismaClient();
-
     //Get the creator's most-viewed script for the thumbnail
-    const allScripts = await prisma.script.findMany({
+    const allScripts = await Database.Instance().script.findMany({
         where: {
             creator: {
                 name: creatorName,
@@ -24,7 +22,7 @@ const UpdateCreator = async (creatorName: string): Promise<UpdateCreatorOutput> 
     const thumbnail =
         allScripts.length > 0 ? allScripts.sort((a, b) => b.views - a.views)[0].thumbnail : "";
 
-    const aggregations = await prisma.script.aggregate({
+    const aggregations = await Database.Instance().script.aggregate({
         where: {
             creator: {
                 name: creatorName,
@@ -35,7 +33,7 @@ const UpdateCreator = async (creatorName: string): Promise<UpdateCreatorOutput> 
             likeCount: true,
         },
     });
-    const updatedCreator = await prisma.creator.update({
+    const updatedCreator = await Database.Instance().creator.update({
         where: {
             name: creatorName,
         },
@@ -46,7 +44,7 @@ const UpdateCreator = async (creatorName: string): Promise<UpdateCreatorOutput> 
         },
     });
 
-    await prisma.$disconnect();
+    await Database.disconnect();
 
     return {
         creatorName: creatorName,

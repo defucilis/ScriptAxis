@@ -1,18 +1,17 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const FetchNames = async (): Promise<string[]> => {
-    const prisma = new PrismaClient();
     try {
         console.log("Fetching all creator names");
-        const creators = await prisma.creator.findMany({
+        const creators = await Database.Instance().creator.findMany({
             select: { name: true },
             orderBy: { totalViews: "desc" },
         });
-        await prisma.$disconnect();
+        await Database.disconnect();
         return creators.map(creator => creator.name);
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };

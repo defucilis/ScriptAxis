@@ -1,6 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-
 import axios from "axios";
+import Database from "lib/Database";
 import getUser from "lib/getUser";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -50,9 +49,8 @@ const Scrape = async (scriptSlug: string, scriptUrl: string) => {
     }
     const createdAt = new Date(threadData.created_at);
 
-    const prisma = new PrismaClient();
     try {
-        const output = await prisma.script.update({
+        const output = await Database.Instance().script.update({
             where: {
                 slug: scriptSlug,
             },
@@ -62,10 +60,10 @@ const Scrape = async (scriptSlug: string, scriptUrl: string) => {
                 createdAt,
             },
         });
-        await prisma.$disconnect();
+        await Database.disconnect();
         return output;
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };

@@ -1,13 +1,12 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import ScriptUtils from "lib/ScriptUtils";
 import { Creator, Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const FetchCreator = async (name: string): Promise<Creator & { scripts: Script[] }> => {
-    const prisma = new PrismaClient();
     try {
         console.log("Fetching creator with data", name);
-        const creator = await prisma.creator.findUnique({
+        const creator = await Database.Instance().creator.findUnique({
             where: {
                 name: name,
             },
@@ -15,13 +14,13 @@ const FetchCreator = async (name: string): Promise<Creator & { scripts: Script[]
                 scripts: true,
             },
         });
-        await prisma.$disconnect();
+        await Database.disconnect();
         if (process.env.NEXT_PUBLIC_SFW_MODE === "true") {
             creator.scripts = creator.scripts.map(script => ScriptUtils.makeScriptSfw(script));
         }
         return creator;
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };

@@ -1,14 +1,13 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import getUser from "lib/getUser";
 import { TestDataScriptInput } from "lib/TestData";
 import { NextApiRequest, NextApiResponse } from "next";
 import ScriptUtils from "../../../lib/ScriptUtils";
 
 const FetchScripts = async (): Promise<TestDataScriptInput[]> => {
-    const prisma = new PrismaClient();
     try {
         console.log("Fetching JSON dump of scripts");
-        const scripts = await prisma.script.findMany({
+        const scripts = await Database.Instance().script.findMany({
             where: {
                 active: true,
             },
@@ -61,10 +60,10 @@ const FetchScripts = async (): Promise<TestDataScriptInput[]> => {
 
             return output;
         });
-        await prisma.$disconnect();
+        await Database.disconnect();
         return mappedScripts;
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };

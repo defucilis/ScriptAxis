@@ -1,20 +1,19 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const ViewScript = async (scriptSlug: string): Promise<number> => {
-    const prisma = new PrismaClient();
     try {
         console.log("Registering script view for", scriptSlug);
-        const updatedScript = await prisma.script.update({
+        const updatedScript = await Database.Instance().script.update({
             where: { slug: scriptSlug },
             data: {
                 views: { increment: 1 },
             },
         });
-        await prisma.$disconnect();
+        await Database.disconnect();
         return updatedScript.views;
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };

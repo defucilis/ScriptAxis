@@ -1,12 +1,10 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const SetSavedSearches = async (uid: number, filters: string): Promise<any> => {
-    const prisma = new PrismaClient();
-
     try {
         console.log("Setting saved searches for user " + uid, filters);
-        const response = await prisma.user.update({
+        const response = await Database.Instance().user.update({
             where: {
                 id: uid,
             },
@@ -15,10 +13,10 @@ const SetSavedSearches = async (uid: number, filters: string): Promise<any> => {
             },
         });
 
-        await prisma.$disconnect();
+        await Database.disconnect();
         return response;
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };

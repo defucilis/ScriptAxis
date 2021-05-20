@@ -1,14 +1,12 @@
-import { PrismaClient } from "@prisma/client";
+import Database from "lib/Database";
 import getUser from "lib/getUser";
 import { Creator } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const Aggregate = async (): Promise<Creator[]> => {
-    const prisma = new PrismaClient();
-
     const updateCreator = async (creator: Creator) => {
         //Get the creator's most-viewed script for the thumbnail
-        const allScripts = await prisma.script.findMany({
+        const allScripts = await Database.Instance().script.findMany({
             where: {
                 creator: {
                     name: creator.name,
@@ -32,7 +30,7 @@ const Aggregate = async (): Promise<Creator[]> => {
                 ? uniqueScripts.sort((a, b) => b.views - a.views)[0].thumbnail
                 : "";
 
-        const updatedCreator = await prisma.creator.update({
+        const updatedCreator = await Database.Instance().creator.update({
             where: {
                 name: creator.name,
             },
@@ -47,17 +45,17 @@ const Aggregate = async (): Promise<Creator[]> => {
 
     try {
         console.log("Running aggregation...");
-        const creators = await prisma.creator.findMany();
+        const creators = await Database.Instance().creator.findMany();
         const output: Creator[] = [];
         for (let i = 0; i < creators.length; i++) {
             const creator = await updateCreator(creators[i]);
             output.push(creator);
             console.log(`Updated creator ${i + 1} / ${creators.length}`);
         }
-        await prisma.$disconnect();
+        await Database.disconnect();
         return output;
     } catch (error) {
-        await prisma.$disconnect();
+        await Database.disconnect();
         throw error;
     }
 };
