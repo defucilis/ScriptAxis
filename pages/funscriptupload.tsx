@@ -1,23 +1,30 @@
 import Head from "next/head";
 
 import Layout from "../components/layout/Layout";
-import LoadingSkeleton from "../components/layout/LoadingSkeleton";
 
-import useAuth from "../lib/auth/useAuth";
-import { Script, ScriptStub } from "lib/types";
+import { Script, ScriptStub, User } from "lib/types";
 import { FetchScripts } from "./api/scripts";
 import React, { useState } from "react";
 import ScriptNeedingFunscript from "components/dashboard/ScriptNeedingFunscript";
+import getUser from "lib/getUser";
+import { GetServerSidePropsContext } from "next";
+import PageSkeleton from "components/layout/PageSkeleton";
 
-const FunscriptUpload = ({ existingScripts }: { existingScripts: Script[] }): JSX.Element => {
-    const { loading } = useAuth({ redirectToIfNotAdmin: "/" });
+const FunscriptUpload = ({
+    existingScripts,
+    user,
+}: {
+    existingScripts: Script[];
+    user?: User;
+}): JSX.Element => {
     const [scripts, setScripts] = useState(existingScripts);
 
     const handleComplete = (script: Script) => {
         setScripts(scripts.filter(s => s.id !== script.id));
     };
 
-    if (loading) return <LoadingSkeleton />;
+    if (!user || !user.isAdmin)
+        return <PageSkeleton message={"You are not authorized to view this page"} />;
 
     return (
         <Layout>
@@ -38,8 +45,11 @@ const FunscriptUpload = ({ existingScripts }: { existingScripts: Script[] }): JS
     );
 };
 
-export async function getServerSideProps(): Promise<{ props: { existingScripts: ScriptStub[] } }> {
+export async function getServerSideProps(
+    context: GetServerSidePropsContext
+): Promise<{ props: { existingScripts: ScriptStub[]; user?: User } }> {
     let scripts = [];
+    const user = await getUser(context.req);
     try {
         scripts = await FetchScripts(999, {
             createdAt: "asc",
@@ -53,6 +63,7 @@ export async function getServerSideProps(): Promise<{ props: { existingScripts: 
     return {
         props: {
             existingScripts: scripts,
+            user,
         },
     };
 }

@@ -225,7 +225,8 @@ const updateScript = async (
     if (diffData.streamingUrl !== undefined)
         finalUpdateData.set.streamingUrl = diffData.streamingUrl;
     if (diffData.studio !== undefined) finalUpdateData.set.studio = diffData.studio;
-    if (diffData.createdAt !== undefined) finalUpdateData.set.createdAt = new Date(diffData.createdAt);
+    if (diffData.createdAt !== undefined)
+        finalUpdateData.set.createdAt = new Date(diffData.createdAt);
 
     //lists of strings need to be handled slightly differently...
     if (diffData.tags !== undefined) finalUpdateData.set.tags = newData.tags;

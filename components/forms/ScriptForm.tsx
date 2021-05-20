@@ -15,7 +15,6 @@ import {
 } from "./FormUtils";
 import NavigationPrompt from "../functional/NavigationPrompt";
 import ScriptUtils from "../../lib/ScriptUtils";
-import useAuth from "../../lib/auth/useAuth";
 
 import style from "./ScriptForm.module.scss";
 import { StringLists } from "lib/types";
@@ -117,8 +116,6 @@ const ScriptForm = ({
     submitLabel: string;
     busy: boolean;
 }): JSX.Element => {
-    const { user } = useAuth();
-
     const [formData, setFormData] = useState<ScriptFormData>({});
 
     const tagsRef = useRef<any>();
@@ -238,7 +235,6 @@ const ScriptForm = ({
                 const finalData: ScriptFormData = {
                     name: formData.name,
                     creator: formData.creator,
-                    owner: user.id,
                     category: formData.category,
                     tags: formData.tags,
                     thumbnail: formData.thumbnail,

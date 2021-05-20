@@ -7,10 +7,9 @@ import axios from "axios";
 import Checkbox from "../forms/Checkbox";
 
 import ScriptUtils from "../../lib/ScriptUtils";
-import useAuth from "../../lib/auth/useAuth";
 
 import style from "./Filters.module.scss";
-import { Filters, Query } from "lib/types";
+import { Filters, Query, User } from "lib/types";
 
 interface FilterActions {
     name?: FilterAction;
@@ -136,9 +135,11 @@ const reduceFilters = (currentFilters: Filters, action: FilterActions) => {
 };
 
 const FiltersElement = ({
+    user,
     query,
     onFilter,
 }: {
+    user?: User;
     query: Query;
     onFilter: (filters: Filters) => void;
 }): JSX.Element => {
@@ -157,7 +158,6 @@ const FiltersElement = ({
     const [sourceUrl, setSourceUrl] = useState(false);
     const [streamingUrl, setStreamingUrl] = useState(false);
     const [saved, setSaved] = useState(false);
-    const { user } = useAuth();
     useEffect(() => {
         window.setTimeout(() => {
             const storedTagCounts = window.localStorage.getItem("storedTagCounts");

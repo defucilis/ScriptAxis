@@ -564,7 +564,7 @@ const formatTag = (tag: string): string => {
     if (foundAcronym) return foundAcronym;
 
     const foundNonacronym = shortNonacronyms.find(a => a.toLowerCase() === tag.toLowerCase());
-    if(foundNonacronym) return foundNonacronym;
+    if (foundNonacronym) return foundNonacronym;
 
     if (tag.length <= 3) return tag.toUpperCase();
 

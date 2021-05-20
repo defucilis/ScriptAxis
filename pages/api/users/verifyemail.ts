@@ -10,9 +10,7 @@ const VerifyEmail = async (email: string): Promise<User> => {
             where: {
                 email: email,
             },
-            data: {
-                
-            },
+            data: {},
         });
         await prisma.$disconnect();
         return user;

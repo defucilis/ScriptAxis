@@ -561,10 +561,14 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
                 <button onClick={StartUploadFile}>Upload Image</button>
             </div>
             <div className={`${style.buttons} ${running ? style.hidden : ""}`}>
-                <button onClick={() => {
-                    localStorage.clear();
-                    addMessage("Local storage cleared");
-                }}>Clear local storage</button>
+                <button
+                    onClick={() => {
+                        localStorage.clear();
+                        addMessage("Local storage cleared");
+                    }}
+                >
+                    Clear local storage
+                </button>
                 <button onClick={UpdateSearchStrings}>Update Search Strings</button>
                 <div className={style.scrape}>
                     <label>

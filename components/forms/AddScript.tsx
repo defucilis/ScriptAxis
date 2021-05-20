@@ -11,7 +11,7 @@ import ScriptUtils from "../../lib/ScriptUtils";
 import ScriptForm, { ScriptFormData, ScriptFormDataOutput } from "./ScriptForm";
 
 import style from "./AddScript.module.scss";
-import { StringLists } from "lib/types";
+import { StringLists, User } from "lib/types";
 
 const defaultFormData: ScriptFormData = {
     name: "",
@@ -29,14 +29,24 @@ const defaultFormData: ScriptFormData = {
     funscript: [],
 };
 
-const AddScript = ({ tags, categories, talent, studios, creators }: StringLists): JSX.Element => {
+const AddScript = ({
+    user,
+    tags,
+    categories,
+    talent,
+    studios,
+    creators,
+}: StringLists & { user?: User }): JSX.Element => {
     const [submitting, setSubmitting] = useState(false);
     const [clipboardWritten, setClipboardWritten] = useState(false);
+
+    if (!user) return null;
 
     const handleValidationPassed = data => {
         setSubmitting(true);
         createScript(
             data,
+            user,
             response => {
                 console.log("Script created successfully", response);
                 //ensure the homepage reloads properly
@@ -93,6 +103,7 @@ const AddScript = ({ tags, categories, talent, studios, creators }: StringLists)
 
 const createScript = async (
     postData: ScriptFormData,
+    user: User,
     onSuccess: (data: any) => void,
     onClipboardWrite: () => void,
     onFail: (error: { message: string }) => void
@@ -103,6 +114,7 @@ const createScript = async (
 
     data.slug = slugify(data.name, { lower: true, strict: true });
     data.searchString = ScriptUtils.getSearchString(data);
+    data.owner = user.id;
 
     if (postData.thumbnail.length > 0) {
         //upload the thumbnail and add it to the database

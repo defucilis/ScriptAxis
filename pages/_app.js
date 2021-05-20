@@ -7,11 +7,11 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
 import { initFirebase } from "../lib/initFirebase";
-import { AuthProvider } from "../lib/auth/useAuth";
 
 import MaintenanceMode from "../components/layout/MaintenanceMode";
 
 import "../styles/app.scss";
+import { Provider } from "next-auth/client";
 
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
@@ -26,9 +26,14 @@ const App = ({ Component, pageProps }) => {
 
     initFirebase();
     return (
-        <AuthProvider>
+        <Provider
+            session={pageProps.session}
+            options={{
+                clientMaxAge: 60,
+            }}
+        >
             <Component {...pageProps} />
-        </AuthProvider>
+        </Provider>
     );
 };
 

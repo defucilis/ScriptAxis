@@ -48,7 +48,7 @@ export interface TestDataScript {
     thumbsUp: number;
     thumbsDown: number;
     createdAt: number;
-    owner: string;
+    owner: number;
     slug: string;
     funscript?: string;
     averageSpeed?: number;
@@ -89,7 +89,7 @@ export const PrepareTestData = (scripts: any[]): TestDataScript[] => {
                 slug: slugify(data.name).toLowerCase(),
                 thumbnail: data.thumbnail || "/img/placeholder-thumbnail.png",
                 duration: ScriptUtils.stringToDuration(data.duration),
-                owner: "487e9807-627a-4f9a-8520-1f61603fa23c",
+                owner: 1,
                 searchString: data.searchString || ScriptUtils.getSearchString(data),
             };
         });
