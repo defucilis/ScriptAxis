@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import getUser from "lib/getUser";
 import { TestDataScriptInput } from "lib/TestData";
 import { NextApiRequest, NextApiResponse } from "next";
 import ScriptUtils from "../../../lib/ScriptUtils";
@@ -12,11 +13,11 @@ const FetchScripts = async (): Promise<TestDataScriptInput[]> => {
                 active: true,
             },
             orderBy: {
-                created: "desc",
+                createdAt: "desc",
             },
             include: {
                 creator: { select: { name: true } },
-                owner: { select: { username: true } },
+                owner: { select: { name: true } },
                 category: { select: { name: true } },
             },
         });
@@ -34,7 +35,7 @@ const FetchScripts = async (): Promise<TestDataScriptInput[]> => {
                 views: 0,
                 thumbsUp: 0,
                 thumbsDown: 0,
-                created: new Date().valueOf(),
+                createdAt: new Date().valueOf(),
             };
             if (script.sourceUrl) output.sourceUrl = script.sourceUrl;
             if (script.streamingUrl) output.streamingUrl = script.streamingUrl;
@@ -54,7 +55,7 @@ const FetchScripts = async (): Promise<TestDataScriptInput[]> => {
                 views: script.views,
                 thumbsUp: script.thumbsUp,
                 thumbsDown: script.thumbsDown,
-                created: script.created.valueOf(),
+                createdAt: script.createdAt.valueOf(),
                 searchString: ScriptUtils.getSearchString(script),
             };
 
@@ -72,6 +73,12 @@ export { FetchScripts };
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
+        const user = await getUser(req);
+        if (!user || !user.isAdmin) {
+            res.status(401);
+            res.json({ error: { message: "You are not authorized to perform this action" } });
+            return;
+        }
         const scripts = await FetchScripts();
         res.status(200);
         res.json(scripts);

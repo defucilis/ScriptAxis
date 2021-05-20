@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 const ChangeLike = async (
     scriptSlug: string,
-    userId: string,
+    userId: number,
     creatorName: string,
     isLiked: boolean
 ): Promise<void> => {

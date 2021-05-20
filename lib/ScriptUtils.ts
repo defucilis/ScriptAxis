@@ -77,7 +77,7 @@ const arraysIdentical = (a: any[], b: any[]) => {
 //         studio: script.studio || "",
 //         talent: script.talent || [],
 //         active: script.active,
-//         created: script.created,
+//         createdAt: script.createdAt,
 //         modified: script.modified,
 //         likeCount: script.likeCount,
 //         thumbsUp: script.thumbsUp,
@@ -334,7 +334,7 @@ const queryToUrlQuery = (input: Query): UrlQuery => {
     const sorting = input.sorting;
     const page = input.page;
     const defaultSorting =
-        sorting && sorting.length > 0 && sorting[0].created && sorting[0].created === "desc";
+        sorting && sorting.length > 0 && sorting[0].createdAt && sorting[0].createdAt === "desc";
     const defaultPage = page && page == 1;
     if (defaultSorting && defaultPage && (!filters || Object.keys(filters).length === 0)) return {};
 
@@ -364,7 +364,7 @@ const queryToUrlQuery = (input: Query): UrlQuery => {
 //goes from a query object parsed from a URL string and turns it into a filter object to be applied to the database
 //Note that this takes place on the *server* from the next.js `query` input into getServerSideProps
 const stringObjectToQuery = (query: UrlQuery): Query => {
-    const output: Query = { filters: {}, sorting: [{ created: "desc" }], page: 1 };
+    const output: Query = { filters: {}, sorting: [{ createdAt: "desc" }], page: 1 };
 
     if (query.search) output.filters.name = { contains: query.search, mode: "insensitive" };
     if (query.category) output.filters.category = { name: { equals: query.category } };
@@ -549,9 +549,9 @@ const getScriptObjectCode = (data: ScriptFormDataOutput): string => {
     lines.push("    views:          0,");
     lines.push("    thumbsUp:       1,");
     lines.push("    thumbsDown:     0,");
-    const created = new Date(data.created);
+    const createdAt = new Date(data.createdAt);
     lines.push(
-        `    created:        new Date(${created.getFullYear()}, ${created.getMonth()}, ${created.getDate()}).valueOf(),`
+        `    created:        new Date(${createdAt.getFullYear()}, ${createdAt.getMonth()}, ${createdAt.getDate()}).valueOf(),`
     );
     lines.push("},");
     return lines.map(line => "    " + line).join("\n");
@@ -564,7 +564,7 @@ const formatTag = (tag: string): string => {
     if (foundAcronym) return foundAcronym;
 
     const foundNonacronym = shortNonacronyms.find(a => a.toLowerCase() === tag.toLowerCase());
-    if(foundNonacronym) return foundNonacronym;
+    if (foundNonacronym) return foundNonacronym;
 
     if (tag.length <= 3) return tag.toUpperCase();
 

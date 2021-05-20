@@ -2,25 +2,21 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Router from "next/router";
 
+import { signOut } from "next-auth/client";
+
 import axios from "axios";
 
 import ScriptList from "../scripts/ScriptList";
 import SavedSearch from "./SavedSearch";
 
-import useAuth from "../../lib/auth/useAuth";
 import ScriptUtils from "../../lib/ScriptUtils";
 
 import style from "./Dashboard.module.scss";
+import { User } from "lib/types";
 
 type LoadingState = "initial" | true | false;
 
-const Dashboard = (): JSX.Element => {
-    const { user, refreshUserDbValues, logoutAndRedirect } = useAuth();
-
-    const signOut = () => {
-        logoutAndRedirect("/");
-    };
-
+const Dashboard = ({ user }: { user: User }): JSX.Element => {
     const [loading, setLoading] = useState<LoadingState>("initial");
     const [likedScripts, setLikedScripts] = useState(null);
     const [savedSearches, setSavedSearches] = useState(null);
@@ -74,7 +70,7 @@ const Dashboard = (): JSX.Element => {
                 creator: script.creator.name,
                 isLiked: false,
             });
-            await refreshUserDbValues();
+            //await refreshUserDbValues();
             if (response.data.error) throw response.data.error;
             console.log(response.data);
         } catch (error) {
@@ -111,7 +107,7 @@ const Dashboard = (): JSX.Element => {
         <div className={style.dashboard}>
             <div className={style.quickfunctions}>
                 <h3>Quick Functions</h3>
-                <button onClick={signOut}>Sign Out</button>
+                <button onClick={() => signOut()}>Sign Out</button>
                 {!(user && user.isAdmin) ? null : (
                     <Link href="/admin">
                         <a>Go to Admin Controls</a>

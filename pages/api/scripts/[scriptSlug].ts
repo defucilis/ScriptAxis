@@ -21,6 +21,7 @@ const FetchScript = async (slug: string, noview = false): Promise<Script> => {
               });
 
         let script = await promise;
+
         if (process.env.NEXT_PUBLIC_SFW_MODE === "true") {
             script = ScriptUtils.makeScriptSfw(script);
         }

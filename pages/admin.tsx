@@ -2,16 +2,22 @@ import Head from "next/head";
 
 import Layout from "../components/layout/Layout";
 import AdminPanel from "../components/dashboard/AdminPanel";
-import LoadingSkeleton from "../components/layout/LoadingSkeleton";
 
-import useAuth from "../lib/auth/useAuth";
-import { Script } from "lib/types";
+import { Script, User } from "lib/types";
 import { GetAllScripts } from "./api/admin/getScripts";
+import getUser from "lib/getUser";
+import { GetServerSidePropsContext } from "next";
+import PageSkeleton from "components/layout/PageSkeleton";
 
-const Admin = ({ existingScripts }: { existingScripts: Script[] }): JSX.Element => {
-    const { loading } = useAuth({ redirectToIfNotAdmin: "/" });
-
-    if (loading) return <LoadingSkeleton />;
+const Admin = ({
+    user,
+    existingScripts,
+}: {
+    user?: User;
+    existingScripts: Script[];
+}): JSX.Element => {
+    if (!user || !user.isAdmin)
+        return <PageSkeleton message={"You are not authorized to view this page"} />;
 
     return (
         <Layout>
@@ -24,8 +30,11 @@ const Admin = ({ existingScripts }: { existingScripts: Script[] }): JSX.Element 
     );
 };
 
-export async function getServerSideProps(): Promise<{ props: { existingScripts: Script[] } }> {
+export async function getServerSideProps(
+    context: GetServerSidePropsContext
+): Promise<{ props: { existingScripts: Script[]; user?: User } }> {
     let scripts = [];
+    const user = await getUser(context.req);
     try {
         scripts = await GetAllScripts();
     } catch (error) {
@@ -34,6 +43,7 @@ export async function getServerSideProps(): Promise<{ props: { existingScripts: 
     return {
         props: {
             existingScripts: scripts,
+            user,
         },
     };
 }

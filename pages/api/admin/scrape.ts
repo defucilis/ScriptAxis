@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 import axios from "axios";
+import getUser from "lib/getUser";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const Scrape = async (scriptSlug: string, scriptUrl: string) => {
@@ -47,7 +48,7 @@ const Scrape = async (scriptSlug: string, scriptUrl: string) => {
     } catch {
         likeCount = 0;
     }
-    const created = new Date(threadData.created_at);
+    const createdAt = new Date(threadData.created_at);
 
     const prisma = new PrismaClient();
     try {
@@ -58,7 +59,7 @@ const Scrape = async (scriptSlug: string, scriptUrl: string) => {
             data: {
                 views,
                 likeCount,
-                created,
+                createdAt,
             },
         });
         await prisma.$disconnect();
@@ -71,6 +72,12 @@ const Scrape = async (scriptSlug: string, scriptUrl: string) => {
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
+        const user = await getUser(req);
+        if (!user || !user.isAdmin) {
+            res.status(401);
+            res.json({ error: { message: "You are not authorized to perform this action" } });
+            return;
+        }
         const scripts = await Scrape(req.body.slug, req.body.url);
         res.status(200);
         res.json(scripts);

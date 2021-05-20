@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const SetSavedSearches = async (uid: string, filters: string): Promise<any> => {
+const SetSavedSearches = async (uid: number, filters: string): Promise<any> => {
     const prisma = new PrismaClient();
 
     try {

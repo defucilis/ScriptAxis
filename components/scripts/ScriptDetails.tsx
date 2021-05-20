@@ -9,13 +9,13 @@ import { FaRegEye } from "react-icons/fa";
 import ReactMarkdown from "react-markdown";
 
 import ScriptUtils from "../../lib/ScriptUtils";
-import useAuth from "../../lib/auth/useAuth";
 
 import style from "./ScriptDetails.module.scss";
 import { Script } from "lib/types";
 import { Funscript } from "funscript-utils/lib/types";
 import { addFunscriptMetadata } from "funscript-utils/lib/funConverter";
 import FunscriptHeatmap from "components/funscript/FunscriptHeatmap";
+import uiUseSession from "lib/uiUseSession";
 
 const getEmbed = (url: string) => {
     let iframeLink = "";
@@ -80,7 +80,7 @@ const getEmbed = (url: string) => {
 };
 
 const ScriptDetails = ({ script }: { script: Script }): JSX.Element => {
-    const { user, refreshUserDbValues } = useAuth();
+    const [user] = uiUseSession();
     const [isLiked, setIsLiked] = useState(false);
     const [scriptLikes, setScriptLikes] = useState(0);
     const iFrameRef = useRef();
@@ -134,7 +134,7 @@ const ScriptDetails = ({ script }: { script: Script }): JSX.Element => {
                 isLiked: newValue,
             });
             if (response.data.error) throw response.data.error;
-            refreshUserDbValues();
+            //refreshUserDbValues();
             console.log(response.data);
         } catch (error) {
             console.error(error);
@@ -173,7 +173,7 @@ const ScriptDetails = ({ script }: { script: Script }): JSX.Element => {
                     </span>
                 </Link>
             </div>
-            <p className={style.created}>{dayjs(script.created).format("D MMMM YYYY")}</p>
+            <p className={style.created}>{dayjs(script.createdAt).format("D MMMM YYYY")}</p>
             <div className={style.sidebyside}>
                 <div className={style.imagewrapper}>
                     {getEmbed(script.streamingUrl) ? (
@@ -260,7 +260,7 @@ const ScriptDetails = ({ script }: { script: Script }): JSX.Element => {
                                 </span>
                             </li>
                             <li>
-                                {user && user.emailVerified ? (
+                                {user ? (
                                     <FaHeart
                                         className={
                                             isLiked

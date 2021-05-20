@@ -2,15 +2,14 @@ import Head from "next/head";
 
 import Layout from "../components/layout/Layout";
 import Dashboard from "../components/dashboard/Dashboard";
-import LoadingSkeleton from "../components/layout/LoadingSkeleton";
 
-import useAuth from "../lib/auth/useAuth";
+import getUser from "lib/getUser";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { User } from "lib/types";
+import PageSkeleton from "components/layout/PageSkeleton";
 
-const DashboardPage = (): JSX.Element => {
-    //page is blocked if user is not signed in
-    const { loading } = useAuth({ redirectTo: "/" });
-
-    if (loading) return <LoadingSkeleton />;
+const DashboardPage = ({ user }: { user: User }): JSX.Element => {
+    if (!user) return <PageSkeleton message={"You are not signed in"} />;
 
     return (
         <Layout>
@@ -18,8 +17,15 @@ const DashboardPage = (): JSX.Element => {
                 <title>ScriptAxis | Dashboard</title>
             </Head>
             <h1>Your Dashboard</h1>
-            <Dashboard />
+            <Dashboard user={user} />
         </Layout>
     );
 };
 export default DashboardPage;
+
+export const getServerSideProps: GetServerSideProps = async (
+    context: GetServerSidePropsContext
+) => {
+    const user = await getUser(context.req);
+    return { props: { user } };
+};

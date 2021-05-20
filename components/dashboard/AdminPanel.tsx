@@ -179,7 +179,7 @@ const RunScrape = async (
               return (
                   script.views < 100 ||
                   script.likeCount < 5 ||
-                  dayjs().diff(dayjs(script.created), "day") < 7
+                  dayjs().diff(dayjs(script.createdAt), "day") < 7
               );
           });
     onMessage(
@@ -197,7 +197,7 @@ const RunScrape = async (
             console.log(response.data);
             if (response.data.error) throw response.data.error.message;
             onMessage(
-                `----Success - set likes to ${response.data.likeCount}, views to ${response.data.views} and date to ${response.data.created}`
+                `----Success - set likes to ${response.data.likeCount}, views to ${response.data.views} and date to ${response.data.createdAt}`
             );
         } catch (error) {
             onError(error.message || error);
@@ -561,10 +561,14 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
                 <button onClick={StartUploadFile}>Upload Image</button>
             </div>
             <div className={`${style.buttons} ${running ? style.hidden : ""}`}>
-                <button onClick={() => {
-                    localStorage.clear();
-                    addMessage("Local storage cleared");
-                }}>Clear local storage</button>
+                <button
+                    onClick={() => {
+                        localStorage.clear();
+                        addMessage("Local storage cleared");
+                    }}
+                >
+                    Clear local storage
+                </button>
                 <button onClick={UpdateSearchStrings}>Update Search Strings</button>
                 <div className={style.scrape}>
                     <label>

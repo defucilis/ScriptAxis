@@ -39,7 +39,7 @@ const getTopics = async (page, perPage) => {
                 tags: topic.tags.slice(1).map(tag => ScriptUtils.formatTag(tag)),
                 likeCount: topic.like_count,
                 views: topic.views,
-                created: new Date(topic.created_at),
+                createdAt: new Date(topic.created_at),
             };
             if (!output.thumbnail) delete output.thumbnail;
             return output;

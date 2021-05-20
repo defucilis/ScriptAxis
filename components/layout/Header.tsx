@@ -2,19 +2,20 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Router from "next/router";
 import Image from "next/image";
+import { signIn } from "next-auth/client";
 
 import { FaSearch } from "react-icons/fa";
 import { FaSync } from "react-icons/fa";
 import axios from "axios";
 
-import useAuth from "../../lib/auth/useAuth";
-
 import styles from "./Header.module.scss";
+import typedUseSession from "lib/typedUseSession";
 
 export type HeaderPage = "home" | "scripts" | "categories" | "tags" | "creators";
 
 const Header = ({ page }: { page?: HeaderPage }): JSX.Element => {
-    const { user, loading } = useAuth();
+    const [user, loading] = typedUseSession();
+
     const [scriptCount, setScriptCount] = useState(0);
     const [categoryCounts, setCategoryCounts] = useState([]);
     const [tagCounts, setTagCounts] = useState([]);
@@ -107,27 +108,26 @@ const Header = ({ page }: { page?: HeaderPage }): JSX.Element => {
                             <FaSync />
                             <p>Loading...</p>
                         </div>
-                    ) : user === null ? (
+                    ) : !user ? (
                         <div className={styles.userbuttons}>
-                            <Link href="/signin">
-                                <a>Sign In</a>
-                            </Link>
-                            <Link href="/signup">
-                                <a>Sign Up</a>
-                            </Link>
+                            <button type="button" onClick={() => signIn()}>
+                                Sign In / Sign Up
+                            </button>
                         </div>
                     ) : (
                         <div>
-                            <Link href="/add">
-                                <a className={styles.addscript}>+ Add a Script</a>
-                            </Link>
                             <Link href="/dashboard">
                                 <a className={styles.addscript}>Dashboard</a>
                             </Link>
                             {user.isAdmin ? (
-                                <Link href="/admin">
-                                    <a className={styles.addscript}>Admin</a>
-                                </Link>
+                                <>
+                                    <Link href="/add">
+                                        <a className={styles.addscript}>+ Add a Script</a>
+                                    </Link>
+                                    <Link href="/admin">
+                                        <a className={styles.addscript}>Admin</a>
+                                    </Link>
+                                </>
                             ) : null}
                         </div>
                     )}

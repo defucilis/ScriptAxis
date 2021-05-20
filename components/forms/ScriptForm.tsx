@@ -15,7 +15,6 @@ import {
 } from "./FormUtils";
 import NavigationPrompt from "../functional/NavigationPrompt";
 import ScriptUtils from "../../lib/ScriptUtils";
-import useAuth from "../../lib/auth/useAuth";
 
 import style from "./ScriptForm.module.scss";
 import { StringLists } from "lib/types";
@@ -24,7 +23,7 @@ import { addFunscriptMetadata } from "funscript-utils/lib/funConverter";
 export interface ScriptFormData {
     name?: string;
     creator?: string;
-    owner?: string;
+    owner?: number;
     category?: string;
     tags?: string[];
     thumbnail?: File[];
@@ -34,7 +33,7 @@ export interface ScriptFormData {
     streamingUrl?: string;
     studio?: string;
     talent?: string[];
-    created?: Date;
+    createdAt?: Date;
     funscript?: File[];
     averageSpeed?: number;
 }
@@ -44,7 +43,7 @@ export interface EditScriptFormData {
     slug?: string;
     name?: string;
     creator?: string;
-    owner?: string;
+    owner?: number;
     category?: string;
     tags?: string[];
     thumbnail?: File[];
@@ -54,7 +53,7 @@ export interface EditScriptFormData {
     streamingUrl?: string;
     studio?: string;
     talent?: string[];
-    created?: Date;
+    createdAt?: Date;
     funscript?: File[];
     averageSpeed?: number;
 }
@@ -64,7 +63,7 @@ export interface ScriptFormDataOutput {
     slug?: string;
     name?: string;
     creator?: string;
-    owner?: string;
+    owner?: number;
     category?: string;
     tags?: string[];
     thumbnail?: string;
@@ -74,7 +73,7 @@ export interface ScriptFormDataOutput {
     streamingUrl?: string;
     studio?: string;
     talent?: string[];
-    created?: Date;
+    createdAt?: Date;
     funscript?: string;
     averageSpeed?: number;
     searchString?: string;
@@ -93,7 +92,7 @@ export interface ScriptErrorData {
     streamingUrl?: string;
     studio?: string;
     talent?: string;
-    created?: string;
+    createdAt?: string;
     funscript?: string;
 }
 
@@ -117,8 +116,6 @@ const ScriptForm = ({
     submitLabel: string;
     busy: boolean;
 }): JSX.Element => {
-    const { user } = useAuth();
-
     const [formData, setFormData] = useState<ScriptFormData>({});
 
     const tagsRef = useRef<any>();
@@ -238,7 +235,6 @@ const ScriptForm = ({
                 const finalData: ScriptFormData = {
                     name: formData.name,
                     creator: formData.creator,
-                    owner: user.id,
                     category: formData.category,
                     tags: formData.tags,
                     thumbnail: formData.thumbnail,
@@ -248,7 +244,7 @@ const ScriptForm = ({
                     streamingUrl: formData.streamingUrl,
                     studio: formData.studio,
                     talent: formData.talent,
-                    created: formData.created,
+                    createdAt: formData.createdAt,
                     averageSpeed: formData.averageSpeed,
                     funscript: cleanFunscript ? [cleanFunscript] : [],
                 };
@@ -284,7 +280,7 @@ const ScriptForm = ({
                 .url("Streaming URL provided is invalid"),
             studio: yup.string().nullable().notRequired(),
             talent: yup.array().notRequired(),
-            created: yup.date().notRequired().max(new Date(), "Cannot set a future date!"),
+            createdAt: yup.date().notRequired().max(new Date(), "Cannot set a future date!"),
             funscript: yup.array().notRequired(),
         });
     };
@@ -483,14 +479,14 @@ const ScriptForm = ({
                     value={formData.talent}
                 />
                 <Datepicker
-                    name="created"
-                    id="created"
+                    name="createdAt"
+                    id="createdAt"
                     label="Creation Date (if not today)"
                     wrapperClassName={style.datepicker}
                     popperClassName={style.datepickercalendar}
                     onChange={handleChange}
-                    error={errors.created}
-                    value={formData.created}
+                    error={errors.createdAt}
+                    value={formData.createdAt}
                 />
                 <Dropzone
                     id="funscript"

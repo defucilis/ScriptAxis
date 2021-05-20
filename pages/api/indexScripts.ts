@@ -15,17 +15,17 @@ const FetchScripts = async (): Promise<{ recentScripts: Script[]; topScripts: Sc
             },
             take: 8,
             orderBy: {
-                created: "desc",
+                createdAt: "desc",
             },
             include: {
                 creator: { select: { name: true } },
-                owner: { select: { username: true } },
+                owner: { select: { name: true } },
             },
         });
         let topScripts = await prisma.script.findMany({
             where: {
                 active: true,
-                created: {
+                createdAt: {
                     gte: dayjs().subtract(1, "week").toDate(),
                 },
             },
@@ -35,14 +35,14 @@ const FetchScripts = async (): Promise<{ recentScripts: Script[]; topScripts: Sc
             },
             include: {
                 creator: { select: { name: true } },
-                owner: { select: { username: true } },
+                owner: { select: { name: true } },
             },
         });
         if (topScripts.length === 0) {
             topScripts = await prisma.script.findMany({
                 where: {
                     active: true,
-                    created: {
+                    createdAt: {
                         gte: dayjs().subtract(1, "month").toDate(),
                     },
                 },
@@ -52,7 +52,7 @@ const FetchScripts = async (): Promise<{ recentScripts: Script[]; topScripts: Sc
                 },
                 include: {
                     creator: { select: { name: true } },
-                    owner: { select: { username: true } },
+                    owner: { select: { name: true } },
                 },
             });
         }
@@ -60,7 +60,7 @@ const FetchScripts = async (): Promise<{ recentScripts: Script[]; topScripts: Sc
             topScripts = await prisma.script.findMany({
                 where: {
                     active: true,
-                    created: {
+                    createdAt: {
                         gte: dayjs().subtract(1, "year").toDate(),
                     },
                 },
@@ -70,7 +70,7 @@ const FetchScripts = async (): Promise<{ recentScripts: Script[]; topScripts: Sc
                 },
                 include: {
                     creator: { select: { name: true } },
-                    owner: { select: { username: true } },
+                    owner: { select: { name: true } },
                 },
             });
         }

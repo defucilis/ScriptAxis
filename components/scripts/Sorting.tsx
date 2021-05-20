@@ -11,7 +11,7 @@ const sortOptions: SortOption[] = [
         label: "Newest",
         sorting: [
             {
-                created: "desc",
+                createdAt: "desc",
             },
         ],
     },
@@ -19,7 +19,7 @@ const sortOptions: SortOption[] = [
         label: "Oldest",
         sorting: [
             {
-                created: "asc",
+                createdAt: "asc",
             },
         ],
     },

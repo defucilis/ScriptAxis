@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import getUser from "lib/getUser";
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface UpdateCreatorOutput {
@@ -57,6 +58,12 @@ const UpdateCreator = async (creatorName: string): Promise<UpdateCreatorOutput> 
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
+        const user = await getUser(req);
+        if (!user || !user.isAdmin) {
+            res.status(401);
+            res.json({ error: { message: "You are not authorized to perform this action" } });
+            return;
+        }
         const creator = await UpdateCreator(String(req.query.creatorName));
         res.status(200);
         res.json(creator);

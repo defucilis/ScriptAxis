@@ -81,9 +81,16 @@
     margin-left: 1em;
 }
 
-.userbuttons > a {
-    margin-left: 1em;
-    font-size: 1.2em;
+.userbuttons {
+    button {
+        width: auto;
+        border-radius: 5px;
+    }
+
+    > a {
+        margin-left: 1em;
+        font-size: 1.2em;
+    }
 }
 
 .navbar {

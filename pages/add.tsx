@@ -1,30 +1,24 @@
 import Head from "next/head";
-
-import firebase from "../lib/initFirebase";
-
 import Layout from "../components/layout/Layout";
 import AddScript from "../components/forms/AddScript";
 
-import useAuth from "../lib/auth/useAuth";
 import { FetchLists } from "./api/loadlists";
 import ScriptUtils from "../lib/ScriptUtils";
-import { StringLists } from "lib/types";
-import LoadingSkeleton from "components/layout/LoadingSkeleton";
+import { StringLists, User } from "lib/types";
+import PageSkeleton from "components/layout/PageSkeleton";
+import { GetServerSidePropsContext } from "next";
+import getUser from "lib/getUser";
 
-const Add = ({ tags, categories, talent, studios, creators }: StringLists): JSX.Element => {
-    //page is blocked if user is not signed in
-    const { user, loading } = useAuth({ redirectTo: "/" });
-
-    const resend = async () => {
-        try {
-            await firebase.auth().currentUser.sendEmailVerification();
-        } catch (error) {
-            console.error(error.message);
-            alert("Failed to send verificationemail\n" + ScriptUtils.tryFormatError(error.message));
-        }
-    };
-
-    if (loading) return <LoadingSkeleton />;
+const Add = ({
+    user,
+    tags,
+    categories,
+    talent,
+    studios,
+    creators,
+}: StringLists & { user?: User }): JSX.Element => {
+    if (!user || !user.isAdmin)
+        return <PageSkeleton message={"You are not authorized to add new scripts"} />;
 
     return (
         <Layout>
@@ -32,26 +26,24 @@ const Add = ({ tags, categories, talent, studios, creators }: StringLists): JSX.
                 <title>ScriptAxis | Add Script</title>
             </Head>
             <h1>Add a Script</h1>
-            {user && user.emailVerified ? (
-                <AddScript
-                    tags={tags}
-                    categories={categories}
-                    talent={talent}
-                    studios={studios}
-                    creators={creators}
-                />
-            ) : (
-                <div>
-                    <p>Please verify your email address to create scripts</p>
-                    <button onClick={resend}>Resend Verification Email</button>
-                </div>
-            )}
+            <AddScript
+                user={user}
+                tags={tags}
+                categories={categories}
+                talent={talent}
+                studios={studios}
+                creators={creators}
+            />
         </Layout>
     );
 };
 
-export async function getServerSideProps(): Promise<{ props: any }> {
+export async function getServerSideProps(
+    context: GetServerSidePropsContext
+): Promise<{ props: any }> {
     let data = {};
+    const user = await getUser(context.req);
+
     try {
         data = ScriptUtils.removeCountFromLists(await FetchLists());
     } catch (error) {
@@ -60,6 +52,7 @@ export async function getServerSideProps(): Promise<{ props: any }> {
 
     return {
         props: {
+            user,
             ...data,
         },
     };
