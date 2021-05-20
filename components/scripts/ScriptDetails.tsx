@@ -173,7 +173,7 @@ const ScriptDetails = ({ script }: { script: Script }): JSX.Element => {
                     </span>
                 </Link>
             </div>
-            <p className={style.created}>{dayjs(script.created).format("D MMMM YYYY")}</p>
+            <p className={style.created}>{dayjs(script.createdAt).format("D MMMM YYYY")}</p>
             <div className={style.sidebyside}>
                 <div className={style.imagewrapper}>
                     {getEmbed(script.streamingUrl) ? (

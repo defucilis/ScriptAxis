@@ -14,8 +14,8 @@ export const getUserFromCookie = (): UiUser => {
         isAdmin: parsedCookie.isAdmin,
         savedFilters: parsedCookie.savedFilters,
         email: parsedCookie.email,
-        created: parsedCookie.created,
-        modified: parsedCookie.modified,
+        createdAt: parsedCookie.createdAt,
+        updatedAt: parsedCookie.updatedAt,
         ownedScripts: parsedCookie.ownedScripts,
         likedScripts: parsedCookie.likedScripts,
     };

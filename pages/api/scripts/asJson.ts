@@ -12,7 +12,7 @@ const FetchScripts = async (): Promise<TestDataScriptInput[]> => {
                 active: true,
             },
             orderBy: {
-                created: "desc",
+                createdAt: "desc",
             },
             include: {
                 creator: { select: { name: true } },
@@ -34,7 +34,7 @@ const FetchScripts = async (): Promise<TestDataScriptInput[]> => {
                 views: 0,
                 thumbsUp: 0,
                 thumbsDown: 0,
-                created: new Date().valueOf(),
+                createdAt: new Date().valueOf(),
             };
             if (script.sourceUrl) output.sourceUrl = script.sourceUrl;
             if (script.streamingUrl) output.streamingUrl = script.streamingUrl;
@@ -54,7 +54,7 @@ const FetchScripts = async (): Promise<TestDataScriptInput[]> => {
                 views: script.views,
                 thumbsUp: script.thumbsUp,
                 thumbsDown: script.thumbsDown,
-                created: script.created.valueOf(),
+                createdAt: script.createdAt.valueOf(),
                 searchString: ScriptUtils.getSearchString(script),
             };
 

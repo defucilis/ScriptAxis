@@ -47,7 +47,7 @@ const EditScript = ({
             streamingUrl: script.streamingUrl || "",
             studio: script.studio || "",
             talent: script.talent || [],
-            created: new Date(script.created),
+            createdAt: new Date(script.createdAt),
             funscript: [],
             averageSpeed: script.averageSpeed || undefined,
         };
@@ -225,7 +225,7 @@ const updateScript = async (
     if (diffData.streamingUrl !== undefined)
         finalUpdateData.set.streamingUrl = diffData.streamingUrl;
     if (diffData.studio !== undefined) finalUpdateData.set.studio = diffData.studio;
-    if (diffData.created !== undefined) finalUpdateData.set.created = new Date(diffData.created);
+    if (diffData.createdAt !== undefined) finalUpdateData.set.createdAt = new Date(diffData.createdAt);
 
     //lists of strings need to be handled slightly differently...
     if (diffData.tags !== undefined) finalUpdateData.set.tags = newData.tags;

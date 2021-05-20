@@ -47,7 +47,7 @@ const Scrape = async (scriptSlug: string, scriptUrl: string) => {
     } catch {
         likeCount = 0;
     }
-    const created = new Date(threadData.created_at);
+    const createdAt = new Date(threadData.created_at);
 
     const prisma = new PrismaClient();
     try {
@@ -58,7 +58,7 @@ const Scrape = async (scriptSlug: string, scriptUrl: string) => {
             data: {
                 views,
                 likeCount,
-                created,
+                createdAt,
             },
         });
         await prisma.$disconnect();

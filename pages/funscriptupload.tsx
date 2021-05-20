@@ -42,7 +42,7 @@ export async function getServerSideProps(): Promise<{ props: { existingScripts: 
     let scripts = [];
     try {
         scripts = await FetchScripts(999, {
-            created: "asc",
+            createdAt: "asc",
         });
         scripts = scripts.filter(
             script => !script.funscript && script.sourceUrl.includes("discuss.eroscripts.com")

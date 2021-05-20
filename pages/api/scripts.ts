@@ -41,7 +41,7 @@ const FetchScripts = async (
         };
         if (amount) findParams.take = amount;
         if (orderBy) findParams.orderBy = orderBy;
-        if (minDate) findParams.where.created = { gte: minDate };
+        if (minDate) findParams.where.createdAt = { gte: minDate };
 
         let scripts = await prisma.script.findMany(findParams);
         if (process.env.NEXT_PUBLIC_SFW_MODE === "true") {
@@ -61,7 +61,7 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
     await cors(req, res);
     try {
         const amount = req.body && req.body.take ? Number(req.body.take) : undefined;
-        const orderBy = req.body && req.body.orderBy ? req.body.orderBy : { created: "desc" };
+        const orderBy = req.body && req.body.orderBy ? req.body.orderBy : { createdAt: "desc" };
         const minDate = req.body && req.body.minDate ? new Date(req.body.minDate) : undefined;
         const scripts = await FetchScripts(amount, orderBy, minDate);
         res.status(200);

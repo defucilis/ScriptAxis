@@ -51,7 +51,7 @@ const CreateScript = async (rawData: any): Promise<Script> => {
         if (rawData.thumbsUp) data.thumbsUp = rawData.thumbsUp;
         if (rawData.thumbsDown) data.thumbsDown = rawData.thumbsDown;
         if (rawData.views) data.views = rawData.views;
-        if (rawData.created) data.created = new Date(rawData.created);
+        if (rawData.createdAt) data.createdAt = new Date(rawData.createdAt);
         if (rawData.funscript) data.funscript = rawData.funscript;
         if (rawData.averageSpeed) data.averageSpeed = rawData.averageSpeed;
 

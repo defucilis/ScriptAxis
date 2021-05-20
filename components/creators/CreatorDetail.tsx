@@ -16,7 +16,7 @@ const CreatorDetail = ({ creator }: { creator: UiCreator }): JSX.Element => {
             <h1>{creator.name}</h1>
             <h3>
                 Scripting since{" "}
-                {dayjs(Number(creator.scripts[creator.scripts.length - 1].created)).format(
+                {dayjs(Number(creator.scripts[creator.scripts.length - 1].createdAt)).format(
                     "MMMM YYYY"
                 )}
             </h3>

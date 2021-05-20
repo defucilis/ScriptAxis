@@ -25,7 +25,7 @@ const defaultFormData: ScriptFormData = {
     streamingUrl: "",
     studio: "",
     talent: [],
-    created: new Date(),
+    createdAt: new Date(),
     funscript: [],
 };
 

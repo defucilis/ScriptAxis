@@ -23,7 +23,7 @@ const BrowseScripts = ({
 }): JSX.Element => {
     const [scripts, setScripts] = useState<Script[]>([]);
     const [cachedFilters, setCachedFilters] = useState<Filters>({ ...query.filters });
-    const [cachedSorting, setCachedSorting] = useState<Sorting[]>([{ created: "desc" }]);
+    const [cachedSorting, setCachedSorting] = useState<Sorting[]>([{ createdAt: "desc" }]);
 
     useEffect(() => {
         setScripts(propScripts);

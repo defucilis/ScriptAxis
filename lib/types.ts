@@ -10,8 +10,8 @@ export interface Creator {
     thumbnail: string;
     totalViews: number;
     totalLikes: number;
-    created: Date;
-    modified: Date;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface FullCreator extends UiCreator {
@@ -43,8 +43,8 @@ export interface Script {
     thumbsUp: number;
     thumbsDown: number;
     views: number;
-    created: Date;
-    modified: Date;
+    createdAt: Date;
+    updatedAt: Date;
     creatorName: string;
     userId: string;
     categoryName: string;
@@ -72,8 +72,8 @@ export interface User {
     emailVerified: boolean;
     isAdmin: boolean;
     savedFilters: string[];
-    created: Date;
-    modified: Date;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface UiUser extends User {
@@ -151,7 +151,7 @@ export interface Filters {
 }
 
 export interface Sorting {
-    created?: "desc" | "asc";
+    createdAt?: "desc" | "asc";
     views?: "desc" | "asc";
     likeCount?: "desc" | "asc";
     duration?: "desc" | "asc";

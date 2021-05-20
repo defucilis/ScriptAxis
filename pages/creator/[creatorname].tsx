@@ -33,7 +33,7 @@ export async function getServerSideProps(
     }
 
     if (creator.scripts && creator.scripts.length > 0) {
-        creator.scripts = creator.scripts.sort((a, b) => b.created.valueOf() - a.created.valueOf());
+        creator.scripts = creator.scripts.sort((a, b) => b.createdAt.valueOf() - a.createdAt.valueOf());
     }
     return {
         props: { creator },
