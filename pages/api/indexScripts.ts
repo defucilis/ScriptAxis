@@ -19,7 +19,7 @@ const FetchScripts = async (): Promise<{ recentScripts: Script[]; topScripts: Sc
             },
             include: {
                 creator: { select: { name: true } },
-                owner: { select: { username: true } },
+                owner: { select: { name: true } },
             },
         });
         let topScripts = await prisma.script.findMany({
@@ -35,7 +35,7 @@ const FetchScripts = async (): Promise<{ recentScripts: Script[]; topScripts: Sc
             },
             include: {
                 creator: { select: { name: true } },
-                owner: { select: { username: true } },
+                owner: { select: { name: true } },
             },
         });
         if (topScripts.length === 0) {
@@ -52,7 +52,7 @@ const FetchScripts = async (): Promise<{ recentScripts: Script[]; topScripts: Sc
                 },
                 include: {
                     creator: { select: { name: true } },
-                    owner: { select: { username: true } },
+                    owner: { select: { name: true } },
                 },
             });
         }
@@ -70,7 +70,7 @@ const FetchScripts = async (): Promise<{ recentScripts: Script[]; topScripts: Sc
                 },
                 include: {
                     creator: { select: { name: true } },
-                    owner: { select: { username: true } },
+                    owner: { select: { name: true } },
                 },
             });
         }

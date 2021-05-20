@@ -260,7 +260,7 @@ const ScriptDetails = ({ script }: { script: Script }): JSX.Element => {
                                 </span>
                             </li>
                             <li>
-                                {user && user.emailVerified ? (
+                                {user ? (
                                     <FaHeart
                                         className={
                                             isLiked

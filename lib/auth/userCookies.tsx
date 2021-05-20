@@ -9,8 +9,7 @@ export const getUserFromCookie = (): UiUser => {
     const parsedCookie = JSON.parse(cookie);
     const output: UiUser = {
         id: parsedCookie.id,
-        username: parsedCookie.username,
-        emailVerified: parsedCookie.emailVerified,
+        name: parsedCookie.name,
         isAdmin: parsedCookie.isAdmin,
         savedFilters: parsedCookie.savedFilters,
         email: parsedCookie.email,

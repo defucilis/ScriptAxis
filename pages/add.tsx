@@ -32,7 +32,7 @@ const Add = ({ tags, categories, talent, studios, creators }: StringLists): JSX.
                 <title>ScriptAxis | Add Script</title>
             </Head>
             <h1>Add a Script</h1>
-            {user && user.emailVerified ? (
+            {user ? (
                 <AddScript
                     tags={tags}
                     categories={categories}

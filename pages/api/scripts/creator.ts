@@ -16,7 +16,7 @@ const FetchCreatorScripts = async (name: string): Promise<Script[]> => {
             .scripts({
                 include: {
                     creator: { select: { name: true } },
-                    owner: { select: { username: true } },
+                    owner: { select: { name: true } },
                 },
             });
         if (process.env.NEXT_PUBLIC_SFW_MODE === "true") {

@@ -33,7 +33,7 @@ const EditScript = ({
         let trimmedTags = script.tags || [];
         trimmedTags = trimmedTags.filter(t => t !== script.categoryName);
 
-        const data = {
+        const data: EditScriptFormData = {
             name: script.name || "",
             slug: script.slug,
             owner: script.userId,

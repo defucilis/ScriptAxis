@@ -36,7 +36,7 @@ const FetchScripts = async (
             },
             include: {
                 creator: { select: { name: true } },
-                owner: { select: { username: true } },
+                owner: { select: { name: true } },
             },
         };
         if (amount) findParams.take = amount;

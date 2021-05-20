@@ -6,7 +6,7 @@ export interface Category {
 
 export interface Creator {
     name: string;
-    userId: string;
+    userId: number;
     thumbnail: string;
     totalViews: number;
     totalLikes: number;
@@ -46,7 +46,7 @@ export interface Script {
     createdAt: Date;
     updatedAt: Date;
     creatorName: string;
-    userId: string;
+    userId: number;
     categoryName: string;
     searchString?: string;
 }
@@ -66,10 +66,9 @@ export interface ScriptVisualStub {
 }
 
 export interface User {
-    id: string;
-    username: string;
+    id: number;
+    name: string;
     email: string;
-    emailVerified: boolean;
     isAdmin: boolean;
     savedFilters: string[];
     createdAt: Date;

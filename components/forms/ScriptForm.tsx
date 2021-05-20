@@ -24,7 +24,7 @@ import { addFunscriptMetadata } from "funscript-utils/lib/funConverter";
 export interface ScriptFormData {
     name?: string;
     creator?: string;
-    owner?: string;
+    owner?: number;
     category?: string;
     tags?: string[];
     thumbnail?: File[];
@@ -44,7 +44,7 @@ export interface EditScriptFormData {
     slug?: string;
     name?: string;
     creator?: string;
-    owner?: string;
+    owner?: number;
     category?: string;
     tags?: string[];
     thumbnail?: File[];
@@ -64,7 +64,7 @@ export interface ScriptFormDataOutput {
     slug?: string;
     name?: string;
     creator?: string;
-    owner?: string;
+    owner?: number;
     category?: string;
     tags?: string[];
     thumbnail?: string;

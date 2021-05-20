@@ -11,7 +11,7 @@ const VerifyEmail = async (email: string): Promise<User> => {
                 email: email,
             },
             data: {
-                emailVerified: true,
+                
             },
         });
         await prisma.$disconnect();

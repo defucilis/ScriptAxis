@@ -16,7 +16,7 @@ const FetchScripts = async (): Promise<TestDataScriptInput[]> => {
             },
             include: {
                 creator: { select: { name: true } },
-                owner: { select: { username: true } },
+                owner: { select: { name: true } },
                 category: { select: { name: true } },
             },
         });
