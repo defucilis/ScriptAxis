@@ -67,7 +67,7 @@ const Dashboard = ({ user }: { user: User }): JSX.Element => {
             const response = await axios.post("/api/scripts/changelike", {
                 slug: script.slug,
                 uid: user.id,
-                creator: script.creator.name,
+                creator: script.creatorName,
                 isLiked: false,
             });
             //await refreshUserDbValues();

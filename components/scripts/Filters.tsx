@@ -9,7 +9,8 @@ import Checkbox from "../forms/Checkbox";
 import ScriptUtils from "../../lib/ScriptUtils";
 
 import style from "./Filters.module.scss";
-import { Filters, Query, User } from "lib/types";
+import { Filters, Query } from "lib/types";
+import typedUseSession from "lib/typedUseSession";
 
 interface FilterActions {
     name?: FilterAction;
@@ -135,14 +136,13 @@ const reduceFilters = (currentFilters: Filters, action: FilterActions) => {
 };
 
 const FiltersElement = ({
-    user,
     query,
     onFilter,
 }: {
-    user?: User;
     query: Query;
     onFilter: (filters: Filters) => void;
 }): JSX.Element => {
+    const [user] = typedUseSession();
     const [filters, setFilters] = useReducer(reduceFilters, query.filters);
     const [initialIncludeTags, setInitialIncludeTags] = useState<string[]>([]);
     const [initialExcludeTags, setInitialExcludeTags] = useState<string[]>([]);

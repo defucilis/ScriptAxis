@@ -45,6 +45,7 @@ export { SaveSearch };
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
+        console.log("Saving search ", req.body);
         const script = await SaveSearch(req.body.uid, req.body.searchString);
         res.status(200);
         res.json(script);
