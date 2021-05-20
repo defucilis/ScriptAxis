@@ -70,6 +70,7 @@ const Dashboard = ({ user }: { user: User }): JSX.Element => {
                 creator: script.creator.name,
                 isLiked: false,
             });
+            //await refreshUserDbValues();
             if (response.data.error) throw response.data.error;
             console.log(response.data);
         } catch (error) {
