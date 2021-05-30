@@ -39,7 +39,11 @@ const Index = (): JSX.Element => {
                 setLoading(-1);
             } catch (error) {
                 console.error(error);
-                setError(error);
+                if (error.message) {
+                    setError(error.message);
+                } else {
+                    setError(error);
+                }
                 setLoading(-1);
             }
         };

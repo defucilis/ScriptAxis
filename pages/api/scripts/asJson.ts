@@ -32,10 +32,13 @@ const FetchScripts = async (): Promise<TestDataScriptInput[]> => {
                 tags: [],
                 likeCount: 0,
                 views: 0,
+                scriptAxisViews: 0,
                 thumbsUp: 0,
                 thumbsDown: 0,
                 createdAt: new Date().valueOf(),
             };
+            if (script.scriptAxisViews || script.scriptAxisViews === 0)
+                output.scriptAxisViews = script.scriptAxisViews;
             if (script.sourceUrl) output.sourceUrl = script.sourceUrl;
             if (script.streamingUrl) output.streamingUrl = script.streamingUrl;
             if (script.description) output.description = script.description;

@@ -16,6 +16,7 @@ const FetchScript = async (slug: string, noview = false): Promise<Script> => {
                   where: { slug },
                   data: {
                       views: { increment: 1 },
+                      scriptAxisViews: { increment: 1 },
                   },
               });
 

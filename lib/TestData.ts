@@ -23,6 +23,7 @@ export interface TestDataScriptInput {
     talent?: string[];
     likeCount: number;
     views: number;
+    scriptAxisViews?: number;
     thumbsUp: number;
     thumbsDown: number;
     createdAt: number;
@@ -45,6 +46,7 @@ export interface TestDataScript {
     talent?: string[];
     likeCount: number;
     views: number;
+    scriptAxisViews?: number;
     thumbsUp: number;
     thumbsDown: number;
     createdAt: number;
@@ -70,6 +72,7 @@ const TestData: TestDataScriptInput[] = [
         talent: ["TalentName"],
         likeCount: 0,
         views: 0,
+        scriptAxisViews: 0,
         thumbsUp: 1,
         thumbsDown: 0,
         createdAt: new Date(2021, 0, 5).valueOf(),

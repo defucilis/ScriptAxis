@@ -8,6 +8,7 @@ const ViewScript = async (scriptSlug: string): Promise<number> => {
             where: { slug: scriptSlug },
             data: {
                 views: { increment: 1 },
+                scriptAxisViews: { increment: 1},
             },
         });
         await Database.disconnect();

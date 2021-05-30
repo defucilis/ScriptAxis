@@ -49,6 +49,7 @@ export interface Script {
     userId: number;
     categoryName: string;
     searchString?: string;
+    scriptAxisViews?: number;
 }
 
 export interface ScriptStub {
