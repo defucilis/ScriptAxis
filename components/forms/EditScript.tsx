@@ -19,8 +19,10 @@ const EditScript = ({
     talent,
     studios,
     creators,
+    isAdmin,
 }: StringLists & {
     script: Script;
+    isAdmin: boolean;
 }): JSX.Element => {
     const [submitting, setSubmitting] = useState(false);
     const [formData, setFormData] = useState<EditScriptFormData>({});
@@ -87,6 +89,18 @@ const EditScript = ({
         );
     };
 
+    const doDelete = async () => {
+        if (!isAdmin) return;
+
+        if (!window.confirm("Really delete script? This cannot be undone!")) return;
+
+        setSubmitting(true);
+        const response = await axios.get(`/api/scripts/delete?scriptId=${script.id}`);
+        console.log("Script deleted:", response.data);
+        setSubmitting(false);
+        Router.push("/");
+    };
+
     return submitting ? (
         <div className={style.processing}>
             <p>
@@ -117,6 +131,16 @@ const EditScript = ({
                 busy={submitting}
             />
             {formError ? <pre style={{ color: "salmon" }}>{formError}</pre> : null}
+            {!isAdmin ? null : (
+                <button
+                    type="button"
+                    disabled={submitting}
+                    onClick={() => doDelete()}
+                    className={style.deleteButton}
+                >
+                    {submitting ? "Please Wait" : "Delete Script"}
+                </button>
+            )}
         </> //
     );
 };

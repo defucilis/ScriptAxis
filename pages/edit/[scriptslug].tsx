@@ -37,6 +37,7 @@ const EditScriptPage = ({
                 talent={talent}
                 studios={studios}
                 creators={creators}
+                isAdmin={user.isAdmin}
             />
         </Layout>
     );
