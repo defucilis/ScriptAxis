@@ -2,14 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
 import axios from "axios";
-import slugify from "slugify";
-import * as imageConversion from "image-conversion";
 import dayjs from "dayjs";
 import { FaCheck } from "react-icons/fa";
 
-import GetTestData, { PrepareTestData, TestDataScript } from "../../lib/TestData";
+import { PrepareTestData, TestDataScript } from "../../lib/TestData";
 import ScriptUtils from "../../lib/ScriptUtils";
-import FirebaseUtils from "../../lib/FirebaseUtils";
 import { Dropzone } from "../forms/FormUtils";
 import Checkbox from "../forms/Checkbox";
 
@@ -112,29 +109,6 @@ const Aggregate = async (
     }
 };
 
-const UploadFile = async (
-    file: File,
-    name: string,
-    onMessage: (message: string) => void,
-    onSuccess: (url: string) => void,
-    onFail: (error: string) => void
-) => {
-    onMessage(`Uploading ${file.name} (${file.size} bytes)`);
-    try {
-        const compressedFile = await imageConversion.compressAccurately(file, {
-            size: 100,
-            type: imageConversion.EImageType.JPEG,
-        });
-        const url = await FirebaseUtils.uploadFile(compressedFile, "adminthumbnails/" + name, null);
-        onSuccess(url);
-    } catch (error) {
-        console.error("error", error);
-
-        onMessage("");
-        onFail(error);
-    }
-};
-
 const GetJsonBackup = async (
     onMessage: (message: string) => void,
     onSuccess: (url: string) => void,
@@ -211,7 +185,7 @@ const RunScrape = async (
 const GetScriptAxisViews = async (
     onMessage: (message: string) => void,
     onComplete: (
-        scripts: { id: number; name: string; slug: string; scriptAxisViews: number }[]
+        scripts: { id: number; name: string; categoryName: string; scriptAxisViews: number }[]
     ) => void,
     onError: (error: string) => void
 ) => {
@@ -219,7 +193,7 @@ const GetScriptAxisViews = async (
     try {
         const scripts = await axios("/api/admin/scriptViewCounts");
         if (scripts.data.error) throw scripts.data.error;
-        onComplete(scripts.data);
+        onComplete(scripts.data.filter(script => script.scriptAxisViews > 0));
     } catch (error) {
         onError(error);
     }
@@ -262,16 +236,19 @@ const RunUpdateSearchString = async (
 const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Element => {
     const [running, setRunning] = useState(false);
     const [messages, setMessages] = useState({ list: [] });
-    const [count, setCount] = useState(41);
     const [scripts, setScripts] = useState<Script[]>([]);
+
+    const progressBarRef = useRef<HTMLDivElement>();
+    const progressBarParentRef = useRef<HTMLDivElement>();
+
+    const [jsonBackup, setJsonBackup] = useState(null);
+
+    const [preparedDownload, setPreparedDownload] = useState("");
+    const [scrapeSubset, setScrapeSubset] = useState(true);
 
     useEffect(() => {
         setScripts(existingScripts);
     }, [existingScripts]);
-
-    useEffect(() => {
-        setCount(GetTestData().length);
-    }, []);
 
     //page is blocked if user is not signed in
     /*
@@ -292,6 +269,7 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
         if (!confirm("Warning, this will irrecoverably wipe ALL data (except user data)!")) return;
 
         setRunning(true);
+        ClearOutput();
         addMessage("Wiping Database...");
 
         ClearData(
@@ -310,47 +288,9 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
         );
     };
 
-    const progressBarRef = useRef<HTMLDivElement>();
-    const progressBarParentRef = useRef<HTMLDivElement>();
-    const StartAddData = () => {
-        setRunning(true);
-
-        progressBarParentRef.current.style.setProperty("display", "block");
-        progressBarRef.current.style.setProperty("width", "0%");
-
-        const scriptsToAdd = GetTestData()
-            .slice(0, count)
-            .filter(script => {
-                return scripts.findIndex(s => s.name === script.name) === -1;
-            });
-
-        AddData(
-            scriptsToAdd,
-            addMessage,
-            (count, total) => {
-                progressBarRef.current.style.setProperty(
-                    "width",
-                    `${Math.round((count * 100) / total)}%`
-                );
-            },
-            addedCount => {
-                addMessage(`Successfully added ${addedCount} scripts to database`);
-                addMessage("");
-                progressBarParentRef.current.style.setProperty("display", "none");
-                setRunning(false);
-            },
-            (failCount, scriptCount) => {
-                addMessage("Finished adding scripts");
-                addMessage(`Error: failed ${failCount} out of ${scriptCount}`);
-                addMessage("");
-                progressBarParentRef.current.style.setProperty("display", "none");
-                setRunning(false);
-            }
-        );
-    };
-
     const StartAggregation = () => {
         setRunning(true);
+        ClearOutput();
 
         progressBarParentRef.current.style.setProperty("display", "block");
         progressBarRef.current.style.setProperty("width", "0%");
@@ -383,44 +323,6 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
         setMessages({ list: [] });
     };
 
-    const [thumbnailImage, setThumbnailImage] = useState(null);
-    const StartUploadFile = () => {
-        console.log("Thumbnail", thumbnailImage);
-        if (!thumbnailImage) {
-            addMessage("Error: No thumbnail image provided");
-            return;
-        }
-
-        let name = prompt("Input thumbnail file name (will be slugified)");
-        name = slugify(name, { lower: true, strict: true });
-
-        setRunning(true);
-
-        UploadFile(
-            thumbnailImage.target.value[0],
-            name,
-            message => {
-                addMessage(message);
-            },
-            url => {
-                addMessage("File uploaded successfully:");
-                addMessage(url);
-                addMessage("");
-                setRunning(false);
-            },
-            error => {
-                addMessage("Error: " + error);
-                addMessage("");
-                setRunning(false);
-            }
-        );
-
-        addMessage(
-            `Uploading thumbnail image ${thumbnailImage.target.value[0].name} (${thumbnailImage.target.value[0].size} bytes)`
-        );
-    };
-
-    const [jsonBackup, setJsonBackup] = useState(null);
     const StartJsonRestore = async () => {
         if (!jsonBackup) {
             alert("Add a JSON backup file first");
@@ -434,6 +336,7 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
         }
 
         setRunning(true);
+        ClearOutput();
 
         progressBarParentRef.current.style.setProperty("display", "block");
         progressBarRef.current.style.setProperty("width", "0%");
@@ -468,9 +371,10 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
         );
     };
 
-    const [preparedDownload, setPreparedDownload] = useState("");
     const StartGetJsonBackup = () => {
         setPreparedDownload("");
+        addMessage("Getting JSON backup...");
+        ClearOutput();
         GetJsonBackup(
             addMessage,
             url => {
@@ -484,9 +388,9 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
         );
     };
 
-    const [scrapeSubset, setScrapeSubset] = useState(true);
     const StartScrape = () => {
         setRunning(true);
+        ClearOutput();
         progressBarParentRef.current.style.setProperty("display", "block");
         progressBarRef.current.style.setProperty("width", "0%");
 
@@ -516,13 +420,44 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
 
     const StartGetScriptAxisViews = () => {
         setRunning(true);
+        ClearOutput();
         GetScriptAxisViews(
             addMessage,
-            (scripts: { id: number; name: string; slug: string; scriptAxisViews: number }[]) => {
-                addMessage("Got Scripts, dumping:");
+            (
+                scripts: {
+                    id: number;
+                    name: string;
+                    categoryName: string;
+                    scriptAxisViews: number;
+                }[]
+            ) => {
+                addMessage(
+                    `Found ${scripts.reduce(
+                        (acc, script) => acc + script.scriptAxisViews,
+                        0
+                    )} views total`
+                );
+                const categoryCounts: { [key: string]: number } = {};
                 scripts.forEach(script => {
-                    addMessage(`  - ${script.scriptAxisViews} - ${script.name}`);
+                    if (!categoryCounts[script.categoryName])
+                        categoryCounts[script.categoryName] = 1;
+                    else categoryCounts[script.categoryName]++;
                 });
+                const sortedCategoryCounts = Object.keys(categoryCounts)
+                    .map(category => ({
+                        name: category,
+                        count: categoryCounts[category],
+                    }))
+                    .sort((a, b) => b.count - a.count);
+                addMessage(`-- Counts by Category:`);
+                sortedCategoryCounts.forEach(category => {
+                    addMessage(`---- ${category.count} - ${category.name}`);
+                });
+                addMessage("");
+                addMessage(`-- Counts by Script:`);
+                scripts.forEach(script =>
+                    addMessage(`---- ${script.scriptAxisViews} - ${script.name}`)
+                );
                 setRunning(false);
             },
             error => {
@@ -534,6 +469,7 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
 
     const UpdateSearchStrings = () => {
         setRunning(true);
+        ClearOutput();
         progressBarParentRef.current.style.setProperty("display", "block");
         progressBarRef.current.style.setProperty("width", "0%");
 
@@ -563,48 +499,21 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
     return (
         <>
             <div className={`${style.buttons} ${running ? style.hidden : ""}`}>
-                <button onClick={ClearOutput}>Clear Output</button>
                 <button onClick={StartClearData}>Wipe Database</button>
-                <button onClick={StartAddData}>Add Test Data</button>
-                <input
-                    type="number"
-                    id="count"
-                    onChange={e => setCount(parseInt(e.target.value))}
-                    value={count}
-                ></input>
                 <button onClick={StartAggregation}>Run Aggregation</button>
-                <Dropzone
-                    id="thumbnail"
-                    name="thumbnail"
-                    label=""
-                    className={style.dropzone}
-                    hoveringClassName={style.dropzoneon}
-                    instruction="Drag + drop a thumbnail image, or click to select one"
-                    options={{
-                        accept: ["image/png", "image/jpeg"],
-                        //maxSize: 2000000, //2MB
-                        multiple: false,
-                        noKeyboard: true,
-                        preventDropOnDocument: true,
-                        pasteable: true,
-                    }}
-                    onChange={setThumbnailImage}
-                    onError={(error: string) => addMessage("Error: " + error)}
-                    error={""}
-                    value={thumbnailImage}
-                />
-                <button onClick={StartUploadFile}>Upload Image</button>
-            </div>
-            <div className={`${style.buttons} ${running ? style.hidden : ""}`}>
                 <button
                     onClick={() => {
                         localStorage.clear();
+                        ClearOutput();
                         addMessage("Local storage cleared");
                     }}
                 >
                     Clear local storage
                 </button>
                 <button onClick={UpdateSearchStrings}>Update Search Strings</button>
+                <button onClick={StartGetScriptAxisViews}>Get ScriptAxis View Counts</button>
+            </div>
+            <div className={`${style.buttons} ${running ? style.hidden : ""}`}>
                 <div className={style.scrape}>
                     <label>
                         {"Scrape"}
@@ -620,18 +529,15 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
                     >
                         <FaCheck />
                     </Checkbox>
-                    <button onClick={StartScrape}>Scrape Views and Likes</button>
-                    <button onClick={StartGetScriptAxisViews}>Get ScriptAxis View Counts</button>
+                    <button onClick={StartScrape}>Scrape</button>
                 </div>
-            </div>
-            <div className={`${style.buttons} ${running ? style.hidden : ""}`}>
-                <button onClick={StartGetJsonBackup}>Prepare JSON Backup</button>
+                <button onClick={StartGetJsonBackup}>Prepare Backup</button>
                 <Link href={preparedDownload}>
                     <a
                         style={preparedDownload !== "" ? null : { display: "none" }}
                         download={"ScriptAxisBackup.json"}
                     >
-                        Download JSON Backup
+                        Download Backup
                     </a>
                 </Link>
                 <Dropzone
@@ -654,7 +560,7 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
                     error={""}
                     value={jsonBackup}
                 />
-                <button onClick={StartJsonRestore}>Restore from JSON Backup</button>
+                <button onClick={StartJsonRestore}>Restore from Backup</button>
             </div>
             <div className={style.progressbg} ref={progressBarParentRef}>
                 <div className={style.progressbar} ref={progressBarRef}></div>
@@ -675,10 +581,6 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
                     })}
                 </ul>
             </div>
-            <div className={`loader top ${running ? "loadingtop" : "notloadingtop"}`}></div>
-            <div
-                className={`loader bottom ${running ? "loadingbottom" : "notloadingbottom"}`}
-            ></div>
         </>
     );
 };

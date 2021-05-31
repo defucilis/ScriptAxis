@@ -3,7 +3,7 @@ import getUser from "lib/getUser";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const GetScriptViews = async (): Promise<
-    { id: number; name: string; slug: string; scriptAxisViews: number }[]
+    { id: number; name: string; categoryName: string; scriptAxisViews: number }[]
 > => {
     try {
         console.log("Fetching scripts by views");
@@ -11,7 +11,7 @@ const GetScriptViews = async (): Promise<
             select: {
                 id: true,
                 name: true,
-                slug: true,
+                categoryName: true,
                 scriptAxisViews: true,
             },
             orderBy: {
