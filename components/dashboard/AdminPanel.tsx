@@ -208,6 +208,23 @@ const RunScrape = async (
     onComplete();
 };
 
+const GetScriptAxisViews = async (
+    onMessage: (message: string) => void,
+    onComplete: (
+        scripts: { id: number; name: string; slug: string; scriptAxisViews: number }[]
+    ) => void,
+    onError: (error: string) => void
+) => {
+    onMessage("Getting all scripts by views...");
+    try {
+        const scripts = await axios("/api/admin/scriptViewCounts");
+        if (scripts.data.error) throw scripts.data.error;
+        onComplete(scripts.data);
+    } catch (error) {
+        onError(error);
+    }
+};
+
 const RunUpdateSearchString = async (
     scripts: Script[],
     onMessage: (message: string) => void,
@@ -497,6 +514,24 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
         );
     };
 
+    const StartGetScriptAxisViews = () => {
+        setRunning(true);
+        GetScriptAxisViews(
+            addMessage,
+            (scripts: { id: number; name: string; slug: string; scriptAxisViews: number }[]) => {
+                addMessage("Got Scripts, dumping:");
+                scripts.forEach(script => {
+                    addMessage(`  - ${script.scriptAxisViews} - ${script.name}`);
+                });
+                setRunning(false);
+            },
+            error => {
+                addMessage("Error: " + error);
+                setRunning(false);
+            }
+        );
+    };
+
     const UpdateSearchStrings = () => {
         setRunning(true);
         progressBarParentRef.current.style.setProperty("display", "block");
@@ -586,6 +621,7 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
                         <FaCheck />
                     </Checkbox>
                     <button onClick={StartScrape}>Scrape Views and Likes</button>
+                    <button onClick={StartGetScriptAxisViews}>Get ScriptAxis View Counts</button>
                 </div>
             </div>
             <div className={`${style.buttons} ${running ? style.hidden : ""}`}>
