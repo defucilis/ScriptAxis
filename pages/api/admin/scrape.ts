@@ -3,7 +3,9 @@ import Database from "lib/Database";
 import getUser from "lib/getUser";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const Scrape = async (scriptSlug: string, scriptUrl: string) => {
+export const GetScrapedInfo = async (
+    scriptUrl: string
+): Promise<{ success?: boolean; views: number; likeCount: number; createdAt: Date }> => {
     if (!scriptUrl.includes("discuss.eroscripts.com"))
         throw { message: "can only scrape scripts from EroScripts" };
 
@@ -23,17 +25,6 @@ const Scrape = async (scriptSlug: string, scriptUrl: string) => {
         headers,
     });
 
-    //scriptUrl = `https://discuss.eroscripts.com/t/${scriptUrl.split("/").slice(-1)[0]}.json?track_visit=false&forceLoad=true`;
-    //console.log(scriptUrl);
-    //const threadResponse = await axios({
-    //    method: "get",
-    //    url: scriptUrl,
-    //    headers: {
-    //        "Discourse-Logged-In": "true",
-    //        "Discourse-Present": "true",
-    //        "Cookie": cookie
-    //    }
-    //});
     const threadData = threadResponse.data;
     if (typeof threadData === "string")
         throw { message: "Authentication failed for EroScripts - bad cookie?" };
@@ -49,15 +40,25 @@ const Scrape = async (scriptSlug: string, scriptUrl: string) => {
     }
     const createdAt = new Date(threadData.created_at);
 
+    return {
+        success: true,
+        views,
+        likeCount,
+        createdAt,
+    };
+};
+
+const Scrape = async (scriptSlug: string, scriptUrl: string) => {
     try {
+        const scrapedInfo = await GetScrapedInfo(scriptUrl);
         const output = await Database.Instance().script.update({
             where: {
                 slug: scriptSlug,
             },
             data: {
-                views,
-                likeCount,
-                createdAt,
+                views: scrapedInfo.views,
+                likeCount: scrapedInfo.likeCount,
+                createdAt: scrapedInfo.createdAt,
             },
         });
         await Database.disconnect();

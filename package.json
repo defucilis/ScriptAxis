@@ -1,6 +1,6 @@
 {
     "name": "scriptaxis",
-    "version": "0.7.1",
+    "version": "0.7.2",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -10,7 +10,8 @@
         "scrape": "node nodescripts/scrape.js",
         "type-check": "tsc --pretty --noEmit",
         "format": "prettier --write .",
-        "lint": "eslint . --ext ts --ext tsx --ext js"
+        "lint": "eslint . --ext ts --ext tsx --ext js",
+        "combo": "npm run format && npm run lint && npm run type-check"
     },
     "author": "Defucilis",
     "license": "ISC",

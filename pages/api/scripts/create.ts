@@ -2,6 +2,7 @@ import Database from "lib/Database";
 import getUser from "lib/getUser";
 import { Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
+import { GetScrapedInfo } from "../admin/scrape";
 
 const CreateScript = async (rawData: any): Promise<Script> => {
     try {
@@ -52,6 +53,18 @@ const CreateScript = async (rawData: any): Promise<Script> => {
         if (rawData.createdAt) data.createdAt = new Date(rawData.createdAt);
         if (rawData.funscript) data.funscript = rawData.funscript;
         if (rawData.averageSpeed) data.averageSpeed = rawData.averageSpeed;
+
+        if (rawData.sourceUrl.includes("discuss.eroscripts.com")) {
+            try {
+                console.log("Scraping data from EroScripts");
+                const scrapedData = await GetScrapedInfo(rawData.sourceUrl);
+                data.views = scrapedData.views;
+                data.likeCount = scrapedData.likeCount;
+                data.createdAt = scrapedData.createdAt;
+            } catch (error) {
+                console.error(error);
+            }
+        }
 
         transaction.push(Database.Instance().script.create({ data }));
 
