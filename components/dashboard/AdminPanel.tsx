@@ -431,12 +431,8 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
                     scriptAxisViews: number;
                 }[]
             ) => {
-                addMessage(
-                    `Found ${scripts.reduce(
-                        (acc, script) => acc + script.scriptAxisViews,
-                        0
-                    )} views total`
-                );
+                const totalCount = scripts.reduce((acc, script) => acc + script.scriptAxisViews, 0);
+                addMessage(`Found ${totalCount} views total`);
                 const categoryCounts: { [key: string]: number } = {};
                 scripts.forEach(script => {
                     if (!categoryCounts[script.categoryName])
@@ -457,6 +453,16 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
                 addMessage(`-- Counts by Script:`);
                 scripts.forEach(script =>
                     addMessage(`---- ${script.scriptAxisViews} - ${script.name}`)
+                );
+                axios.put(
+                    `${process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL}/viewRecords/${dayjs().format(
+                        "YYYY-MM-DD"
+                    )}.json`,
+                    {
+                        timestamp: new Date().valueOf(),
+                        totalCount,
+                        categoryCounts,
+                    }
                 );
                 setRunning(false);
             },
