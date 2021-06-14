@@ -58,7 +58,8 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
         res.status(403);
         res.json({
             error: "Invalid API Key"
-        })
+        });
+        return;
     }
     await cors(req, res);
     try {
