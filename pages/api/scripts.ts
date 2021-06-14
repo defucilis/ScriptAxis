@@ -20,6 +20,7 @@ const initMiddleware = middleware => {
 const cors = initMiddleware(
     Cors({
         methods: ["POST"],
+        origin: "https://funscript.io",
     })
 );
 
