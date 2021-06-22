@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext } from "next";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { Query, Script } from "lib/types";
 import Layout from "../components/layout/Layout";
 import BrowseScripts from "../components/scripts/BrowseScripts";
@@ -22,9 +22,9 @@ const Scripts = ({
     );
 };
 
-export async function getServerSideProps(
+export const getServerSideProps: GetServerSideProps = async (
     ctx: GetServerSidePropsContext
-): Promise<{ props: { propScripts: Script[]; matchCount: number; query: Query } }> {
+) => {
     let scripts = [];
     let count = 0;
     const dbQuery = ScriptUtils.stringObjectToQuery(ctx.query);

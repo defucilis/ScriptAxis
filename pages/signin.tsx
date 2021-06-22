@@ -1,6 +1,6 @@
 import SignInForm from "components/forms/SignInForm";
 import Layout from "components/layout/Layout";
-import { GetServerSidePropsContext } from "next";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { getCsrfToken } from "next-auth/client";
 
 const SignIn = ({ csrfToken }: { csrfToken: string }): JSX.Element => {
@@ -11,10 +11,10 @@ const SignIn = ({ csrfToken }: { csrfToken: string }): JSX.Element => {
     );
 };
 
-export async function getServerSideProps(
-    context: GetServerSidePropsContext
-): Promise<{ props: { csrfToken: string } }> {
-    const csrfToken = await getCsrfToken(context);
+export const getServerSideProps: GetServerSideProps = async (
+    ctx: GetServerSidePropsContext
+) => {
+    const csrfToken = await getCsrfToken(ctx);
     return {
         props: { csrfToken },
     };

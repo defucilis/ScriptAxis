@@ -5,6 +5,7 @@ import CreatorGrid from "../components/creators/CreatorGrid";
 
 import { FetchCreators } from "./api/creators";
 import { Creator } from "lib/types";
+import { GetServerSideProps } from "next";
 
 const Creators = ({ creators }: { creators: Creator[] }): JSX.Element => {
     return (
@@ -18,7 +19,7 @@ const Creators = ({ creators }: { creators: Creator[] }): JSX.Element => {
     );
 };
 
-export async function getServerSideProps(): Promise<{ props: { creators: Creator[] } }> {
+export const getServerSideProps: GetServerSideProps = async () => {
     let creators = [];
     try {
         creators = await FetchCreators();

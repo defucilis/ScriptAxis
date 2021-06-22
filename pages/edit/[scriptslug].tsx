@@ -7,7 +7,7 @@ import ScriptUtils from "../../lib/ScriptUtils";
 import { FetchScript } from "../api/scripts/[scriptSlug]";
 import { FetchLists } from "../api/loadlists";
 import { Script, StringLists, User } from "lib/types";
-import { GetServerSidePropsContext } from "next";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import getUser from "lib/getUser";
 import PageSkeleton from "components/layout/PageSkeleton";
 
@@ -43,9 +43,9 @@ const EditScriptPage = ({
     );
 };
 
-export async function getServerSideProps(
+export const getServerSideProps: GetServerSideProps = async (
     ctx: GetServerSidePropsContext
-): Promise<{ props: StringLists & { script: Script; user?: User } }> {
+) => {
     let script = null;
     let data: StringLists = null;
     const user = await getUser(ctx.req);

@@ -6,7 +6,7 @@ import AdminPanel from "../components/dashboard/AdminPanel";
 import { Script, User } from "lib/types";
 import { GetAllScripts } from "./api/admin/getScripts";
 import getUser from "lib/getUser";
-import { GetServerSidePropsContext } from "next";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import PageSkeleton from "components/layout/PageSkeleton";
 
 const Admin = ({
@@ -30,11 +30,11 @@ const Admin = ({
     );
 };
 
-export async function getServerSideProps(
-    context: GetServerSidePropsContext
-): Promise<{ props: { existingScripts: Script[]; user?: User } }> {
+export const getServerSideProps: GetServerSideProps = async (
+    ctx: GetServerSidePropsContext
+) => {
     let scripts = [];
-    const user = await getUser(context.req);
+    const user = await getUser(ctx.req);
     try {
         scripts = await GetAllScripts();
     } catch (error) {

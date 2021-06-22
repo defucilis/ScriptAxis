@@ -2,12 +2,12 @@ import Head from "next/head";
 
 import Layout from "../components/layout/Layout";
 
-import { Script, ScriptStub, User } from "lib/types";
+import { Script, User } from "lib/types";
 import { FetchScripts } from "./api/scripts";
 import React, { useState } from "react";
 import ScriptNeedingFunscript from "components/dashboard/ScriptNeedingFunscript";
 import getUser from "lib/getUser";
-import { GetServerSidePropsContext } from "next";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import PageSkeleton from "components/layout/PageSkeleton";
 
 const FunscriptUpload = ({
@@ -45,11 +45,11 @@ const FunscriptUpload = ({
     );
 };
 
-export async function getServerSideProps(
-    context: GetServerSidePropsContext
-): Promise<{ props: { existingScripts: ScriptStub[]; user?: User } }> {
+export const getServerSideProps: GetServerSideProps = async (
+    ctx: GetServerSidePropsContext
+) => {
     let scripts = [];
-    const user = await getUser(context.req);
+    const user = await getUser(ctx.req);
     try {
         scripts = await FetchScripts(999, {
             createdAt: "asc",

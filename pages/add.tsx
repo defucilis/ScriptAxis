@@ -6,7 +6,7 @@ import { FetchLists } from "./api/loadlists";
 import ScriptUtils from "../lib/ScriptUtils";
 import { StringLists, User } from "lib/types";
 import PageSkeleton from "components/layout/PageSkeleton";
-import { GetServerSidePropsContext } from "next";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import getUser from "lib/getUser";
 
 const Add = ({
@@ -38,11 +38,11 @@ const Add = ({
     );
 };
 
-export async function getServerSideProps(
-    context: GetServerSidePropsContext
-): Promise<{ props: any }> {
+export const getServerSideProps: GetServerSideProps = async (
+    ctx: GetServerSidePropsContext
+) => {
     let data = {};
-    const user = await getUser(context.req);
+    const user = await getUser(ctx.req);
 
     try {
         data = ScriptUtils.removeCountFromLists(await FetchLists());
