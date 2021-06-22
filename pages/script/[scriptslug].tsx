@@ -1,5 +1,5 @@
 import { Script } from "lib/types";
-import { GetServerSidePropsContext } from "next";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Head from "next/head";
 
 import Layout from "../../components/layout/Layout";
@@ -18,14 +18,21 @@ const ScriptPage = ({ script }: { script: Script }): JSX.Element => {
     );
 };
 
-export async function getServerSideProps(
+export const getServerSideProps: GetServerSideProps = async (
     ctx: GetServerSidePropsContext
-): Promise<{ props: { script: Script } }> {
+) => {
     let script = null;
     try {
         script = await FetchScript(String(ctx.query.scriptslug));
     } catch (error) {
         console.error(error);
+        return {
+            notFound: true,
+        }
+    }
+
+    if(!script) return {
+        notFound: true,
     }
 
     return {
