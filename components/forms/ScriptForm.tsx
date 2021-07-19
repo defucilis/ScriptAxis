@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 
 import * as yup from "yup";
 import ReactMarkdown from "react-markdown";
+import formatTitle from "@directus/format-title";
 
 import {
     Input,
@@ -232,8 +233,19 @@ const ScriptForm = ({
         doValidation(
             formData,
             () => {
+                const newTags = formData.tags?.filter(tag => !!tags.find(t => t === tag)) || [];
+                if (newTags.length > 0) {
+                    if (
+                        !confirm(
+                            "Proceeding will create the following new tags, are you sure that's what you want? " +
+                                newTags.join(", ")
+                        )
+                    ) {
+                        return;
+                    }
+                }
                 const finalData: ScriptFormData = {
-                    name: formData.name,
+                    name: formatTitle(formData.name),
                     creator: formData.creator,
                     category: formData.category,
                     tags: formData.tags,
@@ -256,7 +268,7 @@ const ScriptForm = ({
 
     const getSchema = () => {
         return yup.object().shape({
-            name: yup.string().required("A name is required"),
+            name: yup.string().required("A name is required").max(80, "Max 80 characters"),
             creator: yup.string().required("A creator is required"),
             category: yup.string().required("A category is required"),
             tags: yup.array().notRequired(),
@@ -281,7 +293,9 @@ const ScriptForm = ({
             studio: yup.string().nullable().notRequired(),
             talent: yup.array().notRequired(),
             createdAt: yup.date().notRequired().max(new Date(), "Cannot set a future date!"),
-            funscript: yup.array().notRequired(),
+            funscript: yup
+                .array()
+                .length(1, "A funscript is required for heatmap generation + speed calculation"),
         });
     };
 
