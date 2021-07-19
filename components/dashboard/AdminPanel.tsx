@@ -425,8 +425,8 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
                 const categoryCounts: { [key: string]: number } = {};
                 scripts.forEach(script => {
                     if (!categoryCounts[script.categoryName])
-                        categoryCounts[script.categoryName] = 1;
-                    else categoryCounts[script.categoryName]++;
+                        categoryCounts[script.categoryName] = script.scriptAxisViews;
+                    else categoryCounts[script.categoryName] += script.scriptAxisViews;
                 });
                 const sortedCategoryCounts = Object.keys(categoryCounts)
                     .map(category => ({
@@ -453,6 +453,31 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
                         categoryCounts,
                     }
                 );
+                axios(`${process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL}/viewRecords.json`).then(
+                    data => {
+                        data = data.data;
+                        console.log(data);
+                        const lines: string[] = [];
+                        let line = "";
+                        Object.keys(data).forEach(key => {
+                            if (!line) {
+                                lines.push(
+                                    "date,timestamp,total," +
+                                        Object.keys(data[key].categoryCounts).join(",")
+                                );
+                            }
+                            line = [key, data[key].timestamp, data[key].totalCount].join(",") + ",";
+                            line += Object.keys(data[key].categoryCounts)
+                                .map(category => {
+                                    return data[key].categoryCounts[category];
+                                })
+                                .join(",");
+                            lines.push(line);
+                        });
+                        console.log(lines.join("\n"));
+                    }
+                );
+
                 setRunning(false);
             },
             error => {
