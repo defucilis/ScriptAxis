@@ -1,6 +1,6 @@
 import Database from "lib/Database";
 import getUser from "lib/getUser";
-import { Script } from "lib/types";
+import { roleIsModerator, Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const DeleteScript = async (scriptId: number): Promise<Script> => {
@@ -41,7 +41,7 @@ const DeleteScript = async (scriptId: number): Promise<Script> => {
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
         const user = await getUser(req);
-        if (!user || !user.isAdmin) {
+        if (!user || !roleIsModerator(user.role)) {
             res.status(401);
             res.json({ error: { message: "You are not authorized to perform this action" } });
             return;

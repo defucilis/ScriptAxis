@@ -10,6 +10,7 @@ import axios from "axios";
 
 import styles from "./Header.module.scss";
 import typedUseSession from "lib/typedUseSession";
+import { roleIsAdmin, roleIsCreator } from "lib/types";
 
 export type HeaderPage = "home" | "scripts" | "categories" | "tags" | "creators";
 
@@ -119,14 +120,16 @@ const Header = ({ page }: { page?: HeaderPage }): JSX.Element => {
                             <Link href="/dashboard">
                                 <a className={styles.addscript}>Dashboard</a>
                             </Link>
-                            {user.isAdmin ? (
+                            {roleIsCreator(user.role) ? (
                                 <>
                                     <Link href="/add">
                                         <a className={styles.addscript}>+ Add a Script</a>
                                     </Link>
-                                    <Link href="/admin">
-                                        <a className={styles.addscript}>Admin</a>
-                                    </Link>
+                                    {roleIsAdmin(user.role) ? (
+                                        <Link href="/admin">
+                                            <a className={styles.addscript}>Admin</a>
+                                        </Link>
+                                    ) : null}
                                 </>
                             ) : null}
                         </div>

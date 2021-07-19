@@ -18,9 +18,7 @@ const ScriptPage = ({ script }: { script: Script }): JSX.Element => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async (
-    ctx: GetServerSidePropsContext
-) => {
+export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
     let script = null;
     try {
         script = await FetchScript(String(ctx.query.scriptslug));
@@ -28,18 +26,19 @@ export const getServerSideProps: GetServerSideProps = async (
         console.error(error);
         return {
             notFound: true,
-        }
+        };
     }
 
-    if(!script) return {
-        notFound: true,
-    }
+    if (!script)
+        return {
+            notFound: true,
+        };
 
     return {
         props: {
             script,
         },
     };
-}
+};
 
 export default ScriptPage;

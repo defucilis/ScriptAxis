@@ -22,9 +22,7 @@ const Scripts = ({
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async (
-    ctx: GetServerSidePropsContext
-) => {
+export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
     let scripts = [];
     let count = 0;
     const dbQuery = ScriptUtils.stringObjectToQuery(ctx.query);
@@ -43,6 +41,6 @@ export const getServerSideProps: GetServerSideProps = async (
             query: dbQuery,
         },
     };
-}
+};
 
 export default Scripts;

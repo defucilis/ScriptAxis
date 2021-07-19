@@ -12,7 +12,7 @@ import SavedSearch from "./SavedSearch";
 import ScriptUtils from "../../lib/ScriptUtils";
 
 import style from "./Dashboard.module.scss";
-import { User } from "lib/types";
+import { roleIsAdmin, User } from "lib/types";
 
 type LoadingState = "initial" | true | false;
 
@@ -108,7 +108,7 @@ const Dashboard = ({ user }: { user: User }): JSX.Element => {
             <div className={style.quickfunctions}>
                 <h3>Quick Functions</h3>
                 <button onClick={() => signOut()}>Sign Out</button>
-                {!(user && user.isAdmin) ? null : (
+                {!(user && roleIsAdmin(user.role)) ? null : (
                     <Link href="/admin">
                         <a>Go to Admin Controls</a>
                     </Link>

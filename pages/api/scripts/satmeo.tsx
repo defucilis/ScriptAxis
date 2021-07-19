@@ -54,10 +54,10 @@ const FetchScripts = async (): Promise<Script[]> => {
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     const auth = String(req.query.auth);
-    if(auth !== process.env.NEXT_PUBLIC_API_KEY_SATMEO) {
+    if (auth !== process.env.NEXT_PUBLIC_API_KEY_SATMEO) {
         res.status(403);
         res.json({
-            error: "Invalid API Key"
+            error: "Invalid API Key",
         });
         return;
     }

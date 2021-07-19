@@ -4,7 +4,7 @@ import AddScript from "../components/forms/AddScript";
 
 import { FetchLists } from "./api/loadlists";
 import ScriptUtils from "../lib/ScriptUtils";
-import { StringLists, User } from "lib/types";
+import { roleIsCreator, StringLists, User } from "lib/types";
 import PageSkeleton from "components/layout/PageSkeleton";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import getUser from "lib/getUser";
@@ -17,7 +17,7 @@ const Add = ({
     studios,
     creators,
 }: StringLists & { user?: User }): JSX.Element => {
-    if (!user || !user.isAdmin)
+    if (!user || !roleIsCreator(user.role))
         return <PageSkeleton message={"You are not authorized to add new scripts"} />;
 
     return (
@@ -38,9 +38,7 @@ const Add = ({
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async (
-    ctx: GetServerSidePropsContext
-) => {
+export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
     let data = {};
     const user = await getUser(ctx.req);
 
@@ -56,6 +54,6 @@ export const getServerSideProps: GetServerSideProps = async (
             ...data,
         },
     };
-}
+};
 
 export default Add;

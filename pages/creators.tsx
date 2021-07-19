@@ -29,6 +29,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
     return {
         props: { creators },
     };
-}
+};
 
 export default Creators;

@@ -2,7 +2,7 @@ import Head from "next/head";
 
 import Layout from "../components/layout/Layout";
 
-import { Script, User } from "lib/types";
+import { roleIsAdmin, Script, User } from "lib/types";
 import { FetchScripts } from "./api/scripts";
 import React, { useState } from "react";
 import ScriptNeedingFunscript from "components/dashboard/ScriptNeedingFunscript";
@@ -23,7 +23,7 @@ const FunscriptUpload = ({
         setScripts(scripts.filter(s => s.id !== script.id));
     };
 
-    if (!user || !user.isAdmin)
+    if (!user || !roleIsAdmin(user.role))
         return <PageSkeleton message={"You are not authorized to view this page"} />;
 
     return (
@@ -45,9 +45,7 @@ const FunscriptUpload = ({
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async (
-    ctx: GetServerSidePropsContext
-) => {
+export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
     let scripts = [];
     const user = await getUser(ctx.req);
     try {
@@ -66,6 +64,6 @@ export const getServerSideProps: GetServerSideProps = async (
             user,
         },
     };
-}
+};
 
 export default FunscriptUpload;

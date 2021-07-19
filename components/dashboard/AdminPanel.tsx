@@ -250,17 +250,6 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
         setScripts(existingScripts);
     }, [existingScripts]);
 
-    //page is blocked if user is not signed in
-    /*
-    const {user} = useContext(UserContext);
-    /*
-    useEffect(() => {
-        if(user !== null && user.waiting) return;
-        if(user === null) Router.push("/");
-        else if(!user.isAdmin) Router.push("/");
-    }, [user])
-    */
-
     const addMessage = (message: string) => {
         setMessages(cur => ({ list: [...cur.list, message] }));
     };

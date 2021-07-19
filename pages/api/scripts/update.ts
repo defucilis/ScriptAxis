@@ -1,9 +1,9 @@
 import Database from "lib/Database";
 import getUser from "lib/getUser";
-import { Script } from "lib/types";
+import { roleIsCreator, roleIsModerator, Script, User } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const UpdateScript = async (rawData: any): Promise<Script> => {
+const UpdateScript = async (rawData: any, user: User): Promise<Script> => {
     try {
         console.log("Updating script with data", rawData);
 
@@ -13,6 +13,21 @@ const UpdateScript = async (rawData: any): Promise<Script> => {
         const set = rawData.set || {};
         const remove = rawData.remove || {};
         const add = rawData.add || {};
+
+        const existingScript = await Database.Instance().script.findUnique({
+            where: { id },
+            select: {
+                userId: true,
+            },
+        });
+        if (!existingScript) {
+            await Database.disconnect();
+            throw new Error("Script not found!");
+        }
+        if (existingScript.userId !== user.id && !roleIsModerator(user.role)) {
+            await Database.disconnect();
+            throw new Error("You don't have permission to update this script!");
+        }
 
         const updateData = { ...set };
         if (add.creator) {
@@ -131,12 +146,12 @@ const UpdateScript = async (rawData: any): Promise<Script> => {
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
         const user = await getUser(req);
-        if (!user || !user.isAdmin) {
+        if (!user || !roleIsCreator(user.role)) {
             res.status(401);
             res.json({ error: { message: "You are not authorized to perform this action" } });
             return;
         }
-        const script = await UpdateScript({ ...req.body });
+        const script = await UpdateScript({ ...req.body }, user);
         res.status(200);
         res.json(script);
     } catch (error) {

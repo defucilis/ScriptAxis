@@ -23,9 +23,7 @@ const DashboardPage = ({ user }: { user: User }): JSX.Element => {
 };
 export default DashboardPage;
 
-export const getServerSideProps: GetServerSideProps = async (
-    ctx: GetServerSidePropsContext
-) => {
+export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const user = await getUser(ctx.req);
     return { props: { user } };
 };

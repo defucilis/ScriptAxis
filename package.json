@@ -1,6 +1,6 @@
 {
     "name": "scriptaxis",
-    "version": "0.7.3",
+    "version": "0.8.0",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -16,6 +16,7 @@
     "author": "Defucilis",
     "license": "ISC",
     "dependencies": {
+        "@directus/format-title": "^9.0.0-rc.85",
         "@prisma/client": "^2.21.2",
         "@yaireo/tagify": "^3.23.0",
         "axios": "^0.21.1",

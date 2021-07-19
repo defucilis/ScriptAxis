@@ -3,7 +3,7 @@ import Head from "next/head";
 import Layout from "../components/layout/Layout";
 import AdminPanel from "../components/dashboard/AdminPanel";
 
-import { Script, User } from "lib/types";
+import { roleIsAdmin, Script, User } from "lib/types";
 import { GetAllScripts } from "./api/admin/getScripts";
 import getUser from "lib/getUser";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
@@ -16,7 +16,7 @@ const Admin = ({
     user?: User;
     existingScripts: Script[];
 }): JSX.Element => {
-    if (!user || !user.isAdmin)
+    if (!user || !roleIsAdmin(user.role))
         return <PageSkeleton message={"You are not authorized to view this page"} />;
 
     return (
@@ -30,9 +30,7 @@ const Admin = ({
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async (
-    ctx: GetServerSidePropsContext
-) => {
+export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
     let scripts = [];
     const user = await getUser(ctx.req);
     try {
@@ -46,6 +44,6 @@ export const getServerSideProps: GetServerSideProps = async (
             user,
         },
     };
-}
+};
 
 export default Admin;

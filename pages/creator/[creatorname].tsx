@@ -22,23 +22,21 @@ const Creator = ({ creator }: { creator: UiCreator }): JSX.Element => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async (
-    ctx: GetServerSidePropsContext
-) => {
+export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
     let creator: UiCreator = null;
     try {
         creator = await FetchCreator(String(ctx.query.creatorname));
     } catch (error) {
         console.error(error);
         return {
-            notFound: true
-        }
+            notFound: true,
+        };
     }
 
-    if(!creator) {
+    if (!creator) {
         return {
             notFound: true,
-        }
+        };
     }
 
     if (creator.scripts && creator.scripts.length > 0) {
@@ -49,6 +47,6 @@ export const getServerSideProps: GetServerSideProps = async (
     return {
         props: { creator },
     };
-}
+};
 
 export default Creator;

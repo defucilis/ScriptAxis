@@ -66,15 +66,91 @@ export interface ScriptVisualStub {
     thumbnail: string;
 }
 
+export type UserRole = "USER" | "CREATOR" | "MODERATOR" | "ADMIN";
 export interface User {
     id: number;
     name: string;
     email: string;
-    isAdmin: boolean;
+    role: UserRole;
     savedFilters: string[];
     createdAt: Date;
     updatedAt: Date;
 }
+
+export const roleIsCreator = (role: UserRole): boolean => {
+    switch (role) {
+        case "USER":
+            return false;
+        case "CREATOR":
+            return true;
+        case "MODERATOR":
+            return true;
+        case "ADMIN":
+            return true;
+        default:
+            return false;
+    }
+};
+
+export const roleIsModerator = (role: UserRole): boolean => {
+    switch (role) {
+        case "USER":
+            return false;
+        case "CREATOR":
+            return false;
+        case "MODERATOR":
+            return true;
+        case "ADMIN":
+            return true;
+        default:
+            return false;
+    }
+};
+
+export const roleIsAdmin = (role: UserRole): boolean => {
+    switch (role) {
+        case "USER":
+            return false;
+        case "CREATOR":
+            return false;
+        case "MODERATOR":
+            return false;
+        case "ADMIN":
+            return true;
+        default:
+            return false;
+    }
+};
+
+export const roleIsUser = (role: UserRole): boolean => {
+    switch (role) {
+        case "USER":
+            return true;
+        case "CREATOR":
+            return false;
+        case "MODERATOR":
+            return false;
+        case "ADMIN":
+            return false;
+        default:
+            return false;
+    }
+};
+
+export const roleIsAny = (role: UserRole): boolean => {
+    switch (role) {
+        case "USER":
+            return true;
+        case "CREATOR":
+            return true;
+        case "MODERATOR":
+            return true;
+        case "ADMIN":
+            return true;
+        default:
+            return false;
+    }
+};
 
 export interface UiUser extends User {
     creator?: { name: string };

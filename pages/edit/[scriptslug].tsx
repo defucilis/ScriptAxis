@@ -6,7 +6,7 @@ import EditScript from "../../components/forms/EditScript";
 import ScriptUtils from "../../lib/ScriptUtils";
 import { FetchScript } from "../api/scripts/[scriptSlug]";
 import { FetchLists } from "../api/loadlists";
-import { Script, StringLists, User } from "lib/types";
+import { roleIsCreator, roleIsModerator, Script, StringLists, User } from "lib/types";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import getUser from "lib/getUser";
 import PageSkeleton from "components/layout/PageSkeleton";
@@ -37,15 +37,16 @@ const EditScriptPage = ({
                 talent={talent}
                 studios={studios}
                 creators={creators}
-                isAdmin={user.isAdmin}
+                canDelete={
+                    roleIsModerator(user.role) ||
+                    (roleIsCreator(user.role) && script.userId === user.id)
+                }
             />
         </Layout>
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async (
-    ctx: GetServerSidePropsContext
-) => {
+export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
     let script = null;
     let data: StringLists = null;
     const user = await getUser(ctx.req);
@@ -64,6 +65,6 @@ export const getServerSideProps: GetServerSideProps = async (
             ...data,
         },
     };
-}
+};
 
 export default EditScriptPage;

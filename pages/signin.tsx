@@ -11,13 +11,11 @@ const SignIn = ({ csrfToken }: { csrfToken: string }): JSX.Element => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async (
-    ctx: GetServerSidePropsContext
-) => {
+export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const csrfToken = await getCsrfToken(ctx);
     return {
         props: { csrfToken },
     };
-}
+};
 
 export default SignIn;

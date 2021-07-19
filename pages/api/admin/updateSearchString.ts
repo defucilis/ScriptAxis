@@ -2,6 +2,7 @@ import Database from "lib/Database";
 import getUser from "lib/getUser";
 
 import ScriptUtils from "lib/ScriptUtils";
+import { roleIsAdmin } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const UpdateSearchString = async (scriptSlug: string) => {
@@ -34,7 +35,7 @@ const UpdateSearchString = async (scriptSlug: string) => {
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
         const user = await getUser(req);
-        if (!user || !user.isAdmin) {
+        if (!user || !roleIsAdmin(user.role)) {
             res.status(401);
             res.json({ error: { message: "You are not authorized to perform this action" } });
             return;

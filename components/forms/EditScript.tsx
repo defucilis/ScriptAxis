@@ -19,10 +19,10 @@ const EditScript = ({
     talent,
     studios,
     creators,
-    isAdmin,
+    canDelete,
 }: StringLists & {
     script: Script;
-    isAdmin: boolean;
+    canDelete: boolean;
 }): JSX.Element => {
     const [submitting, setSubmitting] = useState(false);
     const [formData, setFormData] = useState<EditScriptFormData>({});
@@ -90,7 +90,7 @@ const EditScript = ({
     };
 
     const doDelete = async () => {
-        if (!isAdmin) return;
+        if (!canDelete) return;
 
         if (!window.confirm("Really delete script? This cannot be undone!")) return;
 
@@ -131,7 +131,7 @@ const EditScript = ({
                 busy={submitting}
             />
             {formError ? <pre style={{ color: "salmon" }}>{formError}</pre> : null}
-            {!isAdmin ? null : (
+            {!canDelete ? null : (
                 <button
                     type="button"
                     disabled={submitting}
