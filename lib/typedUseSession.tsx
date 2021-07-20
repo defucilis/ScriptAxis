@@ -8,7 +8,6 @@ const typedUseSession = (): [User, boolean] => {
     const [loading, setLoading] = useState(sessionLoading);
 
     useEffect(() => {
-        console.warn(session);
         if (!session) return;
 
         const untypedSession: any = session;
@@ -18,7 +17,6 @@ const typedUseSession = (): [User, boolean] => {
     }, [session]);
 
     useEffect(() => {
-        console.warn("loading changed", sessionLoading);
         setLoading(sessionLoading);
     }, [sessionLoading]);
 
