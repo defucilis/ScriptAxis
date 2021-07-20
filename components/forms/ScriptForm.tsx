@@ -223,7 +223,7 @@ const ScriptForm = ({
                     mappedErrors.duration = "Duration must be in the form hours:minutes:seconds";
                 }
                 setErrors(cur => ({ ...cur, ...mappedErrors }));
-                onFail(mappedErrors);
+                if(onFail) onFail(mappedErrors);
             }
         };
 
@@ -233,7 +233,7 @@ const ScriptForm = ({
         doValidation(
             formData,
             () => {
-                const newTags = formData.tags?.filter(tag => !!tags.find(t => t === tag)) || [];
+                const newTags = formData.tags?.filter(tag => !tags.find(t => t === tag)) || [];
                 if (newTags.length > 0) {
                     if (
                         !confirm(
