@@ -116,6 +116,7 @@
                 height: 100%;
                 display: grid;
                 place-items: center;
+                user-select: none;
 
                 text-align: center;
                 text-transform: uppercase;
@@ -140,12 +141,12 @@
     z-index: 2;
     padding: 2em 0;
     display: none;
+}
 
-    ul {
-        display: grid;
-        grid-template-columns: repeat(8, 1fr);
-        grid-gap: 1em;
-    }
+.categories ul {
+    display: grid;
+    grid-gap: 1em;
+    grid-template-columns: repeat(8, 1fr);
 
     li {
         height: 80px;
@@ -160,6 +161,21 @@
             &:hover {
                 box-shadow: 0px 0px 0px 2px var(--color-text);
             }
+        }
+    }
+}
+
+.tags ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: disc;
+    margin-left: 8%;
+
+    li {
+        width: 33%;
+
+        a:hover {
+            color: var(--color-theme-500);
         }
     }
 }

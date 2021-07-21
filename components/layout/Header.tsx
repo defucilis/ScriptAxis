@@ -211,7 +211,7 @@ const Header = ({ page }: { page?: HeaderPage }): JSX.Element => {
                                         <Link href={`/scripts?include=${tag.name}`}>
                                             <a>
                                                 {tag.name}
-                                                <br />({tag.count} Script{tag.count > 1 ? "s" : ""})
+                                                {` `}({tag.count} Script{tag.count > 1 ? "s" : ""})
                                             </a>
                                         </Link>
                                     </li>
