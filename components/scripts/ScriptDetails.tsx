@@ -175,23 +175,53 @@ const ScriptDetails = ({ script }: { script: Script }): JSX.Element => {
             </div>
             <p className={style.created}>{dayjs(script.createdAt).format("D MMMM YYYY")}</p>
             <div className={style.sidebyside}>
-                <div className={style.imagewrapper}>
-                    {getEmbed(script.streamingUrl) ? (
-                        <>
-                            <iframe
-                                style={{ display: iFrameLoading ? "none" : "block" }}
-                                src={getEmbed(script.streamingUrl)}
-                                width={1000}
-                                height={500}
-                                ref={iFrameRef}
-                                allowFullScreen
-                                onLoad={() => handleIFrameLoaded()}
-                            />
-                            {iFrameLoading ? <img src={script.thumbnail} /> : null}
-                        </> //
-                    ) : (
-                        <img src={script.thumbnail} />
-                    )}
+                <div>
+                    <div className={style.imagewrapper}>
+                        {getEmbed(script.streamingUrl) ? (
+                            <>
+                                <iframe
+                                    style={{ display: iFrameLoading ? "none" : "block" }}
+                                    src={getEmbed(script.streamingUrl)}
+                                    width={1000}
+                                    height={500}
+                                    ref={iFrameRef}
+                                    allowFullScreen
+                                    onLoad={() => handleIFrameLoaded()}
+                                />
+                                {iFrameLoading ? <img src={script.thumbnail} /> : null}
+                            </> //
+                        ) : (
+                            <img src={script.thumbnail} />
+                        )}
+                    </div>
+                    {script.funscript ? (
+                        <div className={style.funscriptInfo}>
+                            <div className={style.heatmapContainer} ref={heatmapContainerRef}>
+                                {funscript ? (
+                                    <FunscriptHeatmap
+                                        funscript={funscript}
+                                        width={heatmapContainerRef.current.offsetWidth}
+                                        height={heatmapContainerRef.current.offsetHeight}
+                                    />
+                                ) : null}
+                            </div>
+
+                            {funscript ? (
+                                <div className={style.funscriptMetadata}>
+                                    <p>
+                                        <span>Actions:</span>
+                                        {funscript.actions.length}
+                                    </p>
+                                    <p>
+                                        <span>Average Speed:</span>
+                                        {Math.round(funscript.metadata.average_speed)}
+                                    </p>
+                                </div>
+                            ) : (
+                                <div></div>
+                            )}
+                        </div>
+                    ) : null}
                 </div>
                 <div className={style.details}>
                     <p className={style.category}>
@@ -308,34 +338,6 @@ const ScriptDetails = ({ script }: { script: Script }): JSX.Element => {
                     </div>
                 </div>
             </div>
-            {script.funscript ? (
-                <div className={style.funscriptInfo}>
-                    <div className={style.heatmapContainer} ref={heatmapContainerRef}>
-                        {funscript ? (
-                            <FunscriptHeatmap
-                                funscript={funscript}
-                                width={heatmapContainerRef.current.offsetWidth}
-                                height={heatmapContainerRef.current.offsetHeight}
-                            />
-                        ) : null}
-                    </div>
-
-                    {funscript ? (
-                        <div className={style.funscriptMetadata}>
-                            <p>
-                                <span>Actions:</span>
-                                {funscript.actions.length}
-                            </p>
-                            <p>
-                                <span>Average Speed:</span>
-                                {Math.round(funscript.metadata.average_speed)}
-                            </p>
-                        </div>
-                    ) : (
-                        <div></div>
-                    )}
-                </div>
-            ) : null}
             <div className={style.description}>
                 <ReactMarkdown source={script.description} />
             </div>
