@@ -223,7 +223,7 @@ const ScriptForm = ({
                     mappedErrors.duration = "Duration must be in the form hours:minutes:seconds";
                 }
                 setErrors(cur => ({ ...cur, ...mappedErrors }));
-                if(onFail) onFail(mappedErrors);
+                if (onFail) onFail(mappedErrors);
             }
         };
 

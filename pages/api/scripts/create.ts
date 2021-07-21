@@ -66,6 +66,8 @@ const CreateScript = async (rawData: any): Promise<Script> => {
             }
         }
 
+        console.log(data);
+
         transaction.push(Database.Instance().script.create({ data }));
 
         //Create or insert any necessary tags

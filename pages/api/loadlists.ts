@@ -17,7 +17,6 @@ const FetchLists = async (): Promise<StringListsWithCount> => {
             },
         });
 
-        await Database.disconnect();
         const output = ScriptUtils.parseDatabaseListsWithCount({
             tags,
             categories,
@@ -34,6 +33,7 @@ const FetchLists = async (): Promise<StringListsWithCount> => {
             output.studios = output.studios.map(s => ScriptUtils.makeStringSfw(s));
             output.creators = output.creators.map(c => ScriptUtils.makeStringSfw(c));
         }
+        await Database.disconnect();
         return output;
     } catch (error) {
         await Database.disconnect();

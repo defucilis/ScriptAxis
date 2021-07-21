@@ -158,6 +158,8 @@ const createScript = async (
     data.duration = ScriptUtils.stringToDuration(postData.duration);
 
     const testDataString = ScriptUtils.getScriptObjectCode(data);
+
+    console.log("Final create data:", data);
     try {
         await navigator.clipboard.writeText(testDataString);
         console.log("Wrote data to clipboard", testDataString);
