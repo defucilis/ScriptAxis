@@ -7,13 +7,21 @@ import ScriptDetails from "../../components/scripts/ScriptDetails";
 
 import { FetchScript } from "../api/scripts/[scriptSlug]";
 
-const ScriptPage = ({ script }: { script: Script }): JSX.Element => {
+const ScriptPage = ({ script, error }: { script: Script; error?: string }): JSX.Element => {
     return (
         <Layout page="scripts">
             <Head>
-                <title>ScriptAxis | {script.name}</title>
+                <title>ScriptAxis | {script?.name || "Error"}</title>
             </Head>
-            <ScriptDetails script={script} />
+            {error ? (
+                <p style={{ color: "salmon" }}>
+                    {error.includes("too many connections")
+                        ? "Too many database connections! I'm looking into this issue, but for now, try waiting five minutes and refreshing the page"
+                        : "Failed to get script! Server error: " + error}
+                </p>
+            ) : (
+                <ScriptDetails script={script} />
+            )}
         </Layout>
     );
 };
@@ -24,6 +32,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
         script = await FetchScript(String(ctx.query.scriptslug));
     } catch (error) {
         console.error(error);
+        if (error.message.includes("too many connections")) {
+            return {
+                props: {
+                    error: error.message,
+                },
+            };
+        }
+
         return {
             notFound: true,
         };

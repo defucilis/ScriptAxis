@@ -10,14 +10,24 @@ const Scripts = ({
     propScripts,
     matchCount,
     query,
+    error,
 }: {
     propScripts: Script[];
     matchCount: number;
     query: Query;
+    error?: string;
 }): JSX.Element => {
     return (
         <Layout page="scripts">
-            <BrowseScripts propScripts={propScripts} scriptCount={matchCount} query={query} />
+            {error ? (
+                <p style={{ color: "salmon" }}>
+                    {error.includes("too many connections")
+                        ? "Too many database connections! I'm looking into this issue, but for now, try waiting five minutes and refreshing the page"
+                        : "Failed to get scripts! Server error: " + error}
+                </p>
+            ) : (
+                <BrowseScripts propScripts={propScripts} scriptCount={matchCount} query={query} />
+            )}
         </Layout>
     );
 };
@@ -26,12 +36,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
     let scripts = [];
     let count = 0;
     const dbQuery = ScriptUtils.stringObjectToQuery(ctx.query);
+    let fetchError = "";
     try {
         const output = await QueryScripts(dbQuery);
         count = output.count;
         scripts = output.scripts;
     } catch (error) {
         console.log("Failed to load scripts", error);
+        fetchError = error.message;
     }
 
     return {
@@ -39,6 +51,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
             propScripts: scripts || [],
             matchCount: count,
             query: dbQuery,
+            error: fetchError,
         },
     };
 };
