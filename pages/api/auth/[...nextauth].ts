@@ -3,18 +3,7 @@ import NextAuth, { Session, NextAuthOptions, User } from "next-auth";
 import Providers from "next-auth/providers";
 import Adapters from "next-auth/adapters";
 
-import { PrismaClient } from "@prisma/client";
-
-let prisma: PrismaClient;
-if (process.env.NODE_ENV === "production") {
-    prisma = new PrismaClient();
-} else {
-    const globalAny: any = global;
-    if (!globalAny.prisma) {
-        globalAny.prisma = new PrismaClient();
-    }
-    prisma = globalAny.prisma;
-}
+import Database from "lib/Database";
 
 const options: NextAuthOptions = {
     providers: [
@@ -38,7 +27,7 @@ const options: NextAuthOptions = {
     },
 
     adapter: Adapters.Prisma.Adapter({
-        prisma,
+        prisma: Database.Instance(),
     }),
     secret: process.env.AUTH_SECRET,
 
