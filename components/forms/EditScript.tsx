@@ -126,6 +126,7 @@ const EditScript = ({
                 defaultFormData={formData}
                 options={{
                     thumbnailOptional: true,
+                    funscriptOptional: true,
                 }}
                 submitLabel="Update Script"
                 busy={submitting}

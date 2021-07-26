@@ -113,6 +113,7 @@ const ScriptForm = ({
     defaultFormData?: ScriptFormData;
     options?: {
         thumbnailOptional?: boolean;
+        funscriptOptional?: boolean;
     };
     submitLabel: string;
     busy: boolean;
@@ -293,9 +294,15 @@ const ScriptForm = ({
             studio: yup.string().nullable().notRequired(),
             talent: yup.array().notRequired(),
             createdAt: yup.date().notRequired().max(new Date(), "Cannot set a future date!"),
-            funscript: yup
-                .array()
-                .length(1, "A funscript is required for heatmap generation + speed calculation"),
+            funscript:
+                options && options.funscriptOptional
+                    ? yup.array().notRequired()
+                    : yup
+                          .array()
+                          .length(
+                              1,
+                              "A funscript is required for heatmap generation + speed calculation"
+                          ),
         });
     };
 
