@@ -20,6 +20,7 @@ import ScriptUtils from "../../lib/ScriptUtils";
 import style from "./ScriptForm.module.scss";
 import { StringLists } from "lib/types";
 import { addFunscriptMetadata } from "funscript-utils/lib/funConverter";
+import axios from "axios";
 
 export interface ScriptFormData {
     name?: string;
@@ -110,7 +111,7 @@ const ScriptForm = ({
     busy,
 }: StringLists & {
     onValidationPassed: (data: ScriptFormData) => void;
-    defaultFormData?: ScriptFormData;
+    defaultFormData?: ScriptFormData | EditScriptFormData;
     options?: {
         thumbnailOptional?: boolean;
         funscriptOptional?: boolean;
@@ -172,6 +173,35 @@ const ScriptForm = ({
         }
         setDirty(true);
     };
+
+    const handleSourceUrlChange = (e: {
+        target: {
+            id: string;
+            value: any;
+        };
+    }) => {
+        const doScrape = async (url: string) => {
+            const result = await axios("/api/scripts/scrapeUrl?url=" + url);
+            const data = result.data;
+            if(data.markdown) {
+                handleChange({ target: { id: "description", value: data.markdown } });
+            }
+            if(data.title) {
+                handleChange({ target: { id: "name", value: data.title } });
+            }
+            if(data.author) {
+                handleChange({ target: { id: "creator", value: data.author } });
+            }
+        }
+
+        if(e.target.value.includes ("discuss.eroscripts.com")) {
+            if(confirm("Fetch title, creator and content from eroscripts?")) {
+                doScrape(e.target.value);
+            }
+        }
+
+        handleChange(e);
+    }
 
     useEffect(() => {
         const createCleanFunscript = async (file: File) => {
@@ -462,7 +492,7 @@ const ScriptForm = ({
                     id="sourceUrl"
                     name="sourceUrl"
                     label="Source URL"
-                    onChange={handleChange}
+                    onChange={handleSourceUrlChange}
                     error={errors.sourceUrl}
                     value={formData.sourceUrl}
                 />
