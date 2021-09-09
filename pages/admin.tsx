@@ -8,6 +8,7 @@ import { GetAllScripts } from "./api/admin/getScripts";
 import getUser from "lib/getUser";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import PageSkeleton from "components/layout/PageSkeleton";
+import AdminDashboard from "components/dashboard/AdminDashboard";
 
 const Admin = ({
     user,
@@ -24,7 +25,9 @@ const Admin = ({
             <Head>
                 <title>ScriptAxis | Admin Functions</title>
             </Head>
-            <h1>Admin Functions</h1>
+            <h1>Admin Dashboard</h1>
+            <AdminDashboard />
+            <h2>Admin Functions</h2>
             <AdminPanel existingScripts={existingScripts} />
         </Layout>
     );

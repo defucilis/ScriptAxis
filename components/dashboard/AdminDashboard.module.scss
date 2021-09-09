@@ -1,0 +1,14 @@
+.graphGrid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin-bottom: 2rem;
+
+    canvas {
+        width: 100%;
+    }
+
+    h3 {
+        margin-bottom: 1rem;
+    }
+}
