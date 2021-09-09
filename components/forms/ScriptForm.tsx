@@ -183,25 +183,25 @@ const ScriptForm = ({
         const doScrape = async (url: string) => {
             const result = await axios("/api/scripts/scrapeUrl?url=" + url);
             const data = result.data;
-            if(data.markdown) {
+            if (data.markdown) {
                 handleChange({ target: { id: "description", value: data.markdown } });
             }
-            if(data.title) {
+            if (data.title) {
                 handleChange({ target: { id: "name", value: data.title } });
             }
-            if(data.author) {
+            if (data.author) {
                 handleChange({ target: { id: "creator", value: data.author } });
             }
-        }
+        };
 
-        if(e.target.value.includes ("discuss.eroscripts.com")) {
-            if(confirm("Fetch title, creator and content from eroscripts?")) {
+        if (e.target.value.includes("discuss.eroscripts.com")) {
+            if (confirm("Fetch title, creator and content from eroscripts?")) {
                 doScrape(e.target.value);
             }
         }
 
         handleChange(e);
-    }
+    };
 
     useEffect(() => {
         const createCleanFunscript = async (file: File) => {

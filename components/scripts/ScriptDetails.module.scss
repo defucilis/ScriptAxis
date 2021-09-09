@@ -146,6 +146,17 @@
     p {
         margin: 0.5em 0;
     }
+    ul {
+        padding-left: 1em;
+        list-style: disc;
+    }
+    li {
+        margin-left: 1em;
+    }
+    a {
+        color: var(--color-theme-500);
+        text-decoration: underline;
+    }
 }
 
 .funscriptInfo {

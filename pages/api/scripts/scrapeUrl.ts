@@ -3,9 +3,8 @@ import getUser from "lib/getUser";
 import Emojis from "lib/emojis";
 import { roleIsCreator } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
-import TurndownService from 'turndown';
+import TurndownService from "turndown";
 import formatTitle from "@directus/format-title";
-
 
 const parseParagraphs = (cookedHtml: string): string => {
     cookedHtml = cookedHtml.replace(/<div(.|\n)*?<\/div>/g, ""); //no divs
@@ -19,7 +18,7 @@ const parseParagraphs = (cookedHtml: string): string => {
     cookedHtml = cookedHtml.replace(/<p><a href="\/uploads(.|\n)*?<\/p>/g, ""); //no attachments
     cookedHtml = cookedHtml.replace(/<p><img(.|\n)*?<\/p>/g, ""); //no images
     return cookedHtml;
-}
+};
 
 const replaceEmojis = (markdown: string): string => {
     //get all the emojis - they appear between colons :like_this:
@@ -30,26 +29,26 @@ const replaceEmojis = (markdown: string): string => {
     });
 
     const finalEmojis = emojiNames.map(name => {
-        for(let i = 0; i < Emojis.length; i++) {
-            if(Emojis[i].key === name) return Emojis[i];
+        for (let i = 0; i < Emojis.length; i++) {
+            if (Emojis[i].key === name) return Emojis[i];
         }
         return null;
     });
 
     console.log(finalEmojis);
-    const emojiChars = finalEmojis.map(emoji => emoji ? String.fromCodePoint(parseInt(emoji.unicode, 16)) : "");
+    const emojiChars = finalEmojis.map(emoji =>
+        emoji ? String.fromCodePoint(parseInt(emoji.unicode, 16)) : ""
+    );
     console.log(emojiChars);
 
-    for(let i = 0; i < locations.length; i++) {
+    for (let i = 0; i < locations.length; i++) {
         markdown = markdown.replace(/!\[:(.)*?\)/, emojiChars[i]);
     }
 
     return markdown;
 };
 
-export const GetThreadData = async (
-    scriptUrl: string
-): Promise<any> => {
+export const GetThreadData = async (scriptUrl: string): Promise<any> => {
     if (!scriptUrl.includes("discuss.eroscripts.com"))
         throw { message: "can only scrape scripts from EroScripts" };
 
