@@ -656,7 +656,7 @@ const formatScriptTitle = (title: string): string => {
     const words = title.split(" ");
     return words.map(word => {
         if(longAcronyms.includes(word.toUpperCase())) return word.toUpperCase();
-        if(shortAcronyms.includes(word.toUpperCase()) return word.toUpperCase();
+        if(shortAcronyms.includes(word.toUpperCase())) return word.toUpperCase();
         return word;
     }).join(" ");
 }
