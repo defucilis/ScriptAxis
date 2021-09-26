@@ -5,6 +5,7 @@ import { roleIsCreator } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 import TurndownService from "turndown";
 import formatTitle from "@directus/format-title";
+import ScriptUtils from "lib/ScriptUtils";
 
 const parseParagraphs = (cookedHtml: string): string => {
     cookedHtml = cookedHtml.replace(/<div(.|\n)*?<\/div>/g, ""); //no divs
@@ -81,7 +82,7 @@ export const GetThreadData = async (scriptUrl: string): Promise<any> => {
     const parsedData = {
         markdown,
         author,
-        title: formatTitle(threadData.title),
+        title: ScriptUtils.formatScriptTitle(threadData.title),
     };
 
     return parsedData;
