@@ -4,11 +4,55 @@ import { roleIsCreator, Script } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 import { GetScrapedInfo } from "../admin/scrape";
 
+export const getUniqueScriptSlug = async (slugPrefix: string): Promise<string> => {
+    try {
+        //get entries that start with the given slug
+        //note that they don't necessarily represent equal slugs
+        //for example "test-work" and "test-work-continues" both begin with "test-work"
+        //so the new slug should be "test-work-1" not "test-work-2"
+        const existingSlugs = (
+            await Database.Instance().script.findMany({
+                where: {
+                    slug: {
+                        startsWith: slugPrefix,
+                    },
+                },
+                select: {
+                    slug: true,
+                },
+            })
+        )
+            .map(obj => obj.slug)
+            .filter(slug => {
+                const suffix = slug.substring(slugPrefix.length);
+                //if the slug is literally the prefix, then it counts
+                if (suffix.length === 0) return true;
+                //if the slug continues (e.g. test-worky) then it doesn't count
+                if (suffix[0] !== "-") return false;
+                //if everything after the hyphen is a number, then it counts
+                return !isNaN(Number(suffix.substring(1)));
+            });
+        if (existingSlugs.length === 0) return slugPrefix;
+
+        let validSlugNumber = 1;
+        while (existingSlugs.indexOf(`${slugPrefix}-${validSlugNumber}`) !== -1) {
+            validSlugNumber++;
+        }
+        return `${slugPrefix}-${validSlugNumber}`;
+    } catch (error) {
+        await Database.disconnect();
+        throw error;
+    }
+}
+
 const CreateScript = async (rawData: any): Promise<Script> => {
     try {
         console.log("Creating script with data", rawData);
 
         const transaction = [];
+
+        //make sure that slug is unique by appending numbers if necessary
+        rawData.slug = await getUniqueScriptSlug(rawData.slug);
 
         //Make sure that the category is included in the tags!
         const tags = [rawData.category, ...rawData.tags];
