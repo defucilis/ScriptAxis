@@ -1,3 +1,4 @@
+import formatTitle from "@directus/format-title";
 import { ScriptFormDataOutput } from "components/forms/ScriptForm";
 import {
     Filters,
@@ -646,6 +647,16 @@ const getSearchString = (data: {
     return output.toLowerCase();
 };
 
+const formatScriptTitle = (title: string): string => {
+    title = formatTitle(title);
+    const words = title.split(" ");
+    return words.map(word => {
+        if (word.length <= 3) return word.toUpperCase();
+        if(longAcronyms.includes(word)) return word.toUpperCase();
+        return word;
+    }).join(" ");
+}
+
 const ScriptUtils = {
     //parseScriptDocument,
     indexToDuration,
@@ -674,6 +685,7 @@ const ScriptUtils = {
     makeScriptStubSfw,
     readFile,
     getSearchString,
+    formatScriptTitle,
 };
 
 //module.exports = ScriptUtils;

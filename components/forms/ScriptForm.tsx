@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 
 import * as yup from "yup";
 import ReactMarkdown from "react-markdown";
-import formatTitle from "@directus/format-title";
 
 import {
     Input,
@@ -276,7 +275,7 @@ const ScriptForm = ({
                     }
                 }
                 const finalData: ScriptFormData = {
-                    name: formatTitle(formData.name),
+                    name: ScriptUtils.formatScriptTitle(formData.name),
                     creator: formData.creator,
                     category: formData.category,
                     tags: formData.tags,
