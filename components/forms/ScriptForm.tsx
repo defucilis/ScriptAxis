@@ -233,7 +233,7 @@ const ScriptForm = ({
         const doValidation = async (data: ScriptFormData, onPass: any, onFail: any) => {
             try {
                 const validation = await getSchema().validate(data, { abortEarly: false });
-                if (!ScriptUtils.stringIsValidDuration(data.duration)) {
+                if (!ScriptUtils.stringIsValidDuration(data.duration.trim())) {
                     throw {
                         inner: [
                             {
@@ -282,7 +282,7 @@ const ScriptForm = ({
                     tags: formData.tags,
                     thumbnail: formData.thumbnail,
                     description: formData.description,
-                    duration: formData.duration,
+                    duration: formData.duration.trim(),
                     sourceUrl: formData.sourceUrl,
                     streamingUrl: formData.streamingUrl,
                     studio: formData.studio,
