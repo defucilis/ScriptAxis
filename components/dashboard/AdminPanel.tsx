@@ -3,12 +3,10 @@ import Link from "next/link";
 
 import axios from "axios";
 import dayjs from "dayjs";
-import { FaCheck } from "react-icons/fa";
 
 import { PrepareTestData, TestDataScript } from "../../lib/TestData";
 import ScriptUtils from "../../lib/ScriptUtils";
 import { Dropzone } from "../forms/FormUtils";
-import Checkbox from "../forms/Checkbox";
 
 import style from "./AdminPanel.module.scss";
 import { Script } from "lib/types";
@@ -132,7 +130,6 @@ const GetJsonBackup = async (
 
 const RunScrape = async (
     scripts: Script[],
-    subset: boolean,
     onMessage: (message: string) => void,
     onProgress: (doneCount: number, totalCount: number) => void,
     onComplete: () => void,
@@ -146,19 +143,20 @@ const RunScrape = async (
         onComplete();
         return;
     }
-    scripts = !subset
-        ? response.data.filter(script => script.sourceUrl.includes("eroscripts"))
-        : response.data.filter(script => {
-              if (!script.sourceUrl.includes("eroscripts")) return false;
-              return (
-                  script.views < 100 ||
-                  script.likeCount < 5 ||
-                  dayjs().diff(dayjs(script.createdAt), "day") < 7
-              );
-          });
-    onMessage(
-        `----Complete - found ${scripts.length} scripts${subset ? " (after filtering)" : ""}`
-    );
+    scripts = response.data.filter((script: Script) => {
+        //don't scrape scripts that aren't from eroscripts
+        if (!script.sourceUrl.includes("eroscripts")) return false;
+
+        //don't scrape scripts that are less than a week old
+        const creationToNow = dayjs().diff(dayjs(script.createdAt), "day");
+        if (creationToNow < 7) return false;
+
+        //don't scrape scripts that have been scraped recently (the time window increases with age)
+        const creationToScrape = dayjs(script.lastScrape).diff(dayjs(script.createdAt), "day");
+        const scrapeToNow = dayjs().diff(dayjs(script.lastScrape), "day");
+        return scrapeToNow > creationToScrape;
+    });
+    onMessage(`----Complete - found ${scripts.length} scripts`);
     for (let i = 0; i < scripts.length; i++) {
         const script = scripts[i];
         try {
@@ -244,7 +242,6 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
     const [jsonBackup, setJsonBackup] = useState(null);
 
     const [preparedDownload, setPreparedDownload] = useState("");
-    const [scrapeSubset, setScrapeSubset] = useState(true);
 
     useEffect(() => {
         setScripts(existingScripts);
@@ -385,7 +382,6 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
 
         RunScrape(
             existingScripts,
-            scrapeSubset,
             addMessage,
             (count, total) => {
                 progressBarRef.current.style.setProperty(
@@ -535,20 +531,6 @@ const AdminPanel = ({ existingScripts }: { existingScripts: Script[] }): JSX.Ele
             </div>
             <div className={`${style.buttons} ${running ? style.hidden : ""}`}>
                 <div className={style.scrape}>
-                    <label>
-                        {"Scrape"}
-                        <br />
-                        {"Subset"}
-                    </label>
-                    <Checkbox
-                        className={style.checkbox}
-                        checked={scrapeSubset}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            setScrapeSubset(e.target.checked)
-                        }
-                    >
-                        <FaCheck />
-                    </Checkbox>
                     <button onClick={StartScrape}>Scrape</button>
                 </div>
                 <button onClick={StartGetJsonBackup}>Prepare Backup</button>

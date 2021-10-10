@@ -50,6 +50,7 @@ export interface Script {
     categoryName: string;
     searchString?: string;
     scriptAxisViews?: number;
+    lastScrape: Date;
 }
 
 export interface ScriptStub {

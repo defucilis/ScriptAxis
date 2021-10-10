@@ -43,6 +43,7 @@ model Script {
   userId              Int
   categoryName        String
   searchString        String?
+  lastScrape          DateTime?             @default(now())
 }
 
 // Creators of scripts - may or may not be connected to a user account

@@ -43,7 +43,7 @@ export const getUniqueScriptSlug = async (slugPrefix: string): Promise<string> =
         await Database.disconnect();
         throw error;
     }
-}
+};
 
 const CreateScript = async (rawData: any): Promise<Script> => {
     try {

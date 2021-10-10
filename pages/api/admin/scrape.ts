@@ -60,6 +60,7 @@ const Scrape = async (scriptSlug: string, scriptUrl: string) => {
                 views: scrapedInfo.views,
                 likeCount: scrapedInfo.likeCount,
                 createdAt: scrapedInfo.createdAt,
+                lastScrape: new Date(),
             },
         });
         await Database.disconnect();

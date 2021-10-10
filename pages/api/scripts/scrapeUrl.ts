@@ -4,7 +4,6 @@ import Emojis from "lib/emojis";
 import { roleIsCreator } from "lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 import TurndownService from "turndown";
-import formatTitle from "@directus/format-title";
 import ScriptUtils from "lib/ScriptUtils";
 
 const parseParagraphs = (cookedHtml: string): string => {

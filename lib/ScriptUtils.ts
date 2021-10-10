@@ -647,19 +647,18 @@ const getSearchString = (data: {
     return output.toLowerCase();
 };
 
-
-const shortAcronyms = [
-    "JOI", "PMV", "3D", "2D", "POV", "HMV", "CH", "VR",
-]
+const shortAcronyms = ["JOI", "PMV", "3D", "2D", "POV", "HMV", "CH", "VR"];
 const formatScriptTitle = (title: string): string => {
     title = formatTitle(title);
     const words = title.split(" ");
-    return words.map(word => {
-        if(longAcronyms.includes(word.toUpperCase())) return word.toUpperCase();
-        if(shortAcronyms.includes(word.toUpperCase())) return word.toUpperCase();
-        return word;
-    }).join(" ");
-}
+    return words
+        .map(word => {
+            if (longAcronyms.includes(word.toUpperCase())) return word.toUpperCase();
+            if (shortAcronyms.includes(word.toUpperCase())) return word.toUpperCase();
+            return word;
+        })
+        .join(" ");
+};
 
 const ScriptUtils = {
     //parseScriptDocument,
